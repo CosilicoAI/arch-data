@@ -1,7 +1,7 @@
 [project]
-name = "microplex-sources"
+name = "cosilico-arch"
 version = "0.1.0"
-description = "Data sources for microplex microsimulation: microdata, calibration targets, and country-specific pipelines"
+description = "Cosilico Arch source-data foundation: source facts, microdata, and target inputs"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.11"
@@ -28,14 +28,14 @@ dev = [
 ]
 
 [project.scripts]
-cosilico-data = "db.cli:main"
+arch = "arch.cli:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["db", "micro", "calibration"]
+packages = ["arch", "db", "micro", "calibration", "microplex"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

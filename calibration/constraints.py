@@ -8,12 +8,12 @@ for each constraint.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional, List, Tuple
+from typing import Optional
 
 import numpy as np
 import pandas as pd
 
-from db.schema import TargetType
+from arch.targets import TargetType
 from .targets import TargetSpec
 
 
@@ -27,7 +27,7 @@ class Constraint:
     Attributes:
         indicator: Vector of indicator values (length = microdata rows)
         target_value: Target aggregate to match
-        variable: PolicyEngine variable name
+        variable: Arch target input variable ID
         target_type: COUNT or AMOUNT
         tolerance: Allowed deviation from target (fraction)
         stratum_name: Human-readable description

@@ -1,11 +1,11 @@
 """
-Supabase client for microplex-sources.
+Supabase client for Arch.
 
 Provides connection to Cosilico Supabase database for:
 - Raw microdata tables (e.g., microplex.us_census_cps_asec_2024_person)
-- Calibration targets (microplex.targets)
-- Data sources metadata (microplex.sources)
-- Dataset registry (microplex.datasets)
+- Calibration targets
+- Data sources metadata
+- Dataset registry
 
 Table naming pattern: {jurisdiction}_{institution}_{dataset}_{year}_{table_type}
 Example: us_census_cps_asec_2024_person

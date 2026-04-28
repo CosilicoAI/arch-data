@@ -16,9 +16,9 @@ from .schema import (
     StratumConstraint,
     Target,
     TargetType,
-    get_engine,
     init_db,
 )
+from arch.normalization import SourceFact, as_target, convert_units, target_kwargs
 
 # State FIPS codes
 STATE_FIPS = {
@@ -105,6 +105,39 @@ SNAP_DATA = {
 SOURCE_URL = "https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap"
 
 
+def build_snap_target(
+    stratum: Stratum,
+    *,
+    variable: str,
+    raw_value: float,
+    period: int,
+    raw_unit: str,
+    output_unit: str,
+    factor: float,
+    target_type: TargetType,
+    source_table: str,
+) -> Target:
+    """Build a SNAP target input from a source fact and unit conversion."""
+    fact = SourceFact(
+        name=variable,
+        value=raw_value,
+        period=period,
+        unit=raw_unit,
+        source=DataSource.USDA_SNAP,
+        jurisdiction=stratum.jurisdiction,
+        source_table=source_table,
+        source_url=SOURCE_URL,
+    )
+    converted = convert_units(fact, factor, output_unit)
+    blueprint = as_target(
+        converted,
+        variable=variable,
+        target_type=target_type,
+        stratum_name=stratum.name,
+    )
+    return Target(**target_kwargs(blueprint, stratum_id=stratum.id))
+
+
 def get_or_create_stratum(
     session: Session,
     name: str,
@@ -178,41 +211,44 @@ def load_snap_targets(session: Session, years: list[int] | None = None):
         national_data = data["national"]
 
         session.add(
-            Target(
-                stratum_id=national_stratum.id,
+            build_snap_target(
+                national_stratum,
                 variable="snap_household_count",
                 period=year,
-                value=national_data["households"] * 1000,  # Convert from thousands
+                raw_value=national_data["households"],
+                raw_unit="thousands",
+                output_unit="count",
+                factor=1000,
                 target_type=TargetType.COUNT,
-                source=DataSource.USDA_SNAP,
                 source_table="SNAP National Summary",
-                source_url=SOURCE_URL,
             )
         )
 
         session.add(
-            Target(
-                stratum_id=national_stratum.id,
+            build_snap_target(
+                national_stratum,
                 variable="snap_participant_count",
                 period=year,
-                value=national_data["participants"] * 1000,
+                raw_value=national_data["participants"],
+                raw_unit="thousands",
+                output_unit="count",
+                factor=1000,
                 target_type=TargetType.COUNT,
-                source=DataSource.USDA_SNAP,
                 source_table="SNAP National Summary",
-                source_url=SOURCE_URL,
             )
         )
 
         session.add(
-            Target(
-                stratum_id=national_stratum.id,
+            build_snap_target(
+                national_stratum,
                 variable="snap_benefits",
                 period=year,
-                value=national_data["benefits"] * 1_000_000,  # Convert from millions
+                raw_value=national_data["benefits"],
+                raw_unit="millions_of_dollars",
+                output_unit="dollars",
+                factor=1_000_000,
                 target_type=TargetType.AMOUNT,
-                source=DataSource.USDA_SNAP,
                 source_table="SNAP National Summary",
-                source_url=SOURCE_URL,
             )
         )
 
@@ -237,41 +273,44 @@ def load_snap_targets(session: Session, years: list[int] | None = None):
             )
 
             session.add(
-                Target(
-                    stratum_id=state_stratum.id,
+                build_snap_target(
+                    state_stratum,
                     variable="snap_household_count",
                     period=year,
-                    value=state_data["households"] * 1000,
+                    raw_value=state_data["households"],
+                    raw_unit="thousands",
+                    output_unit="count",
+                    factor=1000,
                     target_type=TargetType.COUNT,
-                    source=DataSource.USDA_SNAP,
                     source_table="SNAP State Summary",
-                    source_url=SOURCE_URL,
                 )
             )
 
             session.add(
-                Target(
-                    stratum_id=state_stratum.id,
+                build_snap_target(
+                    state_stratum,
                     variable="snap_participant_count",
                     period=year,
-                    value=state_data["participants"] * 1000,
+                    raw_value=state_data["participants"],
+                    raw_unit="thousands",
+                    output_unit="count",
+                    factor=1000,
                     target_type=TargetType.COUNT,
-                    source=DataSource.USDA_SNAP,
                     source_table="SNAP State Summary",
-                    source_url=SOURCE_URL,
                 )
             )
 
             session.add(
-                Target(
-                    stratum_id=state_stratum.id,
+                build_snap_target(
+                    state_stratum,
                     variable="snap_benefits",
                     period=year,
-                    value=state_data["benefits"] * 1_000_000,
+                    raw_value=state_data["benefits"],
+                    raw_unit="millions_of_dollars",
+                    output_unit="dollars",
+                    factor=1_000_000,
                     target_type=TargetType.AMOUNT,
-                    source=DataSource.USDA_SNAP,
                     source_table="SNAP State Summary",
-                    source_url=SOURCE_URL,
                 )
             )
 

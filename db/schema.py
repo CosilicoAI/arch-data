@@ -151,7 +151,7 @@ class Target(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     stratum_id: int = Field(foreign_key="strata.id", index=True)
 
-    variable: str = Field(index=True, description="PolicyEngine variable name")
+    variable: str = Field(index=True, description="Arch target input variable ID")
     period: int = Field(index=True, description="Year")
     value: float
     target_type: TargetType = Field(default=TargetType.COUNT)

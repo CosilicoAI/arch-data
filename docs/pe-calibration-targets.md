@@ -1,6 +1,6 @@
 # PolicyEngine-US-Data Calibration Targets
 
-This document catalogs the calibration targets used in PolicyEngine-US-Data and compares them to what we have in cosilico-data-sources.
+This document catalogs the calibration targets used in PolicyEngine-US-Data and compares them to Arch.
 
 ## Overview
 
@@ -154,9 +154,9 @@ PolicyEngine-US-Data uses a three-table schema:
 | active | bool | Whether target is used |
 | tolerance | float | Acceptable error percentage |
 
-## Comparison: cosilico-data-sources vs PolicyEngine
+## Comparison: Arch vs PolicyEngine
 
-### Currently Implemented in cosilico-data-sources
+### Currently Implemented in Arch
 
 | Category | Source | ETL File | Status |
 |----------|--------|----------|--------|

@@ -5,7 +5,7 @@ Generates synthetic tax units at geographic granularity (states, counties,
 congressional districts) and calibrates weights to match local targets.
 
 Uses microplex library for synthesis and calibration algorithms.
-Uses microplex-sources targets database for authoritative calibration data.
+Uses Arch targets for authoritative calibration data.
 
 Example:
     >>> from micro.us.district import DistrictMicroplex
@@ -29,7 +29,7 @@ import pandas as pd
 # Import algorithms from microplex
 from microplex import SparseCalibrator, ConditionalMAF
 
-# Import targets from microplex-sources
+# Import targets from Arch-compatible calibration adapters
 from calibration.targets import TargetSpec, get_targets
 
 
@@ -58,7 +58,7 @@ def build_targets_from_db(
     verbose: bool = False,
 ) -> Tuple[Dict[str, Dict], Dict[str, float]]:
     """
-    Build calibration targets from microplex-sources database.
+    Build calibration targets from the Arch target database.
 
     Args:
         year: Target year (default 2021)
@@ -322,7 +322,7 @@ class DistrictMicroplex:
         X, C, cont_vars, cond_vars = self._prepare_training_data(seed_data)
 
         if verbose:
-            print(f"Training ConditionalMAF:")
+            print("Training ConditionalMAF:")
             print(f"  Continuous vars: {cont_vars}")
             print(f"  Condition shape: {C.shape if C is not None else 'None'}")
             print(f"  Data shape: {X.shape}")

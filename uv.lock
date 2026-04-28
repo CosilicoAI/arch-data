@@ -211,6 +211,52 @@ wheels = [
 ]
 
 [[package]]
+name = "cosilico-arch"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "httpx" },
+    { name = "microplex" },
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "pyarrow" },
+    { name = "pyyaml" },
+    { name = "scipy" },
+    { name = "sqlmodel" },
+    { name = "supabase" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "ruff" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "microplex", specifier = ">=0.1.0" },
+    { name = "numpy", specifier = ">=1.24.0" },
+    { name = "pandas", specifier = ">=2.0.0" },
+    { name = "pyarrow", specifier = ">=22.0.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0.0" },
+    { name = "pyyaml", specifier = ">=6.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.5.0" },
+    { name = "scipy", specifier = ">=1.11.0" },
+    { name = "sqlmodel", specifier = ">=0.0.22" },
+    { name = "supabase", specifier = ">=2.0.0" },
+]
+provides-extras = ["dev"]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=9.0.2" }]
+
+[[package]]
 name = "cryptography"
 version = "46.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -561,52 +607,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/4a/21/6eab643b40f500905
 wheels = [
     { url = "https://files.pythonhosted.org/packages/76/c4/9774b31a70aa332a0411fcbd19034364270a7e0f0867b73c07236cedabe4/microplex-0.1.0-py3-none-any.whl", hash = "sha256:3b2113afc1c891eb1cd30b170d4fa7b4b1eb5c05659ced82820004f74e917b39", size = 15458, upload-time = "2025-12-25T22:43:22.298Z" },
 ]
-
-[[package]]
-name = "microplex-sources"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "httpx" },
-    { name = "microplex" },
-    { name = "numpy" },
-    { name = "pandas" },
-    { name = "pyarrow" },
-    { name = "pyyaml" },
-    { name = "scipy" },
-    { name = "sqlmodel" },
-    { name = "supabase" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "pytest" },
-    { name = "ruff" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "httpx", specifier = ">=0.27.0" },
-    { name = "microplex", specifier = ">=0.1.0" },
-    { name = "numpy", specifier = ">=1.24.0" },
-    { name = "pandas", specifier = ">=2.0.0" },
-    { name = "pyarrow", specifier = ">=22.0.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0.0" },
-    { name = "pyyaml", specifier = ">=6.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.5.0" },
-    { name = "scipy", specifier = ">=1.11.0" },
-    { name = "sqlmodel", specifier = ">=0.0.22" },
-    { name = "supabase", specifier = ">=2.0.0" },
-]
-provides-extras = ["dev"]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.2" }]
 
 [[package]]
 name = "mmh3"

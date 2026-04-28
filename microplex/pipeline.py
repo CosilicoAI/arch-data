@@ -20,13 +20,11 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
-from db.supabase_client import (
-    get_supabase_client,
-    query_cps_asec,
-    query_targets,
-)
+from arch.client import get_supabase_client
+from arch.microdata import query_cps_asec
+from arch.targets import query_targets
 
 
 @dataclass
