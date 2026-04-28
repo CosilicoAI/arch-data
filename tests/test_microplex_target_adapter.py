@@ -16,9 +16,11 @@ from arch.targets import (
 )
 from micro.us.pipeline import build_constraints_from_target_specs
 from micro.us.targets import (
+    MicroplexTargetProfile,
     age_soi_targets,
     build_hierarchical_microplex_constraints,
     build_microplex_constraints,
+    compose_microplex_targets,
     constraints_to_ipf_dicts,
     get_soi_aging_factors,
     load_microplex_targets,
@@ -135,6 +137,14 @@ def _insert_soi_aging_inputs(db_path):
                 ),
                 Target(
                     stratum_id=economy.id,
+                    variable="labor_force_count",
+                    period=2023,
+                    value=105,
+                    target_type=TargetType.COUNT,
+                    source=DataSource.BLS,
+                ),
+                Target(
+                    stratum_id=economy.id,
                     variable="labor_force",
                     period=2024,
                     value=110,
@@ -224,6 +234,39 @@ def test_age_soi_targets_scales_soi_values_and_preserves_others(tmp_path):
     assert aged[1].period == 2024
     assert np.isclose(aged[1].value, 1_331)
     assert aged[2] is targets[2]
+
+
+def test_compose_microplex_targets_keeps_current_records_and_ages_fallback_soi(
+    tmp_path,
+):
+    db_path = tmp_path / "targets.db"
+    _insert_soi_aging_inputs(db_path)
+
+    composition = compose_microplex_targets(
+        target_year=2024,
+        db_path=db_path,
+        profile=MicroplexTargetProfile(min_current_target_inputs=50),
+    )
+
+    assert composition.fallback_year == 2023
+    assert composition.fallback_reason == "only 1 current-year target inputs"
+    assert composition.soi_aging_factors is not None
+    assert len(composition.targets) == 2
+
+    current_target = next(
+        target for target in composition.targets if target.source == DataSource.CBO
+    )
+    aged_soi_target = next(
+        target for target in composition.targets if target.source == DataSource.IRS_SOI
+    )
+    assert current_target.variable == "labor_force"
+    assert aged_soi_target.period == 2024
+    assert aged_soi_target.variable == "adjusted_gross_income"
+    assert np.isclose(aged_soi_target.value, 1_331)
+
+    actions = composition.diagnostics["action"].value_counts().to_dict()
+    assert actions["kept_candidate"] == 1
+    assert actions["aged_to_model_year"] == 1
 
 
 def test_build_microplex_constraints_from_target_specs():

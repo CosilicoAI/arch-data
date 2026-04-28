@@ -30,6 +30,27 @@ class SOIAgingFactors:
     amount_method: str
 
 
+@dataclass(frozen=True)
+class MicroplexTargetProfile:
+    """Declared rules for composing Arch records into Microplex target inputs."""
+
+    min_current_target_inputs: int = 50
+    tax_variables: tuple[str, ...] = ("tax_unit_count", "adjusted_gross_income")
+    fallback_source: DataSource = DataSource.IRS_SOI
+    age_soi: bool = True
+
+
+@dataclass(frozen=True)
+class TargetCompositionResult:
+    """Composed Microplex target inputs plus audit diagnostics."""
+
+    targets: list[TargetSpec]
+    diagnostics: pd.DataFrame
+    fallback_year: int | None = None
+    fallback_reason: str | None = None
+    soi_aging_factors: SOIAgingFactors | None = None
+
+
 def load_microplex_targets(
     db_path: Path | None = None,
     jurisdiction: str = "us",
@@ -45,6 +66,219 @@ def load_microplex_targets(
         sources=sources,
         variables=variables,
     )
+
+
+def compose_microplex_targets(
+    *,
+    target_year: int,
+    db_path: Path | None = None,
+    jurisdiction: str = "us",
+    profile: MicroplexTargetProfile | None = None,
+) -> TargetCompositionResult:
+    """
+    Compose model-year target inputs for Microplex from Arch records.
+
+    This is the boundary where Microplex may choose source fallbacks and apply
+    model-year transformations. Arch records are not mutated.
+    """
+    profile = profile or MicroplexTargetProfile()
+    current_targets = load_microplex_targets(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=target_year,
+    )
+    fallback_reason = _target_fallback_reason(current_targets, profile)
+
+    diagnostics: list[dict[str, Any]] = []
+    composed_targets: list[TargetSpec] = []
+    fallback_year = None
+    aging_factors = None
+
+    if fallback_reason is None:
+        composed_targets = current_targets
+        diagnostics.extend(
+            _composition_row(
+                target,
+                role="current_year",
+                action="kept_candidate",
+                reason=None,
+                target_year=target_year,
+                source_value=target.value,
+                source_period=target.period,
+            )
+            for target in current_targets
+        )
+        return TargetCompositionResult(
+            targets=composed_targets,
+            diagnostics=pd.DataFrame(diagnostics),
+        )
+
+    fallback_year = (
+        target_year
+        if has_supported_tax_targets(current_targets, profile=profile)
+        else latest_supported_soi_year(
+            target_year,
+            db_path=db_path,
+            jurisdiction=jurisdiction,
+            profile=profile,
+        )
+    )
+    if fallback_year is None:
+        raise ValueError(f"No usable {profile.fallback_source.value} fallback targets.")
+
+    for target in current_targets:
+        if target.source == profile.fallback_source:
+            action = "superseded_by_fallback_source"
+            composed = False
+        else:
+            action = "kept_candidate"
+            composed = True
+            composed_targets.append(target)
+        diagnostics.append(
+            _composition_row(
+                target,
+                role="current_year",
+                action=action,
+                reason=fallback_reason,
+                target_year=target_year,
+                source_value=target.value,
+                source_period=target.period,
+                composed=composed,
+            )
+        )
+
+    fallback_targets = load_microplex_targets(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=fallback_year,
+        sources=[profile.fallback_source.value],
+    )
+    if not fallback_targets:
+        raise ValueError(
+            f"No {profile.fallback_source.value} targets found for {fallback_year}."
+        )
+
+    transformed_targets = fallback_targets
+    if (
+        profile.age_soi
+        and profile.fallback_source == DataSource.IRS_SOI
+        and any(target.period != target_year for target in fallback_targets)
+    ):
+        aging_factors = get_soi_aging_factors(
+            source_year=fallback_year,
+            target_year=target_year,
+            db_path=db_path,
+            jurisdiction=jurisdiction,
+        )
+        transformed_targets = age_soi_targets(
+            fallback_targets,
+            target_year=target_year,
+            db_path=db_path,
+            jurisdiction=jurisdiction,
+            factors=aging_factors,
+        )
+
+    for source_target, transformed_target in zip(fallback_targets, transformed_targets):
+        action = (
+            "aged_to_model_year"
+            if transformed_target.period != source_target.period
+            else "kept_candidate"
+        )
+        diagnostics.append(
+            _composition_row(
+                transformed_target,
+                role=f"fallback_{profile.fallback_source.value}",
+                action=action,
+                reason=fallback_reason,
+                target_year=target_year,
+                source_value=source_target.value,
+                source_period=source_target.period,
+                composed=True,
+            )
+        )
+    composed_targets.extend(transformed_targets)
+
+    return TargetCompositionResult(
+        targets=composed_targets,
+        diagnostics=pd.DataFrame(diagnostics),
+        fallback_year=fallback_year,
+        fallback_reason=fallback_reason,
+        soi_aging_factors=aging_factors,
+    )
+
+
+def has_supported_tax_targets(
+    targets: list[TargetSpec],
+    *,
+    profile: MicroplexTargetProfile | None = None,
+) -> bool:
+    """Return whether target inputs can produce current tax-unit constraints."""
+    profile = profile or MicroplexTargetProfile()
+    return any(
+        target.variable in profile.tax_variables and target.target_type != TargetType.RATE
+        for target in targets
+    )
+
+
+def latest_supported_soi_year(
+    target_year: int,
+    db_path: Path | None = None,
+    jurisdiction: str = "us",
+    *,
+    profile: MicroplexTargetProfile | None = None,
+) -> int | None:
+    """Find the latest SOI year at or before the model year with usable targets."""
+    profile = profile or MicroplexTargetProfile()
+    for candidate_year in range(target_year, 1989, -1):
+        targets = load_microplex_targets(
+            db_path=db_path,
+            jurisdiction=jurisdiction,
+            year=candidate_year,
+            sources=[DataSource.IRS_SOI.value],
+        )
+        if has_supported_tax_targets(targets, profile=profile):
+            return candidate_year
+    return None
+
+
+def _target_fallback_reason(
+    targets: list[TargetSpec],
+    profile: MicroplexTargetProfile,
+) -> str | None:
+    if len(targets) < profile.min_current_target_inputs:
+        return f"only {len(targets)} current-year target inputs"
+    if not has_supported_tax_targets(targets, profile=profile):
+        return "no supported current-year tax targets"
+    return None
+
+
+def _composition_row(
+    target: TargetSpec,
+    *,
+    role: str,
+    action: str,
+    reason: str | None,
+    target_year: int,
+    source_value: float,
+    source_period: int,
+    composed: bool = True,
+) -> dict[str, Any]:
+    return {
+        "role": role,
+        "action": action,
+        "reason": reason,
+        "composed": composed,
+        "source": target.source.value,
+        "variable": target.variable,
+        "target_type": target.target_type.value,
+        "source_period": source_period,
+        "model_period": target_year,
+        "period": target.period,
+        "stratum": target.stratum_name,
+        "constraints": target.constraints,
+        "source_value": source_value,
+        "target_value": target.value,
+    }
 
 
 def get_soi_aging_factors(

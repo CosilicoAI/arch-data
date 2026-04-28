@@ -26,10 +26,11 @@ import pandas as pd
 
 from arch.client import get_supabase_client
 from arch.microdata import query_cps_asec
-from arch.targets import DataSource, TargetSpec, TargetType, query_targets
+from arch.targets import TargetSpec, TargetType, query_targets
 from micro.us.targets import (
-    age_soi_targets,
-    get_soi_aging_factors,
+    MicroplexTargetProfile,
+    TargetCompositionResult,
+    compose_microplex_targets,
     load_microplex_targets,
 )
 
@@ -121,38 +122,6 @@ def load_targets_from_db(
     )
     print(f"  Loaded {len(targets)} target inputs")
     return targets
-
-
-def has_supported_tax_targets(
-    targets: List[Dict[str, Any]] | List[TargetSpec],
-) -> bool:
-    """Return whether target inputs can produce current tax-unit constraints."""
-    supported_variables = {"tax_unit_count", "adjusted_gross_income"}
-    for target in targets:
-        if isinstance(target, TargetSpec):
-            if target.variable in supported_variables and target.target_type != TargetType.RATE:
-                return True
-        elif target.get("variable") in supported_variables and target.get("target_type") != "rate":
-            return True
-    return False
-
-
-def latest_supported_soi_year(
-    target_year: int,
-    db_path: Path | None = None,
-    jurisdiction: str = "us",
-) -> int | None:
-    """Find the latest SOI year at or before the model year with usable targets."""
-    for candidate_year in range(target_year, 1989, -1):
-        targets = load_microplex_targets(
-            db_path=db_path,
-            jurisdiction=jurisdiction,
-            year=candidate_year,
-            sources=[DataSource.IRS_SOI.value],
-        )
-        if has_supported_tax_targets(targets):
-            return candidate_year
-    return None
 
 
 def build_tax_units(df: pd.DataFrame) -> pd.DataFrame:
@@ -1151,6 +1120,37 @@ def write_microplex_to_supabase(
     return total
 
 
+def print_target_composition_diagnostics(
+    composition: TargetCompositionResult,
+) -> None:
+    """Print how Arch target inputs became Microplex target candidates."""
+    diagnostics = composition.diagnostics
+    print("\nTarget input composition:")
+    print(f"  Candidate targets: {len(composition.targets):,}")
+    if composition.fallback_reason is not None:
+        print(
+            "  Fallback: "
+            f"{composition.fallback_reason}; using {composition.fallback_year}"
+        )
+    if composition.soi_aging_factors is not None:
+        factors = composition.soi_aging_factors
+        print(
+            "  Aged SOI targets "
+            f"{factors.source_year}->{factors.target_year}: "
+            f"counts x{factors.count_factor:.4f} "
+            f"({factors.count_method}), "
+            f"amounts x{factors.amount_factor:.4f} "
+            f"({factors.amount_method})"
+        )
+    if diagnostics.empty:
+        return
+    action_counts = diagnostics["action"].value_counts()
+    action_text = ", ".join(
+        f"{action}={count}" for action, count in action_counts.items()
+    )
+    print(f"  Composition actions: {action_text}")
+
+
 def run_pipeline(
     year: int = 2024,
     dry_run: bool = False,
@@ -1182,67 +1182,26 @@ def run_pipeline(
         raise ValueError(f"Unknown microdata_source: {microdata_source}")
 
     if target_source == "db":
-        targets = load_targets_from_db(year, db_path=db_path)
+        target_profile = MicroplexTargetProfile(age_soi=age_soi)
+        target_composition = compose_microplex_targets(
+            target_year=year,
+            db_path=db_path,
+            profile=target_profile,
+        )
+        targets = target_composition.targets
+        print_target_composition_diagnostics(target_composition)
     elif target_source == "supabase":
         targets = load_targets_from_supabase(year)
     else:
         raise ValueError(f"Unknown target_source: {target_source}")
 
-    has_current_tax_targets = has_supported_tax_targets(targets)
-    if len(targets) < 50 or not has_current_tax_targets:
+    if target_source == "supabase" and len(targets) < 50:
         # Fall back to the latest available SOI targets when the model year
         # has insufficient usable tax targets.
-        if target_source == "db":
-            fallback_year = (
-                year
-                if has_current_tax_targets
-                else latest_supported_soi_year(year, db_path=db_path) or 2021
-            )
-        else:
-            fallback_year = 2021
-        if len(targets) < 50:
-            fallback_reason = f"only {len(targets)} target inputs"
-        else:
-            fallback_reason = "no supported current-year tax targets"
+        fallback_year = 2021
+        fallback_reason = f"only {len(targets)} target inputs"
         print(f"  {year} has {fallback_reason}, trying {fallback_year}...")
-        if target_source == "db":
-            current_targets = targets
-            targets = load_targets_from_db(
-                fallback_year,
-                db_path=db_path,
-                sources=[DataSource.IRS_SOI.value],
-            )
-            needs_soi_aging = any(
-                target.source == DataSource.IRS_SOI and target.period != year
-                for target in targets
-            )
-            if age_soi and needs_soi_aging:
-                factors = get_soi_aging_factors(
-                    source_year=fallback_year,
-                    target_year=year,
-                    db_path=db_path,
-                )
-                targets = age_soi_targets(
-                    targets,
-                    target_year=year,
-                    db_path=db_path,
-                    factors=factors,
-                )
-                print(
-                    "  Aged SOI targets "
-                    f"{fallback_year}->{year}: "
-                    f"counts x{factors.count_factor:.4f} "
-                    f"({factors.count_method}), "
-                    f"amounts x{factors.amount_factor:.4f} "
-                    f"({factors.amount_method})"
-                )
-            targets = [
-                target
-                for target in current_targets
-                if target.source != DataSource.IRS_SOI
-            ] + targets
-        else:
-            targets = load_targets_from_supabase(fallback_year)
+        targets = load_targets_from_supabase(fallback_year)
 
     # Build tax units
     df = build_tax_units(df)
