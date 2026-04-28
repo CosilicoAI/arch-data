@@ -631,7 +631,11 @@ def run_pipeline(
                 db_path=db_path,
                 sources=[DataSource.IRS_SOI.value],
             )
-            if age_soi and fallback_year != year:
+            needs_soi_aging = any(
+                target.source == DataSource.IRS_SOI and target.period != year
+                for target in targets
+            )
+            if age_soi and needs_soi_aging:
                 factors = get_soi_aging_factors(
                     source_year=fallback_year,
                     target_year=year,

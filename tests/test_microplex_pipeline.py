@@ -53,6 +53,13 @@ def test_run_pipeline_can_write_local_microplex(tmp_path, monkeypatch):
         )
     ]
     monkeypatch.setattr(microplex, "load_targets_from_db", lambda *args, **kwargs: targets)
+    monkeypatch.setattr(
+        microplex,
+        "get_soi_aging_factors",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("already-current SOI targets should not be aged")
+        ),
+    )
 
     result = microplex.run_pipeline(
         year=2024,
