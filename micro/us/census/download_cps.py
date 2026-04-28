@@ -23,7 +23,26 @@ from typing import Optional
 
 import pandas as pd
 import requests
-from tqdm import tqdm
+
+try:
+    from tqdm import tqdm
+except ImportError:  # pragma: no cover - exercised when optional dependency is absent
+    def tqdm(iterable=None, **kwargs):
+        """Small fallback so downloads still work without tqdm installed."""
+        if iterable is not None:
+            return iterable
+        return _NullProgress()
+
+
+class _NullProgress:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
+
+    def update(self, n: int) -> None:
+        return None
 
 # Storage paths
 CACHE_DIR = Path(__file__).parent / "raw_cache"
@@ -127,6 +146,69 @@ def download_raw_cps(year: int, progress: bool = True, force: bool = False) -> P
 
     print(f"Cached raw CPS {year} to {cache_dir}")
     return cache_dir
+
+
+def download_cps_zip(year: int, progress: bool = True) -> bytes:
+    """Download a CPS ASEC ZIP and return its raw bytes."""
+    if year not in CPS_URL_BY_YEAR:
+        available = sorted(CPS_URL_BY_YEAR.keys())
+        raise ValueError(f"Year {year} not available. Available: {available}")
+
+    response = requests.get(CPS_URL_BY_YEAR[year], stream=True)
+    response.raise_for_status()
+
+    total_size = int(response.headers.get("content-length", 200_000_000))
+    content = io.BytesIO()
+
+    if progress:
+        with tqdm(total=total_size, unit="B", unit_scale=True, desc="Download") as pbar:
+            for chunk in response.iter_content(chunk_size=8192):
+                content.write(chunk)
+                pbar.update(len(chunk))
+    else:
+        for chunk in response.iter_content(chunk_size=8192):
+            content.write(chunk)
+
+    return content.getvalue()
+
+
+def extract_person_data(
+    zip_content: bytes,
+    year: int,
+    columns: Optional[dict[str, str]] = None,
+) -> pd.DataFrame:
+    """Extract person records from a CPS ASEC ZIP byte payload."""
+    if columns is None:
+        columns = PERSON_COLUMNS
+
+    yy = str(year + 1)[-2:]
+    person_file = f"pppub{yy}.csv"
+    prefixed_person_file = f"cpspb/asec/prod/data/20{yy}/{person_file}"
+
+    with zipfile.ZipFile(io.BytesIO(zip_content)) as zf:
+        names = set(zf.namelist())
+        if person_file in names:
+            selected_file = person_file
+        elif prefixed_person_file in names:
+            selected_file = prefixed_person_file
+        else:
+            person_candidates = [
+                name for name in names if Path(name).name.lower() == person_file
+            ]
+            if not person_candidates:
+                raise FileNotFoundError(
+                    f"Could not find {person_file} in CPS ZIP. "
+                    f"Files: {sorted(names)}"
+                )
+            selected_file = person_candidates[0]
+
+        with zf.open(selected_file) as f:
+            person = pd.read_csv(f, low_memory=False).fillna(0)
+
+    available = [c for c in columns if c in person.columns]
+    df = person[available].copy()
+    df = df.rename(columns={k: v for k, v in columns.items() if k in available})
+    return process_cps_data(df)
 
 
 def extract_cps_variables(
@@ -266,6 +348,12 @@ def _process_person_data(df: pd.DataFrame) -> pd.DataFrame:
     elif "total_person_income" in df.columns:
         df["income"] = df["total_person_income"].fillna(0)
 
+    # Child presence indicator for simple calibration/synthesis tests.
+    if "own_children_under_18" in df.columns:
+        df["has_children"] = (df["own_children_under_18"].fillna(0) > 0).astype(int)
+    elif "has_children" not in df.columns:
+        df["has_children"] = 0
+
     # Apply weight scaling (CPS weights have 2 implied decimals)
     if "march_supplement_weight" in df.columns:
         df["weight"] = df["march_supplement_weight"].fillna(0) / 100
@@ -278,6 +366,11 @@ def _process_person_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df["weight"] > 0].copy()
 
     return df
+
+
+def process_cps_data(df: pd.DataFrame) -> pd.DataFrame:
+    """Process raw or renamed CPS person records into analysis-ready columns."""
+    return _process_person_data(df.copy())
 
 
 # Legacy function for backwards compatibility

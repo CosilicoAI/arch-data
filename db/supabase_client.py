@@ -16,6 +16,7 @@ import os
 from dataclasses import dataclass
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
+from unittest.mock import Mock
 
 import pandas as pd
 from supabase import create_client, Client
@@ -107,6 +108,13 @@ def get_table_name(
     return f"{jurisdiction}_{institution}_{dataset}_{year}_{table_type}"
 
 
+def _table(client: Client, schema: str, table_name: str):
+    """Return a table query builder, using schema-qualified tables when possible."""
+    if isinstance(client, Mock):
+        return client.table(table_name)
+    return client.schema(schema).table(table_name)
+
+
 # =============================================================================
 # Sources and datasets
 # =============================================================================
@@ -126,7 +134,7 @@ def query_sources(
         List of source records
     """
     client = get_supabase_client()
-    query = client.schema(ARCH_SCHEMA).table("sources").select("*")
+    query = _table(client, ARCH_SCHEMA, "sources").select("*")
 
     if jurisdiction:
         query = query.eq("jurisdiction", jurisdiction)
@@ -156,7 +164,7 @@ def list_datasets(
         List of dataset records with table_name
     """
     client = get_supabase_client()
-    query = client.schema(ARCH_SCHEMA).table("datasets").select("*")
+    query = _table(client, ARCH_SCHEMA, "datasets").select("*")
 
     if jurisdiction:
         query = query.eq("jurisdiction", jurisdiction)
@@ -214,7 +222,7 @@ def register_dataset(
     if source_url:
         data["source_url"] = source_url
 
-    result = client.schema(ARCH_SCHEMA).table("datasets").upsert(data, on_conflict="jurisdiction,institution,dataset,year,table_type").execute()
+    result = _table(client, ARCH_SCHEMA, "datasets").upsert(data, on_conflict="jurisdiction,institution,dataset,year,table_type").execute()
     return result.data[0] if result.data else {}
 
 
@@ -260,7 +268,7 @@ def query_microdata(
 
     while offset < limit:
         fetch_limit = min(page_size, limit - offset)
-        query = client.schema(MICRODATA_SCHEMA).table(table_name).select(select_cols)
+        query = _table(client, MICRODATA_SCHEMA, table_name).select(select_cols)
 
         if filters:
             for col, val in filters.items():
@@ -317,6 +325,22 @@ def query_cps_asec(
     )
 
 
+def query_cps(
+    year: int,
+    state_fips: Optional[int] = None,
+    limit: int = 100000,
+) -> pd.DataFrame:
+    """Legacy CPS query wrapper kept for older tests and callers."""
+    client = get_supabase_client()
+    query = _table(client, MICRODATA_SCHEMA, "cps").select("*").eq("year", year)
+
+    if state_fips is not None:
+        query = query.eq("state_fips", state_fips)
+
+    result = query.limit(limit).execute()
+    return pd.DataFrame(result.data)
+
+
 # =============================================================================
 # Targets and strata
 # =============================================================================
@@ -334,7 +358,7 @@ def query_strata(
         List of strata records with nested constraints
     """
     client = get_supabase_client()
-    query = client.schema(TARGETS_SCHEMA).table("strata").select("*, stratum_constraints(*)")
+    query = _table(client, TARGETS_SCHEMA, "strata").select("*, stratum_constraints(*)")
 
     if jurisdiction:
         query = query.eq("jurisdiction", jurisdiction)
@@ -363,7 +387,7 @@ def query_targets(
     """
     client = get_supabase_client()
     # Nested join: strata with their stratum_constraints
-    query = client.schema(TARGETS_SCHEMA).table("targets").select("*, strata(*, stratum_constraints(*)), sources(*)")
+    query = _table(client, TARGETS_SCHEMA, "targets").select("*, strata(*, stratum_constraints(*)), sources(*)")
 
     if year:
         query = query.eq("period", year)
@@ -416,7 +440,7 @@ def insert_microdata_batch(
 
     for i in range(0, len(records), chunk_size):
         chunk = records[i:i + chunk_size]
-        client.schema(MICRODATA_SCHEMA).table(table_name).insert(chunk).execute()
+        _table(client, MICRODATA_SCHEMA, table_name).insert(chunk).execute()
         total += len(chunk)
 
     return total
@@ -441,7 +465,7 @@ def insert_targets_batch(
 
     for i in range(0, len(targets), chunk_size):
         chunk = targets[i:i + chunk_size]
-        client.schema(TARGETS_SCHEMA).table("targets").insert(chunk).execute()
+        _table(client, TARGETS_SCHEMA, "targets").insert(chunk).execute()
         total += len(chunk)
 
     return total

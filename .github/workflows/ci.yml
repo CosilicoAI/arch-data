@@ -35,7 +35,9 @@ jobs:
           db/etl_ssi.py
           db/pe_source_inventory.py
           db/schema.py
+          db/supabase_client.py
           db/source_files.py
+          micro/us/census/download_cps.py
           calibration/constraints.py
           calibration/targets.py
           tests/test_arch_facts.py
@@ -47,6 +49,10 @@ jobs:
           tests/test_etl_ssi.py
           tests/test_source_files.py
           tests/test_microplex_target_adapter.py
+          tests/test_microplex_pipeline.py
+          tests/test_download_cps.py
+          tests/test_hierarchical_pipeline.py
+          tests/test_supabase_client.py
 
       - name: Test Arch surface
         run: >
@@ -61,6 +67,10 @@ jobs:
           tests/test_source_files.py
           tests/test_calibration.py
           tests/test_microplex_target_adapter.py
+          tests/test_microplex_pipeline.py
+          tests/test_download_cps.py
+          tests/test_hierarchical_pipeline.py
+          tests/test_supabase_client.py
           -q
 
       - name: Build target input database

@@ -1,8 +1,8 @@
 """
-Arch-to-Microplex Pipeline: Build calibrated microdata from Supabase sources.
+Arch-to-Microplex Pipeline: Build calibrated microdata from Arch sources.
 
-Reads raw CPS data and targets from Supabase, runs IPF calibration,
-and writes calibrated microplex back to Supabase.
+Reads CPS microdata and Arch target inputs, runs IPF calibration, and writes
+calibrated microplex output locally or back to Supabase.
 
 Calibration methods compared (L2 loss, runtime):
 - IPF (100 iter): L2=0.040, 0.6s   <-- RECOMMENDED
@@ -55,6 +55,24 @@ def load_cps_from_supabase(year: int, limit: int = 200000) -> pd.DataFrame:
     return df
 
 
+def load_cps_from_local_file(
+    year: int,
+    path: Path | None = None,
+    limit: int | None = None,
+) -> pd.DataFrame:
+    """Load CPS person data from a local parquet file."""
+    if path is None:
+        repo_root = Path(__file__).resolve().parents[2]
+        path = repo_root / "micro" / "us" / f"cps_{year}.parquet"
+
+    print(f"Loading CPS ASEC {year} from {path}...")
+    df = pd.read_parquet(path)
+    if limit is not None:
+        df = df.head(limit).copy()
+    print(f"  Loaded {len(df):,} person records")
+    return df
+
+
 def load_targets_from_supabase(year: int) -> List[Dict[str, Any]]:
     """Load calibration targets from Supabase."""
     print(f"Loading targets for {year} from Supabase...")
@@ -86,6 +104,20 @@ def load_targets_from_db(
     return targets
 
 
+def has_supported_tax_targets(
+    targets: List[Dict[str, Any]] | List[TargetSpec],
+) -> bool:
+    """Return whether target inputs can produce current tax-unit constraints."""
+    supported_variables = {"tax_unit_count", "adjusted_gross_income"}
+    for target in targets:
+        if isinstance(target, TargetSpec):
+            if target.variable in supported_variables and target.target_type != TargetType.RATE:
+                return True
+        elif target.get("variable") in supported_variables and target.get("target_type") != "rate":
+            return True
+    return False
+
+
 def build_tax_units(df: pd.DataFrame) -> pd.DataFrame:
     """
     Build tax units from person-level CPS data.
@@ -100,14 +132,18 @@ def build_tax_units(df: pd.DataFrame) -> pd.DataFrame:
             df[col.lower()] = df["raw_data"].apply(lambda x: x.get(col) if isinstance(x, dict) else None)
 
     # Calculate total income
-    income_cols = ["ptotval", "wsal_val", "semp_val"]
-    for col in income_cols:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
-
-    df["total_income"] = df.get("ptotval", 0)
-    df["wage_income"] = df.get("wsal_val", 0)
-    df["self_employment_income"] = df.get("semp_val", 0)
+    df["total_income"] = _numeric_first(
+        df,
+        ["ptotval", "total_person_income", "income"],
+    )
+    df["wage_income"] = _numeric_first(
+        df,
+        ["wsal_val", "wage_salary_income", "wage_income"],
+    )
+    df["self_employment_income"] = _numeric_first(
+        df,
+        ["semp_val", "self_employment_income"],
+    ) + _numeric_first(df, ["frse_val", "farm_self_employment_income"])
 
     # Simple AGI estimate (wages + SE - 1/2 SE tax)
     se_tax = np.maximum(df["self_employment_income"] * 0.0765, 0)
@@ -116,15 +152,42 @@ def build_tax_units(df: pd.DataFrame) -> pd.DataFrame:
     # Weight
     if "marsupwt" in df.columns:
         df["weight"] = pd.to_numeric(df["marsupwt"], errors="coerce").fillna(0) / 100
+    elif "weight" in df.columns:
+        df["weight"] = pd.to_numeric(df["weight"], errors="coerce").fillna(0)
+    elif "march_supplement_weight" in df.columns:
+        df["weight"] = pd.to_numeric(
+            df["march_supplement_weight"],
+            errors="coerce",
+        ).fillna(0) / 100
     else:
         df["weight"] = 1.0
 
+    if "state_fips" not in df.columns and "gestfips" in df.columns:
+        df["state_fips"] = df["gestfips"]
+    if "age" not in df.columns and "a_age" in df.columns:
+        df["age"] = df["a_age"]
+    if "household_id" not in df.columns and "ph_seq" in df.columns:
+        df["household_id"] = df["ph_seq"]
+
     # Filter to likely filers
-    filer_mask = (df["total_income"] > 13850) | (df["wage_income"] > 0)
+    filer_mask = (
+        (df["total_income"] > 13850)
+        | (df["wage_income"] > 0)
+        | (df["self_employment_income"] > 0)
+    )
     df = df[filer_mask].copy()
+    df["is_tax_filer"] = 1
     print(f"  Filtered to {len(df):,} likely filers")
 
     return df
+
+
+def _numeric_first(df: pd.DataFrame, columns: list[str]) -> pd.Series:
+    """Return the first available numeric column, or zeros if none exist."""
+    for column in columns:
+        if column in df.columns:
+            return pd.to_numeric(df[column], errors="coerce").fillna(0)
+    return pd.Series(0.0, index=df.index)
 
 
 def assign_agi_bracket(agi: np.ndarray) -> np.ndarray:
@@ -527,6 +590,9 @@ def run_pipeline(
     limit: int = 200000,
     target_source: str = "db",
     db_path: Path | None = None,
+    microdata_source: str = "local",
+    cps_path: Path | None = None,
+    output_path: Path | None = None,
 ) -> pd.DataFrame:
     """Run the full microplex pipeline."""
     print("=" * 60)
@@ -534,7 +600,13 @@ def run_pipeline(
     print("=" * 60)
 
     # Load data
-    df = load_cps_from_supabase(year, limit=limit)
+    if microdata_source == "local":
+        df = load_cps_from_local_file(year, path=cps_path, limit=limit)
+    elif microdata_source == "supabase":
+        df = load_cps_from_supabase(year, limit=limit)
+    else:
+        raise ValueError(f"Unknown microdata_source: {microdata_source}")
+
     if target_source == "db":
         targets = load_targets_from_db(year, db_path=db_path)
     elif target_source == "supabase":
@@ -542,9 +614,9 @@ def run_pipeline(
     else:
         raise ValueError(f"Unknown target_source: {target_source}")
 
-    if len(targets) < 50:
-        # Fall back to 2021 targets if year has insufficient targets
-        print(f"  Only {len(targets)} targets for {year}, trying 2021...")
+    if len(targets) < 50 or not has_supported_tax_targets(targets):
+        # Fall back to 2021 targets if year has insufficient usable tax targets.
+        print(f"  Only {len(targets)} usable targets for {year}, trying 2021...")
         if target_source == "db":
             targets = load_targets_from_db(2021, db_path=db_path)
         else:
@@ -572,7 +644,11 @@ def run_pipeline(
     print(f"Calibrated weighted: {result.calibrated_weights.sum():,.0f}")
     print(f"Calibration success: {result.success}")
 
-    if not dry_run:
+    if output_path is not None:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        df.to_parquet(output_path, index=False)
+        print(f"\nSaved microplex to {output_path}")
+    elif not dry_run:
         write_microplex_to_supabase(df, year)
     else:
         print("\nDRY RUN - not writing to Supabase")
@@ -588,12 +664,20 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Don't write to Supabase")
     parser.add_argument("--limit", type=int, default=200000, help="Max records to load")
     parser.add_argument(
+        "--microdata-source",
+        choices=["local", "supabase"],
+        default="local",
+        help="CPS microdata source",
+    )
+    parser.add_argument(
         "--target-source",
         choices=["db", "supabase"],
         default="db",
         help="Calibration target source",
     )
     parser.add_argument("--db-path", type=Path, default=None, help="Arch SQLite DB path")
+    parser.add_argument("--cps-path", type=Path, default=None, help="Local CPS parquet path")
+    parser.add_argument("--output-path", type=Path, default=None, help="Local parquet output")
     args = parser.parse_args()
 
     run_pipeline(
@@ -602,6 +686,9 @@ def main():
         limit=args.limit,
         target_source=args.target_source,
         db_path=args.db_path,
+        microdata_source=args.microdata_source,
+        cps_path=args.cps_path,
+        output_path=args.output_path,
     )
 
 

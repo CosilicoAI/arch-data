@@ -14,7 +14,7 @@ class TestSupabaseClient:
 
     def test_get_client_returns_client_with_env_vars(self):
         """Client is created when environment variables are set."""
-        from db.supabase_client import get_supabase_client, SupabaseConfig
+        from db.supabase_client import get_supabase_client
 
         # Skip if no real credentials
         if not os.environ.get("COSILICO_SUPABASE_URL"):

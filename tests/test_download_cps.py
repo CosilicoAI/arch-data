@@ -5,7 +5,6 @@ import zipfile
 
 import pandas as pd
 import pytest
-from unittest.mock import patch, MagicMock
 
 # Direct imports from download_cps to avoid calibration package import chain
 from micro.us.census.download_cps import (
