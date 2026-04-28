@@ -321,6 +321,7 @@ def _base_target_diagnostic(
         "stratum": target.stratum_name,
         "constraints": json.dumps(target.constraints, separators=(",", ":")),
         "target_value": target.value,
+        "role": "",
         "status": "",
         "drop_reason": "",
         "n_obs": 0,
@@ -349,6 +350,7 @@ def _base_dict_target_diagnostic(
         "stratum": stratum.get("name", "unknown"),
         "constraints": json.dumps(constraints, separators=(",", ":"), default=str),
         "target_value": target.get("value"),
+        "role": "",
         "status": "",
         "drop_reason": "",
         "n_obs": 0,
@@ -378,6 +380,40 @@ def _parse_aging_note(stratum_name: str | None) -> dict[str, Any]:
 
 def _enum_value(value: Any) -> Any:
     return value.value if hasattr(value, "value") else value
+
+
+def _mark_unsupported(
+    diagnostic: dict[str, Any],
+    drop_reason: str,
+) -> dict[str, Any]:
+    diagnostic.update(
+        role="unsupported",
+        status="dropped",
+        drop_reason=drop_reason,
+    )
+    return diagnostic
+
+
+def _mark_diagnostic(
+    diagnostic: dict[str, Any],
+    drop_reason: str,
+) -> dict[str, Any]:
+    diagnostic.update(
+        role="diagnostic",
+        status="dropped",
+        drop_reason=drop_reason,
+    )
+    return diagnostic
+
+
+def _mark_holdout(diagnostic: dict[str, Any]) -> dict[str, Any]:
+    diagnostic.update(role="holdout", status="dropped", drop_reason="holdout")
+    return diagnostic
+
+
+def _mark_active(diagnostic: dict[str, Any]) -> dict[str, Any]:
+    diagnostic.update(role="active", status="used", drop_reason="")
+    return diagnostic
 
 
 def _numeric_first(df: pd.DataFrame, columns: list[str]) -> pd.Series:
@@ -497,6 +533,7 @@ def build_constraints_from_target_specs(
     targets: List[TargetSpec],
     min_obs: int = 100,
     include_amounts: bool = False,
+    holdout_variables: tuple[str, ...] = (),
 ) -> List[Dict]:
     """
     Build legacy IPF constraint dicts from Arch DB ``TargetSpec`` objects.
@@ -504,11 +541,12 @@ def build_constraints_from_target_specs(
     This keeps the old IPF pipeline working while moving the target source from
     Supabase-shaped dictionaries to the local Arch target database.
     """
-    constraints, _ = build_constraints_and_diagnostics_from_target_specs(
+    constraints, _, _ = build_constraints_and_diagnostics_from_target_specs(
         df,
         targets,
         min_obs=min_obs,
         include_amounts=include_amounts,
+        holdout_variables=holdout_variables,
     )
     return constraints
 
@@ -518,47 +556,39 @@ def build_constraints_and_diagnostics_from_target_specs(
     targets: List[TargetSpec],
     min_obs: int = 100,
     include_amounts: bool = False,
-) -> tuple[List[Dict], list[dict[str, Any]]]:
+    holdout_variables: tuple[str, ...] = (),
+) -> tuple[List[Dict], list[dict[str, Any]], list[dict[str, Any]]]:
     """Build IPF constraints and one diagnostic row per loaded target."""
     df = df.copy()
     df["agi_bracket"] = assign_agi_bracket(df["adjusted_gross_income"].values)
 
     constraints = []
+    evaluation_constraints = []
     diagnostics = []
     seen_keys = set()
+    holdout_variable_set = set(holdout_variables)
     for target_index, target in enumerate(targets):
         diagnostic = _base_target_diagnostic(target, target_index)
 
         if target.variable not in SUPPORTED_TARGET_VARIABLES:
-            diagnostic.update(status="dropped", drop_reason="unsupported_variable")
+            _mark_unsupported(diagnostic, "unsupported_variable")
             diagnostics.append(diagnostic)
             continue
         if target.target_type == TargetType.RATE:
-            diagnostic.update(status="dropped", drop_reason="rate_target")
-            diagnostics.append(diagnostic)
-            continue
-        if target.target_type == TargetType.AMOUNT and not include_amounts:
-            diagnostic.update(status="dropped", drop_reason="amount_targets_disabled")
+            _mark_unsupported(diagnostic, "rate_target")
             diagnostics.append(diagnostic)
             continue
         if target.target_type == TargetType.AMOUNT and target.value <= 0:
-            diagnostic.update(status="dropped", drop_reason="nonpositive_amount_target")
+            _mark_unsupported(diagnostic, "nonpositive_amount_target")
             diagnostics.append(diagnostic)
             continue
         if any(
             variable not in SUPPORTED_CONSTRAINT_VARIABLES
             for variable, _, _ in target.constraints
         ):
-            diagnostic.update(status="dropped", drop_reason="unsupported_constraint")
+            _mark_unsupported(diagnostic, "unsupported_constraint")
             diagnostics.append(diagnostic)
             continue
-
-        key = (target.stratum_name, target.variable, target.target_type)
-        if key in seen_keys:
-            diagnostic.update(status="dropped", drop_reason="duplicate_target")
-            diagnostics.append(diagnostic)
-            continue
-        seen_keys.add(key)
 
         constraint_dict = _build_microplex_constraint_dict(
             df,
@@ -569,27 +599,43 @@ def build_constraints_and_diagnostics_from_target_specs(
             stratum_constraints=target.constraints,
         )
         if constraint_dict is None:
-            diagnostic.update(
-                status="dropped",
-                drop_reason="could_not_build_constraint",
-            )
+            _mark_unsupported(diagnostic, "could_not_build_constraint")
             diagnostics.append(diagnostic)
             continue
 
         diagnostic["n_obs"] = constraint_dict["n_obs"]
-        if constraint_dict["n_obs"] < min_obs:
-            diagnostic.update(status="dropped", drop_reason="insufficient_obs")
+        key = (target.stratum_name, target.variable, target.target_type)
+        drop_reason = ""
+        is_holdout = target.variable in holdout_variable_set
+        if is_holdout:
+            drop_reason = "holdout"
+        elif key in seen_keys:
+            drop_reason = "duplicate_target"
+        elif target.target_type == TargetType.AMOUNT and not include_amounts:
+            drop_reason = "amount_targets_disabled"
+        elif constraint_dict["n_obs"] < min_obs:
+            drop_reason = "insufficient_obs"
+
+        if drop_reason:
+            if is_holdout:
+                _mark_holdout(diagnostic)
+            else:
+                _mark_diagnostic(diagnostic, drop_reason)
+            diagnostic_index = len(diagnostics)
+            constraint_dict["diagnostic_index"] = diagnostic_index
             diagnostics.append(diagnostic)
+            evaluation_constraints.append(constraint_dict)
             continue
 
-        diagnostic.update(status="used", drop_reason="")
+        seen_keys.add(key)
+        _mark_active(diagnostic)
         diagnostic_index = len(diagnostics)
         constraint_dict["diagnostic_index"] = diagnostic_index
         diagnostics.append(diagnostic)
         constraints.append(constraint_dict)
 
     print(f"  Built {len(constraints)} constraints (min {min_obs} obs each)")
-    return constraints, diagnostics
+    return constraints, diagnostics, evaluation_constraints
 
 
 def build_constraints_from_targets(
@@ -597,6 +643,7 @@ def build_constraints_from_targets(
     targets: List[Dict[str, Any]] | List[TargetSpec],
     min_obs: int = 100,
     include_amounts: bool = False,
+    holdout_variables: tuple[str, ...] = (),
     return_diagnostics: bool = False,
 ) -> List[Dict]:
     """
@@ -613,19 +660,24 @@ def build_constraints_from_targets(
     - Population counts (different universe than tax filers)
     """
     if targets and isinstance(targets[0], TargetSpec):
-        constraints, diagnostics = build_constraints_and_diagnostics_from_target_specs(
-            df,
-            targets,
-            min_obs=min_obs,
-            include_amounts=include_amounts,
+        constraints, diagnostics, evaluation_constraints = (
+            build_constraints_and_diagnostics_from_target_specs(
+                df,
+                targets,
+                min_obs=min_obs,
+                include_amounts=include_amounts,
+                holdout_variables=holdout_variables,
+            )
         )
         if return_diagnostics:
-            return constraints, diagnostics
+            return constraints, diagnostics, evaluation_constraints
         return constraints
 
     constraints = []
+    evaluation_constraints = []
     diagnostics = []
     seen_keys = set()
+    holdout_variable_set = set(holdout_variables)
     df = df.copy()
 
     # Precompute AGI brackets
@@ -639,21 +691,17 @@ def build_constraints_from_targets(
 
         # Only calibrate on supported variables
         if variable not in SUPPORTED_TARGET_VARIABLES:
-            diagnostic.update(status="dropped", drop_reason="unsupported_variable")
+            _mark_unsupported(diagnostic, "unsupported_variable")
             diagnostics.append(diagnostic)
             continue
 
         # Skip rate targets; optionally skip amount targets
         if target_type == "rate":
-            diagnostic.update(status="dropped", drop_reason="rate_target")
-            diagnostics.append(diagnostic)
-            continue
-        if target_type == "amount" and not include_amounts:
-            diagnostic.update(status="dropped", drop_reason="amount_targets_disabled")
+            _mark_unsupported(diagnostic, "rate_target")
             diagnostics.append(diagnostic)
             continue
         if target_type == "amount" and value <= 0:
-            diagnostic.update(status="dropped", drop_reason="nonpositive_amount_target")
+            _mark_unsupported(diagnostic, "nonpositive_amount_target")
             diagnostics.append(diagnostic)
             continue
 
@@ -670,17 +718,9 @@ def build_constraints_from_targets(
                 has_unsupported = True
                 break
         if has_unsupported:
-            diagnostic.update(status="dropped", drop_reason="unsupported_constraint")
+            _mark_unsupported(diagnostic, "unsupported_constraint")
             diagnostics.append(diagnostic)
             continue
-
-        # Deduplicate
-        key = (stratum_name, variable, target_type)
-        if key in seen_keys:
-            diagnostic.update(status="dropped", drop_reason="duplicate_target")
-            diagnostics.append(diagnostic)
-            continue
-        seen_keys.add(key)
 
         tuple_constraints = [
             (
@@ -699,27 +739,45 @@ def build_constraints_from_targets(
             stratum_constraints=tuple_constraints,
         )
         if constraint_dict is None:
-            diagnostic.update(
-                status="dropped",
-                drop_reason="could_not_build_constraint",
-            )
+            _mark_unsupported(diagnostic, "could_not_build_constraint")
             diagnostics.append(diagnostic)
             continue
 
         n_obs = constraint_dict["n_obs"]
         diagnostic["n_obs"] = int(n_obs)
-        if n_obs >= min_obs:
-            diagnostic.update(status="used", drop_reason="")
+        key = (stratum_name, variable, target_type)
+        drop_reason = ""
+        is_holdout = variable in holdout_variable_set
+        if is_holdout:
+            drop_reason = "holdout"
+        elif key in seen_keys:
+            drop_reason = "duplicate_target"
+        elif target_type == "amount" and not include_amounts:
+            drop_reason = "amount_targets_disabled"
+        elif n_obs < min_obs:
+            drop_reason = "insufficient_obs"
+
+        if drop_reason:
+            if is_holdout:
+                _mark_holdout(diagnostic)
+            else:
+                _mark_diagnostic(diagnostic, drop_reason)
             diagnostic_index = len(diagnostics)
             constraint_dict["diagnostic_index"] = diagnostic_index
-            constraints.append(constraint_dict)
-        else:
-            diagnostic.update(status="dropped", drop_reason="insufficient_obs")
+            diagnostics.append(diagnostic)
+            evaluation_constraints.append(constraint_dict)
+            continue
+
+        seen_keys.add(key)
+        _mark_active(diagnostic)
+        diagnostic_index = len(diagnostics)
+        constraint_dict["diagnostic_index"] = diagnostic_index
+        constraints.append(constraint_dict)
         diagnostics.append(diagnostic)
 
     print(f"  Built {len(constraints)} constraints (min {min_obs} obs each)")
     if return_diagnostics:
-        return constraints, diagnostics
+        return constraints, diagnostics, evaluation_constraints
     return constraints
 
 
@@ -956,6 +1014,7 @@ def calibrate_weights(
     min_obs: int = 100,
     calibration_method: str = "auto",
     weight_bounds: tuple[float, float] = (0.1, 20.0),
+    holdout_variables: tuple[str, ...] = (),
     verbose: bool = True,
 ) -> CalibrationResult:
     """Calibrate Microplex weights to Arch target inputs."""
@@ -965,11 +1024,12 @@ def calibrate_weights(
         print(f"\nCalibrating {len(df):,} tax units...")
         print(f"Original weighted total: {original_weights.sum():,.0f}")
 
-    constraints, diagnostics = build_constraints_from_targets(
+    constraints, diagnostics, evaluation_constraints = build_constraints_from_targets(
         df,
         targets,
         min_obs=min_obs,
         include_amounts=include_amounts,
+        holdout_variables=holdout_variables,
         return_diagnostics=True,
     )
     diagnostics_df = pd.DataFrame(diagnostics)
@@ -1009,6 +1069,14 @@ def calibrate_weights(
             "target": c["target_value"],
             "error": error,
         }
+    for c in evaluation_constraints:
+        _update_diagnostic_values(
+            diagnostics_df,
+            c,
+            weights=original_weights,
+            value_column="pre_value",
+            error_column="pre_error",
+        )
 
     has_amount_constraints = any(c.get("target_type") == "amount" for c in constraints)
     method = calibration_method
@@ -1049,6 +1117,14 @@ def calibrate_weights(
             "error": error,
         }
         max_error = max(max_error, abs(error))
+    for c in evaluation_constraints:
+        _update_diagnostic_values(
+            diagnostics_df,
+            c,
+            weights=calibrated_weights,
+            value_column="post_value",
+            error_column="post_error",
+        )
 
     adjustment_factors = calibrated_weights / original_weights
 
@@ -1070,6 +1146,24 @@ def calibrate_weights(
         l2_loss=l2_loss,
         method=method,
     )
+
+
+def _update_diagnostic_values(
+    diagnostics_df: pd.DataFrame,
+    constraint: dict[str, Any],
+    *,
+    weights: np.ndarray,
+    value_column: str,
+    error_column: str,
+) -> None:
+    diagnostic_index = constraint.get("diagnostic_index")
+    if diagnostic_index is None:
+        return
+    current = float(np.dot(weights, constraint["indicator"]))
+    target = constraint["target_value"]
+    error = (current - target) / target if target != 0 else 0
+    diagnostics_df.loc[diagnostic_index, value_column] = current
+    diagnostics_df.loc[diagnostic_index, error_column] = error
 
 
 def _constraint_key(constraint: dict[str, Any]) -> str:
@@ -1214,6 +1308,9 @@ def run_pipeline(
         min_obs=min_target_obs,
         calibration_method=calibration_method,
         weight_bounds=(min_weight_factor, max_weight_factor),
+        holdout_variables=target_profile.holdout_variables
+        if target_source == "db"
+        else (),
     )
 
     # Add calibrated weights to dataframe
@@ -1260,6 +1357,10 @@ def print_calibration_diagnostics(diagnostics: pd.DataFrame, max_rows: int = 8) 
     print("\nCalibration target diagnostics:")
     print(f"  Used targets: {len(used):,}")
     print(f"  Dropped targets: {len(dropped):,}")
+    if "role" in diagnostics:
+        roles = diagnostics["role"].fillna("unknown").value_counts()
+        role_text = ", ".join(f"{role}={count}" for role, count in roles.items())
+        print(f"  Target roles: {role_text}")
     if not dropped.empty:
         reasons = dropped["drop_reason"].value_counts()
         reason_text = ", ".join(f"{reason}={count}" for reason, count in reasons.items())

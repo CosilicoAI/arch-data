@@ -150,6 +150,72 @@ def test_calibrate_weights_preserves_per_target_diagnostics():
     }
 
 
+def test_calibrate_weights_roles_diagnostic_and_unsupported_targets():
+    df = pd.DataFrame(
+        {
+            "weight": [1.0, 1.0, 1.0],
+            "is_tax_filer": [1, 1, 1],
+            "adjusted_gross_income": [10_000.0, 20_000.0, 30_000.0],
+        }
+    )
+    targets = [
+        TargetSpec(
+            variable="tax_unit_count",
+            value=3.0,
+            target_type=TargetType.COUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="All filers",
+        ),
+        TargetSpec(
+            variable="tax_unit_count",
+            value=1.0,
+            target_type=TargetType.COUNT,
+            constraints=[("adjusted_gross_income", ">=", "25000")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="High AGI sparse cell",
+        ),
+        TargetSpec(
+            variable="adjusted_gross_income",
+            value=60_000.0,
+            target_type=TargetType.AMOUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="AGI holdout",
+        ),
+        TargetSpec(
+            variable="snap_benefit",
+            value=1.0,
+            target_type=TargetType.AMOUNT,
+            constraints=[],
+            source=DataSource.USDA_SNAP,
+            period=2024,
+            stratum_name="SNAP benefits",
+        ),
+    ]
+
+    result = microplex.calibrate_weights(
+        df,
+        targets,
+        min_obs=2,
+        holdout_variables=("adjusted_gross_income",),
+        verbose=False,
+    )
+
+    diagnostics = result.diagnostics.set_index("stratum")
+    assert diagnostics.loc["All filers", "role"] == "active"
+    assert diagnostics.loc["High AGI sparse cell", "role"] == "diagnostic"
+    assert diagnostics.loc["High AGI sparse cell", "drop_reason"] == "insufficient_obs"
+    assert diagnostics.loc["High AGI sparse cell", "post_value"] == 1.0
+    assert diagnostics.loc["AGI holdout", "role"] == "holdout"
+    assert diagnostics.loc["AGI holdout", "post_value"] == 60_000.0
+    assert diagnostics.loc["SNAP benefits", "role"] == "unsupported"
+    assert pd.isna(diagnostics.loc["SNAP benefits", "post_value"])
+
+
 def test_generalized_rake_calibrates_count_and_amount_targets():
     df = pd.DataFrame(
         {
