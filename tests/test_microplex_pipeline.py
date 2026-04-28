@@ -147,3 +147,51 @@ def test_calibrate_weights_preserves_per_target_diagnostics():
         "tax_unit_count|count|All filers",
         "adjusted_gross_income|amount|All filers",
     }
+
+
+def test_generalized_rake_calibrates_count_and_amount_targets():
+    df = pd.DataFrame(
+        {
+            "weight": [1.0, 1.0, 1.0, 1.0],
+            "is_tax_filer": [1, 1, 1, 1],
+            "adjusted_gross_income": [10_000.0, 20_000.0, 80_000.0, 90_000.0],
+        }
+    )
+    targets = [
+        TargetSpec(
+            variable="tax_unit_count",
+            value=4.0,
+            target_type=TargetType.COUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="All filers",
+        ),
+        TargetSpec(
+            variable="adjusted_gross_income",
+            value=240_000.0,
+            target_type=TargetType.AMOUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="All filers",
+        ),
+    ]
+
+    result = microplex.calibrate_weights(
+        df,
+        targets,
+        include_amounts=True,
+        min_obs=1,
+        calibration_method="generalized-rake",
+        verbose=False,
+    )
+
+    assert result.success
+    assert result.method == "generalized-rake"
+    count_error = result.targets_after["tax_unit_count|count|All filers"]["error"]
+    amount_error = result.targets_after[
+        "adjusted_gross_income|amount|All filers"
+    ]["error"]
+    assert abs(count_error) < 0.01
+    assert abs(amount_error) < 0.01

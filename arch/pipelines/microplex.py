@@ -1,14 +1,12 @@
 """
 Arch-to-Microplex Pipeline: Build calibrated microdata from Arch sources.
 
-Reads CPS microdata and Arch target inputs, runs IPF calibration, and writes
+Reads CPS microdata and Arch target inputs, runs calibration, and writes
 calibrated microplex output locally or back to Supabase.
 
-Calibration methods compared (L2 loss, runtime):
-- IPF (100 iter): L2=0.040, 0.6s   <-- RECOMMENDED
-- IPF+GREG (20):  L2=0.038, 301s   (486x slower for 7% better)
-- Entropy:        L2=9.0, 0.04s    (doesn't converge)
-- GD L2:          L2=0.77          (doesn't converge)
+Calibration methods:
+- generalized-rake: bounded dual raking for count and amount constraints
+- ipf: fast count-only iterative proportional fitting
 
 Usage:
     python -m arch.pipelines.microplex --year 2024
@@ -40,7 +38,7 @@ from arch.targets.microplex import (
 
 @dataclass
 class CalibrationResult:
-    """Results from IPF calibration."""
+    """Results from Microplex weight calibration."""
     original_weights: np.ndarray
     calibrated_weights: np.ndarray
     adjustment_factors: np.ndarray
@@ -50,6 +48,7 @@ class CalibrationResult:
     success: bool
     message: str
     l2_loss: float
+    method: str
 
 
 AGING_NOTE_RE = re.compile(
@@ -774,14 +773,173 @@ def ipf_calibrate(
     return w, success, l2_loss
 
 
+def generalized_rake_calibrate(
+    original_weights: np.ndarray,
+    constraints: List[Dict],
+    bounds: tuple[float, float] = (0.1, 10.0),
+    max_iter: int = 80,
+    target_tolerance: float = 0.05,
+    verbose: bool = True,
+) -> tuple[np.ndarray, bool, float]:
+    """
+    Calibrate weights with bounded generalized raking.
+
+    This solves the entropy/raking problem in the dual, where the number of
+    variables is the number of calibration constraints rather than the number
+    of microdata rows. It supports overlapping count and amount constraints
+    such as SOI filer counts and AGI totals by bracket.
+
+    Args:
+        original_weights: Initial survey weights.
+        constraints: Constraint dicts with ``indicator`` and ``target_value``.
+        bounds: Min/max adjustment factors around ``original_weights``.
+        max_iter: Maximum Newton iterations.
+        target_tolerance: Success threshold for max relative target error.
+        verbose: Print progress.
+
+    Returns:
+        (calibrated_weights, success, l2_loss)
+    """
+    lower, upper = bounds
+    if not 0 < lower < 1 < upper:
+        raise ValueError("generalized raking bounds must satisfy 0 < lower < 1 < upper")
+
+    n = len(original_weights)
+    m = len(constraints)
+    if verbose:
+        print(
+            "Generalized raking calibration: "
+            f"{n:,} weights, {m} constraints, bounds=[{lower}, {upper}]"
+        )
+
+    A = np.vstack([np.asarray(c["indicator"], dtype=float) for c in constraints])
+    targets = np.asarray([c["target_value"] for c in constraints], dtype=float)
+    if np.any(~np.isfinite(A)) or np.any(~np.isfinite(targets)):
+        raise ValueError("Calibration constraints contain non-finite values")
+    if np.any(targets == 0):
+        raise ValueError("Generalized raking requires nonzero target values")
+
+    current = A @ original_weights
+    if np.any(current == 0):
+        zero_constraints = [
+            _constraint_key(c) for c, value in zip(constraints, current) if value == 0
+        ]
+        raise ValueError(
+            "Cannot calibrate constraints with zero current support: "
+            + ", ".join(zero_constraints)
+        )
+
+    # Row scaling keeps count and amount constraints on comparable numerical
+    # footing without changing the equations being solved.
+    scale = np.abs(current)
+    B = A / scale[:, None]
+    scaled_targets = targets / scale
+
+    offset = np.log((1 - lower) / (upper - 1))
+    dual = np.zeros(m)
+    best_weights = original_weights.copy()
+    best_error = np.inf
+
+    for iteration in range(max_iter):
+        adjustment, derivative = _bounded_rake_adjustment(
+            B.T @ dual,
+            offset=offset,
+            lower=lower,
+            upper=upper,
+        )
+        weights = original_weights * adjustment
+        residual = B @ weights - scaled_targets
+        relative_errors = (A @ weights - targets) / targets
+        max_error = float(np.max(np.abs(relative_errors)))
+        if max_error < best_error:
+            best_error = max_error
+            best_weights = weights.copy()
+
+        if verbose and (iteration == 0 or (iteration + 1) % 10 == 0):
+            print(
+                f"  iter {iteration + 1}: max error={max_error:.2%}, "
+                f"adjustment range=[{adjustment.min():.2f}, {adjustment.max():.2f}]"
+            )
+
+        jacobian = (B * (original_weights * derivative)) @ B.T
+        ridge = max(float(np.trace(jacobian)) / max(m, 1) * 1e-9, 1e-12)
+        step = np.linalg.lstsq(
+            jacobian + np.eye(m) * ridge,
+            residual,
+            rcond=None,
+        )[0]
+
+        residual_norm = float(np.linalg.norm(residual))
+        step_accepted = False
+        small_improvement = False
+        step_size = 1.0
+        for _ in range(30):
+            candidate_dual = dual - step_size * step
+            candidate_adjustment, _ = _bounded_rake_adjustment(
+                B.T @ candidate_dual,
+                offset=offset,
+                lower=lower,
+                upper=upper,
+            )
+            candidate_residual = (
+                B @ (original_weights * candidate_adjustment) - scaled_targets
+            )
+            candidate_norm = float(np.linalg.norm(candidate_residual))
+            if (
+                np.all(np.isfinite(candidate_residual))
+                and candidate_norm < residual_norm
+            ):
+                dual = candidate_dual
+                step_accepted = True
+                small_improvement = (residual_norm - candidate_norm) <= max(
+                    1e-12,
+                    residual_norm * 1e-8,
+                )
+                break
+            step_size *= 0.5
+
+        if not step_accepted or small_improvement:
+            break
+
+    relative_errors = (A @ best_weights - targets) / targets
+    l2_loss = float(np.mean(relative_errors**2))
+    max_error = float(np.max(np.abs(relative_errors)))
+    success = max_error < target_tolerance
+
+    if verbose:
+        print(
+            f"Generalized raking complete: max error = {max_error:.1%}, "
+            f"L2 loss = {l2_loss:.6f}"
+        )
+
+    return best_weights, success, l2_loss
+
+
+def _bounded_rake_adjustment(
+    linear_predictor: np.ndarray,
+    *,
+    offset: float,
+    lower: float,
+    upper: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return bounded calibration factors and derivatives."""
+    z = np.clip(offset + linear_predictor, -60, 60)
+    probability = 1 / (1 + np.exp(-z))
+    adjustment = lower + (upper - lower) * probability
+    derivative = (adjustment - lower) * (upper - adjustment) / (upper - lower)
+    return adjustment, derivative
+
+
 def calibrate_weights(
     df: pd.DataFrame,
     targets: List[Dict[str, Any]] | List[TargetSpec],
-    include_amounts: bool = False,
+    include_amounts: bool = True,
     min_obs: int = 100,
+    calibration_method: str = "auto",
+    weight_bounds: tuple[float, float] = (0.1, 10.0),
     verbose: bool = True,
 ) -> CalibrationResult:
-    """Calibrate weights using IPF (Iterative Proportional Fitting)."""
+    """Calibrate Microplex weights to Arch target inputs."""
     original_weights = df["weight"].values.copy()
 
     if verbose:
@@ -833,10 +991,26 @@ def calibrate_weights(
             "error": error,
         }
 
-    # Run IPF calibration
-    calibrated_weights, success, l2_loss = ipf_calibrate(
-        original_weights, constraints, verbose=verbose
-    )
+    has_amount_constraints = any(c.get("target_type") == "amount" for c in constraints)
+    method = calibration_method
+    if method == "auto":
+        method = "generalized-rake" if has_amount_constraints else "ipf"
+
+    if method == "ipf":
+        calibrated_weights, success, l2_loss = ipf_calibrate(
+            original_weights,
+            constraints,
+            verbose=verbose,
+        )
+    elif method == "generalized-rake":
+        calibrated_weights, success, l2_loss = generalized_rake_calibrate(
+            original_weights,
+            constraints,
+            bounds=weight_bounds,
+            verbose=verbose,
+        )
+    else:
+        raise ValueError(f"Unknown calibration method: {calibration_method}")
 
     # Post-calibration values
     targets_after = {}
@@ -875,6 +1049,7 @@ def calibrate_weights(
         success=success,
         message="Converged" if success else "Did not converge",
         l2_loss=l2_loss,
+        method=method,
     )
 
 
@@ -936,8 +1111,11 @@ def run_pipeline(
     cps_path: Path | None = None,
     output_path: Path | None = None,
     age_soi: bool = True,
-    include_amount_targets: bool = False,
+    include_amount_targets: bool = True,
     min_target_obs: int = 100,
+    calibration_method: str = "auto",
+    min_weight_factor: float = 0.1,
+    max_weight_factor: float = 10.0,
     diagnostics_path: Path | None = None,
 ) -> pd.DataFrame:
     """Run the full microplex pipeline."""
@@ -1025,6 +1203,8 @@ def run_pipeline(
         targets,
         include_amounts=include_amount_targets,
         min_obs=min_target_obs,
+        calibration_method=calibration_method,
+        weight_bounds=(min_weight_factor, max_weight_factor),
     )
 
     # Add calibrated weights to dataframe
@@ -1041,6 +1221,7 @@ def run_pipeline(
     print(f"Total tax units: {len(df):,}")
     print(f"Original weighted: {result.original_weights.sum():,.0f}")
     print(f"Calibrated weighted: {result.calibrated_weights.sum():,.0f}")
+    print(f"Calibration method: {result.method}")
     print(f"Calibration success: {result.success}")
     print_calibration_diagnostics(result.diagnostics)
 
@@ -1134,8 +1315,8 @@ def main():
     parser.add_argument(
         "--include-amount-targets",
         action=argparse.BooleanOptionalAction,
-        default=False,
-        help="Opt in to amount targets such as AGI totals in calibration",
+        default=True,
+        help="Include amount targets such as AGI totals in calibration",
     )
     parser.add_argument(
         "--min-target-obs",
@@ -1148,6 +1329,24 @@ def main():
         type=Path,
         default=None,
         help="Optional CSV or Parquet path for calibration target diagnostics",
+    )
+    parser.add_argument(
+        "--calibration-method",
+        choices=["auto", "ipf", "generalized-rake"],
+        default="auto",
+        help="Calibration solver to use",
+    )
+    parser.add_argument(
+        "--min-weight-factor",
+        type=float,
+        default=0.1,
+        help="Minimum generalized-rake weight adjustment factor",
+    )
+    parser.add_argument(
+        "--max-weight-factor",
+        type=float,
+        default=10.0,
+        help="Maximum generalized-rake weight adjustment factor",
     )
     args = parser.parse_args()
 
@@ -1163,6 +1362,9 @@ def main():
         age_soi=args.age_soi_targets,
         include_amount_targets=args.include_amount_targets,
         min_target_obs=args.min_target_obs,
+        calibration_method=args.calibration_method,
+        min_weight_factor=args.min_weight_factor,
+        max_weight_factor=args.max_weight_factor,
         diagnostics_path=args.diagnostics_path,
     )
 
