@@ -8,13 +8,12 @@ the architecture in docs/calibration-pipeline.md.
 import numpy as np
 import pandas as pd
 from dataclasses import dataclass
-from typing import Optional
 from scipy.optimize import minimize
 import sys
 sys.path.insert(0, str(__file__).rsplit('/', 3)[0])  # Add parent to path
 
 from calibration.constraints import Constraint
-from db.schema import TargetType
+from arch.targets import TargetType
 
 
 # IRS SOI 2021 Targets (from Statistics of Income, Table 1.1)
@@ -118,7 +117,6 @@ def build_constraints(df: pd.DataFrame, min_obs: int = 100) -> list[Constraint]:
     Only uses bracket constraints (total is redundant since sum of brackets = total).
     """
     constraints = []
-    n = len(df)
 
     df = df.copy()
     df['agi_bracket'] = assign_agi_bracket(df['adjusted_gross_income'].values)

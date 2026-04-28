@@ -138,7 +138,7 @@ python scripts/cps_to_cosilico.py --year 2024 --calibrate --summary
 
 ### 3. Validate Against Targets
 ```python
-from db.schema import get_engine, Target
+from arch.targets import get_engine, Target
 from sqlmodel import Session, select
 
 with Session(get_engine()) as session:

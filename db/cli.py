@@ -1,4 +1,4 @@
-"""CLI for managing the targets database."""
+"""CLI for managing Arch target input data."""
 
 import argparse
 import os
@@ -170,7 +170,7 @@ def cmd_query(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Manage cosilico-data-sources targets database"
+        description="Manage Arch target input data"
     )
     parser.add_argument(
         "--db",

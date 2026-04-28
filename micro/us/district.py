@@ -5,7 +5,7 @@ Generates synthetic tax units at geographic granularity (states, counties,
 congressional districts) and calibrates weights to match local targets.
 
 Uses microplex library for synthesis and calibration algorithms.
-Uses microplex-sources targets database for authoritative calibration data.
+Uses Arch targets for authoritative calibration data.
 
 Example:
     >>> from micro.us.district import DistrictMicroplex
@@ -21,15 +21,22 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
 
-# Import algorithms from microplex
-from microplex import SparseCalibrator, ConditionalMAF
+# Import algorithms from microplex. SparseCalibrator is not available in every
+# released microplex build, so keep module import cheap and fail only when
+# calibration actually needs it.
+from microplex import ConditionalMAF
 
-# Import targets from microplex-sources
+try:
+    from microplex import SparseCalibrator as MicroplexSparseCalibrator
+except ImportError:
+    MicroplexSparseCalibrator = None
+
+# Import targets from Arch-compatible calibration adapters
 from calibration.targets import TargetSpec, get_targets
 
 
@@ -58,7 +65,7 @@ def build_targets_from_db(
     verbose: bool = False,
 ) -> Tuple[Dict[str, Dict], Dict[str, float]]:
     """
-    Build calibration targets from microplex-sources database.
+    Build calibration targets from the Arch target database.
 
     Args:
         year: Target year (default 2021)
@@ -241,7 +248,7 @@ class DistrictMicroplex:
     # Private attributes
     _maf: Optional[ConditionalMAF] = field(default=None, repr=False)
     _seed_data: Optional[pd.DataFrame] = field(default=None, repr=False)
-    _calibrator: Optional[SparseCalibrator] = field(default=None, repr=False)
+    _calibrator: Optional[Any] = field(default=None, repr=False)
 
     def __post_init__(self):
         """Initialize private attributes."""
@@ -322,7 +329,7 @@ class DistrictMicroplex:
         X, C, cont_vars, cond_vars = self._prepare_training_data(seed_data)
 
         if verbose:
-            print(f"Training ConditionalMAF:")
+            print("Training ConditionalMAF:")
             print(f"  Continuous vars: {cont_vars}")
             print(f"  Condition shape: {C.shape if C is not None else 'None'}")
             print(f"  Data shape: {X.shape}")
@@ -428,7 +435,13 @@ class DistrictMicroplex:
         Returns:
             Calibrated DataFrame with adjusted weights
         """
-        self._calibrator = SparseCalibrator(
+        if MicroplexSparseCalibrator is None:
+            raise ImportError(
+                "microplex.SparseCalibrator is required for district calibration "
+                "but is not available in the installed microplex package."
+            )
+
+        self._calibrator = MicroplexSparseCalibrator(
             target_sparsity=self.target_sparsity,
             max_iter=2000,
             tol=1e-6,

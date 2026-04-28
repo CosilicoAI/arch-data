@@ -16,7 +16,6 @@ from db.schema import (
 from db.etl_aca_enrollment import (
     load_aca_enrollment_targets,
     ACA_ENROLLMENT_DATA,
-    METAL_LEVEL_BY_STATE,
 )
 
 
@@ -154,6 +153,7 @@ class TestAcaEnrollmentETL:
             national_data = ACA_ENROLLMENT_DATA[2024]["national"]
             expected = int(national_data["total_enrollment"] * national_data["silver_pct"])
             assert enrollment.value == expected
+            assert "apply_share" in enrollment.notes
 
     def test_load_aca_creates_state_strata(self, temp_db):
         """Loading ACA should create state-level strata."""

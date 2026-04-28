@@ -62,6 +62,7 @@ class TestSnapETL:
             assert hh_target.value == expected_hh
             assert hh_target.target_type == TargetType.COUNT
             assert hh_target.source == DataSource.USDA_SNAP
+            assert "convert_units" in hh_target.notes
 
     def test_load_snap_creates_participant_targets(self, temp_db):
         """Loading SNAP should create participant count targets."""
@@ -103,6 +104,7 @@ class TestSnapETL:
             expected = SNAP_DATA[2023]["national"]["benefits"] * 1_000_000
             assert benefit_target.value == expected
             assert benefit_target.target_type == TargetType.AMOUNT
+            assert "convert_units" in benefit_target.notes
 
     def test_load_snap_creates_state_strata(self, temp_db):
         """Loading SNAP should create state-level strata."""

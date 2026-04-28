@@ -1,11 +1,10 @@
 """
-Supabase client for microplex-sources.
+Supabase client for Arch.
 
 Provides connection to Cosilico Supabase database for:
-- Raw microdata tables (e.g., microplex.us_census_cps_asec_2024_person)
-- Calibration targets (microplex.targets)
-- Data sources metadata (microplex.sources)
-- Dataset registry (microplex.datasets)
+- Source metadata and dataset registries
+- Raw microdata tables (e.g., microdata.us_census_cps_asec_2024_person)
+- Target inputs
 
 Table naming pattern: {jurisdiction}_{institution}_{dataset}_{year}_{table_type}
 Example: us_census_cps_asec_2024_person
@@ -20,6 +19,11 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 from supabase import create_client, Client
+
+
+ARCH_SCHEMA = os.environ.get("COSILICO_ARCH_SCHEMA", "arch")
+MICRODATA_SCHEMA = os.environ.get("COSILICO_MICRODATA_SCHEMA", "microdata")
+TARGETS_SCHEMA = os.environ.get("COSILICO_TARGETS_SCHEMA", "targets")
 
 
 @dataclass
@@ -112,7 +116,7 @@ def query_sources(
     institution: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Query data sources from microplex.sources.
+    Query data sources from the Arch source registry.
 
     Args:
         jurisdiction: Filter by jurisdiction (e.g., "us", "uk")
@@ -122,7 +126,7 @@ def query_sources(
         List of source records
     """
     client = get_supabase_client()
-    query = client.schema("microplex").table("sources").select("*")
+    query = client.schema(ARCH_SCHEMA).table("sources").select("*")
 
     if jurisdiction:
         query = query.eq("jurisdiction", jurisdiction)
@@ -152,7 +156,7 @@ def list_datasets(
         List of dataset records with table_name
     """
     client = get_supabase_client()
-    query = client.schema("microplex").table("datasets").select("*")
+    query = client.schema(ARCH_SCHEMA).table("datasets").select("*")
 
     if jurisdiction:
         query = query.eq("jurisdiction", jurisdiction)
@@ -210,7 +214,7 @@ def register_dataset(
     if source_url:
         data["source_url"] = source_url
 
-    result = client.schema("microplex").table("datasets").upsert(data, on_conflict="jurisdiction,institution,dataset,year,table_type").execute()
+    result = client.schema(ARCH_SCHEMA).table("datasets").upsert(data, on_conflict="jurisdiction,institution,dataset,year,table_type").execute()
     return result.data[0] if result.data else {}
 
 
@@ -256,7 +260,7 @@ def query_microdata(
 
     while offset < limit:
         fetch_limit = min(page_size, limit - offset)
-        query = client.schema("microplex").table(table_name).select(select_cols)
+        query = client.schema(MICRODATA_SCHEMA).table(table_name).select(select_cols)
 
         if filters:
             for col, val in filters.items():
@@ -321,7 +325,7 @@ def query_strata(
     jurisdiction: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Query strata with their constraints from microplex.strata.
+    Query target input strata with their constraints.
 
     Args:
         jurisdiction: Filter by jurisdiction
@@ -330,7 +334,7 @@ def query_strata(
         List of strata records with nested constraints
     """
     client = get_supabase_client()
-    query = client.schema("microplex").table("strata").select("*, stratum_constraints(*)")
+    query = client.schema(TARGETS_SCHEMA).table("strata").select("*, stratum_constraints(*)")
 
     if jurisdiction:
         query = query.eq("jurisdiction", jurisdiction)
@@ -346,7 +350,7 @@ def query_targets(
     variable: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Query calibration targets from microplex.targets.
+    Query Arch target inputs.
 
     Args:
         jurisdiction: Filter by jurisdiction (via stratum join)
@@ -359,7 +363,7 @@ def query_targets(
     """
     client = get_supabase_client()
     # Nested join: strata with their stratum_constraints
-    query = client.schema("microplex").table("targets").select("*, strata(*, stratum_constraints(*)), sources(*)")
+    query = client.schema(TARGETS_SCHEMA).table("targets").select("*, strata(*, stratum_constraints(*)), sources(*)")
 
     if year:
         query = query.eq("period", year)
@@ -412,7 +416,7 @@ def insert_microdata_batch(
 
     for i in range(0, len(records), chunk_size):
         chunk = records[i:i + chunk_size]
-        client.schema("microplex").table(table_name).insert(chunk).execute()
+        client.schema(MICRODATA_SCHEMA).table(table_name).insert(chunk).execute()
         total += len(chunk)
 
     return total
@@ -437,7 +441,7 @@ def insert_targets_batch(
 
     for i in range(0, len(targets), chunk_size):
         chunk = targets[i:i + chunk_size]
-        client.schema("microplex").table("targets").insert(chunk).execute()
+        client.schema(TARGETS_SCHEMA).table("targets").insert(chunk).execute()
         total += len(chunk)
 
     return total

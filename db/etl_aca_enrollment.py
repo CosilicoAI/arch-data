@@ -18,9 +18,9 @@ from .schema import (
     StratumConstraint,
     Target,
     TargetType,
-    get_engine,
     init_db,
 )
+from arch.normalization import SourceFact, apply_share, as_target, target_kwargs
 
 # State FIPS codes
 STATE_FIPS = {
@@ -282,6 +282,45 @@ SOURCE_URL = "https://www.cms.gov/data-research/statistics-trends-reports/market
 KFF_SOURCE_URL = "https://www.kff.org/affordable-care-act/state-indicator/marketplace-enrollment/"
 
 
+def build_aca_metal_enrollment_target(
+    stratum: Stratum,
+    *,
+    total_enrollment: float,
+    share: float,
+    share_name: str,
+    period: int,
+    source_table: str,
+    source_url: str,
+) -> Target:
+    """Build ACA metal-level enrollment from total enrollment and a share."""
+    total_fact = SourceFact(
+        name="aca_marketplace_enrollment",
+        value=total_enrollment,
+        period=period,
+        unit="count",
+        source=DataSource.CMS_ACA,
+        jurisdiction=stratum.jurisdiction,
+        source_table=source_table,
+        source_url=source_url,
+    )
+    metal_fact = apply_share(
+        total_fact,
+        share,
+        name="aca_marketplace_metal_level_enrollment",
+        share_name=share_name,
+        unit="count",
+    )
+    blueprint = as_target(
+        metal_fact,
+        variable="aca_marketplace_enrollment",
+        target_type=TargetType.COUNT,
+        stratum_name=stratum.name,
+    )
+    kwargs = target_kwargs(blueprint, stratum_id=stratum.id)
+    kwargs["value"] = int(kwargs["value"])
+    return Target(**kwargs)
+
+
 def get_or_create_stratum(
     session: Session,
     name: str,
@@ -492,19 +531,13 @@ def load_aca_enrollment_targets(session: Session, years: list[int] | None = None
                     stratum_group_id="aca_metal_levels",
                 )
 
-                # Calculate enrollment count from percentage
-                metal_enrollment = int(
-                    national_data["total_enrollment"] * national_data[pct_key]
-                )
-
                 session.add(
-                    Target(
-                        stratum_id=metal_stratum.id,
-                        variable="aca_marketplace_enrollment",
+                    build_aca_metal_enrollment_target(
+                        metal_stratum,
+                        total_enrollment=national_data["total_enrollment"],
+                        share=national_data[pct_key],
+                        share_name=pct_key,
                         period=year,
-                        value=metal_enrollment,
-                        target_type=TargetType.COUNT,
-                        source=DataSource.CMS_ACA,
                         source_table="Marketplace OEP Metal Level Report",
                         source_url=SOURCE_URL,
                     )
@@ -578,16 +611,13 @@ def load_aca_enrollment_targets(session: Session, years: list[int] | None = None
                                 stratum_group_id="aca_state_metal_levels",
                             )
 
-                            metal_enrollment = int(state_data["enrollment"] * pct)
-
                             session.add(
-                                Target(
-                                    stratum_id=state_metal_stratum.id,
-                                    variable="aca_marketplace_enrollment",
+                                build_aca_metal_enrollment_target(
+                                    state_metal_stratum,
+                                    total_enrollment=state_data["enrollment"],
+                                    share=pct,
+                                    share_name=metal_level,
                                     period=year,
-                                    value=metal_enrollment,
-                                    target_type=TargetType.COUNT,
-                                    source=DataSource.CMS_ACA,
                                     source_table="Marketplace OEP State Metal Level Report",
                                     source_url=SOURCE_URL,
                                 )

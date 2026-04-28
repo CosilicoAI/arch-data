@@ -156,7 +156,7 @@ def calibrate_microdata(
 ## Directory Structure
 
 ```
-cosilico-data-sources/
+arch/
 ├── calibration/
 │   ├── __init__.py
 │   ├── loader.py           # load_microdata()
@@ -243,4 +243,4 @@ Optimizations:
 3. [ ] Implement `calibration/methods/entropy.py` (core algorithm)
 4. [ ] Add tests with mock data
 5. [ ] Benchmark on real CPS
-6. [ ] Integrate with cosilico-microdata
+6. [ ] Integrate with Arch microdata loaders
