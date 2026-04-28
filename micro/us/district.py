@@ -21,13 +21,20 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
 
-# Import algorithms from microplex
-from microplex import SparseCalibrator, ConditionalMAF
+# Import algorithms from microplex. SparseCalibrator is not available in every
+# released microplex build, so keep module import cheap and fail only when
+# calibration actually needs it.
+from microplex import ConditionalMAF
+
+try:
+    from microplex import SparseCalibrator as MicroplexSparseCalibrator
+except ImportError:
+    MicroplexSparseCalibrator = None
 
 # Import targets from Arch-compatible calibration adapters
 from calibration.targets import TargetSpec, get_targets
@@ -241,7 +248,7 @@ class DistrictMicroplex:
     # Private attributes
     _maf: Optional[ConditionalMAF] = field(default=None, repr=False)
     _seed_data: Optional[pd.DataFrame] = field(default=None, repr=False)
-    _calibrator: Optional[SparseCalibrator] = field(default=None, repr=False)
+    _calibrator: Optional[Any] = field(default=None, repr=False)
 
     def __post_init__(self):
         """Initialize private attributes."""
@@ -428,7 +435,13 @@ class DistrictMicroplex:
         Returns:
             Calibrated DataFrame with adjusted weights
         """
-        self._calibrator = SparseCalibrator(
+        if MicroplexSparseCalibrator is None:
+            raise ImportError(
+                "microplex.SparseCalibrator is required for district calibration "
+                "but is not available in the installed microplex package."
+            )
+
+        self._calibrator = MicroplexSparseCalibrator(
             target_sparsity=self.target_sparsity,
             max_iter=2000,
             tol=1e-6,

@@ -1,5 +1,5 @@
 """
-Microplex Pipeline: Build calibrated microdata from Supabase sources.
+Arch-to-Microplex Pipeline: Build calibrated microdata from Supabase sources.
 
 Reads raw CPS data and targets from Supabase, runs IPF calibration,
 and writes calibrated microplex back to Supabase.
@@ -11,8 +11,8 @@ Calibration methods compared (L2 loss, runtime):
 - GD L2:          L2=0.77          (doesn't converge)
 
 Usage:
-    python -m microplex.pipeline --year 2024
-    python -m microplex.pipeline --year 2024 --dry-run
+    python -m arch.pipelines.microplex --year 2024
+    python -m arch.pipelines.microplex --year 2024 --dry-run
 """
 
 from __future__ import annotations

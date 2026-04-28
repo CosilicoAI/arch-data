@@ -49,3 +49,26 @@ jobs:
           tests/test_etl_aca_enrollment.py
           tests/test_calibration.py
           -q
+
+      - name: Build wheel
+        run: |
+          rm -rf dist
+          uv build
+
+      - name: Test wheel install
+        run: |
+          wheel_path="$(find dist -name '*.whl' -print -quit)"
+          uv venv /tmp/arch-wheel-smoke --python 3.14
+          uv pip install --python /tmp/arch-wheel-smoke/bin/python "$wheel_path"
+          cd /tmp
+          /tmp/arch-wheel-smoke/bin/python - <<'PY'
+          import arch
+          import arch.targets
+          from micro.us.district import DistrictMicroplex
+          from microplex import ConditionalMAF
+
+          assert arch.__name__ == "arch"
+          assert DistrictMicroplex is not None
+          assert ConditionalMAF is not None
+          PY
+          /tmp/arch-wheel-smoke/bin/arch --help >/dev/null
