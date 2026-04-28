@@ -28,8 +28,11 @@ jobs:
         run: >
           uv run ruff check
           arch
+          db/cli.py
           db/etl_snap.py
           db/etl_aca_enrollment.py
+          db/etl_medicaid.py
+          db/etl_ssi.py
           db/schema.py
           calibration/constraints.py
           calibration/targets.py
@@ -38,6 +41,8 @@ jobs:
           tests/test_arch_normalization.py
           tests/test_etl_snap.py
           tests/test_etl_aca_enrollment.py
+          tests/test_etl_medicaid.py
+          tests/test_etl_ssi.py
 
       - name: Test Arch surface
         run: >
@@ -47,8 +52,16 @@ jobs:
           tests/test_arch_normalization.py
           tests/test_etl_snap.py
           tests/test_etl_aca_enrollment.py
+          tests/test_etl_medicaid.py
+          tests/test_etl_ssi.py
           tests/test_calibration.py
           -q
+
+      - name: Build target input database
+        run: |
+          uv run arch --db /tmp/arch-targets-ci.db init
+          uv run arch --db /tmp/arch-targets-ci.db load all
+          uv run arch --db /tmp/arch-targets-ci.db stats
 
       - name: Build wheel
         run: |

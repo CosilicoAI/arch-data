@@ -1,7 +1,6 @@
 """CLI for managing Arch target input data."""
 
 import argparse
-import os
 from pathlib import Path
 
 from sqlmodel import Session, select
@@ -58,6 +57,18 @@ def cmd_load(args):
             load_snap_targets(session, years=years)
             print(f"Loaded SNAP targets for years: {years or 'all available'}")
 
+        if args.source == "medicaid" or args.source == "all":
+            from .etl_medicaid import load_medicaid_targets
+            years = [int(y) for y in args.years.split(",")] if args.years else None
+            load_medicaid_targets(session, years=years)
+            print(f"Loaded Medicaid targets for years: {years or 'all available'}")
+
+        if args.source == "aca" or args.source == "all":
+            from .etl_aca_enrollment import load_aca_enrollment_targets
+            years = [int(y) for y in args.years.split(",")] if args.years else None
+            load_aca_enrollment_targets(session, years=years)
+            print(f"Loaded ACA Marketplace targets for years: {years or 'all available'}")
+
         if args.source == "hmrc" or args.source == "all":
             from .etl_hmrc import load_hmrc_targets
             years = [int(y) for y in args.years.split(",")] if args.years else None
@@ -75,6 +86,12 @@ def cmd_load(args):
             years = [int(y) for y in args.years.split(",")] if args.years else None
             load_ssa_targets(session, years=years)
             print(f"Loaded SSA targets for years: {years or 'all available'}")
+
+        if args.source == "ssi" or args.source == "all":
+            from .etl_ssi import load_ssi_targets
+            years = [int(y) for y in args.years.split(",")] if args.years else None
+            load_ssi_targets(session, years=years)
+            print(f"Loaded SSI targets for years: {years or 'all available'}")
 
         if args.source == "bls" or args.source == "all":
             from .etl_bls import load_bls_targets
@@ -187,7 +204,26 @@ def main():
     load_parser = subparsers.add_parser("load", help="Load targets from source")
     load_parser.add_argument(
         "source",
-        choices=["soi", "soi-state", "soi-credits", "soi-income-sources", "soi-deductions", "snap", "hmrc", "census", "ssa", "bls", "cps", "cbo", "obr", "ons", "all"],
+        choices=[
+            "soi",
+            "soi-state",
+            "soi-credits",
+            "soi-income-sources",
+            "soi-deductions",
+            "snap",
+            "medicaid",
+            "aca",
+            "hmrc",
+            "census",
+            "ssa",
+            "ssi",
+            "bls",
+            "cps",
+            "cbo",
+            "obr",
+            "ons",
+            "all",
+        ],
         help="Data source to load"
     )
     load_parser.add_argument(
