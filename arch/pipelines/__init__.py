@@ -1,2 +1,0 @@
-"""Arch pipeline entry points."""
-

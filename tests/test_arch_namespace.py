@@ -7,7 +7,6 @@ from arch.targets import (
     Target,
     TargetSpec,
     TargetType,
-    build_microplex_constraints,
     get_targets,
     query_targets,
 )
@@ -29,10 +28,6 @@ def test_arch_targets_reexport_schema_objects():
 def test_arch_targets_reexport_client_helpers():
     assert query_targets is db_query_targets
     assert callable(get_targets)
-
-
-def test_arch_targets_reexport_microplex_adapters():
-    assert callable(build_microplex_constraints)
 
 
 def test_arch_microdata_reexport_client_helpers():

@@ -11,9 +11,9 @@ Key difference from flat pipeline:
 - Person-level targets are aggregated to household level before calibration
 
 Usage:
-    python -m arch.pipelines.hierarchical_microplex --year 2024
-    python -m arch.pipelines.hierarchical_microplex --year 2024 --dry-run
-    python -m arch.pipelines.hierarchical_microplex --year 2024 --use-mock
+    python -m micro.us.hierarchical_pipeline --year 2024
+    python -m micro.us.hierarchical_pipeline --year 2024 --dry-run
+    python -m micro.us.hierarchical_pipeline --year 2024 --use-mock
 """
 
 from __future__ import annotations
@@ -737,9 +737,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-    python -m arch.pipelines.hierarchical_microplex --year 2024 --dry-run
-    python -m arch.pipelines.hierarchical_microplex --year 2024 --use-mock --dry-run
-    python -m arch.pipelines.hierarchical_microplex --year 2024 --limit 10000
+    python -m micro.us.hierarchical_pipeline --year 2024 --dry-run
+    python -m micro.us.hierarchical_pipeline --year 2024 --use-mock --dry-run
+    python -m micro.us.hierarchical_pipeline --year 2024 --limit 10000
         """,
     )
     parser.add_argument("--year", type=int, default=2024, help="Data year (default: 2024)")

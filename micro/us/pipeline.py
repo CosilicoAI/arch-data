@@ -1,5 +1,5 @@
 """
-Arch-to-Microplex Pipeline: Build calibrated microdata from Arch sources.
+Microplex pipeline: build calibrated microdata from Arch target inputs.
 
 Reads CPS microdata and Arch target inputs, runs calibration, and writes
 calibrated microplex output locally or back to Supabase.
@@ -9,8 +9,8 @@ Calibration methods:
 - ipf: fast count-only iterative proportional fitting
 
 Usage:
-    python -m arch.pipelines.microplex --year 2024
-    python -m arch.pipelines.microplex --year 2024 --dry-run
+    python -m micro.us.pipeline --year 2024
+    python -m micro.us.pipeline --year 2024 --dry-run
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ import pandas as pd
 from arch.client import get_supabase_client
 from arch.microdata import query_cps_asec
 from arch.targets import DataSource, TargetSpec, TargetType, query_targets
-from arch.targets.microplex import (
+from micro.us.targets import (
     age_soi_targets,
     get_soi_aging_factors,
     load_microplex_targets,

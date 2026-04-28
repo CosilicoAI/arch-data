@@ -2,8 +2,8 @@
 
 import pandas as pd
 
-from arch.pipelines import microplex
 from arch.targets import DataSource, TargetSpec, TargetType
+from micro.us import pipeline as microplex
 
 
 def test_build_tax_units_accepts_local_cps_columns():

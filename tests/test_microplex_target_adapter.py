@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 from sqlmodel import Session
 
-from arch.pipelines.microplex import build_constraints_from_target_specs
 from arch.targets import (
     DataSource,
     Jurisdiction,
@@ -13,12 +12,15 @@ from arch.targets import (
     Target,
     TargetSpec,
     TargetType,
+    init_db,
+)
+from micro.us.pipeline import build_constraints_from_target_specs
+from micro.us.targets import (
     age_soi_targets,
     build_hierarchical_microplex_constraints,
     build_microplex_constraints,
     constraints_to_ipf_dicts,
     get_soi_aging_factors,
-    init_db,
     load_microplex_targets,
 )
 

@@ -12,7 +12,7 @@ import pandas as pd
 import pytest
 
 # Import functions to test
-from arch.pipelines.hierarchical_microplex import (
+from micro.us.hierarchical_pipeline import (
     build_hierarchical_constraints,
     run_hierarchical_ipf,
     _create_mock_hierarchical_data,
@@ -20,7 +20,7 @@ from arch.pipelines.hierarchical_microplex import (
 
 # These imports may fail if Supabase not available
 try:
-    from arch.pipelines.hierarchical_microplex import (
+    from micro.us.hierarchical_pipeline import (
         load_hierarchical_data_from_supabase,
         run_hierarchical_pipeline,
     )

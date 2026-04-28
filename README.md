@@ -58,19 +58,19 @@ arch/
 │   ├── targets/             # Target input schema, client, loaders
 │   ├── microdata/           # Microdata registry, ingestion, queries
 │   ├── jurisdictions/       # Jurisdiction-specific loaders
-│   └── pipelines/           # Arch-to-Microplex pipeline entry points
 ├── db/                      # SQLModel persistence and source loaders
 │   ├── schema.py            # SQLModel: Target, Stratum, StratumConstraint
 │   ├── supabase_client.py   # Supabase client helpers
 │   └── etl_*.py             # Source-specific ETL pipelines
-├── micro/                   # Microdata source adapters
+├── micro/                   # Microplex consumers of Arch records
 ├── calibration/             # Calibration target adapters and constraints
 ├── data/                    # Cached data files
 └── docs/                    # Architecture and source documentation
 ```
 
 New code should prefer `arch.sources`, `arch.facts`, `arch.normalization`,
-`arch.targets`, `arch.microdata`, and `arch.pipelines`.
+`arch.targets`, and `arch.microdata`. Microplex-specific target composition
+and calibration code belongs under `micro/`.
 
 ## Quick Start
 
