@@ -15,6 +15,7 @@ from micro.us.policyengine import (
     PolicyEngineNotAvailableError,
     PolicyEngineTaxConfig,
     add_policyengine_income_tax,
+    add_policyengine_income_tax_from_persons,
 )
 
 
@@ -30,10 +31,12 @@ class FakeSimulation:
         self.calls.append((self.situation, variable, period))
         values = []
         for tax_unit in self.situation["tax_units"].values():
-            member = tax_unit["members"][0]
-            person = self.situation["people"][member]
-            wages = person["employment_income"][period]
-            self_employment = person["self_employment_income"][period]
+            wages = 0.0
+            self_employment = 0.0
+            for member in tax_unit["members"]:
+                person = self.situation["people"][member]
+                wages += person["employment_income"][period]
+                self_employment += person["self_employment_income"][period]
             values.append(wages * 0.10 + self_employment * 0.15)
         return np.array(values)
 
@@ -85,6 +88,92 @@ def test_add_policyengine_income_tax_batches(monkeypatch):
 
     assert result["income_tax_liability"].tolist() == [1_000.0, 2_000.0, 3_000.0]
     assert len(FakeSimulation.calls) == 2
+
+
+def test_add_policyengine_income_tax_from_persons_preserves_entities(monkeypatch):
+    install_fake_policyengine(monkeypatch)
+    persons = pd.DataFrame(
+        {
+            "household_id": [1, 1, 1, 2],
+            "tax_unit_id": [10, 10, 11, 20],
+            "spm_unit_id": [100, 100, 101, 200],
+            "person_seq": [1, 2, 3, 1],
+            "age": [40, 38, 16, 55],
+            "state_fips": [6, 6, 6, 48],
+            "weight": [100.0, 100.0, 100.0, 200.0],
+            "wage_salary_income": [50_000.0, 20_000.0, 0.0, 0.0],
+            "self_employment_income": [0.0, 0.0, 0.0, 20_000.0],
+            "total_person_income": [50_000.0, 20_000.0, 0.0, 20_000.0],
+        }
+    )
+
+    result = add_policyengine_income_tax_from_persons(persons, year=2024)
+
+    assert result["tax_unit_id"].tolist() == [10, 11, 20]
+    assert result["person_count"].tolist() == [2, 1, 1]
+    assert result["income_tax_liability"].tolist() == [7_000.0, 0.0, 3_000.0]
+    situation, variable, period = FakeSimulation.calls[0]
+    assert variable == "income_tax_before_credits"
+    assert period == "2024"
+    assert [len(unit["members"]) for unit in situation["tax_units"].values()] == [
+        2,
+        1,
+        1,
+    ]
+    assert [len(unit["members"]) for unit in situation["households"].values()] == [
+        3,
+        1,
+    ]
+
+
+def test_pipeline_merges_hierarchical_policyengine_tax(monkeypatch):
+    install_fake_policyengine(monkeypatch)
+    targets = [
+        TargetSpec(
+            variable="income_tax_liability",
+            value=10_000.0,
+            target_type=TargetType.AMOUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="Tax liability holdout",
+        )
+    ]
+    tax_units = pd.DataFrame(
+        {
+            "household_id": [1, 2],
+            "tax_unit_id": [10, 20],
+            "wage_income": [70_000.0, 0.0],
+            "self_employment_income": [0.0, 20_000.0],
+        }
+    )
+    persons = pd.DataFrame(
+        {
+            "household_id": [1, 1, 2],
+            "tax_unit_id": [10, 10, 20],
+            "person_seq": [1, 2, 1],
+            "age": [40, 38, 55],
+            "state_fips": [6, 6, 48],
+            "weight": [100.0, 100.0, 200.0],
+            "wage_salary_income": [50_000.0, 20_000.0, 0.0],
+            "self_employment_income": [0.0, 0.0, 20_000.0],
+        }
+    )
+
+    result = microplex.maybe_add_policyengine_income_tax(
+        tax_units,
+        targets,
+        year=2024,
+        persons=persons,
+    )
+
+    assert result["income_tax_liability"].tolist() == [7_000.0, 3_000.0]
+    assert len(FakeSimulation.calls) == 1
+    situation = FakeSimulation.calls[0][0]
+    assert [len(unit["members"]) for unit in situation["tax_units"].values()] == [
+        2,
+        1,
+    ]
 
 
 def test_policyengine_missing_raises_clear_error(monkeypatch):

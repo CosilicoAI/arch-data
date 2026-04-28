@@ -30,6 +30,7 @@ from arch.targets import TargetSpec, TargetType, query_targets
 from micro.us.policyengine import (
     PolicyEngineNotAvailableError,
     add_policyengine_income_tax,
+    add_policyengine_income_tax_from_persons,
 )
 from micro.us.targets import (
     MicroplexTargetProfile,
@@ -308,6 +309,7 @@ def maybe_add_policyengine_income_tax(
     targets: list[TargetSpec] | list[dict[str, Any]],
     *,
     year: int,
+    persons: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Calculate income tax liability when loaded targets require it."""
     if "income_tax_liability" in df.columns:
@@ -317,6 +319,19 @@ def maybe_add_policyengine_income_tax(
 
     print("Calculating income_tax_liability with PolicyEngine-US...")
     try:
+        if persons is not None and _can_merge_policyengine_person_hierarchy(
+            df,
+            persons,
+        ):
+            hierarchical = add_policyengine_income_tax_from_persons(
+                persons,
+                year=year,
+            )
+            merged = _merge_policyengine_tax_units(df, hierarchical)
+            if "income_tax_liability" in merged.columns:
+                print("  Used person/household hierarchy for PolicyEngine-US.")
+                return merged
+            print("  Could not match hierarchical PE tax units; using aggregate rows.")
         return add_policyengine_income_tax(df, year=year)
     except PolicyEngineNotAvailableError as exc:
         print(f"  {exc}")
@@ -336,6 +351,56 @@ def _targets_include_variable(
         if target_variable == variable:
             return True
     return False
+
+
+def _can_merge_policyengine_person_hierarchy(
+    tax_units: pd.DataFrame,
+    persons: pd.DataFrame,
+) -> bool:
+    """Return whether person-derived PE tax units can join to pipeline rows."""
+    if {"household_id", "tax_unit_id"}.issubset(tax_units.columns):
+        return _has_any_column(persons, ["household_id", "ph_seq", "PH_SEQ"]) and (
+            _has_any_column(persons, ["tax_unit_id", "tax_id", "TAX_ID"])
+        )
+    if "tax_unit_id" in tax_units.columns:
+        return _has_any_column(persons, ["tax_unit_id", "tax_id", "TAX_ID"])
+    return False
+
+
+def _has_any_column(df: pd.DataFrame, columns: list[str]) -> bool:
+    return any(column in df.columns for column in columns)
+
+
+def _merge_policyengine_tax_units(
+    tax_units: pd.DataFrame,
+    policyengine_tax_units: pd.DataFrame,
+) -> pd.DataFrame:
+    """Merge PE tax results from person-derived tax units into pipeline rows."""
+    output_columns = ["income_tax_liability", "income_tax_liability_source"]
+    if not all(column in policyengine_tax_units.columns for column in output_columns):
+        return tax_units
+
+    if {
+        "household_id",
+        "tax_unit_id",
+    }.issubset(tax_units.columns) and {
+        "household_id",
+        "tax_unit_id",
+    }.issubset(policyengine_tax_units.columns):
+        keys = ["household_id", "tax_unit_id"]
+    elif (
+        "tax_unit_id" in tax_units.columns
+        and "tax_unit_id" in policyengine_tax_units.columns
+    ):
+        keys = ["tax_unit_id"]
+    else:
+        return tax_units
+
+    values = policyengine_tax_units[keys + output_columns].drop_duplicates(keys)
+    merged = tax_units.merge(values, on=keys, how="left")
+    if merged["income_tax_liability"].notna().any():
+        return merged
+    return tax_units
 
 
 def _sum_columns(df: pd.DataFrame, columns: list[str]) -> float:
@@ -1340,9 +1405,10 @@ def run_pipeline(
         print(f"  {year} has {fallback_reason}, trying {fallback_year}...")
         targets = load_targets_from_supabase(fallback_year)
 
-    # Build tax units
+    # Build tax units while preserving the original person hierarchy for PE.
+    person_df = df.copy()
     df = build_tax_units(df)
-    df = maybe_add_policyengine_income_tax(df, targets, year=year)
+    df = maybe_add_policyengine_income_tax(df, targets, year=year, persons=person_df)
 
     # Calibrate
     result = calibrate_weights(
