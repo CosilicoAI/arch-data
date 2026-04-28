@@ -29,9 +29,13 @@ from .schema import (
 
 SOURCE_URL = "https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-statistics"
 TABLE_1_1_SHEET_NAME = "TBL11"
+TABLE_1_4_SHEET_NAME = "TBL14"
 TABLE_1_1_MONEY_SCALE = 1_000
+TABLE_1_4_MONEY_SCALE = 1_000
 TABLE_1_1_PACKAGE_DIR = "data/irs_soi/table_1_1"
+TABLE_1_4_PACKAGE_DIR = "data/irs_soi/table_1_4"
 TABLE_1_1_MANIFEST = "manifest.yaml"
+TABLE_1_4_MANIFEST = "manifest.yaml"
 
 # AGI bracket definitions (lower, upper) in dollars.
 AGI_BRACKETS = {
@@ -89,9 +93,24 @@ class SOITable11Data(TypedDict):
     income_tax_by_bracket: dict[str, int]
 
 
+class SOITable14Data(TypedDict):
+    source_url: str
+    total_employment_income_returns: int
+    total_employment_income: int
+    employment_income_returns_by_agi_bracket: dict[str, int]
+    employment_income_by_agi_bracket: dict[str, int]
+
+
 @lru_cache(maxsize=1)
 def _table_1_1_manifest() -> dict[str, Any]:
     manifest_path = files("db").joinpath(TABLE_1_1_PACKAGE_DIR, TABLE_1_1_MANIFEST)
+    with manifest_path.open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+@lru_cache(maxsize=1)
+def _table_1_4_manifest() -> dict[str, Any]:
+    manifest_path = files("db").joinpath(TABLE_1_4_PACKAGE_DIR, TABLE_1_4_MANIFEST)
     with manifest_path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
@@ -101,13 +120,31 @@ def available_soi_years() -> list[int]:
     return sorted(int(year) for year in _table_1_1_manifest()["files"])
 
 
+def available_soi_table_1_4_years() -> list[int]:
+    """Return SOI Table 1.4 years available in the source manifest."""
+    return sorted(int(year) for year in _table_1_4_manifest()["files"])
+
+
 def soi_table_1_1_source_url(year: int) -> str:
     """Return the IRS source URL for a Table 1.1 year."""
     return _table_1_1_file_spec(year)["source_url"]
 
 
+def soi_table_1_4_source_url(year: int) -> str:
+    """Return the IRS source URL for a Table 1.4 year."""
+    return _table_1_4_file_spec(year)["source_url"]
+
+
 def _table_1_1_file_spec(year: int) -> dict[str, str]:
     files_by_year = _table_1_1_manifest()["files"]
+    try:
+        return files_by_year[year]
+    except KeyError:
+        return files_by_year[str(year)]
+
+
+def _table_1_4_file_spec(year: int) -> dict[str, str]:
+    files_by_year = _table_1_4_manifest()["files"]
     try:
         return files_by_year[year]
     except KeyError:
@@ -124,8 +161,17 @@ SOI_DATA = {
 
 @lru_cache(maxsize=None)
 def _table_1_1_content(year: int) -> bytes:
-    spec = _table_1_1_file_spec(year)
-    package_path = files("db").joinpath(TABLE_1_1_PACKAGE_DIR, spec["filename"])
+    return _table_content(year, _table_1_1_file_spec, TABLE_1_1_PACKAGE_DIR)
+
+
+@lru_cache(maxsize=None)
+def _table_1_4_content(year: int) -> bytes:
+    return _table_content(year, _table_1_4_file_spec, TABLE_1_4_PACKAGE_DIR)
+
+
+def _table_content(year: int, file_spec_fn, package_dir: str) -> bytes:
+    spec = file_spec_fn(year)
+    package_path = files("db").joinpath(package_dir, spec["filename"])
     if package_path.is_file():
         content = package_path.read_bytes()
     else:
@@ -141,7 +187,7 @@ def _table_1_1_content(year: int) -> bytes:
         actual_sha = hashlib.sha256(content).hexdigest()
         if actual_sha != expected_sha:
             raise ValueError(
-                f"SOI Table 1.1 {year} checksum mismatch: "
+                f"SOI source file {year} checksum mismatch: "
                 f"expected {expected_sha}, got {actual_sha}"
             )
     return content
@@ -158,11 +204,30 @@ def _read_soi_table_1_1_frame(year: int) -> pd.DataFrame:
     )
 
 
+@lru_cache(maxsize=None)
+def _read_soi_table_1_4_frame(year: int) -> pd.DataFrame:
+    return pd.read_excel(
+        BytesIO(_table_1_4_content(year)),
+        sheet_name=TABLE_1_4_SHEET_NAME,
+        header=None,
+        dtype=object,
+        engine="xlrd",
+    )
+
+
 def load_soi_table_1_1_data(year: int) -> SOITable11Data:
     """Parse one year of IRS SOI Publication 1304 Table 1.1."""
     return _parse_soi_table_1_1_frame(
         _read_soi_table_1_1_frame(year),
         source_url=soi_table_1_1_source_url(year),
+    )
+
+
+def load_soi_table_1_4_data(year: int) -> SOITable14Data:
+    """Parse wage targets from IRS SOI Publication 1304 Table 1.4."""
+    return _parse_soi_table_1_4_frame(
+        _read_soi_table_1_4_frame(year),
+        source_url=soi_table_1_4_source_url(year),
     )
 
 
@@ -191,6 +256,10 @@ def _money_value(value: object) -> int:
     return int(round(_numeric_value(value) * TABLE_1_1_MONEY_SCALE))
 
 
+def _table_1_4_money_value(value: object) -> int:
+    return int(round(_numeric_value(value) * TABLE_1_4_MONEY_SCALE))
+
+
 def _header_text(df: pd.DataFrame, column: int) -> str:
     pieces = [_clean_label(df.iat[row, column]) for row in range(min(8, len(df)))]
     return " ".join(piece for piece in pieces if piece).lower()
@@ -214,6 +283,18 @@ def _table_1_1_size_rows(df: pd.DataFrame) -> pd.DataFrame:
 
     end_label = "Accumulated from smallest size of adjusted gross income"
     end_matches = labels[(labels == end_label) & (labels.index > start)]
+    end = int(end_matches.index[0]) if not end_matches.empty else len(df)
+    return df.loc[start : end - 1]
+
+
+def _table_1_4_size_rows(df: pd.DataFrame) -> pd.DataFrame:
+    labels = df.iloc[:, 0].map(_clean_label)
+    start_matches = labels[labels == "All returns, total"]
+    if start_matches.empty:
+        raise ValueError("Could not find SOI Table 1.4 'All returns, total' row")
+    start = int(start_matches.index[0])
+
+    end_matches = labels[(labels == "Taxable returns, total") & (labels.index > start)]
     end = int(end_matches.index[0]) if not end_matches.empty else len(df)
     return df.loc[start : end - 1]
 
@@ -254,6 +335,40 @@ def _parse_soi_table_1_1_frame(
         "returns_by_agi_bracket": returns_by_bracket,
         "agi_by_bracket": agi_by_bracket,
         "income_tax_by_bracket": income_tax_by_bracket,
+    }
+
+
+def _parse_soi_table_1_4_frame(
+    df: pd.DataFrame,
+    *,
+    source_url: str,
+) -> SOITable14Data:
+    wage_count_col = _find_column(df, "wages", "number of returns")
+    wage_amount_col = wage_count_col + 1
+    if "amount" not in _header_text(df, wage_amount_col):
+        raise ValueError("Could not find SOI Table 1.4 wage amount column")
+    rows = _table_1_4_size_rows(df)
+    all_returns = _row_by_label(rows, "All returns, total")
+
+    wage_returns_by_bracket = {}
+    wage_amount_by_bracket = {}
+    for source_label, bracket_name in TABLE_1_1_AGI_LABEL_TO_BRACKET.items():
+        row = _row_by_label(rows, source_label)
+        wage_returns_by_bracket[bracket_name] = _count_value(row.iat[wage_count_col])
+        wage_amount_by_bracket[bracket_name] = _table_1_4_money_value(
+            row.iat[wage_amount_col]
+        )
+
+    return {
+        "source_url": source_url,
+        "total_employment_income_returns": _count_value(
+            all_returns.iat[wage_count_col]
+        ),
+        "total_employment_income": _table_1_4_money_value(
+            all_returns.iat[wage_amount_col]
+        ),
+        "employment_income_returns_by_agi_bracket": wage_returns_by_bracket,
+        "employment_income_by_agi_bracket": wage_amount_by_bracket,
     }
 
 
@@ -308,6 +423,7 @@ def _add_target(
     value: float,
     target_type: TargetType,
     source_url: str,
+    source_table: str = "Table 1.1",
 ) -> None:
     session.add(
         Target(
@@ -317,7 +433,7 @@ def _add_target(
             value=value,
             target_type=target_type,
             source=DataSource.IRS_SOI,
-            source_table="Table 1.1",
+            source_table=source_table,
             source_url=source_url,
         )
     )
@@ -340,6 +456,11 @@ def load_soi_targets(session: Session, years: list[int] | None = None) -> None:
 
         data = load_soi_table_1_1_data(year)
         source_url = data["source_url"]
+        table_1_4_data = None
+        table_1_4_source_url = None
+        if year in available_soi_table_1_4_years():
+            table_1_4_data = load_soi_table_1_4_data(year)
+            table_1_4_source_url = table_1_4_data["source_url"]
 
         national_stratum = get_or_create_stratum(
             session,
@@ -377,6 +498,28 @@ def load_soi_targets(session: Session, years: list[int] | None = None) -> None:
             target_type=TargetType.AMOUNT,
             source_url=source_url,
         )
+
+        if table_1_4_data is not None and table_1_4_source_url is not None:
+            _add_target(
+                session,
+                stratum_id=national_stratum.id,
+                variable="employment_income",
+                period=year,
+                value=table_1_4_data["total_employment_income_returns"],
+                target_type=TargetType.COUNT,
+                source_url=table_1_4_source_url,
+                source_table="Table 1.4",
+            )
+            _add_target(
+                session,
+                stratum_id=national_stratum.id,
+                variable="employment_income",
+                period=year,
+                value=table_1_4_data["total_employment_income"],
+                target_type=TargetType.AMOUNT,
+                source_url=table_1_4_source_url,
+                source_table="Table 1.4",
+            )
 
         for bracket_name, (lower, upper) in AGI_BRACKETS.items():
             constraints = []
@@ -427,6 +570,38 @@ def load_soi_targets(session: Session, years: list[int] | None = None) -> None:
                     target_type=TargetType.AMOUNT,
                     source_url=source_url,
                 )
+
+            if table_1_4_data is not None and table_1_4_source_url is not None:
+                if (
+                    bracket_name
+                    in table_1_4_data["employment_income_returns_by_agi_bracket"]
+                ):
+                    _add_target(
+                        session,
+                        stratum_id=bracket_stratum.id,
+                        variable="employment_income",
+                        period=year,
+                        value=table_1_4_data[
+                            "employment_income_returns_by_agi_bracket"
+                        ][bracket_name],
+                        target_type=TargetType.COUNT,
+                        source_url=table_1_4_source_url,
+                        source_table="Table 1.4",
+                    )
+
+                if bracket_name in table_1_4_data["employment_income_by_agi_bracket"]:
+                    _add_target(
+                        session,
+                        stratum_id=bracket_stratum.id,
+                        variable="employment_income",
+                        period=year,
+                        value=table_1_4_data["employment_income_by_agi_bracket"][
+                            bracket_name
+                        ],
+                        target_type=TargetType.AMOUNT,
+                        source_url=table_1_4_source_url,
+                        source_table="Table 1.4",
+                    )
 
     session.commit()
 

@@ -195,3 +195,45 @@ def test_generalized_rake_calibrates_count_and_amount_targets():
     ]["error"]
     assert abs(count_error) < 0.01
     assert abs(amount_error) < 0.01
+
+
+def test_build_constraints_maps_employment_income_to_wages():
+    df = pd.DataFrame(
+        {
+            "weight": [1.0, 1.0, 1.0],
+            "is_tax_filer": [1, 1, 1],
+            "adjusted_gross_income": [10_000.0, 20_000.0, 30_000.0],
+            "wage_income": [10_000.0, 0.0, 40_000.0],
+        }
+    )
+    targets = [
+        TargetSpec(
+            variable="employment_income",
+            value=2.0,
+            target_type=TargetType.COUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="Wage filers",
+        ),
+        TargetSpec(
+            variable="employment_income",
+            value=50_000.0,
+            target_type=TargetType.AMOUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="Wage filers",
+        ),
+    ]
+
+    constraints = microplex.build_constraints_from_target_specs(
+        df,
+        targets,
+        min_obs=1,
+        include_amounts=True,
+    )
+
+    assert len(constraints) == 2
+    assert constraints[0]["indicator"].tolist() == [1.0, 0.0, 1.0]
+    assert constraints[1]["indicator"].tolist() == [10_000.0, 0.0, 40_000.0]

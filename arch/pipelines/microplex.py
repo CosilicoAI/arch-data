@@ -29,8 +29,6 @@ from arch.microdata import query_cps_asec
 from arch.targets import DataSource, TargetSpec, TargetType, query_targets
 from arch.targets.microplex import (
     age_soi_targets,
-    build_microplex_constraints,
-    constraints_to_ipf_dicts,
     get_soi_aging_factors,
     load_microplex_targets,
 )
@@ -55,6 +53,17 @@ AGING_NOTE_RE = re.compile(
     r"SOI aged (?P<source_year>\d+)->(?P<target_year>\d+); "
     r"(?P<method>[^;)]+)(?:; factor x(?P<factor>[-+0-9.eE]+))?"
 )
+TARGET_VARIABLE_COLUMNS = {
+    "adjusted_gross_income": "adjusted_gross_income",
+    "employment_income": "wage_income",
+}
+SUPPORTED_TARGET_VARIABLES = {"tax_unit_count", *TARGET_VARIABLE_COLUMNS}
+SUPPORTED_CONSTRAINT_VARIABLES = {
+    "adjusted_gross_income",
+    "is_tax_filer",
+    "agi_bracket",
+    "state_fips",
+}
 
 
 def load_cps_from_supabase(year: int, limit: int = 200000) -> pd.DataFrame:
@@ -442,6 +451,78 @@ def assign_agi_bracket(agi: np.ndarray) -> np.ndarray:
     return result
 
 
+def _build_microplex_constraint_dict(
+    df: pd.DataFrame,
+    *,
+    variable: str,
+    target_type: TargetType | str,
+    target_value: float,
+    stratum_name: str | None,
+    stratum_constraints: list[tuple[str, str, str]],
+) -> dict[str, Any] | None:
+    mask = _stratum_mask(df, stratum_constraints)
+    if mask is None:
+        return None
+
+    target_type_value = _enum_value(target_type)
+    if variable == "tax_unit_count":
+        indicator = mask.astype(float).to_numpy()
+    else:
+        column = TARGET_VARIABLE_COLUMNS.get(variable)
+        if column is None or column not in df.columns:
+            return None
+        values = pd.to_numeric(df[column], errors="coerce").fillna(0).to_numpy()
+        if target_type_value == TargetType.COUNT.value:
+            indicator = (mask.to_numpy() & (values > 0)).astype(float)
+        elif target_type_value == TargetType.AMOUNT.value:
+            indicator = mask.astype(float).to_numpy() * values
+        else:
+            return None
+
+    return {
+        "indicator": indicator,
+        "target_value": target_value,
+        "variable": variable,
+        "target_type": target_type_value,
+        "stratum": stratum_name,
+        "n_obs": int(np.count_nonzero(indicator)),
+    }
+
+
+def _stratum_mask(
+    df: pd.DataFrame,
+    stratum_constraints: list[tuple[str, str, str]],
+) -> pd.Series | None:
+    mask = pd.Series(True, index=df.index)
+    for variable, operator, value in stratum_constraints:
+        if variable == "is_tax_filer" and variable not in df.columns:
+            col = pd.Series([1] * len(df), index=df.index)
+        elif variable in df.columns:
+            col = df[variable]
+        else:
+            return None
+
+        parsed_value: float | int | str = value
+        if pd.api.types.is_numeric_dtype(col):
+            parsed_value = float(value)
+
+        if operator == "==":
+            mask &= col == parsed_value
+        elif operator == "!=":
+            mask &= col != parsed_value
+        elif operator == ">":
+            mask &= col > parsed_value
+        elif operator == ">=":
+            mask &= col >= parsed_value
+        elif operator == "<":
+            mask &= col < parsed_value
+        elif operator == "<=":
+            mask &= col <= parsed_value
+        else:
+            return None
+    return mask
+
+
 def build_constraints_from_target_specs(
     df: pd.DataFrame,
     targets: List[TargetSpec],
@@ -473,20 +554,13 @@ def build_constraints_and_diagnostics_from_target_specs(
     df = df.copy()
     df["agi_bracket"] = assign_agi_bracket(df["adjusted_gross_income"].values)
 
-    supported_variables = {"tax_unit_count", "adjusted_gross_income"}
-    supported_constraint_variables = {
-        "adjusted_gross_income",
-        "is_tax_filer",
-        "agi_bracket",
-    }
-
     constraints = []
     diagnostics = []
     seen_keys = set()
     for target_index, target in enumerate(targets):
         diagnostic = _base_target_diagnostic(target, target_index)
 
-        if target.variable not in supported_variables:
+        if target.variable not in SUPPORTED_TARGET_VARIABLES:
             diagnostic.update(status="dropped", drop_reason="unsupported_variable")
             diagnostics.append(diagnostic)
             continue
@@ -503,7 +577,7 @@ def build_constraints_and_diagnostics_from_target_specs(
             diagnostics.append(diagnostic)
             continue
         if any(
-            variable not in supported_constraint_variables
+            variable not in SUPPORTED_CONSTRAINT_VARIABLES
             for variable, _, _ in target.constraints
         ):
             diagnostic.update(status="dropped", drop_reason="unsupported_constraint")
@@ -517,12 +591,15 @@ def build_constraints_and_diagnostics_from_target_specs(
             continue
         seen_keys.add(key)
 
-        target_constraints = build_microplex_constraints(
+        constraint_dict = _build_microplex_constraint_dict(
             df,
-            targets=[target],
-            min_obs=0,
+            variable=target.variable,
+            target_type=target.target_type,
+            target_value=target.value,
+            stratum_name=target.stratum_name,
+            stratum_constraints=target.constraints,
         )
-        if not target_constraints:
+        if constraint_dict is None:
             diagnostic.update(
                 status="dropped",
                 drop_reason="could_not_build_constraint",
@@ -530,7 +607,6 @@ def build_constraints_and_diagnostics_from_target_specs(
             diagnostics.append(diagnostic)
             continue
 
-        constraint_dict = constraints_to_ipf_dicts(target_constraints)[0]
         diagnostic["n_obs"] = constraint_dict["n_obs"]
         if constraint_dict["n_obs"] < min_obs:
             diagnostic.update(status="dropped", drop_reason="insufficient_obs")
@@ -560,6 +636,7 @@ def build_constraints_from_targets(
     Currently supports:
     - Tax unit counts by AGI bracket (adjusted_gross_income ranges)
     - AGI totals by bracket (if include_amounts=True)
+    - Wage/employment income counts and totals (if include_amounts=True for totals)
 
     Skips unsupported targets:
     - Filing status (need CPS marital status mapping)
@@ -580,14 +657,10 @@ def build_constraints_from_targets(
     constraints = []
     diagnostics = []
     seen_keys = set()
-    n = len(df)
     df = df.copy()
 
     # Precompute AGI brackets
     df["agi_bracket"] = assign_agi_bracket(df["adjusted_gross_income"].values)
-
-    # Supported variables for tax filer calibration
-    SUPPORTED_VARIABLES = {"tax_unit_count", "adjusted_gross_income"}
 
     for target_index, target in enumerate(targets):
         diagnostic = _base_dict_target_diagnostic(target, target_index)
@@ -596,7 +669,7 @@ def build_constraints_from_targets(
         target_type = target.get("target_type")
 
         # Only calibrate on supported variables
-        if variable not in SUPPORTED_VARIABLES:
+        if variable not in SUPPORTED_TARGET_VARIABLES:
             diagnostic.update(status="dropped", drop_reason="unsupported_variable")
             diagnostics.append(diagnostic)
             continue
@@ -624,7 +697,7 @@ def build_constraints_from_targets(
         has_unsupported = False
         for c in stratum_constraints:
             var = c.get("variable")
-            if var not in {"adjusted_gross_income", "is_tax_filer", "agi_bracket"}:
+            if var not in SUPPORTED_CONSTRAINT_VARIABLES:
                 has_unsupported = True
                 break
         if has_unsupported:
@@ -640,60 +713,37 @@ def build_constraints_from_targets(
             continue
         seen_keys.add(key)
 
-        # Build indicator from stratum constraints
-        indicator = np.ones(n, dtype=bool)
+        tuple_constraints = [
+            (
+                constraint.get("variable"),
+                constraint.get("operator", "=="),
+                constraint.get("value"),
+            )
+            for constraint in stratum_constraints
+        ]
+        constraint_dict = _build_microplex_constraint_dict(
+            df,
+            variable=variable,
+            target_type=target_type,
+            target_value=value,
+            stratum_name=stratum_name,
+            stratum_constraints=tuple_constraints,
+        )
+        if constraint_dict is None:
+            diagnostic.update(
+                status="dropped",
+                drop_reason="could_not_build_constraint",
+            )
+            diagnostics.append(diagnostic)
+            continue
 
-        for constraint in stratum_constraints:
-            var = constraint.get("variable")
-            op = constraint.get("operator", "==")
-            val = constraint.get("value")
-
-            if var == "adjusted_gross_income":
-                col = df["adjusted_gross_income"]
-                val = float(val)
-            elif var == "agi_bracket":
-                col = df["agi_bracket"]
-            elif var == "is_tax_filer":
-                # All records in our dataset are filers
-                col = pd.Series([1] * n)
-                val = int(val)
-            else:
-                continue
-
-            # Apply operator
-            if op == "==":
-                indicator &= (col == val)
-            elif op == ">=":
-                indicator &= (col >= val)
-            elif op == ">":
-                indicator &= (col > val)
-            elif op == "<=":
-                indicator &= (col <= val)
-            elif op == "<":
-                indicator &= (col < val)
-            elif op == "!=":
-                indicator &= (col != val)
-
-        indicator = indicator.astype(float)
-
-        # For amount targets, multiply by AGI
-        if target_type == "amount" and variable == "adjusted_gross_income":
-            indicator = indicator * df["adjusted_gross_income"].values
-
-        n_obs = (indicator > 0).sum()
+        n_obs = constraint_dict["n_obs"]
         diagnostic["n_obs"] = int(n_obs)
         if n_obs >= min_obs:
             diagnostic.update(status="used", drop_reason="")
             diagnostic_index = len(diagnostics)
-            constraints.append({
-                "indicator": indicator,
-                "target_value": value,
-                "variable": variable,
-                "target_type": target_type,
-                "stratum": stratum_name,
-                "n_obs": n_obs,
-                "diagnostic_index": diagnostic_index,
-            })
+            constraint_dict["diagnostic_index"] = diagnostic_index
+            constraints.append(constraint_dict)
         else:
             diagnostic.update(status="dropped", drop_reason="insufficient_obs")
         diagnostics.append(diagnostic)
@@ -776,7 +826,7 @@ def ipf_calibrate(
 def generalized_rake_calibrate(
     original_weights: np.ndarray,
     constraints: List[Dict],
-    bounds: tuple[float, float] = (0.1, 10.0),
+    bounds: tuple[float, float] = (0.1, 20.0),
     max_iter: int = 80,
     target_tolerance: float = 0.05,
     verbose: bool = True,
@@ -936,7 +986,7 @@ def calibrate_weights(
     include_amounts: bool = True,
     min_obs: int = 100,
     calibration_method: str = "auto",
-    weight_bounds: tuple[float, float] = (0.1, 10.0),
+    weight_bounds: tuple[float, float] = (0.1, 20.0),
     verbose: bool = True,
 ) -> CalibrationResult:
     """Calibrate Microplex weights to Arch target inputs."""
@@ -1115,7 +1165,7 @@ def run_pipeline(
     min_target_obs: int = 100,
     calibration_method: str = "auto",
     min_weight_factor: float = 0.1,
-    max_weight_factor: float = 10.0,
+    max_weight_factor: float = 20.0,
     diagnostics_path: Path | None = None,
 ) -> pd.DataFrame:
     """Run the full microplex pipeline."""
@@ -1345,7 +1395,7 @@ def main():
     parser.add_argument(
         "--max-weight-factor",
         type=float,
-        default=10.0,
+        default=20.0,
         help="Maximum generalized-rake weight adjustment factor",
     )
     args = parser.parse_args()
