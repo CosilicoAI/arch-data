@@ -635,11 +635,16 @@ def run_pipeline(
     else:
         raise ValueError(f"Unknown target_source: {target_source}")
 
-    if len(targets) < 50 or not has_supported_tax_targets(targets):
+    has_current_tax_targets = has_supported_tax_targets(targets)
+    if len(targets) < 50 or not has_current_tax_targets:
         # Fall back to the latest available SOI targets when the model year
         # has insufficient usable tax targets.
         if target_source == "db":
-            fallback_year = latest_supported_soi_year(year, db_path=db_path) or 2021
+            fallback_year = (
+                year
+                if has_current_tax_targets
+                else latest_supported_soi_year(year, db_path=db_path) or 2021
+            )
         else:
             fallback_year = 2021
         if len(targets) < 50:
