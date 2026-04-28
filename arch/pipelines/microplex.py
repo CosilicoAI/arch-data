@@ -17,6 +17,8 @@ Usage:
 
 from __future__ import annotations
 
+import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List
@@ -44,9 +46,16 @@ class CalibrationResult:
     adjustment_factors: np.ndarray
     targets_before: Dict[str, Dict]
     targets_after: Dict[str, Dict]
+    diagnostics: pd.DataFrame
     success: bool
     message: str
     l2_loss: float
+
+
+AGING_NOTE_RE = re.compile(
+    r"SOI aged (?P<source_year>\d+)->(?P<target_year>\d+); "
+    r"(?P<method>[^;)]+)(?:; factor x(?P<factor>[-+0-9.eE]+))?"
+)
 
 
 def load_cps_from_supabase(year: int, limit: int = 200000) -> pd.DataFrame:
@@ -151,6 +160,9 @@ def build_tax_units(df: pd.DataFrame) -> pd.DataFrame:
         for col in ["A_MARITL", "A_FAMREL", "TAX_ID"]:
             df[col.lower()] = df["raw_data"].apply(lambda x: x.get(col) if isinstance(x, dict) else None)
 
+    if "tax_unit_id" in df.columns:
+        return build_tax_units_from_census_tax_ids(df)
+
     # Calculate total income
     df["total_income"] = _numeric_first(
         df,
@@ -202,6 +214,195 @@ def build_tax_units(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def build_tax_units_from_census_tax_ids(df: pd.DataFrame) -> pd.DataFrame:
+    """Aggregate person-level CPS records to Census-provided tax units."""
+    df = df.copy()
+
+    income_columns = [
+        "total_person_income",
+        "income",
+        "wage_salary_income",
+        "wage_income",
+        "self_employment_income",
+        "farm_self_employment_income",
+        "interest_income",
+        "dividend_income",
+        "rental_income",
+        "unemployment_compensation",
+        "other_income",
+    ]
+    for column in income_columns:
+        if column in df.columns:
+            df[column] = pd.to_numeric(df[column], errors="coerce").fillna(0)
+
+    if "weight" in df.columns:
+        df["weight"] = pd.to_numeric(df["weight"], errors="coerce").fillna(0)
+    elif "march_supplement_weight" in df.columns:
+        df["weight"] = pd.to_numeric(
+            df["march_supplement_weight"],
+            errors="coerce",
+        ).fillna(0) / 100
+    else:
+        df["weight"] = 1.0
+
+    if "line_number" in df.columns:
+        sort_column = "line_number"
+    elif "person_seq" in df.columns:
+        sort_column = "person_seq"
+    else:
+        sort_column = None
+
+    group_columns = ["tax_unit_id"]
+    if "household_id" in df.columns:
+        group_columns = ["household_id", "tax_unit_id"]
+
+    rows = []
+    for _, group in df.groupby(group_columns, sort=False, dropna=False):
+        if sort_column is not None:
+            group = group.sort_values(sort_column)
+        head = group.iloc[0]
+
+        wage_income = _sum_columns(group, ["wage_salary_income", "wage_income"])
+        self_employment_income = _sum_columns(
+            group,
+            ["self_employment_income", "farm_self_employment_income"],
+        )
+        interest_income = _sum_columns(group, ["interest_income"])
+        dividend_income = _sum_columns(group, ["dividend_income"])
+        rental_income = _sum_columns(group, ["rental_income"])
+        unemployment = _sum_columns(group, ["unemployment_compensation"])
+        other_income = _sum_columns(group, ["other_income"])
+        total_income = _sum_columns(group, ["total_person_income"])
+        if total_income == 0:
+            total_income = _sum_columns(group, ["income"])
+
+        se_tax_adjustment = max(self_employment_income, 0) * 0.0765 / 2
+        adjusted_gross_income = (
+            wage_income
+            + self_employment_income
+            - se_tax_adjustment
+            + interest_income
+            + dividend_income
+            + rental_income
+            + unemployment
+            + other_income
+        )
+
+        rows.append(
+            {
+                "tax_unit_id": head.get("tax_unit_id"),
+                "household_id": head.get("household_id"),
+                "person_id": head.get("person_id"),
+                "person_count": len(group),
+                "age": head.get("age", head.get("a_age")),
+                "state_fips": head.get("state_fips", head.get("gestfips")),
+                "weight": head["weight"],
+                "total_income": total_income,
+                "wage_income": wage_income,
+                "self_employment_income": self_employment_income,
+                "interest_income": interest_income,
+                "dividend_income": dividend_income,
+                "rental_income": rental_income,
+                "unemployment_compensation": unemployment,
+                "other_income": other_income,
+                "adjusted_gross_income": adjusted_gross_income,
+            }
+        )
+
+    tax_units = pd.DataFrame(rows)
+    filer_mask = (
+        (tax_units["total_income"] > 13_850)
+        | (tax_units["wage_income"] > 0)
+        | (tax_units["self_employment_income"] != 0)
+    )
+    tax_units = tax_units[filer_mask].copy()
+    tax_units["is_tax_filer"] = 1
+    print(f"  Aggregated to {len(tax_units):,} likely filing tax units")
+    return tax_units
+
+
+def _sum_columns(df: pd.DataFrame, columns: list[str]) -> float:
+    total = 0.0
+    for column in columns:
+        if column in df.columns:
+            total += float(pd.to_numeric(df[column], errors="coerce").fillna(0).sum())
+    return total
+
+
+def _base_target_diagnostic(
+    target: TargetSpec,
+    target_index: int,
+) -> dict[str, Any]:
+    aging = _parse_aging_note(target.stratum_name)
+    return {
+        "target_index": target_index,
+        "source": _enum_value(target.source),
+        "variable": target.variable,
+        "target_type": _enum_value(target.target_type),
+        "period": target.period,
+        "source_period": aging.get("source_year", target.period),
+        "stratum": target.stratum_name,
+        "constraints": json.dumps(target.constraints, separators=(",", ":")),
+        "target_value": target.value,
+        "status": "",
+        "drop_reason": "",
+        "n_obs": 0,
+        "aging_method": aging.get("method"),
+        "aging_factor": aging.get("factor"),
+        "pre_value": np.nan,
+        "pre_error": np.nan,
+        "post_value": np.nan,
+        "post_error": np.nan,
+    }
+
+
+def _base_dict_target_diagnostic(
+    target: dict[str, Any],
+    target_index: int,
+) -> dict[str, Any]:
+    stratum = target.get("strata", {})
+    constraints = stratum.get("stratum_constraints", [])
+    return {
+        "target_index": target_index,
+        "source": target.get("source"),
+        "variable": target.get("variable"),
+        "target_type": target.get("target_type"),
+        "period": target.get("period"),
+        "source_period": target.get("period"),
+        "stratum": stratum.get("name", "unknown"),
+        "constraints": json.dumps(constraints, separators=(",", ":"), default=str),
+        "target_value": target.get("value"),
+        "status": "",
+        "drop_reason": "",
+        "n_obs": 0,
+        "aging_method": None,
+        "aging_factor": None,
+        "pre_value": np.nan,
+        "pre_error": np.nan,
+        "post_value": np.nan,
+        "post_error": np.nan,
+    }
+
+
+def _parse_aging_note(stratum_name: str | None) -> dict[str, Any]:
+    if not stratum_name:
+        return {}
+    match = AGING_NOTE_RE.search(stratum_name)
+    if not match:
+        return {}
+    factor = match.group("factor")
+    return {
+        "source_year": int(match.group("source_year")),
+        "target_year": int(match.group("target_year")),
+        "method": match.group("method"),
+        "factor": float(factor) if factor is not None else np.nan,
+    }
+
+
+def _enum_value(value: Any) -> Any:
+    return value.value if hasattr(value, "value") else value
+
+
 def _numeric_first(df: pd.DataFrame, columns: list[str]) -> pd.Series:
     """Return the first available numeric column, or zeros if none exist."""
     for column in columns:
@@ -227,7 +428,11 @@ def assign_agi_bracket(agi: np.ndarray) -> np.ndarray:
         ("100k_to_200k", 100000, 200000),
         ("200k_to_500k", 200000, 500000),
         ("500k_to_1m", 500000, 1000000),
-        ("1m_plus", 1000000, np.inf),
+        ("1m_to_1_5m", 1000000, 1500000),
+        ("1_5m_to_2m", 1500000, 2000000),
+        ("2m_to_5m", 2000000, 5000000),
+        ("5m_to_10m", 5000000, 10000000),
+        ("10m_plus", 10000000, np.inf),
     ]
 
     result = np.empty(len(agi), dtype=object)
@@ -250,6 +455,22 @@ def build_constraints_from_target_specs(
     This keeps the old IPF pipeline working while moving the target source from
     Supabase-shaped dictionaries to the local Arch target database.
     """
+    constraints, _ = build_constraints_and_diagnostics_from_target_specs(
+        df,
+        targets,
+        min_obs=min_obs,
+        include_amounts=include_amounts,
+    )
+    return constraints
+
+
+def build_constraints_and_diagnostics_from_target_specs(
+    df: pd.DataFrame,
+    targets: List[TargetSpec],
+    min_obs: int = 100,
+    include_amounts: bool = False,
+) -> tuple[List[Dict], list[dict[str, Any]]]:
+    """Build IPF constraints and one diagnostic row per loaded target."""
     df = df.copy()
     df["agi_bracket"] = assign_agi_bracket(df["adjusted_gross_income"].values)
 
@@ -260,35 +481,71 @@ def build_constraints_from_target_specs(
         "agi_bracket",
     }
 
-    filtered_targets = []
+    constraints = []
+    diagnostics = []
     seen_keys = set()
-    for target in targets:
+    for target_index, target in enumerate(targets):
+        diagnostic = _base_target_diagnostic(target, target_index)
+
         if target.variable not in supported_variables:
+            diagnostic.update(status="dropped", drop_reason="unsupported_variable")
+            diagnostics.append(diagnostic)
             continue
         if target.target_type == TargetType.RATE:
+            diagnostic.update(status="dropped", drop_reason="rate_target")
+            diagnostics.append(diagnostic)
             continue
         if target.target_type == TargetType.AMOUNT and not include_amounts:
+            diagnostic.update(status="dropped", drop_reason="amount_targets_disabled")
+            diagnostics.append(diagnostic)
+            continue
+        if target.target_type == TargetType.AMOUNT and target.value <= 0:
+            diagnostic.update(status="dropped", drop_reason="nonpositive_amount_target")
+            diagnostics.append(diagnostic)
             continue
         if any(
             variable not in supported_constraint_variables
             for variable, _, _ in target.constraints
         ):
+            diagnostic.update(status="dropped", drop_reason="unsupported_constraint")
+            diagnostics.append(diagnostic)
             continue
 
         key = (target.stratum_name, target.variable, target.target_type)
         if key in seen_keys:
+            diagnostic.update(status="dropped", drop_reason="duplicate_target")
+            diagnostics.append(diagnostic)
             continue
         seen_keys.add(key)
-        filtered_targets.append(target)
 
-    constraints = build_microplex_constraints(
-        df,
-        targets=filtered_targets,
-        min_obs=min_obs,
-    )
-    constraint_dicts = constraints_to_ipf_dicts(constraints)
-    print(f"  Built {len(constraint_dicts)} constraints (min {min_obs} obs each)")
-    return constraint_dicts
+        target_constraints = build_microplex_constraints(
+            df,
+            targets=[target],
+            min_obs=0,
+        )
+        if not target_constraints:
+            diagnostic.update(
+                status="dropped",
+                drop_reason="could_not_build_constraint",
+            )
+            diagnostics.append(diagnostic)
+            continue
+
+        constraint_dict = constraints_to_ipf_dicts(target_constraints)[0]
+        diagnostic["n_obs"] = constraint_dict["n_obs"]
+        if constraint_dict["n_obs"] < min_obs:
+            diagnostic.update(status="dropped", drop_reason="insufficient_obs")
+            diagnostics.append(diagnostic)
+            continue
+
+        diagnostic.update(status="used", drop_reason="")
+        diagnostic_index = len(diagnostics)
+        constraint_dict["diagnostic_index"] = diagnostic_index
+        diagnostics.append(diagnostic)
+        constraints.append(constraint_dict)
+
+    print(f"  Built {len(constraints)} constraints (min {min_obs} obs each)")
+    return constraints, diagnostics
 
 
 def build_constraints_from_targets(
@@ -296,6 +553,7 @@ def build_constraints_from_targets(
     targets: List[Dict[str, Any]] | List[TargetSpec],
     min_obs: int = 100,
     include_amounts: bool = False,
+    return_diagnostics: bool = False,
 ) -> List[Dict]:
     """
     Build calibration constraints from Supabase targets.
@@ -310,14 +568,18 @@ def build_constraints_from_targets(
     - Population counts (different universe than tax filers)
     """
     if targets and isinstance(targets[0], TargetSpec):
-        return build_constraints_from_target_specs(
+        constraints, diagnostics = build_constraints_and_diagnostics_from_target_specs(
             df,
             targets,
             min_obs=min_obs,
             include_amounts=include_amounts,
         )
+        if return_diagnostics:
+            return constraints, diagnostics
+        return constraints
 
     constraints = []
+    diagnostics = []
     seen_keys = set()
     n = len(df)
     df = df.copy()
@@ -328,19 +590,30 @@ def build_constraints_from_targets(
     # Supported variables for tax filer calibration
     SUPPORTED_VARIABLES = {"tax_unit_count", "adjusted_gross_income"}
 
-    for target in targets:
+    for target_index, target in enumerate(targets):
+        diagnostic = _base_dict_target_diagnostic(target, target_index)
         variable = target["variable"]
         value = target["value"]
         target_type = target.get("target_type")
 
         # Only calibrate on supported variables
         if variable not in SUPPORTED_VARIABLES:
+            diagnostic.update(status="dropped", drop_reason="unsupported_variable")
+            diagnostics.append(diagnostic)
             continue
 
         # Skip rate targets; optionally skip amount targets
         if target_type == "rate":
+            diagnostic.update(status="dropped", drop_reason="rate_target")
+            diagnostics.append(diagnostic)
             continue
         if target_type == "amount" and not include_amounts:
+            diagnostic.update(status="dropped", drop_reason="amount_targets_disabled")
+            diagnostics.append(diagnostic)
+            continue
+        if target_type == "amount" and value <= 0:
+            diagnostic.update(status="dropped", drop_reason="nonpositive_amount_target")
+            diagnostics.append(diagnostic)
             continue
 
         stratum = target.get("strata", {})
@@ -356,11 +629,15 @@ def build_constraints_from_targets(
                 has_unsupported = True
                 break
         if has_unsupported:
+            diagnostic.update(status="dropped", drop_reason="unsupported_constraint")
+            diagnostics.append(diagnostic)
             continue
 
         # Deduplicate
         key = (stratum_name, variable, target_type)
         if key in seen_keys:
+            diagnostic.update(status="dropped", drop_reason="duplicate_target")
+            diagnostics.append(diagnostic)
             continue
         seen_keys.add(key)
 
@@ -405,7 +682,10 @@ def build_constraints_from_targets(
             indicator = indicator * df["adjusted_gross_income"].values
 
         n_obs = (indicator > 0).sum()
+        diagnostic["n_obs"] = int(n_obs)
         if n_obs >= min_obs:
+            diagnostic.update(status="used", drop_reason="")
+            diagnostic_index = len(diagnostics)
             constraints.append({
                 "indicator": indicator,
                 "target_value": value,
@@ -413,9 +693,15 @@ def build_constraints_from_targets(
                 "target_type": target_type,
                 "stratum": stratum_name,
                 "n_obs": n_obs,
+                "diagnostic_index": diagnostic_index,
             })
+        else:
+            diagnostic.update(status="dropped", drop_reason="insufficient_obs")
+        diagnostics.append(diagnostic)
 
     print(f"  Built {len(constraints)} constraints (min {min_obs} obs each)")
+    if return_diagnostics:
+        return constraints, diagnostics
     return constraints
 
 
@@ -491,6 +777,8 @@ def ipf_calibrate(
 def calibrate_weights(
     df: pd.DataFrame,
     targets: List[Dict[str, Any]] | List[TargetSpec],
+    include_amounts: bool = False,
+    min_obs: int = 100,
     verbose: bool = True,
 ) -> CalibrationResult:
     """Calibrate weights using IPF (Iterative Proportional Fitting)."""
@@ -500,7 +788,16 @@ def calibrate_weights(
         print(f"\nCalibrating {len(df):,} tax units...")
         print(f"Original weighted total: {original_weights.sum():,.0f}")
 
-    constraints = build_constraints_from_targets(df, targets)
+    constraints, diagnostics = build_constraints_from_targets(
+        df,
+        targets,
+        min_obs=min_obs,
+        include_amounts=include_amounts,
+        return_diagnostics=True,
+    )
+    diagnostics_df = pd.DataFrame(diagnostics)
+    if not constraints:
+        raise ValueError("No usable calibration constraints were built.")
 
     # Pre-scale weights to match total population target
     total_target = None
@@ -519,10 +816,21 @@ def calibrate_weights(
     targets_before = {}
     for c in constraints:
         current = np.dot(original_weights, c["indicator"])
-        targets_before[c["variable"]] = {
+        error = (
+            (current - c["target_value"]) / c["target_value"]
+            if c["target_value"] != 0
+            else 0
+        )
+        diagnostic_index = c.get("diagnostic_index")
+        if diagnostic_index is not None:
+            diagnostics_df.loc[diagnostic_index, "pre_value"] = current
+            diagnostics_df.loc[diagnostic_index, "pre_error"] = error
+
+        key = _constraint_key(c)
+        targets_before[key] = {
             "current": current,
             "target": c["target_value"],
-            "error": (current - c["target_value"]) / c["target_value"] if c["target_value"] != 0 else 0,
+            "error": error,
         }
 
     # Run IPF calibration
@@ -536,7 +844,13 @@ def calibrate_weights(
     for c in constraints:
         current = np.dot(calibrated_weights, c["indicator"])
         error = (current - c["target_value"]) / c["target_value"] if c["target_value"] != 0 else 0
-        targets_after[c["variable"]] = {
+        diagnostic_index = c.get("diagnostic_index")
+        if diagnostic_index is not None:
+            diagnostics_df.loc[diagnostic_index, "post_value"] = current
+            diagnostics_df.loc[diagnostic_index, "post_error"] = error
+
+        key = _constraint_key(c)
+        targets_after[key] = {
             "current": current,
             "target": c["target_value"],
             "error": error,
@@ -557,9 +871,17 @@ def calibrate_weights(
         adjustment_factors=adjustment_factors,
         targets_before=targets_before,
         targets_after=targets_after,
+        diagnostics=diagnostics_df,
         success=success,
         message="Converged" if success else "Did not converge",
         l2_loss=l2_loss,
+    )
+
+
+def _constraint_key(constraint: dict[str, Any]) -> str:
+    return (
+        f"{constraint.get('variable')}|{constraint.get('target_type')}|"
+        f"{constraint.get('stratum')}"
     )
 
 
@@ -614,6 +936,9 @@ def run_pipeline(
     cps_path: Path | None = None,
     output_path: Path | None = None,
     age_soi: bool = True,
+    include_amount_targets: bool = False,
+    min_target_obs: int = 100,
+    diagnostics_path: Path | None = None,
 ) -> pd.DataFrame:
     """Run the full microplex pipeline."""
     print("=" * 60)
@@ -695,7 +1020,12 @@ def run_pipeline(
     df = build_tax_units(df)
 
     # Calibrate
-    result = calibrate_weights(df, targets)
+    result = calibrate_weights(
+        df,
+        targets,
+        include_amounts=include_amount_targets,
+        min_obs=min_target_obs,
+    )
 
     # Add calibrated weights to dataframe
     df["original_weight"] = result.original_weights
@@ -712,6 +1042,10 @@ def run_pipeline(
     print(f"Original weighted: {result.original_weights.sum():,.0f}")
     print(f"Calibrated weighted: {result.calibrated_weights.sum():,.0f}")
     print(f"Calibration success: {result.success}")
+    print_calibration_diagnostics(result.diagnostics)
+
+    if diagnostics_path is not None:
+        write_calibration_diagnostics(result.diagnostics, diagnostics_path)
 
     if output_path is not None:
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -723,6 +1057,50 @@ def run_pipeline(
         print("\nDRY RUN - not writing to Supabase")
 
     return df
+
+
+def print_calibration_diagnostics(diagnostics: pd.DataFrame, max_rows: int = 8) -> None:
+    """Print a compact diagnostic summary for target usage and failures."""
+    if diagnostics.empty:
+        print("No calibration diagnostics available")
+        return
+
+    used = diagnostics[diagnostics["status"] == "used"].copy()
+    dropped = diagnostics[diagnostics["status"] == "dropped"].copy()
+    print("\nCalibration target diagnostics:")
+    print(f"  Used targets: {len(used):,}")
+    print(f"  Dropped targets: {len(dropped):,}")
+    if not dropped.empty:
+        reasons = dropped["drop_reason"].value_counts()
+        reason_text = ", ".join(f"{reason}={count}" for reason, count in reasons.items())
+        print(f"  Drop reasons: {reason_text}")
+
+    if used.empty or "post_error" not in used:
+        return
+
+    used["abs_post_error"] = used["post_error"].abs()
+    top = used.sort_values("abs_post_error", ascending=False).head(max_rows)
+    print("  Largest used-target errors:")
+    for _, row in top.iterrows():
+        print(
+            "    "
+            f"{row['variable']} {row['target_type']} | "
+            f"{row['stratum']} | "
+            f"target={row['target_value']:,.0f} "
+            f"post={row['post_value']:,.0f} "
+            f"error={row['post_error']:.1%} "
+            f"n={int(row['n_obs']):,}"
+        )
+
+
+def write_calibration_diagnostics(diagnostics: pd.DataFrame, path: Path) -> None:
+    """Write calibration diagnostics to CSV or Parquet."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.suffix.lower() == ".parquet":
+        diagnostics.to_parquet(path, index=False)
+    else:
+        diagnostics.to_csv(path, index=False)
+    print(f"Saved calibration diagnostics to {path}")
 
 
 def main():
@@ -753,6 +1131,24 @@ def main():
         default=True,
         help="Age fallback SOI target inputs to the requested model year",
     )
+    parser.add_argument(
+        "--include-amount-targets",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Opt in to amount targets such as AGI totals in calibration",
+    )
+    parser.add_argument(
+        "--min-target-obs",
+        type=int,
+        default=100,
+        help="Minimum nonzero records required for a target constraint",
+    )
+    parser.add_argument(
+        "--diagnostics-path",
+        type=Path,
+        default=None,
+        help="Optional CSV or Parquet path for calibration target diagnostics",
+    )
     args = parser.parse_args()
 
     run_pipeline(
@@ -765,6 +1161,9 @@ def main():
         cps_path=args.cps_path,
         output_path=args.output_path,
         age_soi=args.age_soi_targets,
+        include_amount_targets=args.include_amount_targets,
+        min_target_obs=args.min_target_obs,
+        diagnostics_path=args.diagnostics_path,
     )
 
 

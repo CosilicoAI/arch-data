@@ -171,6 +171,7 @@ def age_soi_targets(
                     source_year=target.period,
                     target_year=target_year,
                     method=method,
+                    factor=factor,
                 ),
             )
         )
@@ -306,9 +307,10 @@ def _aged_stratum_name(
     source_year: int,
     target_year: int,
     method: str,
+    factor: float,
 ) -> str:
     base = stratum_name or "SOI target"
-    return f"{base} (SOI aged {source_year}->{target_year}; {method})"
+    return f"{base} (SOI aged {source_year}->{target_year}; {method}; factor x{factor:.6g})"
 
 
 def _get_labor_force_target(
