@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  arch:
+    name: Arch checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras
+
+      - name: Lint Arch surface
+        run: >
+          uv run ruff check
+          arch
+          db/etl_snap.py
+          db/etl_aca_enrollment.py
+          db/schema.py
+          calibration/constraints.py
+          calibration/targets.py
+          tests/test_arch_facts.py
+          tests/test_arch_namespace.py
+          tests/test_arch_normalization.py
+          tests/test_etl_snap.py
+          tests/test_etl_aca_enrollment.py
+
+      - name: Test Arch surface
+        run: >
+          uv run pytest
+          tests/test_arch_facts.py
+          tests/test_arch_namespace.py
+          tests/test_arch_normalization.py
+          tests/test_etl_snap.py
+          tests/test_etl_aca_enrollment.py
+          tests/test_calibration.py
+          -q
