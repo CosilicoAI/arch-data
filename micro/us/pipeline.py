@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -27,6 +27,11 @@ import pandas as pd
 from arch.client import get_supabase_client
 from arch.microdata import query_cps_asec
 from arch.targets import TargetSpec, TargetType, query_targets
+from micro.us.entities import (
+    build_microplex_entities,
+    with_household_weights,
+    write_microplex_entities,
+)
 from micro.us.policyengine import (
     PolicyEngineNotAvailableError,
     add_policyengine_income_tax,
@@ -53,6 +58,7 @@ class CalibrationResult:
     message: str
     l2_loss: float
     method: str
+    calibration_unit: str = "tax_unit"
 
 
 AGING_NOTE_RE = re.compile(
@@ -1250,7 +1256,231 @@ def calibrate_weights(
         message="Converged" if success else "Did not converge",
         l2_loss=l2_loss,
         method=method,
+        calibration_unit="tax_unit",
     )
+
+
+def calibrate_household_weights(
+    households: pd.DataFrame,
+    tax_units: pd.DataFrame,
+    targets: List[Dict[str, Any]] | List[TargetSpec],
+    include_amounts: bool = True,
+    min_obs: int = 100,
+    calibration_method: str = "auto",
+    weight_bounds: tuple[float, float] = (0.1, 20.0),
+    holdout_variables: tuple[str, ...] = (),
+    verbose: bool = True,
+) -> CalibrationResult:
+    """Calibrate household weights against tax-unit targets."""
+    original_weights = households["weight"].values.copy()
+
+    if verbose:
+        print(f"\nCalibrating {len(households):,} households...")
+        print(f"Original weighted households: {original_weights.sum():,.0f}")
+
+    constraints, diagnostics, evaluation_constraints = (
+        build_household_constraints_from_targets(
+            households,
+            tax_units,
+            targets,
+            min_obs=min_obs,
+            include_amounts=include_amounts,
+            holdout_variables=holdout_variables,
+        )
+    )
+    diagnostics_df = pd.DataFrame(diagnostics)
+    if not constraints:
+        raise ValueError("No usable household calibration constraints were built.")
+
+    total_constraint = _household_prescale_constraint(constraints)
+    if total_constraint is not None:
+        current_total = float(np.dot(original_weights, total_constraint["indicator"]))
+        if current_total > 0:
+            scale_factor = total_constraint["target_value"] / current_total
+            original_weights = original_weights * scale_factor
+            if verbose:
+                print(
+                    f"Pre-scaled household weights by {scale_factor:.3f} "
+                    f"to match {total_constraint['stratum']} "
+                    f"target {total_constraint['target_value']:,.0f}"
+                )
+
+    targets_before = {}
+    for constraint in constraints:
+        current = float(np.dot(original_weights, constraint["indicator"]))
+        error = (
+            (current - constraint["target_value"]) / constraint["target_value"]
+            if constraint["target_value"] != 0
+            else 0
+        )
+        diagnostic_index = constraint.get("diagnostic_index")
+        if diagnostic_index is not None:
+            diagnostics_df.loc[diagnostic_index, "pre_value"] = current
+            diagnostics_df.loc[diagnostic_index, "pre_error"] = error
+
+        targets_before[_constraint_key(constraint)] = {
+            "current": current,
+            "target": constraint["target_value"],
+            "error": error,
+        }
+    for constraint in evaluation_constraints:
+        _update_diagnostic_values(
+            diagnostics_df,
+            constraint,
+            weights=original_weights,
+            value_column="pre_value",
+            error_column="pre_error",
+        )
+
+    has_amount_constraints = any(
+        constraint.get("target_type") == "amount" for constraint in constraints
+    )
+    method = calibration_method
+    if method == "auto":
+        method = "generalized-rake" if has_amount_constraints else "ipf"
+
+    if method == "ipf":
+        calibrated_weights, success, l2_loss = ipf_calibrate(
+            original_weights,
+            constraints,
+            verbose=verbose,
+        )
+    elif method == "generalized-rake":
+        calibrated_weights, success, l2_loss = generalized_rake_calibrate(
+            original_weights,
+            constraints,
+            bounds=weight_bounds,
+            verbose=verbose,
+        )
+    else:
+        raise ValueError(f"Unknown calibration method: {calibration_method}")
+
+    targets_after = {}
+    max_error = 0.0
+    for constraint in constraints:
+        current = float(np.dot(calibrated_weights, constraint["indicator"]))
+        error = (
+            (current - constraint["target_value"]) / constraint["target_value"]
+            if constraint["target_value"] != 0
+            else 0
+        )
+        diagnostic_index = constraint.get("diagnostic_index")
+        if diagnostic_index is not None:
+            diagnostics_df.loc[diagnostic_index, "post_value"] = current
+            diagnostics_df.loc[diagnostic_index, "post_error"] = error
+
+        targets_after[_constraint_key(constraint)] = {
+            "current": current,
+            "target": constraint["target_value"],
+            "error": error,
+        }
+        max_error = max(max_error, abs(error))
+    for constraint in evaluation_constraints:
+        _update_diagnostic_values(
+            diagnostics_df,
+            constraint,
+            weights=calibrated_weights,
+            value_column="post_value",
+            error_column="post_error",
+        )
+
+    adjustment_factors = calibrated_weights / original_weights
+
+    if verbose:
+        print(f"\nPost-calibration max error: {max_error:.1%}")
+        print(
+            "Household weight adjustments: "
+            f"mean={adjustment_factors.mean():.2f}, "
+            f"range=[{adjustment_factors.min():.2f}, "
+            f"{adjustment_factors.max():.2f}]"
+        )
+        print(f"L2 loss: {l2_loss:.6f}")
+
+    return CalibrationResult(
+        original_weights=original_weights,
+        calibrated_weights=calibrated_weights,
+        adjustment_factors=adjustment_factors,
+        targets_before=targets_before,
+        targets_after=targets_after,
+        diagnostics=diagnostics_df,
+        success=success,
+        message="Converged" if success else "Did not converge",
+        l2_loss=l2_loss,
+        method=method,
+        calibration_unit="household",
+    )
+
+
+def _household_prescale_constraint(constraints: List[Dict]) -> dict[str, Any] | None:
+    """Pick the broad tax-unit count constraint used to scale sample weights."""
+    count_constraints = [
+        constraint
+        for constraint in constraints
+        if constraint.get("variable") == "tax_unit_count"
+        and constraint.get("target_type") == "count"
+    ]
+    if not count_constraints:
+        return None
+    all_filers = [
+        constraint
+        for constraint in count_constraints
+        if "all filers" in str(constraint.get("stratum", "")).lower()
+    ]
+    if all_filers:
+        return max(all_filers, key=lambda constraint: constraint.get("n_obs", 0))
+    return max(count_constraints, key=lambda constraint: constraint.get("n_obs", 0))
+
+
+def build_household_constraints_from_targets(
+    households: pd.DataFrame,
+    tax_units: pd.DataFrame,
+    targets: List[Dict[str, Any]] | List[TargetSpec],
+    min_obs: int = 100,
+    include_amounts: bool = False,
+    holdout_variables: tuple[str, ...] = (),
+) -> tuple[List[Dict], list[dict[str, Any]], list[dict[str, Any]]]:
+    """Build household-level constraints from tax-unit target indicators."""
+    constraints, diagnostics, evaluation_constraints = build_constraints_from_targets(
+        tax_units,
+        targets,
+        min_obs=min_obs,
+        include_amounts=include_amounts,
+        holdout_variables=holdout_variables,
+        return_diagnostics=True,
+    )
+    return (
+        _aggregate_tax_unit_constraints_to_households(
+            households,
+            tax_units,
+            constraints,
+        ),
+        diagnostics,
+        _aggregate_tax_unit_constraints_to_households(
+            households,
+            tax_units,
+            evaluation_constraints,
+        ),
+    )
+
+
+def _aggregate_tax_unit_constraints_to_households(
+    households: pd.DataFrame,
+    tax_units: pd.DataFrame,
+    constraints: List[Dict],
+) -> List[Dict]:
+    """Convert tax-unit indicator vectors to household-level indicators."""
+    aggregated_constraints = []
+    household_ids = households["household_entity_id"]
+    tax_unit_households = tax_units["household_entity_id"]
+    for constraint in constraints:
+        indicator = pd.Series(constraint["indicator"], index=tax_units.index)
+        grouped = indicator.groupby(tax_unit_households).sum()
+        household_constraint = constraint.copy()
+        household_constraint["indicator"] = (
+            household_ids.map(grouped).fillna(0).to_numpy(dtype=float)
+        )
+        aggregated_constraints.append(household_constraint)
+    return aggregated_constraints
 
 
 def _update_diagnostic_values(
@@ -1362,6 +1592,7 @@ def run_pipeline(
     microdata_source: str = "local",
     cps_path: Path | None = None,
     output_path: Path | None = None,
+    entity_output_dir: Path | None = None,
     age_soi: bool = True,
     include_amount_targets: bool = True,
     min_target_obs: int = 100,
@@ -1405,14 +1636,23 @@ def run_pipeline(
         print(f"  {year} has {fallback_reason}, trying {fallback_year}...")
         targets = load_targets_from_supabase(fallback_year)
 
-    # Build tax units while preserving the original person hierarchy for PE.
-    person_df = df.copy()
-    df = build_tax_units(df)
-    df = maybe_add_policyengine_income_tax(df, targets, year=year, persons=person_df)
+    # Build linked entity frames. Households/persons are primitive; tax units
+    # are an assignment over persons inside households.
+    entities = build_microplex_entities(df)
+    entities = replace(
+        entities,
+        tax_units=maybe_add_policyengine_income_tax(
+            entities.tax_units,
+            targets,
+            year=year,
+            persons=entities.persons,
+        ),
+    )
 
     # Calibrate
-    result = calibrate_weights(
-        df,
+    result = calibrate_household_weights(
+        entities.households,
+        entities.tax_units,
         targets,
         include_amounts=include_amount_targets,
         min_obs=min_target_obs,
@@ -1423,10 +1663,14 @@ def run_pipeline(
         else (),
     )
 
-    # Add calibrated weights to dataframe
-    df["original_weight"] = result.original_weights
-    df["weight"] = result.calibrated_weights
-    df["weight_adjustment"] = result.adjustment_factors
+    # Add calibrated household weights and map them to linked entities.
+    households = entities.households.copy()
+    households["original_weight"] = result.original_weights
+    households["weight"] = result.calibrated_weights
+    households["calibrated_weight"] = result.calibrated_weights
+    households["weight_adjustment"] = result.adjustment_factors
+    entities = with_household_weights(entities, households)
+    df = entities.tax_units.copy()
 
     # Add AGI bracket for analysis
     df["agi_bracket"] = assign_agi_bracket(df["adjusted_gross_income"].values)
@@ -1434,15 +1678,22 @@ def run_pipeline(
     print("\n" + "=" * 60)
     print("SUMMARY")
     print("=" * 60)
+    print(f"Households: {len(entities.households):,}")
+    print(f"Persons: {len(entities.persons):,}")
     print(f"Total tax units: {len(df):,}")
     print(f"Original weighted: {result.original_weights.sum():,.0f}")
     print(f"Calibrated weighted: {result.calibrated_weights.sum():,.0f}")
     print(f"Calibration method: {result.method}")
+    print(f"Calibration unit: {result.calibration_unit}")
     print(f"Calibration success: {result.success}")
     print_calibration_diagnostics(result.diagnostics)
 
     if diagnostics_path is not None:
         write_calibration_diagnostics(result.diagnostics, diagnostics_path)
+
+    if entity_output_dir is not None:
+        write_microplex_entities(entities, entity_output_dir)
+        print(f"\nSaved linked Microplex entities to {entity_output_dir}")
 
     if output_path is not None:
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1527,6 +1778,12 @@ def main():
     parser.add_argument("--cps-path", type=Path, default=None, help="Local CPS parquet path")
     parser.add_argument("--output-path", type=Path, default=None, help="Local parquet output")
     parser.add_argument(
+        "--entity-output-dir",
+        type=Path,
+        default=None,
+        help="Optional directory for linked households/persons/tax_units Parquet files",
+    )
+    parser.add_argument(
         "--age-soi-targets",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -1579,6 +1836,7 @@ def main():
         microdata_source=args.microdata_source,
         cps_path=args.cps_path,
         output_path=args.output_path,
+        entity_output_dir=args.entity_output_dir,
         age_soi=args.age_soi_targets,
         include_amount_targets=args.include_amount_targets,
         min_target_obs=args.min_target_obs,

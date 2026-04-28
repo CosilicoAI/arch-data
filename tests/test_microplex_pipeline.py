@@ -105,6 +105,66 @@ def test_run_pipeline_can_write_local_microplex(tmp_path, monkeypatch):
     assert pd.read_parquet(output_path).shape[0] == n
 
 
+def test_run_pipeline_writes_linked_entity_outputs(tmp_path, monkeypatch):
+    cps = pd.DataFrame(
+        {
+            "household_id": [1, 1, 2],
+            "tax_unit_id": [10, 10, 20],
+            "person_seq": [1, 2, 1],
+            "age": [40, 38, 55],
+            "state_fips": [6, 6, 48],
+            "weight": [100.0, 100.0, 200.0],
+            "total_person_income": [50_000.0, 20_000.0, 30_000.0],
+            "wage_salary_income": [50_000.0, 20_000.0, 30_000.0],
+            "self_employment_income": [0.0, 0.0, 0.0],
+        }
+    )
+    cps_path = tmp_path / "cps.parquet"
+    entity_output_dir = tmp_path / "microplex_entities"
+    cps.to_parquet(cps_path, index=False)
+
+    targets = [
+        TargetSpec(
+            variable="tax_unit_count",
+            value=300.0,
+            target_type=TargetType.COUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="All filers",
+        )
+    ]
+    monkeypatch.setattr(
+        microplex,
+        "compose_microplex_targets",
+        lambda *args, **kwargs: TargetCompositionResult(
+            targets=targets,
+            diagnostics=pd.DataFrame(),
+        ),
+    )
+
+    result = microplex.run_pipeline(
+        year=2024,
+        limit=3,
+        cps_path=cps_path,
+        entity_output_dir=entity_output_dir,
+        dry_run=True,
+        min_target_obs=1,
+    )
+
+    households = pd.read_parquet(entity_output_dir / "households.parquet")
+    persons = pd.read_parquet(entity_output_dir / "persons.parquet")
+    tax_units = pd.read_parquet(entity_output_dir / "tax_units.parquet")
+
+    assert len(result) == 2
+    assert len(households) == 2
+    assert len(persons) == 3
+    assert len(tax_units) == 2
+    assert households["weight_adjustment"].notna().all()
+    assert persons["household_entity_id"].isin(households["household_entity_id"]).all()
+    assert tax_units["household_entity_id"].isin(households["household_entity_id"]).all()
+
+
 def test_calibrate_weights_preserves_per_target_diagnostics():
     df = pd.DataFrame(
         {

@@ -38,6 +38,7 @@ jobs:
           db/supabase_client.py
           db/source_files.py
           micro/us/census/download_cps.py
+          micro/us/entities.py
           micro/us/hierarchical_pipeline.py
           micro/us/pipeline.py
           micro/us/policyengine.py
@@ -53,6 +54,7 @@ jobs:
           tests/test_etl_medicaid.py
           tests/test_etl_ssi.py
           tests/test_source_files.py
+          tests/test_microplex_entities.py
           tests/test_microplex_target_adapter.py
           tests/test_microplex_pipeline.py
           tests/test_microplex_policyengine.py
@@ -73,6 +75,7 @@ jobs:
           tests/test_etl_ssi.py
           tests/test_source_files.py
           tests/test_calibration.py
+          tests/test_microplex_entities.py
           tests/test_microplex_target_adapter.py
           tests/test_microplex_pipeline.py
           tests/test_microplex_policyengine.py
