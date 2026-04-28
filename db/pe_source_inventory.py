@@ -10,7 +10,20 @@ from .source_files import SourceArtifactSpec, make_slug, make_url_slug
 DEFAULT_PE_US_ROOT = Path("/Users/maxghenis/PolicyEngine/policyengine-us-data")
 DEFAULT_PE_UK_ROOT = Path("/Users/maxghenis/PolicyEngine/policyengine-uk-data")
 
-SOURCE_SUFFIXES = {".csv", ".gz", ".json", ".ods", ".txt", ".xlsx", ".zip"}
+SOURCE_SUFFIXES = {
+    ".csv",
+    ".gz",
+    ".html",
+    ".htm",
+    ".json",
+    ".ods",
+    ".pdf",
+    ".txt",
+    ".xlsx",
+    ".yaml",
+    ".yml",
+    ".zip",
+}
 
 US_CALIBRATION_TARGET_ROOT_FILES = {
     "aca_ptc_multipliers_2022_2024.csv",
@@ -49,6 +62,33 @@ US_LONG_TERM_TARGET_SOURCE_FILES = {
     "oasdi_oact_20250805_nominal_delta.csv",
     "sources.json",
     "trustees_2025_current_law.csv",
+}
+
+US_LONG_TERM_ROOT_SOURCE_FILES = {
+    "social_security_aux.csv",
+    "SSPopJul_TR2024.csv",
+}
+
+US_LONG_TERM_REFERENCE_URLS = [
+    {
+        "source_id": "ssa",
+        "url": "https://www.ssa.gov/oact/tr/2025/lrIndex.html",
+        "filename": "ssa_2025_trustees_report_index.html",
+    },
+    {
+        "source_id": "ssa",
+        "url": "https://www.ssa.gov/oact/solvency/provisions/tables/table_run133.html",
+        "filename": "ssa_solvencey_provision_table_run133.html",
+    },
+    {
+        "source_id": "ssa",
+        "url": "https://www.ssa.gov/OACT/solvency/RWyden_20250805.pdf",
+        "filename": "ssa_oact_wyden_2025_08_05.pdf",
+    },
+]
+
+UK_TARGET_CONFIG_FILES = {
+    "policyengine_uk_data/targets/sources.yaml",
 }
 
 UK_TARGET_URL_FILES = [
@@ -101,6 +141,131 @@ UK_TARGET_URL_FILES = [
         "source_id": "slc",
         "url": "https://explore-education-statistics.service.gov.uk/data-tables/permalink/6ff75517-7124-487c-cb4e-08de6eccf22d",
         "filename": "slc_student_loan_forecasts_permalink.html",
+    },
+    {
+        "source_id": "dwp",
+        "url": "https://stat-xplore.dwp.gov.uk/",
+        "filename": "dwp_stat_xplore.html",
+    },
+    {
+        "source_id": "dwp",
+        "url": "https://www.gov.uk/government/statistics/benefit-cap-number-of-households-capped-to-february-2025/benefit-cap-number-of-households-capped-to-february-2025",
+        "filename": "dwp_benefit_cap_february_2025.html",
+    },
+    {
+        "source_id": "dwp",
+        "url": "https://www.gov.uk/government/statistics/universal-credit-and-child-tax-credit-claimants-statistics-related-to-the-policy-to-provide-support-for-a-maximum-of-2-children-april-2024",
+        "filename": "dwp_two_child_limit_april_2024.html",
+    },
+    {
+        "source_id": "dwp",
+        "url": "https://www.disabilityrightsuk.org/news/90-pip-standard-daily-living-component-recipients-would-fail-new-green-paper-test",
+        "filename": "disability_rights_uk_pip_green_paper_test.html",
+    },
+    {
+        "source_id": "hmrc",
+        "url": "https://www.gov.uk/government/statistics/income-tax-summarised-accounts-statistics",
+        "filename": "hmrc_income_tax_summarised_accounts_statistics.html",
+    },
+    {
+        "source_id": "hmrc",
+        "url": "https://www.gov.uk/government/statistics/income-and-tax-by-county-and-region-and-by-parliamentary-constituency",
+        "filename": "hmrc_income_and_tax_by_area.html",
+    },
+    {
+        "source_id": "uk-government",
+        "url": "https://assets.publishing.service.gov.uk/media/67ce0e7c08e764d17a5d3c21/2025_SPP_Review.pdf",
+        "filename": "uk_government_2025_spp_review.pdf",
+    },
+    {
+        "source_id": "uk-government",
+        "url": "https://www.gov.uk/government/publications/salary-sacrifice-reform-for-pension-contributions-effective-from-6-april-2029",
+        "filename": "uk_government_salary_sacrifice_reform_2029.html",
+    },
+    {
+        "source_id": "isc",
+        "url": "https://www.isc.co.uk/research/annual-census/",
+        "filename": "isc_annual_census.html",
+    },
+    {
+        "source_id": "nts",
+        "url": "https://www.gov.uk/government/statistics/national-travel-survey-2024",
+        "filename": "nts_national_travel_survey_2024.html",
+    },
+    {
+        "source_id": "ons",
+        "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates",
+        "filename": "ons_population_estimates.html",
+    },
+    {
+        "source_id": "ons",
+        "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/privaterentandhousepricesuk/january2025",
+        "filename": "ons_private_rent_and_house_prices_january_2025.html",
+    },
+    {
+        "source_id": "ons",
+        "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/smallareaincomeestimatesformiddlelayersuperoutputareasenglandandwales",
+        "filename": "ons_small_area_income_estimates.html",
+    },
+    {
+        "source_id": "ons",
+        "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/privaterentalmarketsummarystatisticsinengland",
+        "filename": "ons_private_rental_market_summary_statistics.html",
+    },
+    {
+        "source_id": "ons",
+        "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/z1zippedpopulationprojectionsdatafilesuk",
+        "filename": "ons_uk_population_projection_dataset_page.html",
+    },
+    {
+        "source_id": "ons",
+        "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
+        "filename": "ons_families_and_households_dataset_page.html",
+    },
+    {
+        "source_id": "ons",
+        "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/timeseries/haxv/ukea",
+        "filename": "ons_haxv_savings_interest_timeseries_page.html",
+    },
+    {
+        "source_id": "ons",
+        "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/subnationaldwellingstockbytenureestimates",
+        "filename": "ons_subnational_dwelling_stock_by_tenure_page.html",
+    },
+    {
+        "source_id": "nrs",
+        "url": "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/population/population-estimates/mid-year-population-estimates",
+        "filename": "nrs_mid_year_population_estimates.html",
+    },
+    {
+        "source_id": "nrs",
+        "url": "https://www.nrscotland.gov.uk/publications/vital-events-reference-tables-2024/",
+        "filename": "nrs_vital_events_reference_tables_2024.html",
+    },
+    {
+        "source_id": "scotland-census",
+        "url": "https://www.scotlandscensus.gov.uk/census-results/at-a-glance/household-composition/",
+        "filename": "scotland_census_household_composition.html",
+    },
+    {
+        "source_id": "scottish-government",
+        "url": "https://www.gov.scot/publications/scottish-budget-2026-2027/pages/6/",
+        "filename": "scottish_budget_2026_2027_page_6.html",
+    },
+    {
+        "source_id": "scottish-government",
+        "url": "https://www.gov.scot/publications/council-tax-datasets/",
+        "filename": "scottish_council_tax_datasets.html",
+    },
+    {
+        "source_id": "voa",
+        "url": "https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2024",
+        "filename": "voa_council_tax_stock_of_properties_2024.html",
+    },
+    {
+        "source_id": "ons-housing",
+        "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023",
+        "filename": "english_housing_survey_2023.html",
     },
 ]
 
@@ -267,9 +432,11 @@ def pe_us_source_specs(pe_us_root: Path = DEFAULT_PE_US_ROOT) -> list[SourceArti
             )
 
     long_term_root = root / "long_term_target_sources"
+    has_long_term_sources = long_term_root.exists()
     for filename in sorted(US_LONG_TERM_TARGET_SOURCE_FILES):
         path = long_term_root / filename
         if path.exists() and _is_source_file(path):
+            has_long_term_sources = True
             specs.append(
                 _spec(
                     path=path,
@@ -279,6 +446,36 @@ def pe_us_source_specs(pe_us_root: Path = DEFAULT_PE_US_ROOT) -> list[SourceArti
                     jurisdiction=Jurisdiction.US,
                     source_id=_infer_us_source_id(path),
                     notes="PE-US long-term calibration target source artifact",
+                )
+            )
+
+    for filename in sorted(US_LONG_TERM_ROOT_SOURCE_FILES):
+        path = root / filename
+        if path.exists() and _is_source_file(path):
+            has_long_term_sources = True
+            specs.append(
+                _spec(
+                    path=path,
+                    root=pe_us_root,
+                    origin_project="policyengine-us-data",
+                    pipeline="long-term-target-sources",
+                    jurisdiction=Jurisdiction.US,
+                    source_id="ssa",
+                    notes="PE-US long-term calibration source artifact",
+                )
+            )
+
+    if has_long_term_sources:
+        for item in US_LONG_TERM_REFERENCE_URLS:
+            specs.append(
+                _url_spec(
+                    origin_project="policyengine-us-data",
+                    pipeline="long-term-target-references",
+                    jurisdiction=Jurisdiction.US,
+                    source_id=item["source_id"],
+                    url=item["url"],
+                    filename=item["filename"],
+                    notes="PE-US long-term calibration reference source artifact",
                 )
             )
 
@@ -304,6 +501,21 @@ def pe_uk_source_specs(pe_uk_root: Path = DEFAULT_PE_UK_ROOT) -> list[SourceArti
     """Return public PE-UK target source files available in a local checkout."""
     storage = pe_uk_root / "policyengine_uk_data" / "storage"
     specs: list[SourceArtifactSpec] = []
+
+    for filename in sorted(UK_TARGET_CONFIG_FILES):
+        path = pe_uk_root / filename
+        if path.exists() and _is_source_file(path):
+            specs.append(
+                _spec(
+                    path=path,
+                    root=pe_uk_root,
+                    origin_project="policyengine-uk-data",
+                    pipeline="target-registry-config",
+                    jurisdiction=Jurisdiction.UK,
+                    source_id="policyengine-uk",
+                    notes="PE-UK target source registry configuration",
+                )
+            )
 
     for filename in sorted(UK_STORAGE_TARGET_FILES):
         path = storage / filename

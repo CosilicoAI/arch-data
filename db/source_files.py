@@ -8,6 +8,7 @@ import json
 import mimetypes
 import re
 import zipfile
+from base64 import b64encode
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
@@ -33,8 +34,11 @@ SUPPORTED_SUFFIXES = {
     ".htm",
     ".json",
     ".ods",
+    ".pdf",
     ".txt",
     ".xlsx",
+    ".yaml",
+    ".yml",
     ".zip",
 }
 
@@ -118,6 +122,8 @@ def _suffix_for_content_type(content_type: str | None) -> str:
         return ".html"
     if content_type == "application/zip":
         return ".zip"
+    if content_type == "application/pdf":
+        return ".pdf"
     if content_type in {
         "application/vnd.oasis.opendocument.spreadsheet",
         "application/x-vnd.oasis.opendocument.spreadsheet",
@@ -153,8 +159,22 @@ def _read_spec_content(spec: SourceArtifactSpec) -> tuple[bytes, str, str | None
         return _read_bytes(spec.path), spec.path.name, mimetypes.guess_type(spec.path.name)[0]
     if spec.source_url is None:
         raise ValueError(f"Source artifact {spec.slug} has no path or URL")
-    content, content_type, final_url = _fetch_url(spec.source_url)
-    return content, _artifact_name(spec, content_type, final_url), content_type
+    try:
+        content, content_type, final_url = _fetch_url(spec.source_url)
+        return content, _artifact_name(spec, content_type, final_url), content_type
+    except Exception as exc:
+        name = _artifact_name(spec, "text/plain", spec.source_url)
+        error_name = f"{Path(name).stem}.fetch_error.yaml"
+        payload = {
+            "source_url": spec.source_url,
+            "error_type": type(exc).__name__,
+            "error": str(exc),
+        }
+        return (
+            json.dumps(payload, ensure_ascii=True, indent=2).encode("utf-8"),
+            error_name,
+            "text/plain",
+        )
 
 
 def _stable_slug(*parts: str) -> str:
@@ -205,6 +225,31 @@ def _parse_text(content: bytes, name: str) -> list[ParsedSourceTable]:
                 "line": text.splitlines(),
             }
         )
+    return [ParsedSourceTable(name=name, frame=df)]
+
+
+def _parse_lines(content: bytes, name: str) -> list[ParsedSourceTable]:
+    text = content.decode("utf-8", errors="replace")
+    df = pd.DataFrame(
+        {
+            "line_number": range(1, len(text.splitlines()) + 1),
+            "line": text.splitlines(),
+        }
+    )
+    return [ParsedSourceTable(name=name, frame=df)]
+
+
+def _parse_binary(content: bytes, name: str) -> list[ParsedSourceTable]:
+    df = pd.DataFrame(
+        [
+            {
+                "filename": name,
+                "size_bytes": len(content),
+                "sha256": _sha256(content),
+                "content_base64": b64encode(content).decode("ascii"),
+            }
+        ]
+    )
     return [ParsedSourceTable(name=name, frame=df)]
 
 
@@ -270,8 +315,10 @@ def parse_source_artifact(path: Path, content: bytes | None = None) -> list[Pars
         return _parse_csv(content, name, suffix)
     if suffix == ".txt":
         return _parse_text(content, name)
-    if suffix in {".html", ".htm"}:
-        return _parse_text(content, name)
+    if suffix in {".html", ".htm", ".yaml", ".yml"}:
+        return _parse_lines(content, name)
+    if suffix == ".pdf":
+        return _parse_binary(content, name)
     if suffix == ".json":
         return _parse_json(content, name)
     if suffix in {".xlsx", ".ods"}:
