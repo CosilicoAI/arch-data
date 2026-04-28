@@ -12,7 +12,7 @@ from pathlib import Path
 
 from sqlmodel import Session, select
 
-from arch.targets import (
+from db.schema import (
     DataSource,
     DEFAULT_DB_PATH,
     Stratum,

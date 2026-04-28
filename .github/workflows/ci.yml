@@ -46,6 +46,7 @@ jobs:
           tests/test_etl_medicaid.py
           tests/test_etl_ssi.py
           tests/test_source_files.py
+          tests/test_microplex_target_adapter.py
 
       - name: Test Arch surface
         run: >
@@ -59,6 +60,7 @@ jobs:
           tests/test_etl_ssi.py
           tests/test_source_files.py
           tests/test_calibration.py
+          tests/test_microplex_target_adapter.py
           -q
 
       - name: Build target input database

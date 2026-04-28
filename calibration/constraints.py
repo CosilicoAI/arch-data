@@ -13,7 +13,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
-from arch.targets import TargetType
+from db.schema import TargetType
 from .targets import TargetSpec
 
 

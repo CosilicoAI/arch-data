@@ -38,6 +38,7 @@ except ImportError:
 
 # Import targets from Arch-compatible calibration adapters
 from calibration.targets import TargetSpec, get_targets
+from db.schema import TargetType
 
 
 # US State FIPS codes (int -> abbreviation)
@@ -99,7 +100,7 @@ def build_targets_from_db(
             continue
 
         # State-level count target
-        if t.target_type.value == "COUNT":
+        if t.target_type == TargetType.COUNT:
             if t.variable in ["tax_unit_count", "household_count"]:
                 marginal_targets["state_fips"][state_constraint] = t.value
 

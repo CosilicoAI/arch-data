@@ -17,14 +17,21 @@ Usage:
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List
+
 import numpy as np
 import pandas as pd
-from dataclasses import dataclass
-from typing import Any, Dict, List
 
 from arch.client import get_supabase_client
 from arch.microdata import query_cps_asec
-from arch.targets import query_targets
+from arch.targets import TargetSpec, TargetType, query_targets
+from arch.targets.microplex import (
+    build_microplex_constraints,
+    constraints_to_ipf_dicts,
+    load_microplex_targets,
+)
 
 
 @dataclass
@@ -56,6 +63,26 @@ def load_targets_from_supabase(year: int) -> List[Dict[str, Any]]:
     targets = [t for t in all_targets
                if t.get("strata", {}).get("jurisdiction", "").startswith("US")]
     print(f"  Loaded {len(targets)} targets")
+    return targets
+
+
+def load_targets_from_db(
+    year: int,
+    db_path: Path | None = None,
+    jurisdiction: str = "us",
+    sources: list[str] | None = None,
+    variables: list[str] | None = None,
+) -> List[TargetSpec]:
+    """Load calibration target inputs from the local Arch SQLite database."""
+    print(f"Loading target inputs for {year} from Arch DB...")
+    targets = load_microplex_targets(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=year,
+        sources=sources,
+        variables=variables,
+    )
+    print(f"  Loaded {len(targets)} target inputs")
     return targets
 
 
@@ -128,9 +155,62 @@ def assign_agi_bracket(agi: np.ndarray) -> np.ndarray:
     return result
 
 
+def build_constraints_from_target_specs(
+    df: pd.DataFrame,
+    targets: List[TargetSpec],
+    min_obs: int = 100,
+    include_amounts: bool = False,
+) -> List[Dict]:
+    """
+    Build legacy IPF constraint dicts from Arch DB ``TargetSpec`` objects.
+
+    This keeps the old IPF pipeline working while moving the target source from
+    Supabase-shaped dictionaries to the local Arch target database.
+    """
+    df = df.copy()
+    df["agi_bracket"] = assign_agi_bracket(df["adjusted_gross_income"].values)
+
+    supported_variables = {"tax_unit_count", "adjusted_gross_income"}
+    supported_constraint_variables = {
+        "adjusted_gross_income",
+        "is_tax_filer",
+        "agi_bracket",
+    }
+
+    filtered_targets = []
+    seen_keys = set()
+    for target in targets:
+        if target.variable not in supported_variables:
+            continue
+        if target.target_type == TargetType.RATE:
+            continue
+        if target.target_type == TargetType.AMOUNT and not include_amounts:
+            continue
+        if any(
+            variable not in supported_constraint_variables
+            for variable, _, _ in target.constraints
+        ):
+            continue
+
+        key = (target.stratum_name, target.variable, target.target_type)
+        if key in seen_keys:
+            continue
+        seen_keys.add(key)
+        filtered_targets.append(target)
+
+    constraints = build_microplex_constraints(
+        df,
+        targets=filtered_targets,
+        min_obs=min_obs,
+    )
+    constraint_dicts = constraints_to_ipf_dicts(constraints)
+    print(f"  Built {len(constraint_dicts)} constraints (min {min_obs} obs each)")
+    return constraint_dicts
+
+
 def build_constraints_from_targets(
     df: pd.DataFrame,
-    targets: List[Dict[str, Any]],
+    targets: List[Dict[str, Any]] | List[TargetSpec],
     min_obs: int = 100,
     include_amounts: bool = False,
 ) -> List[Dict]:
@@ -146,6 +226,14 @@ def build_constraints_from_targets(
     - Program participation (SNAP, SSI, OASDI - need program vars)
     - Population counts (different universe than tax filers)
     """
+    if targets and isinstance(targets[0], TargetSpec):
+        return build_constraints_from_target_specs(
+            df,
+            targets,
+            min_obs=min_obs,
+            include_amounts=include_amounts,
+        )
+
     constraints = []
     seen_keys = set()
     n = len(df)
@@ -319,7 +407,7 @@ def ipf_calibrate(
 
 def calibrate_weights(
     df: pd.DataFrame,
-    targets: List[Dict[str, Any]],
+    targets: List[Dict[str, Any]] | List[TargetSpec],
     verbose: bool = True,
 ) -> CalibrationResult:
     """Calibrate weights using IPF (Iterative Proportional Fitting)."""
@@ -437,6 +525,8 @@ def run_pipeline(
     year: int = 2024,
     dry_run: bool = False,
     limit: int = 200000,
+    target_source: str = "db",
+    db_path: Path | None = None,
 ) -> pd.DataFrame:
     """Run the full microplex pipeline."""
     print("=" * 60)
@@ -445,12 +535,20 @@ def run_pipeline(
 
     # Load data
     df = load_cps_from_supabase(year, limit=limit)
-    targets = load_targets_from_supabase(year)
+    if target_source == "db":
+        targets = load_targets_from_db(year, db_path=db_path)
+    elif target_source == "supabase":
+        targets = load_targets_from_supabase(year)
+    else:
+        raise ValueError(f"Unknown target_source: {target_source}")
 
     if len(targets) < 50:
         # Fall back to 2021 targets if year has insufficient targets
         print(f"  Only {len(targets)} targets for {year}, trying 2021...")
-        targets = load_targets_from_supabase(2021)
+        if target_source == "db":
+            targets = load_targets_from_db(2021, db_path=db_path)
+        else:
+            targets = load_targets_from_supabase(2021)
 
     # Build tax units
     df = build_tax_units(df)
@@ -489,9 +587,22 @@ def main():
     parser.add_argument("--year", type=int, default=2024, help="Data year")
     parser.add_argument("--dry-run", action="store_true", help="Don't write to Supabase")
     parser.add_argument("--limit", type=int, default=200000, help="Max records to load")
+    parser.add_argument(
+        "--target-source",
+        choices=["db", "supabase"],
+        default="db",
+        help="Calibration target source",
+    )
+    parser.add_argument("--db-path", type=Path, default=None, help="Arch SQLite DB path")
     args = parser.parse_args()
 
-    run_pipeline(year=args.year, dry_run=args.dry_run, limit=args.limit)
+    run_pipeline(
+        year=args.year,
+        dry_run=args.dry_run,
+        limit=args.limit,
+        target_source=args.target_source,
+        db_path=args.db_path,
+    )
 
 
 if __name__ == "__main__":
