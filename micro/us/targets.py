@@ -35,8 +35,12 @@ class MicroplexTargetProfile:
     """Declared rules for composing Arch records into Microplex target inputs."""
 
     min_current_target_inputs: int = 50
-    tax_variables: tuple[str, ...] = ("tax_unit_count", "adjusted_gross_income")
-    holdout_variables: tuple[str, ...] = ()
+    tax_variables: tuple[str, ...] = (
+        "tax_unit_count",
+        "adjusted_gross_income",
+        "income_tax_liability",
+    )
+    holdout_variables: tuple[str, ...] = ("income_tax_liability",)
     fallback_source: DataSource = DataSource.IRS_SOI
     age_soi: bool = True
 

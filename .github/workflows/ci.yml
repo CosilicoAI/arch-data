@@ -40,6 +40,7 @@ jobs:
           micro/us/census/download_cps.py
           micro/us/hierarchical_pipeline.py
           micro/us/pipeline.py
+          micro/us/policyengine.py
           micro/us/targets.py
           calibration/constraints.py
           calibration/targets.py
@@ -54,6 +55,7 @@ jobs:
           tests/test_source_files.py
           tests/test_microplex_target_adapter.py
           tests/test_microplex_pipeline.py
+          tests/test_microplex_policyengine.py
           tests/test_download_cps.py
           tests/test_hierarchical_pipeline.py
           tests/test_supabase_client.py
@@ -73,6 +75,7 @@ jobs:
           tests/test_calibration.py
           tests/test_microplex_target_adapter.py
           tests/test_microplex_pipeline.py
+          tests/test_microplex_policyengine.py
           tests/test_download_cps.py
           tests/test_hierarchical_pipeline.py
           tests/test_supabase_client.py

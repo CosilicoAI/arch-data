@@ -27,6 +27,10 @@ import pandas as pd
 from arch.client import get_supabase_client
 from arch.microdata import query_cps_asec
 from arch.targets import TargetSpec, TargetType, query_targets
+from micro.us.policyengine import (
+    PolicyEngineNotAvailableError,
+    add_policyengine_income_tax,
+)
 from micro.us.targets import (
     MicroplexTargetProfile,
     TargetCompositionResult,
@@ -57,6 +61,7 @@ AGING_NOTE_RE = re.compile(
 TARGET_VARIABLE_COLUMNS = {
     "adjusted_gross_income": "adjusted_gross_income",
     "employment_income": "wage_income",
+    "income_tax_liability": "income_tax_liability",
 }
 SUPPORTED_TARGET_VARIABLES = {"tax_unit_count", *TARGET_VARIABLE_COLUMNS}
 SUPPORTED_CONSTRAINT_VARIABLES = {
@@ -296,6 +301,41 @@ def build_tax_units_from_census_tax_ids(df: pd.DataFrame) -> pd.DataFrame:
     tax_units["is_tax_filer"] = 1
     print(f"  Aggregated to {len(tax_units):,} likely filing tax units")
     return tax_units
+
+
+def maybe_add_policyengine_income_tax(
+    df: pd.DataFrame,
+    targets: list[TargetSpec] | list[dict[str, Any]],
+    *,
+    year: int,
+) -> pd.DataFrame:
+    """Calculate income tax liability when loaded targets require it."""
+    if "income_tax_liability" in df.columns:
+        return df
+    if not _targets_include_variable(targets, "income_tax_liability"):
+        return df
+
+    print("Calculating income_tax_liability with PolicyEngine-US...")
+    try:
+        return add_policyengine_income_tax(df, year=year)
+    except PolicyEngineNotAvailableError as exc:
+        print(f"  {exc}")
+        print("  income_tax_liability targets will remain unsupported.")
+        return df
+
+
+def _targets_include_variable(
+    targets: list[TargetSpec] | list[dict[str, Any]],
+    variable: str,
+) -> bool:
+    for target in targets:
+        if isinstance(target, TargetSpec):
+            target_variable = target.variable
+        else:
+            target_variable = target.get("variable")
+        if target_variable == variable:
+            return True
+    return False
 
 
 def _sum_columns(df: pd.DataFrame, columns: list[str]) -> float:
@@ -1195,6 +1235,9 @@ def write_microplex_to_supabase(
             "self_employment_income": float(row.get("self_employment_income", 0)),
             "total_income": float(row.get("total_income", 0)),
             "adjusted_gross_income": float(row.get("adjusted_gross_income", 0)) if "adjusted_gross_income" in row else None,
+            "income_tax_liability": float(row.get("income_tax_liability", 0))
+            if "income_tax_liability" in row
+            else None,
             "original_weight": float(row.get("original_weight", 0)),
             "calibrated_weight": float(row.get("weight", 0)),
             "weight_adjustment": float(row.get("weight_adjustment", 1.0)),
@@ -1299,6 +1342,7 @@ def run_pipeline(
 
     # Build tax units
     df = build_tax_units(df)
+    df = maybe_add_policyengine_income_tax(df, targets, year=year)
 
     # Calibrate
     result = calibrate_weights(
