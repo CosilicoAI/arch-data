@@ -1,6 +1,11 @@
 """Tests for hierarchical calibration with person/household aggregation."""
 
+from dataclasses import dataclass
 from enum import Enum
+import importlib.util
+from pathlib import Path
+from typing import Optional
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -20,13 +25,6 @@ class DataSource(str, Enum):
     CENSUS_ACS = "census-acs"
 
 
-# Import directly from module files to avoid supabase dependency chain
-# calibration/__init__.py imports calibration/targets.py which imports db/schema.py
-# which imports supabase. We bypass this by importing the file directly.
-import importlib.util
-import sys
-from pathlib import Path
-
 # Load calibration.variables directly
 _calibration_path = Path(__file__).parent.parent / "calibration"
 
@@ -39,11 +37,6 @@ _variables_spec.loader.exec_module(_variables_module)
 infer_target_level = _variables_module.infer_target_level
 parse_variable_ref = _variables_module.parse_variable_ref
 InvalidVariableRefError = _variables_module.InvalidVariableRefError
-
-
-# Local TargetSpec and Constraint for testing (avoids full import chain)
-from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
