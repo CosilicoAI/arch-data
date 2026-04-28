@@ -33,7 +33,9 @@ jobs:
           db/etl_aca_enrollment.py
           db/etl_medicaid.py
           db/etl_ssi.py
+          db/pe_source_inventory.py
           db/schema.py
+          db/source_files.py
           calibration/constraints.py
           calibration/targets.py
           tests/test_arch_facts.py
@@ -43,6 +45,7 @@ jobs:
           tests/test_etl_aca_enrollment.py
           tests/test_etl_medicaid.py
           tests/test_etl_ssi.py
+          tests/test_source_files.py
 
       - name: Test Arch surface
         run: >
@@ -54,6 +57,7 @@ jobs:
           tests/test_etl_aca_enrollment.py
           tests/test_etl_medicaid.py
           tests/test_etl_ssi.py
+          tests/test_source_files.py
           tests/test_calibration.py
           -q
 

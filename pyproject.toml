@@ -19,6 +19,8 @@ dependencies = [
     "scipy>=1.11.0",  # For entropy minimization optimization
     "microplex>=0.1.0",  # Synthesis and calibration algorithms
     "pyarrow>=22.0.0",
+    "openpyxl>=3.1.0",
+    "odfpy>=1.4.1",
 ]
 
 [project.optional-dependencies]

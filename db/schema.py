@@ -177,6 +177,71 @@ class Target(SQLModel, table=True):
     stratum: Optional[Stratum] = Relationship(back_populates="targets")
 
 
+class SourceArtifact(SQLModel, table=True):
+    """A source file ingested into Arch with provenance and checksum metadata."""
+
+    __tablename__ = "source_artifacts"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    slug: str = Field(unique=True, index=True)
+    origin_project: str = Field(index=True)
+    pipeline: str = Field(index=True)
+    jurisdiction: Jurisdiction | None = Field(default=None, index=True)
+    source_id: str = Field(index=True)
+    source_name: str | None = None
+    local_path: str | None = None
+    source_url: str | None = None
+    content_type: str | None = None
+    size_bytes: int | None = None
+    sha256: str = Field(index=True)
+    notes: str | None = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    tables: list["SourceTable"] = Relationship(back_populates="artifact")
+
+
+class SourceTable(SQLModel, table=True):
+    """One parsed table, sheet, JSON object list, or zip member."""
+
+    __tablename__ = "source_tables"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    artifact_id: int = Field(foreign_key="source_artifacts.id", index=True)
+    name: str = Field(index=True)
+    row_count: int = 0
+    column_count: int = 0
+
+    artifact: Optional[SourceArtifact] = Relationship(back_populates="tables")
+    columns: list["SourceColumn"] = Relationship(back_populates="table")
+    rows: list["SourceRow"] = Relationship(back_populates="table")
+
+
+class SourceColumn(SQLModel, table=True):
+    """Column metadata for a parsed source table."""
+
+    __tablename__ = "source_columns"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    table_id: int = Field(foreign_key="source_tables.id", index=True)
+    position: int
+    name: str
+
+    table: Optional[SourceTable] = Relationship(back_populates="columns")
+
+
+class SourceRow(SQLModel, table=True):
+    """A parsed source row stored as JSON keyed by source column name."""
+
+    __tablename__ = "source_rows"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    table_id: int = Field(foreign_key="source_tables.id", index=True)
+    row_number: int = Field(index=True)
+    values_json: str
+
+    table: Optional[SourceTable] = Relationship(back_populates="rows")
+
+
 def get_engine(db_path: Path = DEFAULT_DB_PATH):
     """Get SQLAlchemy engine for the targets database."""
     db_path.parent.mkdir(parents=True, exist_ok=True)
