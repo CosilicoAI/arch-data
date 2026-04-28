@@ -9,7 +9,7 @@ purely by targets.
 import numpy as np
 import pandas as pd
 from dataclasses import dataclass
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple
 import sys
 
 # Try to import torch, fall back to numpy-based optimization if not available

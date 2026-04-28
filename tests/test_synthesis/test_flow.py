@@ -10,10 +10,7 @@ Architecture: Masked Autoregressive Flow (MAF) conditioned on demographics.
 - Generation: sample from learned distribution
 """
 
-import pytest
-import numpy as np
 import torch
-import torch.nn as nn
 
 
 class TestConditionalMAF:

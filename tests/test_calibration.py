@@ -10,10 +10,6 @@ from sqlmodel import Session
 
 from db.schema import (
     DataSource,
-    Jurisdiction,
-    Stratum,
-    StratumConstraint,
-    Target,
     TargetType,
     init_db,
 )

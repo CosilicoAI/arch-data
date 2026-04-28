@@ -7,12 +7,9 @@ from collections import defaultdict
 from sqlmodel import Session, select
 
 from db.schema import (
-    DataSource,
     Stratum,
-    StratumConstraint,
     Target,
     get_engine,
-    init_db,
     DEFAULT_DB_PATH,
 )
 

@@ -7,12 +7,9 @@ import pytest
 from sqlmodel import Session, select
 
 from db.schema import (
-    DataSource,
     GeographicLevel,
-    Jurisdiction,
     Stratum,
     Target,
-    TargetType,
     init_db,
 )
 

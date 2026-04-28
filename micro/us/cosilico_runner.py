@@ -6,7 +6,6 @@ Applies statute-based tax calculations to tax unit data.
 
 import numpy as np
 import pandas as pd
-from pathlib import Path
 
 
 # 2024 Tax Parameters (from Rev. Proc. 2023-34)

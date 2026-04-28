@@ -11,14 +11,11 @@ Outputs parquet files ready for use with microplex Reweighter.
 
 from __future__ import annotations
 
-import io
-import warnings
 from pathlib import Path
 from typing import Optional
 
 import numpy as np
 import pandas as pd
-import requests
 
 # Output directory
 OUTPUT_DIR = Path(__file__).parent

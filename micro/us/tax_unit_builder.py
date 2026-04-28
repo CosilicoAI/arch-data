@@ -5,7 +5,6 @@ Aggregates person records into tax units with derived variables
 needed for tax calculations.
 """
 
-import numpy as np
 import pandas as pd
 from pathlib import Path
 

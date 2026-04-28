@@ -8,7 +8,6 @@ Transforms handle:
 - Standardization (for neural network training)
 """
 
-import pytest
 import numpy as np
 import torch
 

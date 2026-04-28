@@ -12,7 +12,7 @@ Pipeline:
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import List, Optional, Union
 import numpy as np
 import pandas as pd
 import torch
@@ -379,7 +379,6 @@ class TaxSynthesizer:
             demographics[var].values for var in self.demographic_vars
         ])
         context = torch.tensor(context_np, dtype=torch.float32)
-        n_samples = len(demographics)
 
         # Sample from flow (will be masked by zero indicators)
         with torch.no_grad():

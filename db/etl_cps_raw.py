@@ -14,7 +14,6 @@ Usage:
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -204,7 +203,7 @@ def load_cps_to_supabase(
     }
 
     if dry_run:
-        print(f"DRY RUN - would load:")
+        print("DRY RUN - would load:")
         print(f"  {result['person_count']:,} person records")
         print(f"  {result['household_count']:,} household records")
         print(f"  {result['family_count']:,} family records")
@@ -304,7 +303,7 @@ def export_cps_to_csv(
     # Person
     person_path = cache_dir / "person.parquet"
     if person_path.exists():
-        print(f"Exporting person records...")
+        print("Exporting person records...")
         df = pd.read_parquet(person_path)
         records = prepare_person_records(df)
         out_df = pd.DataFrame(records)
@@ -316,7 +315,7 @@ def export_cps_to_csv(
     # Household
     hh_path = cache_dir / "household.parquet"
     if hh_path.exists():
-        print(f"Exporting household records...")
+        print("Exporting household records...")
         df = pd.read_parquet(hh_path)
         records = prepare_household_records(df)
         out_df = pd.DataFrame(records)
@@ -328,7 +327,7 @@ def export_cps_to_csv(
     # Family
     fam_path = cache_dir / "family.parquet"
     if fam_path.exists():
-        print(f"Exporting family records...")
+        print("Exporting family records...")
         df = pd.read_parquet(fam_path)
         records = prepare_family_records(df)
         out_df = pd.DataFrame(records)
@@ -337,11 +336,11 @@ def export_cps_to_csv(
         paths["family"] = csv_path
         print(f"  Exported {len(out_df):,} records to {csv_path}")
 
-    print(f"\nTo import to Supabase:")
-    print(f"  1. Go to Supabase Dashboard > Table Editor")
+    print("\nTo import to Supabase:")
+    print("  1. Go to Supabase Dashboard > Table Editor")
     print(f"  2. Select table (e.g., {table_names['person']})")
-    print(f"  3. Click 'Insert' > 'Import data from CSV'")
-    print(f"  4. Upload the CSV file")
+    print("  3. Click 'Insert' > 'Import data from CSV'")
+    print("  4. Upload the CSV file")
 
     return paths
 

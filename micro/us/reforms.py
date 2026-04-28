@@ -7,10 +7,8 @@ Parametric reforms: Change parameter values (rates, thresholds, amounts)
 Structural reforms: Change formulas (add/remove provisions, change logic)
 """
 
-import numpy as np
-import pandas as pd
-from dataclasses import dataclass, field
-from typing import Callable, Optional
+from dataclasses import dataclass
+from typing import Callable
 from copy import deepcopy
 
 from cosilico_runner import PARAMS_2024, run_all_calculations

@@ -16,7 +16,6 @@ from .schema import (
     StratumConstraint,
     Target,
     TargetType,
-    get_engine,
     init_db,
 )
 

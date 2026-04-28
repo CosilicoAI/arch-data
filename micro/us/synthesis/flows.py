@@ -221,7 +221,6 @@ class AffineCouplingLayer(nn.Module):
         Returns:
             x: Reconstructed input
         """
-        batch_size = z.shape[0]
         x = torch.zeros_like(z)
 
         for i in range(self.n_features):

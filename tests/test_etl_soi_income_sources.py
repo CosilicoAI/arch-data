@@ -19,7 +19,6 @@ from db.etl_soi_income_sources import (
     SOI_STATE_INCOME_SOURCES_DATA,
     STATE_FIPS,
     INCOME_SOURCES,
-    SOURCE_URL,
 )
 
 

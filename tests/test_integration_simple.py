@@ -8,11 +8,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import pytest
 from sqlmodel import Session
 
 from calibration import (
-    load_microdata,
     get_targets,
     build_constraint_matrix,
     EntropyCalibrator,

@@ -289,7 +289,7 @@ def load_microdata(
         # UK Family Resources Survey - not yet implemented
         import warnings
         warnings.warn(
-            f"FRS data loading not yet implemented, using synthetic data."
+            "FRS data loading not yet implemented, using synthetic data."
         )
         df = _generate_synthetic_cps(year, seed=seed)
 

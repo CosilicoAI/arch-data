@@ -6,7 +6,6 @@ while satisfying calibration constraints.
 """
 
 from dataclasses import dataclass
-from typing import Optional
 
 import numpy as np
 from scipy.optimize import minimize, OptimizeResult

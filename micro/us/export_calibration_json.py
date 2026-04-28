@@ -3,9 +3,8 @@ Export calibration results to JSON for the cosilico.ai dashboard.
 """
 
 import json
-import numpy as np
 from datetime import datetime
-from gradient_calibrate import calibrate_weights, build_targets, build_indicator_matrix
+from gradient_calibrate import calibrate_weights
 from tax_unit_builder import load_and_build_tax_units
 
 

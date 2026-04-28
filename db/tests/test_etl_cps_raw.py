@@ -1,6 +1,5 @@
 """Tests for CPS raw microdata ETL to Supabase."""
 
-import pytest
 import pandas as pd
 from unittest.mock import MagicMock, patch
 

@@ -14,7 +14,7 @@ import sys
 engine_path = Path(__file__).parents[3] / "cosilico-engine" / "src"
 sys.path.insert(0, str(engine_path))
 
-from cosilico.brackets import marginal_agg
+from cosilico.brackets import marginal_agg  # noqa: E402
 
 
 def load_tax_units() -> pd.DataFrame:
@@ -134,7 +134,7 @@ def get_policyengine_values(df: pd.DataFrame) -> np.ndarray:
             sim = Simulation(situation=situation)
             tax = float(sim.calculate("income_tax_before_credits", 2024)[0])
             taxes.append(tax)
-        except Exception as e:
+        except Exception:
             taxes.append(np.nan)
 
     return np.array(taxes), sample_idx
@@ -181,7 +181,7 @@ def main():
     dsl_total = (dsl_tax * weight).sum()
     py_total = (py_tax * weight).sum()
 
-    print(f"\n   Weighted totals:")
+    print("\n   Weighted totals:")
     print(f"   DSL:    ${dsl_total:>20,.0f}")
     print(f"   Python: ${py_total:>20,.0f}")
 

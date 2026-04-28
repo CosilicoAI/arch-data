@@ -8,9 +8,6 @@ Compares Cosilico synthesis vs PolicyEngine Enhanced CPS vs IRS SOI ground truth
 
 import pytest
 import numpy as np
-import pandas as pd
-from scipy import stats
-from typing import Dict, List, Tuple
 
 
 # =============================================================================
