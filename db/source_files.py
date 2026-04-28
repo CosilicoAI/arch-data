@@ -36,6 +36,7 @@ SUPPORTED_SUFFIXES = {
     ".ods",
     ".pdf",
     ".txt",
+    ".xls",
     ".xlsx",
     ".yaml",
     ".yml",
@@ -129,10 +130,9 @@ def _suffix_for_content_type(content_type: str | None) -> str:
         "application/x-vnd.oasis.opendocument.spreadsheet",
     }:
         return ".ods"
-    if content_type in {
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "application/vnd.ms-excel",
-    }:
+    if content_type == "application/vnd.ms-excel":
+        return ".xls"
+    if content_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
         return ".xlsx"
     return ".txt"
 
@@ -293,7 +293,12 @@ def _parse_json(content: bytes, name: str) -> list[ParsedSourceTable]:
 
 
 def _parse_excel(content: bytes, name: str, suffix: str) -> list[ParsedSourceTable]:
-    engine = "odf" if suffix == ".ods" else "openpyxl"
+    if suffix == ".ods":
+        engine = "odf"
+    elif suffix == ".xls":
+        engine = "xlrd"
+    else:
+        engine = "openpyxl"
     xls = pd.ExcelFile(io.BytesIO(content), engine=engine)
     tables = []
     for sheet_name in xls.sheet_names:
@@ -321,7 +326,7 @@ def parse_source_artifact(path: Path, content: bytes | None = None) -> list[Pars
         return _parse_binary(content, name)
     if suffix == ".json":
         return _parse_json(content, name)
-    if suffix in {".xlsx", ".ods"}:
+    if suffix in {".xls", ".xlsx", ".ods"}:
         return _parse_excel(content, name, suffix)
     if suffix == ".zip":
         tables = []

@@ -58,8 +58,8 @@ def get_soi_aging_factors(
 
     Counts are scaled by labor force: BLS annual labor-force counts when
     available, then CBO labor-force projections for years beyond BLS coverage.
-    Amounts are scaled by BLS median weekly earnings. If the target year is
-    beyond available BLS earnings data, the last observed annual earnings growth
+    Amounts are scaled by aggregate SOI adjusted gross income. If the target
+    year is beyond available SOI AGI data, the last observed annual AGI growth
     rate is carried forward and declared in the method string.
     """
     if source_year == target_year:
@@ -82,14 +82,12 @@ def get_soi_aging_factors(
         db_path=db_path,
         jurisdiction=jurisdiction,
     )
-    source_earnings = _target_value(
+    source_aggregate_income = _soi_total_agi_value(
+        year=source_year,
         db_path=db_path,
         jurisdiction=jurisdiction,
-        year=source_year,
-        source=DataSource.BLS,
-        variable="median_weekly_earnings",
     )
-    target_earnings, amount_method = _earnings_target_for_year(
+    target_aggregate_income, amount_method = _soi_total_agi_for_year(
         target_year=target_year,
         db_path=db_path,
         jurisdiction=jurisdiction,
@@ -99,7 +97,7 @@ def get_soi_aging_factors(
         source_year=source_year,
         target_year=target_year,
         count_factor=target_labor_force / source_labor_force,
-        amount_factor=target_earnings / source_earnings,
+        amount_factor=target_aggregate_income / source_aggregate_income,
         count_method=f"{count_source}_labor_force_ratio",
         amount_method=amount_method,
     )
@@ -356,34 +354,30 @@ def _get_labor_force_target_with_source(
     raise ValueError(f"No BLS/CBO labor-force target found for {year}.")
 
 
-def _earnings_target_for_year(
+def _soi_total_agi_for_year(
     *,
     target_year: int,
     db_path: Path | None,
     jurisdiction: str,
 ) -> tuple[float, str]:
-    target_earnings = _optional_target_value(
-        db_path=db_path,
-        jurisdiction=jurisdiction,
+    target_agi = _optional_soi_total_agi_value(
         year=target_year,
-        source=DataSource.BLS,
-        variable="median_weekly_earnings",
-    )
-    if target_earnings is not None:
-        return target_earnings, "bls_median_weekly_earnings_ratio"
-
-    available = _available_target_values(
         db_path=db_path,
         jurisdiction=jurisdiction,
-        source=DataSource.BLS,
-        variable="median_weekly_earnings",
+    )
+    if target_agi is not None:
+        return target_agi, "soi_total_agi_ratio"
+
+    available = _available_soi_total_agi_values(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
         start_year=target_year - 20,
         end_year=target_year,
     )
     if len(available) < 2:
         raise ValueError(
-            "Need at least two BLS median weekly earnings years to extrapolate "
-            f"to {target_year}."
+            "Need at least two SOI total AGI years to extrapolate "
+            f"aggregate income to {target_year}."
         )
 
     latest_year = max(available)
@@ -393,31 +387,68 @@ def _earnings_target_for_year(
     projected = available[latest_year] * annual_growth**years_forward
     return (
         projected,
-        "bls_median_weekly_earnings_last_growth_extrapolation",
+        "soi_total_agi_last_growth_extrapolation",
     )
 
 
-def _available_target_values(
+def _available_soi_total_agi_values(
     *,
     db_path: Path | None,
     jurisdiction: str,
-    source: DataSource,
-    variable: str,
     start_year: int,
     end_year: int,
 ) -> dict[int, float]:
     values = {}
     for year in range(start_year, end_year + 1):
-        value = _optional_target_value(
+        value = _optional_soi_total_agi_value(
+            year=year,
             db_path=db_path,
             jurisdiction=jurisdiction,
-            year=year,
-            source=source,
-            variable=variable,
         )
         if value is not None:
             values[year] = value
     return values
+
+
+def _soi_total_agi_value(
+    *,
+    year: int,
+    db_path: Path | None,
+    jurisdiction: str,
+) -> float:
+    value = _optional_soi_total_agi_value(
+        year=year,
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+    )
+    if value is None:
+        raise ValueError(f"No SOI total AGI target found for {year}.")
+    return value
+
+
+def _optional_soi_total_agi_value(
+    *,
+    year: int,
+    db_path: Path | None,
+    jurisdiction: str,
+) -> float | None:
+    targets = get_targets(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=year,
+        sources=[DataSource.IRS_SOI.value],
+        variables=["adjusted_gross_income"],
+    )
+    if not targets:
+        return None
+
+    for target in targets:
+        if target.stratum_name == "US All Filers":
+            return target.value
+    for target in targets:
+        if target.constraints == [("is_tax_filer", "==", "1")]:
+            return target.value
+    return None
 
 
 def _target_value(

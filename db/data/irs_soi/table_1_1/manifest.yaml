@@ -1,0 +1,20 @@
+dataset: irs_soi_publication_1304_table_1_1
+source_page: https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns-complete-report-publication-1304-basic-tables-part-1
+table: Table 1.1
+files:
+  2020:
+    filename: 20in11si.xls
+    source_url: https://www.irs.gov/pub/irs-soi/20in11si.xls
+    sha256: 9ade112c36a0b6b81b539524537d0fbfbf5c34c611d10da700f82b87a2e81cb0
+  2021:
+    filename: 21in11si.xls
+    source_url: https://www.irs.gov/pub/irs-soi/21in11si.xls
+    sha256: 2c325fb48fe5bc72fdf339aba40da47d4c8285384ba1b7efe26762008a31d2ce
+  2022:
+    filename: 22in11si.xls
+    source_url: https://www.irs.gov/pub/irs-soi/22in11si.xls
+    sha256: 31e0203ded16576bad0e3042916a134161a3671405f6be494fbb927acecb8fe5
+  2023:
+    filename: 23in11si.xls
+    source_url: https://www.irs.gov/pub/irs-soi/23in11si.xls
+    sha256: 842da11fe09123796c861e919d16011ef161338de1c172d39064bdfa666aca17

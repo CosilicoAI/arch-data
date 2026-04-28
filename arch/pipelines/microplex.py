@@ -120,6 +120,24 @@ def has_supported_tax_targets(
     return False
 
 
+def latest_supported_soi_year(
+    target_year: int,
+    db_path: Path | None = None,
+    jurisdiction: str = "us",
+) -> int | None:
+    """Find the latest SOI year at or before the model year with usable targets."""
+    for candidate_year in range(target_year, 1989, -1):
+        targets = load_microplex_targets(
+            db_path=db_path,
+            jurisdiction=jurisdiction,
+            year=candidate_year,
+            sources=[DataSource.IRS_SOI.value],
+        )
+        if has_supported_tax_targets(targets):
+            return candidate_year
+    return None
+
+
 def build_tax_units(df: pd.DataFrame) -> pd.DataFrame:
     """
     Build tax units from person-level CPS data.
@@ -618,12 +636,17 @@ def run_pipeline(
         raise ValueError(f"Unknown target_source: {target_source}")
 
     if len(targets) < 50 or not has_supported_tax_targets(targets):
-        # Fall back to 2021 targets if year has insufficient usable tax targets.
-        fallback_year = 2021
-        print(
-            f"  Only {len(targets)} usable targets for {year}, "
-            f"trying {fallback_year}..."
-        )
+        # Fall back to the latest available SOI targets when the model year
+        # has insufficient usable tax targets.
+        if target_source == "db":
+            fallback_year = latest_supported_soi_year(year, db_path=db_path) or 2021
+        else:
+            fallback_year = 2021
+        if len(targets) < 50:
+            fallback_reason = f"only {len(targets)} target inputs"
+        else:
+            fallback_reason = "no supported current-year tax targets"
+        print(f"  {year} has {fallback_reason}, trying {fallback_year}...")
         if target_source == "db":
             current_targets = targets
             targets = load_targets_from_db(

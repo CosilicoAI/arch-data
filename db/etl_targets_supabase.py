@@ -79,10 +79,10 @@ def load_soi_targets_supabase(
     Returns:
         Dict with counts and status
     """
-    from .etl_soi import SOI_DATA, SOURCE_URL
+    from .etl_soi import SOURCE_URL, available_soi_years, load_soi_table_1_1_data
 
     if years is None:
-        years = list(SOI_DATA.keys())
+        years = available_soi_years()
 
     client = get_supabase_client()
 
@@ -106,10 +106,10 @@ def load_soi_targets_supabase(
     strata_created = 0
 
     for year in years:
-        if year not in SOI_DATA:
+        if year not in available_soi_years():
             continue
 
-        year_data = SOI_DATA[year]
+        year_data = load_soi_table_1_1_data(year)
 
         # National totals
         if dry_run:

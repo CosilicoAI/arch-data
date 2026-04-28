@@ -116,28 +116,20 @@ def _insert_soi_aging_inputs(db_path):
                     source=DataSource.BLS,
                 ),
                 Target(
-                    stratum_id=economy.id,
-                    variable="median_weekly_earnings",
-                    period=2021,
-                    value=1_000,
-                    target_type=TargetType.AMOUNT,
-                    source=DataSource.BLS,
-                ),
-                Target(
-                    stratum_id=economy.id,
-                    variable="median_weekly_earnings",
+                    stratum_id=tax_filers.id,
+                    variable="adjusted_gross_income",
                     period=2022,
                     value=1_100,
                     target_type=TargetType.AMOUNT,
-                    source=DataSource.BLS,
+                    source=DataSource.IRS_SOI,
                 ),
                 Target(
-                    stratum_id=economy.id,
-                    variable="median_weekly_earnings",
+                    stratum_id=tax_filers.id,
+                    variable="adjusted_gross_income",
                     period=2023,
                     value=1_210,
                     target_type=TargetType.AMOUNT,
-                    source=DataSource.BLS,
+                    source=DataSource.IRS_SOI,
                 ),
                 Target(
                     stratum_id=economy.id,
@@ -170,7 +162,7 @@ def test_load_microplex_targets_reads_arch_db(tmp_path):
     )
 
 
-def test_get_soi_aging_factors_uses_labor_force_and_earnings(tmp_path):
+def test_get_soi_aging_factors_uses_labor_force_and_aggregate_agi(tmp_path):
     db_path = tmp_path / "targets.db"
     _insert_soi_aging_inputs(db_path)
 
@@ -185,7 +177,7 @@ def test_get_soi_aging_factors_uses_labor_force_and_earnings(tmp_path):
     assert factors.count_method == "cbo_labor_force_ratio"
     assert (
         factors.amount_method
-        == "bls_median_weekly_earnings_last_growth_extrapolation"
+        == "soi_total_agi_last_growth_extrapolation"
     )
 
 

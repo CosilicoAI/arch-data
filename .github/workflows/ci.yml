@@ -44,6 +44,7 @@ jobs:
           tests/test_arch_namespace.py
           tests/test_arch_normalization.py
           tests/test_etl_snap.py
+          tests/test_etl_soi.py
           tests/test_etl_aca_enrollment.py
           tests/test_etl_medicaid.py
           tests/test_etl_ssi.py
@@ -61,6 +62,7 @@ jobs:
           tests/test_arch_namespace.py
           tests/test_arch_normalization.py
           tests/test_etl_snap.py
+          tests/test_etl_soi.py
           tests/test_etl_aca_enrollment.py
           tests/test_etl_medicaid.py
           tests/test_etl_ssi.py
