@@ -44,6 +44,7 @@ jobs:
           micro/us/pipeline.py
           micro/us/policyengine.py
           micro/us/targets.py
+          micro/us/validation_dashboard.py
           calibration/constraints.py
           calibration/targets.py
           tests/test_arch_facts.py

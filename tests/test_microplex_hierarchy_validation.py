@@ -1,5 +1,7 @@
 """Tests for flat-vs-household Microplex calibration comparison."""
 
+import json
+
 import pandas as pd
 
 from arch.targets import DataSource, TargetSpec, TargetType
@@ -87,6 +89,7 @@ def test_compare_flat_vs_household_calibration_writes_artifacts(
         cps_path=cps_path,
         limit=3,
         output_dir=output_dir,
+        version_id="test-microplex-v1",
         min_target_obs=1,
         add_policyengine_tax=False,
         verbose=False,
@@ -97,4 +100,73 @@ def test_compare_flat_vs_household_calibration_writes_artifacts(
     assert len(result.target_comparison) == 1
     assert (output_dir / "summary.csv").exists()
     assert (output_dir / "target_comparison.csv").exists()
+    assert (output_dir / "manifest.json").exists()
+    assert (output_dir / "metrics.json").exists()
+    assert (output_dir / "dashboard.html").exists()
+    assert (output_dir / "variable_summary.csv").exists()
+    assert (output_dir / "worst_targets.csv").exists()
     assert set(result.summary["group"]) >= {"flat", "household", "delta"}
+
+    manifest = json.loads((output_dir / "manifest.json").read_text())
+    metrics = json.loads((output_dir / "metrics.json").read_text())
+    dashboard = (output_dir / "dashboard.html").read_text()
+    assert manifest["microplex_version"] == "test-microplex-v1"
+    assert manifest["report_type"] == "microplex_calibration_dashboard"
+    assert manifest["artifacts"]["dashboard"] == "dashboard.html"
+    assert metrics["summary"]["flat"]["calibration_unit"] == "tax_unit"
+    assert metrics["summary"]["household"]["calibration_unit"] == "household"
+    assert "Microplex Calibration Dashboard" in dashboard
+
+
+def test_compare_flat_vs_household_calibration_uses_reports_root(
+    tmp_path,
+    monkeypatch,
+):
+    cps = pd.DataFrame(
+        {
+            "household_id": [1],
+            "tax_unit_id": [10],
+            "person_seq": [1],
+            "age": [40],
+            "state_fips": [6],
+            "weight": [100.0],
+            "total_person_income": [50_000.0],
+            "wage_salary_income": [50_000.0],
+            "self_employment_income": [0.0],
+        }
+    )
+    cps_path = tmp_path / "cps.parquet"
+    reports_root = tmp_path / "reports"
+    cps.to_parquet(cps_path, index=False)
+
+    targets = [
+        TargetSpec(
+            variable="tax_unit_count",
+            value=100.0,
+            target_type=TargetType.COUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2024,
+            stratum_name="All filers",
+        )
+    ]
+
+    def fake_compose(*args, **kwargs):
+        return TargetCompositionResult(targets=targets, diagnostics=pd.DataFrame())
+
+    monkeypatch.setattr(
+        "micro.us.hierarchy_validation.compose_microplex_targets",
+        fake_compose,
+    )
+
+    compare_flat_vs_household_calibration(
+        year=2024,
+        cps_path=cps_path,
+        reports_root=reports_root,
+        version_id="test-version-root",
+        min_target_obs=1,
+        add_policyengine_tax=False,
+        verbose=False,
+    )
+
+    assert (reports_root / "test-version-root" / "dashboard.html").exists()

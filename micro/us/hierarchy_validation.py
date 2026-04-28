@@ -22,6 +22,11 @@ from micro.us.pipeline import (
     print_target_composition_diagnostics,
 )
 from micro.us.targets import MicroplexTargetProfile, compose_microplex_targets
+from micro.us.validation_dashboard import (
+    build_microplex_version_id,
+    current_git_sha,
+    write_calibration_dashboard,
+)
 
 
 @dataclass(frozen=True)
@@ -52,9 +57,38 @@ def compare_flat_vs_household_calibration(
     max_weight_factor: float = 20.0,
     add_policyengine_tax: bool = True,
     output_dir: Path | None = None,
+    reports_root: Path | None = None,
+    version_id: str | None = None,
     verbose: bool = True,
 ) -> HierarchyComparisonResult:
     """Run flat and household calibration on the same Microplex entity build."""
+    report_config = _report_config(
+        year=year,
+        limit=limit,
+        microdata_source=microdata_source,
+        cps_path=cps_path,
+        target_source=target_source,
+        db_path=db_path,
+        age_soi=age_soi,
+        include_amount_targets=include_amount_targets,
+        min_target_obs=min_target_obs,
+        calibration_method=calibration_method,
+        min_weight_factor=min_weight_factor,
+        max_weight_factor=max_weight_factor,
+        add_policyengine_tax=add_policyengine_tax,
+    )
+    git_sha = current_git_sha()
+    version_id = version_id or build_microplex_version_id(
+        year=year,
+        config=report_config,
+        git_sha=git_sha,
+    )
+    output_dir = _resolve_output_dir(
+        output_dir=output_dir,
+        reports_root=reports_root,
+        version_id=version_id,
+    )
+
     if microdata_source == "local":
         persons = load_cps_from_local_file(year, path=cps_path, limit=limit)
     elif microdata_source == "supabase":
@@ -134,6 +168,14 @@ def compare_flat_vs_household_calibration(
             target_comparison=target_comparison,
             flat_diagnostics=flat_result.diagnostics,
             household_diagnostics=household_result.diagnostics,
+            metadata={
+                "microplex_version": version_id,
+                "git_sha": git_sha,
+                "jurisdiction": "us",
+                "year": year,
+                "comparison": "flat_vs_household",
+                "config": report_config,
+            },
         )
 
     if verbose:
@@ -238,16 +280,69 @@ def write_hierarchy_comparison(
     target_comparison: pd.DataFrame,
     flat_diagnostics: pd.DataFrame,
     household_diagnostics: pd.DataFrame,
+    metadata: dict[str, Any] | None = None,
 ) -> None:
     """Write comparison artifacts to a directory."""
-    output_dir.mkdir(parents=True, exist_ok=True)
-    summary.to_csv(output_dir / "summary.csv", index=False)
-    target_comparison.to_csv(output_dir / "target_comparison.csv", index=False)
-    flat_diagnostics.to_csv(output_dir / "flat_diagnostics.csv", index=False)
-    household_diagnostics.to_csv(
-        output_dir / "household_diagnostics.csv",
-        index=False,
+    dashboard_metadata = {
+        "microplex_version": output_dir.name,
+        "jurisdiction": "us",
+        "comparison": "flat_vs_household",
+        **(metadata or {}),
+    }
+    write_calibration_dashboard(
+        output_dir,
+        summary=summary,
+        target_comparison=target_comparison,
+        flat_diagnostics=flat_diagnostics,
+        household_diagnostics=household_diagnostics,
+        metadata=dashboard_metadata,
     )
+
+
+def _report_config(
+    *,
+    year: int,
+    limit: int | None,
+    microdata_source: str,
+    cps_path: Path | None,
+    target_source: str,
+    db_path: Path | None,
+    age_soi: bool,
+    include_amount_targets: bool,
+    min_target_obs: int,
+    calibration_method: str,
+    min_weight_factor: float,
+    max_weight_factor: float,
+    add_policyengine_tax: bool,
+) -> dict[str, Any]:
+    return {
+        "year": year,
+        "limit": limit,
+        "microdata_source": microdata_source,
+        "cps_path": str(cps_path) if cps_path is not None else None,
+        "target_source": target_source,
+        "db_path": str(db_path) if db_path is not None else None,
+        "age_soi": age_soi,
+        "include_amount_targets": include_amount_targets,
+        "min_target_obs": min_target_obs,
+        "calibration_method": calibration_method,
+        "min_weight_factor": min_weight_factor,
+        "max_weight_factor": max_weight_factor,
+        "add_policyengine_tax": add_policyengine_tax,
+    }
+
+
+def _resolve_output_dir(
+    *,
+    output_dir: Path | None,
+    reports_root: Path | None,
+    version_id: str,
+) -> Path | None:
+    if output_dir is not None:
+        return output_dir
+    if reports_root is not None:
+        return reports_root / version_id
+    return None
 
 
 def _load_targets_and_holdouts(
@@ -383,6 +478,17 @@ def main() -> None:
         default=True,
     )
     parser.add_argument("--output-dir", type=Path, default=None)
+    parser.add_argument(
+        "--reports-root",
+        type=Path,
+        default=None,
+        help="Directory where a version-named dashboard directory is created",
+    )
+    parser.add_argument(
+        "--version-id",
+        default=None,
+        help="Microplex version identifier for the validation dashboard",
+    )
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args()
 
@@ -401,6 +507,8 @@ def main() -> None:
         max_weight_factor=args.max_weight_factor,
         add_policyengine_tax=args.policyengine_tax,
         output_dir=args.output_dir,
+        reports_root=args.reports_root,
+        version_id=args.version_id,
         verbose=not args.quiet,
     )
 
