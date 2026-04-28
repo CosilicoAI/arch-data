@@ -26,10 +26,12 @@ import pandas as pd
 
 from arch.client import get_supabase_client
 from arch.microdata import query_cps_asec
-from arch.targets import TargetSpec, TargetType, query_targets
+from arch.targets import DataSource, TargetSpec, TargetType, query_targets
 from arch.targets.microplex import (
+    age_soi_targets,
     build_microplex_constraints,
     constraints_to_ipf_dicts,
+    get_soi_aging_factors,
     load_microplex_targets,
 )
 
@@ -593,6 +595,7 @@ def run_pipeline(
     microdata_source: str = "local",
     cps_path: Path | None = None,
     output_path: Path | None = None,
+    age_soi: bool = True,
 ) -> pd.DataFrame:
     """Run the full microplex pipeline."""
     print("=" * 60)
@@ -616,11 +619,45 @@ def run_pipeline(
 
     if len(targets) < 50 or not has_supported_tax_targets(targets):
         # Fall back to 2021 targets if year has insufficient usable tax targets.
-        print(f"  Only {len(targets)} usable targets for {year}, trying 2021...")
+        fallback_year = 2021
+        print(
+            f"  Only {len(targets)} usable targets for {year}, "
+            f"trying {fallback_year}..."
+        )
         if target_source == "db":
-            targets = load_targets_from_db(2021, db_path=db_path)
+            current_targets = targets
+            targets = load_targets_from_db(
+                fallback_year,
+                db_path=db_path,
+                sources=[DataSource.IRS_SOI.value],
+            )
+            if age_soi and fallback_year != year:
+                factors = get_soi_aging_factors(
+                    source_year=fallback_year,
+                    target_year=year,
+                    db_path=db_path,
+                )
+                targets = age_soi_targets(
+                    targets,
+                    target_year=year,
+                    db_path=db_path,
+                    factors=factors,
+                )
+                print(
+                    "  Aged SOI targets "
+                    f"{fallback_year}->{year}: "
+                    f"counts x{factors.count_factor:.4f} "
+                    f"({factors.count_method}), "
+                    f"amounts x{factors.amount_factor:.4f} "
+                    f"({factors.amount_method})"
+                )
+            targets = [
+                target
+                for target in current_targets
+                if target.source != DataSource.IRS_SOI
+            ] + targets
         else:
-            targets = load_targets_from_supabase(2021)
+            targets = load_targets_from_supabase(fallback_year)
 
     # Build tax units
     df = build_tax_units(df)
@@ -678,6 +715,12 @@ def main():
     parser.add_argument("--db-path", type=Path, default=None, help="Arch SQLite DB path")
     parser.add_argument("--cps-path", type=Path, default=None, help="Local CPS parquet path")
     parser.add_argument("--output-path", type=Path, default=None, help="Local parquet output")
+    parser.add_argument(
+        "--age-soi-targets",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Age fallback SOI target inputs to the requested model year",
+    )
     args = parser.parse_args()
 
     run_pipeline(
@@ -689,6 +732,7 @@ def main():
         microdata_source=args.microdata_source,
         cps_path=args.cps_path,
         output_path=args.output_path,
+        age_soi=args.age_soi_targets,
     )
 
 

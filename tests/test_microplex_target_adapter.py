@@ -13,9 +13,11 @@ from arch.targets import (
     Target,
     TargetSpec,
     TargetType,
+    age_soi_targets,
     build_hierarchical_microplex_constraints,
     build_microplex_constraints,
     constraints_to_ipf_dicts,
+    get_soi_aging_factors,
     init_db,
     load_microplex_targets,
 )
@@ -55,6 +57,101 @@ def _insert_simple_target(db_path):
         session.commit()
 
 
+def _add_stratum(session, name, jurisdiction, constraints):
+    stratum = Stratum(
+        name=name,
+        description=name,
+        jurisdiction=jurisdiction,
+        definition_hash=Stratum.compute_hash(constraints, jurisdiction),
+    )
+    session.add(stratum)
+    session.flush()
+    for variable, operator, value in constraints:
+        session.add(
+            StratumConstraint(
+                stratum_id=stratum.id,
+                variable=variable,
+                operator=operator,
+                value=value,
+            )
+        )
+    return stratum
+
+
+def _insert_soi_aging_inputs(db_path):
+    engine = init_db(db_path)
+    with Session(engine) as session:
+        tax_filers = _add_stratum(
+            session,
+            "All tax filers",
+            Jurisdiction.US,
+            [("is_tax_filer", "==", "1")],
+        )
+        economy = _add_stratum(session, "US Economy", Jurisdiction.US, [])
+
+        session.add_all(
+            [
+                Target(
+                    stratum_id=tax_filers.id,
+                    variable="tax_unit_count",
+                    period=2021,
+                    value=100,
+                    target_type=TargetType.COUNT,
+                    source=DataSource.IRS_SOI,
+                ),
+                Target(
+                    stratum_id=tax_filers.id,
+                    variable="adjusted_gross_income",
+                    period=2021,
+                    value=1_000,
+                    target_type=TargetType.AMOUNT,
+                    source=DataSource.IRS_SOI,
+                ),
+                Target(
+                    stratum_id=economy.id,
+                    variable="labor_force_count",
+                    period=2021,
+                    value=100,
+                    target_type=TargetType.COUNT,
+                    source=DataSource.BLS,
+                ),
+                Target(
+                    stratum_id=economy.id,
+                    variable="median_weekly_earnings",
+                    period=2021,
+                    value=1_000,
+                    target_type=TargetType.AMOUNT,
+                    source=DataSource.BLS,
+                ),
+                Target(
+                    stratum_id=economy.id,
+                    variable="median_weekly_earnings",
+                    period=2022,
+                    value=1_100,
+                    target_type=TargetType.AMOUNT,
+                    source=DataSource.BLS,
+                ),
+                Target(
+                    stratum_id=economy.id,
+                    variable="median_weekly_earnings",
+                    period=2023,
+                    value=1_210,
+                    target_type=TargetType.AMOUNT,
+                    source=DataSource.BLS,
+                ),
+                Target(
+                    stratum_id=economy.id,
+                    variable="labor_force",
+                    period=2024,
+                    value=110,
+                    target_type=TargetType.COUNT,
+                    source=DataSource.CBO,
+                ),
+            ]
+        )
+        session.commit()
+
+
 def test_load_microplex_targets_reads_arch_db(tmp_path):
     db_path = tmp_path / "targets.db"
     _insert_simple_target(db_path)
@@ -71,6 +168,68 @@ def test_load_microplex_targets_reads_arch_db(tmp_path):
         period=2024,
         stratum_name="All tax filers",
     )
+
+
+def test_get_soi_aging_factors_uses_labor_force_and_earnings(tmp_path):
+    db_path = tmp_path / "targets.db"
+    _insert_soi_aging_inputs(db_path)
+
+    factors = get_soi_aging_factors(
+        source_year=2021,
+        target_year=2024,
+        db_path=db_path,
+    )
+
+    assert factors.count_factor == 1.1
+    assert np.isclose(factors.amount_factor, 1.331)
+    assert factors.count_method == "cbo_labor_force_ratio"
+    assert (
+        factors.amount_method
+        == "bls_median_weekly_earnings_last_growth_extrapolation"
+    )
+
+
+def test_age_soi_targets_scales_soi_values_and_preserves_others(tmp_path):
+    db_path = tmp_path / "targets.db"
+    _insert_soi_aging_inputs(db_path)
+    targets = [
+        TargetSpec(
+            variable="tax_unit_count",
+            value=100,
+            target_type=TargetType.COUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2021,
+            stratum_name="All tax filers",
+        ),
+        TargetSpec(
+            variable="adjusted_gross_income",
+            value=1_000,
+            target_type=TargetType.AMOUNT,
+            constraints=[("is_tax_filer", "==", "1")],
+            source=DataSource.IRS_SOI,
+            period=2021,
+            stratum_name="All tax filers",
+        ),
+        TargetSpec(
+            variable="population",
+            value=300,
+            target_type=TargetType.COUNT,
+            constraints=[],
+            source=DataSource.CENSUS_ACS,
+            period=2024,
+            stratum_name="US population",
+        ),
+    ]
+
+    aged = age_soi_targets(targets, target_year=2024, db_path=db_path)
+
+    assert aged[0].period == 2024
+    assert np.isclose(aged[0].value, 110)
+    assert "SOI aged 2021->2024" in aged[0].stratum_name
+    assert aged[1].period == 2024
+    assert np.isclose(aged[1].value, 1_331)
+    assert aged[2] is targets[2]
 
 
 def test_build_microplex_constraints_from_target_specs():

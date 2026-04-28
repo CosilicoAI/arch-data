@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +15,19 @@ from calibration.constraints import (
     build_hierarchical_constraint_matrix,
 )
 from calibration.targets import TargetSpec, get_targets
+from db.schema import DataSource, TargetType
+
+
+@dataclass(frozen=True)
+class SOIAgingFactors:
+    """Declared factors used to age SOI target inputs for Microplex."""
+
+    source_year: int
+    target_year: int
+    count_factor: float
+    amount_factor: float
+    count_method: str
+    amount_method: str
 
 
 def load_microplex_targets(
@@ -31,6 +45,139 @@ def load_microplex_targets(
         sources=sources,
         variables=variables,
     )
+
+
+def get_soi_aging_factors(
+    source_year: int,
+    target_year: int,
+    db_path: Path | None = None,
+    jurisdiction: str = "us",
+) -> SOIAgingFactors:
+    """
+    Resolve source-backed factors for aging SOI target inputs.
+
+    Counts are scaled by labor force: BLS annual labor-force counts when
+    available, then CBO labor-force projections for years beyond BLS coverage.
+    Amounts are scaled by BLS median weekly earnings. If the target year is
+    beyond available BLS earnings data, the last observed annual earnings growth
+    rate is carried forward and declared in the method string.
+    """
+    if source_year == target_year:
+        return SOIAgingFactors(
+            source_year=source_year,
+            target_year=target_year,
+            count_factor=1.0,
+            amount_factor=1.0,
+            count_method="identity",
+            amount_method="identity",
+        )
+
+    source_labor_force = _get_labor_force_target(
+        year=source_year,
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+    )
+    target_labor_force, count_source = _get_labor_force_target_with_source(
+        year=target_year,
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+    )
+    source_earnings = _target_value(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=source_year,
+        source=DataSource.BLS,
+        variable="median_weekly_earnings",
+    )
+    target_earnings, amount_method = _earnings_target_for_year(
+        target_year=target_year,
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+    )
+
+    return SOIAgingFactors(
+        source_year=source_year,
+        target_year=target_year,
+        count_factor=target_labor_force / source_labor_force,
+        amount_factor=target_earnings / source_earnings,
+        count_method=f"{count_source}_labor_force_ratio",
+        amount_method=amount_method,
+    )
+
+
+def age_soi_targets(
+    targets: list[TargetSpec],
+    target_year: int,
+    *,
+    db_path: Path | None = None,
+    jurisdiction: str = "us",
+    factors: SOIAgingFactors | None = None,
+) -> list[TargetSpec]:
+    """
+    Age IRS SOI target inputs to a Microplex model year.
+
+    This composes model-year targets from source records. It does not mutate
+    Arch records in the database.
+    """
+    source_years = {
+        target.period
+        for target in targets
+        if target.source == DataSource.IRS_SOI and target.period != target_year
+    }
+    if len(source_years) > 1:
+        raise ValueError(
+            "SOI target aging expects one SOI source year at a time; "
+            f"got {sorted(source_years)}."
+        )
+    if not source_years:
+        return targets
+
+    source_year = source_years.pop()
+    if factors is None:
+        factors = get_soi_aging_factors(
+            source_year=source_year,
+            target_year=target_year,
+            db_path=db_path,
+            jurisdiction=jurisdiction,
+        )
+    elif factors.source_year != source_year or factors.target_year != target_year:
+        raise ValueError(
+            "SOI aging factors do not match target years: "
+            f"targets are {source_year}->{target_year}, "
+            f"factors are {factors.source_year}->{factors.target_year}."
+        )
+
+    aged_targets = []
+    for target in targets:
+        if target.source != DataSource.IRS_SOI or target.period == target_year:
+            aged_targets.append(target)
+            continue
+
+        if target.target_type == TargetType.COUNT:
+            factor = factors.count_factor
+            method = factors.count_method
+        elif target.target_type == TargetType.AMOUNT:
+            factor = factors.amount_factor
+            method = factors.amount_method
+        else:
+            factor = 1.0
+            method = "rate_unchanged"
+
+        aged_targets.append(
+            replace(
+                target,
+                value=target.value * factor,
+                period=target_year,
+                stratum_name=_aged_stratum_name(
+                    target.stratum_name,
+                    source_year=target.period,
+                    target_year=target_year,
+                    method=method,
+                ),
+            )
+        )
+
+    return aged_targets
 
 
 def build_microplex_constraints(
@@ -153,3 +300,167 @@ def _filter_constraints_by_obs(
 
 def _count_nonzero_indicator(indicator: np.ndarray) -> int:
     return int(np.count_nonzero(np.asarray(indicator)))
+
+
+def _aged_stratum_name(
+    stratum_name: str | None,
+    *,
+    source_year: int,
+    target_year: int,
+    method: str,
+) -> str:
+    base = stratum_name or "SOI target"
+    return f"{base} (SOI aged {source_year}->{target_year}; {method})"
+
+
+def _get_labor_force_target(
+    *,
+    year: int,
+    db_path: Path | None,
+    jurisdiction: str,
+) -> float:
+    value, _ = _get_labor_force_target_with_source(
+        year=year,
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+    )
+    return value
+
+
+def _get_labor_force_target_with_source(
+    *,
+    year: int,
+    db_path: Path | None,
+    jurisdiction: str,
+) -> tuple[float, str]:
+    bls_value = _optional_target_value(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=year,
+        source=DataSource.BLS,
+        variable="labor_force_count",
+    )
+    if bls_value is not None:
+        return bls_value, "bls"
+
+    cbo_value = _optional_target_value(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=year,
+        source=DataSource.CBO,
+        variable="labor_force",
+    )
+    if cbo_value is not None:
+        return cbo_value, "cbo"
+
+    raise ValueError(f"No BLS/CBO labor-force target found for {year}.")
+
+
+def _earnings_target_for_year(
+    *,
+    target_year: int,
+    db_path: Path | None,
+    jurisdiction: str,
+) -> tuple[float, str]:
+    target_earnings = _optional_target_value(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=target_year,
+        source=DataSource.BLS,
+        variable="median_weekly_earnings",
+    )
+    if target_earnings is not None:
+        return target_earnings, "bls_median_weekly_earnings_ratio"
+
+    available = _available_target_values(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        source=DataSource.BLS,
+        variable="median_weekly_earnings",
+        start_year=target_year - 20,
+        end_year=target_year,
+    )
+    if len(available) < 2:
+        raise ValueError(
+            "Need at least two BLS median weekly earnings years to extrapolate "
+            f"to {target_year}."
+        )
+
+    latest_year = max(available)
+    previous_year = max(year for year in available if year < latest_year)
+    annual_growth = available[latest_year] / available[previous_year]
+    years_forward = target_year - latest_year
+    projected = available[latest_year] * annual_growth**years_forward
+    return (
+        projected,
+        "bls_median_weekly_earnings_last_growth_extrapolation",
+    )
+
+
+def _available_target_values(
+    *,
+    db_path: Path | None,
+    jurisdiction: str,
+    source: DataSource,
+    variable: str,
+    start_year: int,
+    end_year: int,
+) -> dict[int, float]:
+    values = {}
+    for year in range(start_year, end_year + 1):
+        value = _optional_target_value(
+            db_path=db_path,
+            jurisdiction=jurisdiction,
+            year=year,
+            source=source,
+            variable=variable,
+        )
+        if value is not None:
+            values[year] = value
+    return values
+
+
+def _target_value(
+    *,
+    db_path: Path | None,
+    jurisdiction: str,
+    year: int,
+    source: DataSource,
+    variable: str,
+) -> float:
+    value = _optional_target_value(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=year,
+        source=source,
+        variable=variable,
+    )
+    if value is None:
+        raise ValueError(f"No {source.value} {variable} target found for {year}.")
+    return value
+
+
+def _optional_target_value(
+    *,
+    db_path: Path | None,
+    jurisdiction: str,
+    year: int,
+    source: DataSource,
+    variable: str,
+) -> float | None:
+    targets = get_targets(
+        db_path=db_path,
+        jurisdiction=jurisdiction,
+        year=year,
+        sources=[source.value],
+        variables=[variable],
+    )
+    if not targets:
+        return None
+    if len(targets) == 1:
+        return targets[0].value
+
+    unconstrained = [target for target in targets if not target.constraints]
+    if len(unconstrained) == 1:
+        return unconstrained[0].value
+    return targets[0].value
