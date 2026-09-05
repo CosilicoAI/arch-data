@@ -14,9 +14,15 @@
 - Confirmed clean detached intake and protected-path constraints. No source
   package, contract schema, publisher fact, or consumer computation is in scope.
 
+- Finding 1 reproduced before production edits: 32 failures, direct exit 1.
+  Fetch wrote fixture microdata into the package directory; checksum aliases
+  also rewrote the table manifest and could report success. Cases cover current
+  and archived filename/digest aliases, declared/R2/expected/observed digests,
+  with and without upload. Exact command/failures: external `out.md`.
+
 ## Next
 
-- Read the prior fixes and affected implementations/tests in detail.
+- Complete both failing-first checkpoints, then apply the shared checks.
 - Reproduce each finding with failing tests, record exact commands/failures,
   and commit those regressions before the corresponding fixes.
 - Reuse shared identity/kind checks, review the changes, and run Ruff plus the

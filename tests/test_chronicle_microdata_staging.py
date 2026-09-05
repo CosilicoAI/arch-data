@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import nullcontext
+import hashlib
 from pathlib import Path
 
 import pytest
@@ -10,10 +11,11 @@ import yaml
 
 from chronicle.artifacts import (
     ArtifactCommandResult,
+    fetch_source_artifact,
     microdata_staging_path,
     publish_source_artifacts,
 )
-from chronicle.registration import ManifestAccessError
+from chronicle.registration import ManifestAccessError, validate_file_entry
 from tests.test_chronicle_microdata_registration import (
     PUBLIC_BYTES,
     PUBLIC_SHA,
@@ -247,3 +249,126 @@ def test_fetch_accepts_external_microdata_staging(tmp_path, monkeypatch, spellin
     assert staged.read_bytes() == PUBLIC_BYTES
     assert uploads == [(report.r2_location.uri, str(staged))]
     assert sorted(path.name for path in output.iterdir()) == ["manifest.yaml"]
+
+
+def _table_fetch_beside_public_microdata(package, *, alias, identity):
+    """Build valid metadata; only the selected table's classification is wrong."""
+    content = b"person_id,age\n1,45\n2,31\n"
+    digest = hashlib.sha256(content).hexdigest()
+
+    def locator(filename, sha256):
+        key = f"raw/publisher/package/2023/{sha256}/{filename}"
+        return {
+            "provider": "r2",
+            "bucket": "ledger-raw",
+            "key": key,
+            "uri": f"r2://ledger-raw/{key}",
+        }
+
+    entry = {
+        "filename": "table.csv" if alias == "filename" else "microdata.csv",
+        "sha256": digest,
+        "size_bytes": len(content),
+        "source_url": "https://publisher.example/microdata.csv",
+        "access": "public",
+        "licence": "CC0-1.0",
+        "vintage": "2023",
+        "hash_source": "chronicle_fetch",
+        "attested_by": "chronicle",
+        "verified_at": "2026-09-05",
+    }
+    history = []
+    if alias.startswith("archived-"):
+        entry.update(filename="new-microdata.csv", sha256="a" * 64)
+        history.append(
+            locator("table.csv", "b" * 64)
+            if alias == "archived-filename"
+            else locator("old-microdata.csv", digest)
+        )
+    entry["storage"] = {
+        "r2": locator(entry["filename"], entry["sha256"]),
+        "previous_r2": history,
+    }
+    entry["licence_evidence"] = {
+        "issuer": "Fixture publisher",
+        "scope": "This fixture public microdata release is dedicated to CC0.",
+        "url": "https://publisher.example/licence",
+        "licence": entry["licence"],
+        "sha256": entry["sha256"],
+    }
+    assert (
+        validate_file_entry(
+            entry, kind="microdata_release", manifest={}, local_file_exists=False
+        )
+        == ()
+    )
+    selected = {
+        "filename": "table.csv",
+        "source_url": "https://publisher.example/table.csv",
+    }
+    if identity == "declared":
+        selected["sha256"] = digest
+    elif identity == "r2-only":
+        selected["storage"] = {"r2": locator("table.csv", digest)}
+    package.mkdir()
+    for name, kind, spec in (
+        ("manifest_tables.yaml", "publisher_table", selected),
+        ("manifest_release.yaml", "microdata_release", [entry]),
+    ):
+        (package / name).write_text(
+            yaml.safe_dump(
+                {
+                    "source_id": "publisher",
+                    "package_id": "package",
+                    "kind": kind,
+                    "files": {2023: spec},
+                }
+            )
+        )
+    (package / "README.txt").write_bytes(b"preserve unrelated package bytes\n")
+    kwargs = {
+        "source_id": "publisher",
+        "package_id": "package",
+        "year": 2023,
+        "output_dir": package,
+        "filename": "table.csv",
+        "manifest_filename": "manifest_tables.yaml",
+    }
+    if identity == "expected":
+        kwargs["expected_sha256"] = digest
+    return content, kwargs
+
+
+@pytest.mark.parametrize(
+    "alias", ["filename", "sha256", "archived-filename", "archived-sha256"]
+)
+@pytest.mark.parametrize("identity", ["declared", "r2-only", "expected", "observed"])
+@pytest.mark.parametrize("upload", [False, True])
+def test_table_fetch_refuses_public_microdata_alias_without_package_writes(
+    tmp_path, monkeypatch, alias, identity, upload
+):
+    package = tmp_path / "package"
+    content, kwargs = _table_fetch_beside_public_microdata(
+        package, alias=alias, identity=identity
+    )
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    reads = _serve(monkeypatch, content)
+    uploads = _record_uploads(monkeypatch)
+    locks = []
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock",
+        lambda path: locks.append(path) or nullcontext(),
+    )
+    # The only permitted operation for an unknown checksum is the in-memory
+    # publisher stub; known identities must be refused before even the lock.
+    known = identity != "observed" or alias.endswith("filename")
+    try:
+        with pytest.raises(ManifestAccessError, match="microdata"):
+            fetch_source_artifact(
+                "https://publisher.example/table.csv", upload_r2=upload, **kwargs
+            )
+    finally:
+        assert {path.name: path.read_bytes() for path in package.iterdir()} == before
+        assert uploads == []
+        assert reads == ([] if known else ["https://publisher.example/table.csv"])
+        assert locks == ([] if known else [package])
