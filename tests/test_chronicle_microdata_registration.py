@@ -3854,3 +3854,88 @@ def test_registration_does_not_read_unidentified_sibling_owner_bytes(
     assert report.filename == "unrelated.tab"
     assert sibling_path.read_bytes() == original
     assert original_read_bytes(table_path) == content
+
+
+@pytest.mark.parametrize("empty", [False, True], ids=["populated", "empty"])
+def test_registration_refuses_publisher_table_list_sibling_before_mutation(
+    tmp_path, monkeypatch, empty
+):
+    package = tmp_path / "package"
+    package.mkdir()
+    (package / "manifest.yaml").write_text(
+        yaml.safe_dump({"kind": "microdata_release", "files": {}})
+    )
+    sibling, _ = _registration_recorded_sibling()
+    sibling["files"][2023] = [] if empty else [sibling["files"][2023]]
+    (package / "manifest_tables.yaml").write_text(yaml.safe_dump(sibling))
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    lock_path = _registration_lock_path(package)
+    assert not lock_path.exists()
+    _refuse_read(monkeypatch)
+    _forbid_uploads(monkeypatch)
+
+    def unexpected_mutation(*args, **kwargs):
+        pytest.fail("publisher-table list sibling reached a filesystem mutation")
+
+    monkeypatch.setattr(Path, "mkdir", unexpected_mutation)
+    monkeypatch.setattr(
+        "chronicle.registration._registration_lock", unexpected_mutation
+    )
+    monkeypatch.setattr(
+        "chronicle.registration._atomic_replace_manifest", unexpected_mutation
+    )
+    with pytest.raises(
+        HashOnlyRegistrationError,
+        match="list_file_spec_requires_microdata_release_kind",
+    ):
+        _register(package, filename="unrelated.tab", sha256="c" * 64)
+
+    assert not lock_path.exists()
+    assert {path.name: path.read_bytes() for path in package.iterdir()} == before
+
+
+@pytest.mark.parametrize("empty", [False, True], ids=["populated", "empty"])
+def test_registration_rechecks_publisher_table_list_sibling_under_lock(
+    tmp_path, monkeypatch, empty
+):
+    package = tmp_path / "package"
+    package.mkdir()
+    (package / "manifest.yaml").write_text(
+        yaml.safe_dump({"kind": "microdata_release", "files": {}})
+    )
+    sibling_path = package / "manifest_tables.yaml"
+    sibling, _ = _registration_recorded_sibling()
+    sibling_path.write_text(yaml.safe_dump(sibling))
+    sibling["files"][2023] = [] if empty else [sibling["files"][2023]]
+    invalid_document = yaml.safe_dump(sibling)
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    before[sibling_path.name] = invalid_document.encode()
+    _refuse_read(monkeypatch)
+    _forbid_uploads(monkeypatch)
+    lock_entries = []
+
+    @contextmanager
+    def invalidation_while_acquiring_lock(output):
+        assert output == package
+        lock_entries.append(output)
+        sibling_path.write_text(invalid_document)
+        yield
+
+    def unexpected_replacement(*args, **kwargs):
+        pytest.fail("publisher-table list sibling under lock reached replacement")
+
+    monkeypatch.setattr(
+        "chronicle.registration._registration_lock", invalidation_while_acquiring_lock
+    )
+    monkeypatch.setattr(
+        "chronicle.registration._atomic_replace_manifest", unexpected_replacement
+    )
+    with pytest.raises(
+        HashOnlyRegistrationError,
+        match="list_file_spec_requires_microdata_release_kind",
+    ):
+        _register(package, filename="unrelated.tab", sha256="c" * 64)
+
+    assert lock_entries == [package]
+    assert not _registration_lock_path(package).exists()
+    assert {path.name: path.read_bytes() for path in package.iterdir()} == before

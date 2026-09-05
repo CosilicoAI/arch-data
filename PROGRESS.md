@@ -20,9 +20,14 @@
   and archived filename/digest aliases, declared/R2/expected/observed digests,
   with and without upload. Exact command/failures: external `out.md`.
 
+- Finding 2 reproduced before production edits: 4 failures, direct exit 1.
+  Populated/empty publisher-table list vintages reached preflight mkdir and
+  under-lock manifest replacement sentinels; expected kind-aware refusal absent.
+  Command and failures recorded in external report and finding2-red.log.
+
 ## Next
 
-- Complete both failing-first checkpoints, then apply the shared checks.
+- Apply the shared fetch classifier and kind-aware registration validation.
 - Reproduce each finding with failing tests, record exact commands/failures,
   and commit those regressions before the corresponding fixes.
 - Reuse shared identity/kind checks, review the changes, and run Ruff plus the
