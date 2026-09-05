@@ -2,56 +2,55 @@
 
 ## State
 
-- Both fixes committed; full final pytest is running on code commit `31df1b7`.
-  Started detached at `89737a1`; prior journals are preserved unchanged.
-- Report: `/tmp/chronicle-227-fix/out.md`; evidence and prior report:
-  `/tmp/chronicle-227-fix/bbd833a9-round3/`.
+- Complete. Started detached at `89737a1`; final code commit `31df1b7` fixes
+  both findings. Only journal commits follow the tested code.
+- Full final pytest passes with direct exit 0: **1,778 passed, 1 skipped,
+  42 warnings in 1,625.15 seconds (27:05)**. Repository Ruff lint and formatting
+  checks for all five changed Python files pass with direct exit 0.
+- Report: `/tmp/chronicle-227-fix/out.md`; evidence:
+  `/tmp/chronicle-227-fix/bbd833a9-round3/`. Prior report preserved there as
+  `prior-out.md`; prior journals below remain unchanged.
 
 ## Done
 
-- Read the prior lane journals and identified the existing shared validators.
-- Established this committed state/done/next journal before test/code changes.
-- Confirmed clean detached intake and protected-path constraints. No source
-  package, contract schema, publisher fact, or consumer computation is in scope.
-
-- Finding 1 reproduced before production edits: 32 failures, direct exit 1.
-  Fetch wrote fixture microdata into the package directory; checksum aliases
-  also rewrote the table manifest and could report success. Cases cover current
-  and archived filename/digest aliases, declared/R2/expected/observed digests,
-  with and without upload. Exact command/failures: external `out.md`.
-
-- Finding 2 reproduced before production edits: 4 failures, direct exit 1.
-  Populated/empty publisher-table list vintages reached preflight mkdir and
-  under-lock manifest replacement sentinels; expected kind-aware refusal absent.
-  Command and failures recorded in external report and finding2-red.log.
-
-- Finding 2 fixed: `_registration_manifest_errors` now validates each vintage
-  through kind-aware `iter_file_specs`; both preparation passes reject table
-  lists with the existing code. All 232 registration tests pass, direct exit 0;
-  scoped Ruff lint and formatting pass. Evidence: finding2-evidence.md.
-
-- Finding 1 fixed: fetch and source readers share `_assert_no_microdata_identity`
-  with the existing kind/current/history classifier. Tables check filename and
-  all known digests before locking/publisher access, then the observed in-memory
-  digest before any persistence. Readers keep their unpinned refusal.
-- Fetch/reader regressions pass: 66 cases, direct exit 0. Four affected test
-  modules pass: 540 tests, direct exit 0, including distinct-table, external
-  microdata-staging, and under-lock identity-change controls. Scoped Ruff passes.
-- Independent read-only implementation review reports no material issue.
-
-- Final whole-repository Ruff lint and formatting checks for all five changed
-  Python files pass, direct exits 0. Full pytest is running with direct exit
-  capture, offline dependency resolution, cached OTS, and no live Supabase keys.
-- Scope audit passes: exactly six allowed paths changed, 135 inherited test
-  function ASTs preserved, five new functions (41 cases), all 15 UK pins and
-  both complete pin manifests unchanged, prior journal suffix preserved.
-- External report contains reproductions, fixes, exact commands, and full
-  commit SHAs; only the full-suite outcome remains pending. No code/test changes
-  will be made during the full run.
+- Committed the initial state/done/next journal in `25d5225`, then committed
+  each finding's failing regressions before its production fix.
+- Finding 1: 32 red cases changed the package byte snapshot; current-filename
+  aliases raised after persistence, while archived-filename/checksum aliases
+  also rewrote the table manifest and returned successfully. Test commit
+  `cc6c644`; fix `31df1b7` shares the reader's kind/current/history classifier
+  with fetch. Tables check names and all known digests before lock/publisher
+  access, then observed in-memory digests before persistence. Reader unpinned
+  refusals, hash-only/owner checks, and external release staging remain intact.
+- Finding 1 regressions plus inherited reader controls pass: 66 tests. Four
+  affected test modules pass: 540 tests, including distinct tables, relative
+  paths, legitimate microdata staging, and under-lock identity invalidation.
+- Finding 2: 4 red populated/empty publisher-table list cases reached preflight
+  mkdir or under-lock replacement sentinels. Test commit `fb65e7a`; fix
+  `abc459f` validates vintages through kind-aware `iter_file_specs` in both
+  preparation passes. All 232 registration tests pass, direct exit 0.
+- Exact reproduction commands, observed failures, test names, fix commit SHAs,
+  focused checks, and final commands/results are in the external report.
+- Final `uv run ruff check .`: direct exit 0, `All checks passed!`.
+  Final changed-file `uv run ruff format --check`: direct exit 0,
+  `5 files already formatted`. Logs: `final-ruff.log`, `final-format.log`.
+- Full `uv run pytest -q -p no:cacheprovider`: direct exit 0, counts above;
+  log `final-pytest.log`. Used permitted UV cache, offline resolution, cached
+  real OTS executable, and removed live Supabase credentials. No pytest output
+  pipeline and no code/test changes during the full run.
+- Independent implementation, report, and scope audits pass. Exactly six
+  allowed files changed; 135 inherited test function ASTs preserved; five new
+  functions add 41 cases. All 15 UK pins, both complete pin manifests, and the
+  prior journal suffix are unchanged. Evidence: `scope-audit.json` and `.md`.
+- No protected/data/OTS edits, source packages, schemas, publisher facts, or
+  consumer computations changed. No GitHub/network operations, pushes,
+  branches, stash, deployment, or real publication. Worktree clean before this
+  final journal update; final scope/diff checks pass.
 
 ## Next
 
-- Await full pytest direct exit, record final counts, and commit final journal.
+- None. Both fixes, required verification, and final report are complete.
+  Commits remain on detached HEAD.
 
 # PR #227 Astra gate bbd833a9 — round 2 fix lane
 
