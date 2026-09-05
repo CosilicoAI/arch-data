@@ -1,3 +1,27 @@
+# PR #227 Astra gate bbd833a9 — round 3 fix lane
+
+## State
+
+- Active, detached at `89737a1`; scope is the two supplied fetch/registration
+  findings. Prior journals below are preserved unchanged.
+- Report: `/tmp/chronicle-227-fix/out.md`; evidence and prior report:
+  `/tmp/chronicle-227-fix/bbd833a9-round3/`.
+
+## Done
+
+- Read the prior lane journals and identified the existing shared validators.
+- Established this committed state/done/next journal before test/code changes.
+- Confirmed clean detached intake and protected-path constraints. No source
+  package, contract schema, publisher fact, or consumer computation is in scope.
+
+## Next
+
+- Read the prior fixes and affected implementations/tests in detail.
+- Reproduce each finding with failing tests, record exact commands/failures,
+  and commit those regressions before the corresponding fixes.
+- Reuse shared identity/kind checks, review the changes, and run Ruff plus the
+  full pytest suite with direct exit codes. Finish the external report.
+
 # PR #227 Astra gate bbd833a9 — round 2 fix lane
 
 ## State
