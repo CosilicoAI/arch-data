@@ -25,9 +25,14 @@
   under-lock manifest replacement sentinels; expected kind-aware refusal absent.
   Command and failures recorded in external report and finding2-red.log.
 
+- Finding 2 fixed: `_registration_manifest_errors` now validates each vintage
+  through kind-aware `iter_file_specs`; both preparation passes reject table
+  lists with the existing code. All 232 registration tests pass, direct exit 0;
+  scoped Ruff lint and formatting pass. Evidence: finding2-evidence.md.
+
 ## Next
 
-- Apply the shared fetch classifier and kind-aware registration validation.
+- Finish fetch controls/integration review, commit its fix, then run final gates.
 - Reproduce each finding with failing tests, record exact commands/failures,
   and commit those regressions before the corresponding fixes.
 - Reuse shared identity/kind checks, review the changes, and run Ruff plus the

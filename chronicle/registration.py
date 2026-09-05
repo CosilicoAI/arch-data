@@ -1658,23 +1658,27 @@ def _registration_manifest_errors(
 ) -> list[str]:
     """Return complete entry and manifest-level validation errors."""
     errors = list(validate_manifest_files(payload))
-    for existing_key, _index, existing in iter_manifest_entries(payload):
-        existing_name = (
-            existing.get("filename") if isinstance(existing, Mapping) else None
-        )
-        exists = (
-            is_bare_filename(existing_name)
-            and matching_directory_entry(output, existing_name) is not None
-        )
-        errors.extend(
-            f"{existing_key!r}/{existing_name}: {code}"
-            for code in validate_file_entry(
-                existing,
-                kind=kind,
-                manifest=payload,
-                local_file_exists=exists,
+    files = payload.get("files")
+    if not isinstance(files, Mapping):
+        return errors
+    for existing_key, spec in files.items():
+        for existing in iter_file_specs(spec, kind=kind):
+            existing_name = (
+                existing.get("filename") if isinstance(existing, Mapping) else None
             )
-        )
+            exists = (
+                is_bare_filename(existing_name)
+                and matching_directory_entry(output, existing_name) is not None
+            )
+            errors.extend(
+                f"{existing_key!r}/{existing_name}: {code}"
+                for code in validate_file_entry(
+                    existing,
+                    kind=kind,
+                    manifest=payload,
+                    local_file_exists=exists,
+                )
+            )
     return errors
 
 
