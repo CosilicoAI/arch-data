@@ -30,13 +30,19 @@
   lists with the existing code. All 232 registration tests pass, direct exit 0;
   scoped Ruff lint and formatting pass. Evidence: finding2-evidence.md.
 
+- Finding 1 fixed: fetch and source readers share `_assert_no_microdata_identity`
+  with the existing kind/current/history classifier. Tables check filename and
+  all known digests before locking/publisher access, then the observed in-memory
+  digest before any persistence. Readers keep their unpinned refusal.
+- Fetch/reader regressions pass: 66 cases, direct exit 0. Four affected test
+  modules pass: 540 tests, direct exit 0, including distinct-table, external
+  microdata-staging, and under-lock identity-change controls. Scoped Ruff passes.
+- Independent read-only implementation review reports no material issue.
+
 ## Next
 
-- Finish fetch controls/integration review, commit its fix, then run final gates.
-- Reproduce each finding with failing tests, record exact commands/failures,
-  and commit those regressions before the corresponding fixes.
-- Reuse shared identity/kind checks, review the changes, and run Ruff plus the
-  full pytest suite with direct exit codes. Finish the external report.
+- Run whole-repository Ruff, changed-file format checks, and full pytest.
+- Complete scope/pin audit and external report with final counts and commit map.
 
 # PR #227 Astra gate bbd833a9 — round 2 fix lane
 

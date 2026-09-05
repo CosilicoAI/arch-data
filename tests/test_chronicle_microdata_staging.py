@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from contextlib import nullcontext
+from contextlib import contextmanager, nullcontext
 import hashlib
 from pathlib import Path
 
@@ -372,3 +372,76 @@ def test_table_fetch_refuses_public_microdata_alias_without_package_writes(
         assert uploads == []
         assert reads == ([] if known else ["https://publisher.example/table.csv"])
         assert locks == ([] if known else [package])
+
+
+@pytest.mark.parametrize("identified", [False, True])
+@pytest.mark.parametrize("upload", [False, True])
+def test_table_fetch_accepts_distinct_bytes_beside_public_microdata(
+    tmp_path, monkeypatch, identified, upload
+):
+    package = tmp_path / "package"
+    _content, kwargs = _table_fetch_beside_public_microdata(
+        package, alias="sha256", identity="observed"
+    )
+    content = b"year,total_people\n2023,1234\n"
+    digest = hashlib.sha256(content).hexdigest()
+    manifest = package / "manifest_tables.yaml"
+    if identified:
+        payload = yaml.safe_load(manifest.read_text())
+        payload["files"][2023]["sha256"] = digest
+        manifest.write_text(yaml.safe_dump(payload))
+    sibling = package / "manifest_release.yaml"
+    before = sibling.read_bytes()
+    reads = _serve(monkeypatch, content)
+    uploads = _record_uploads(monkeypatch)
+    # Exercise relative output paths as well as the absolute refusal fixtures.
+    monkeypatch.chdir(tmp_path)
+    kwargs["output_dir"] = Path("package")
+
+    report = fetch_source_artifact(
+        "https://publisher.example/table.csv", upload_r2=upload, **kwargs
+    )
+
+    assert report.valid
+    assert reads == ["https://publisher.example/table.csv"]
+    assert (package / "table.csv").read_bytes() == content
+    assert sibling.read_bytes() == before
+    assert len(uploads) == int(upload)
+
+
+def test_table_fetch_rechecks_public_microdata_identity_under_lock(
+    tmp_path, monkeypatch
+):
+    package = tmp_path / "package"
+    content, kwargs = _table_fetch_beside_public_microdata(
+        package, alias="sha256", identity="observed"
+    )
+    table_path = package / "manifest_tables.yaml"
+    table = yaml.safe_load(table_path.read_text())
+    table["files"][2023]["sha256"] = "b" * 64
+    table_path.write_text(yaml.safe_dump(table))
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    reads = _serve(monkeypatch, content)
+    uploads = _record_uploads(monkeypatch)
+    locks = []
+
+    @contextmanager
+    def change_identity_while_acquiring_lock(output):
+        locks.append(output)
+        table["files"][2023]["sha256"] = hashlib.sha256(content).hexdigest()
+        table_path.write_text(yaml.safe_dump(table))
+        before[table_path.name] = table_path.read_bytes()
+        yield
+
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock", change_identity_while_acquiring_lock
+    )
+    with pytest.raises(ManifestAccessError, match="microdata"):
+        fetch_source_artifact(
+            "https://publisher.example/table.csv", upload_r2=True, **kwargs
+        )
+
+    assert locks == [package]
+    assert reads == []
+    assert uploads == []
+    assert {path.name: path.read_bytes() for path in package.iterdir()} == before

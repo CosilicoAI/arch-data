@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import mimetypes
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from contextlib import ExitStack
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -46,6 +46,7 @@ from chronicle.registration import (
     ListSpecRejected,
     ManifestAccessError,
     ManifestKindError,
+    _recorded_object_identities,
     bare_filename as registration_bare_filename,
     filename_key,
     has_file_entries,
@@ -53,6 +54,7 @@ from chronicle.registration import (
     is_bare_filename,
     is_hash_only,
     is_manifest_filename,
+    iter_directory_entries,
     iter_file_specs,
     iter_manifest_entries,
     load_manifest_document,
@@ -290,6 +292,54 @@ def _assert_no_hash_only_bytes(
             "are those exact bytes. A gated artifact is not archived under "
             f"another name ({filename!r}); keep the hash-only registration."
         )
+
+
+def _assert_no_microdata_identity(
+    manifests: Mapping[str, dict[str, Any]],
+    *,
+    package_dir: Any,
+    filename: str,
+    digests: Iterable[str | None],
+    require_digest: bool = False,
+) -> None:
+    """Refuse table bytes identified as current or archived package microdata.
+
+    Readers require a recorded digest before any artifact I/O. Fetch can check
+    an unknown digest after downloading into memory, before persisting bytes.
+    ``package_dir`` also accepts the source reader's ZIP resource directory.
+    Callers validate complete manifests before using this identity classifier.
+    """
+    wanted_name = filename_key(filename)
+    wanted_digests = {digest for digest in digests if digest}
+    for name, key, _index, entry in iter_directory_entries(manifests):
+        path = package_dir.joinpath(Path(name).name)
+        kind, _error = safe_manifest_kind(manifests[name], manifest_path=path)
+        if kind != MICRODATA_RELEASE_KIND or not isinstance(entry, dict):
+            continue
+        identities = [
+            (filename_key(entry.get("filename")), entry.get("sha256")),
+            *(
+                (recorded_name, digest)
+                for recorded_name, digest, _ in _recorded_object_identities(entry)
+            ),
+        ]
+        if any(
+            recorded_name == wanted_name or digest in wanted_digests
+            for recorded_name, digest in identities
+        ):
+            raise ManifestAccessError(
+                f"{path} registers a microdata release for {key!r} sharing "
+                f"the filename or checksum of {filename!r}, including recorded "
+                "R2 history. No source package reads, fetches, caches, or "
+                "parses microdata through another manifest, even when public."
+            )
+        if require_digest and not wanted_digests:
+            raise ManifestAccessError(
+                f"{package_dir} entry {filename!r} has no recorded digest "
+                f"beside microdata release {name}. Record its checksum before "
+                "reading, fetching, or caching bytes whose identity "
+                "cannot yet exclude that release."
+            )
 
 
 def _assert_siblings_record_these_bytes(
@@ -1107,6 +1157,17 @@ def fetch_source_artifact(
         package_id=package_id,
         bind_registration_identity=release,
     )
+    if not release:
+        _assert_no_microdata_identity(
+            manifests,
+            package_dir=output,
+            filename=artifact_filename,
+            digests=(
+                expected.sha256,
+                selected_spec.get("sha256"),
+                recorded_identity.sha256 if recorded_identity is not None else None,
+            ),
+        )
     _assert_table_vintage_is_revisable(
         existing_value,
         recorded_identity,
@@ -1230,6 +1291,13 @@ def fetch_source_artifact(
         filename=artifact_filename,
         what=f"the bytes served by {source_url}",
     )
+    if not release:
+        _assert_no_microdata_identity(
+            manifests,
+            package_dir=output,
+            filename=artifact_filename,
+            digests=(sha256,),
+        )
     if not record_revision:
         _assert_siblings_record_these_bytes(
             manifests,
