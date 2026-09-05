@@ -2,8 +2,8 @@
 
 ## State
 
-- Active, detached at `89737a1`; scope is the two supplied fetch/registration
-  findings. Prior journals below are preserved unchanged.
+- Both fixes committed; full final pytest is running on code commit `31df1b7`.
+  Started detached at `89737a1`; prior journals are preserved unchanged.
 - Report: `/tmp/chronicle-227-fix/out.md`; evidence and prior report:
   `/tmp/chronicle-227-fix/bbd833a9-round3/`.
 
@@ -39,10 +39,19 @@
   microdata-staging, and under-lock identity-change controls. Scoped Ruff passes.
 - Independent read-only implementation review reports no material issue.
 
+- Final whole-repository Ruff lint and formatting checks for all five changed
+  Python files pass, direct exits 0. Full pytest is running with direct exit
+  capture, offline dependency resolution, cached OTS, and no live Supabase keys.
+- Scope audit passes: exactly six allowed paths changed, 135 inherited test
+  function ASTs preserved, five new functions (41 cases), all 15 UK pins and
+  both complete pin manifests unchanged, prior journal suffix preserved.
+- External report contains reproductions, fixes, exact commands, and full
+  commit SHAs; only the full-suite outcome remains pending. No code/test changes
+  will be made during the full run.
+
 ## Next
 
-- Run whole-repository Ruff, changed-file format checks, and full pytest.
-- Complete scope/pin audit and external report with final counts and commit map.
+- Await full pytest direct exit, record final counts, and commit final journal.
 
 # PR #227 Astra gate bbd833a9 — round 2 fix lane
 
