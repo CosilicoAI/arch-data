@@ -172,96 +172,112 @@ record_sets:
     expected_cell_type: number
 
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_05
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_05.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_05
   period: 2023-05
   measures: [{<<: *benefit_units, column: V, source_column_id: may_2023, expected_column_header: May 2023}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_05.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_05.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_05.total
   period: 2023-05
   measures: [{<<: *total_benefit_units, column: V, source_column_id: may_2023, expected_column_header: May 2023}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_06
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_06.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_06
   period: 2023-06
   measures: [{<<: *benefit_units, column: X, source_column_id: june_2023, expected_column_header: June 2023}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_06.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_06.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_06.total
   period: 2023-06
   measures: [{<<: *total_benefit_units, column: X, source_column_id: june_2023, expected_column_header: June 2023}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_07
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_07.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_07
   period: 2023-07
   measures: [{<<: *benefit_units, column: Z, source_column_id: july_2023, expected_column_header: July 2023}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_07.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_07.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_07.total
   period: 2023-07
   measures: [{<<: *total_benefit_units, column: Z, source_column_id: july_2023, expected_column_header: July 2023}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_08
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_08.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_08
   period: 2023-08
   measures: [{<<: *benefit_units, column: AB, source_column_id: august_2023, expected_column_header: August 2023}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_08.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_08.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_08.total
   period: 2023-08
   measures: [{<<: *total_benefit_units, column: AB, source_column_id: august_2023, expected_column_header: August 2023}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_09
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_09.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_09
   period: 2023-09
   measures: [{<<: *benefit_units, column: AD, source_column_id: september_2023, expected_column_header: September 2023}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_09.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_09.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_09.total
   period: 2023-09
   measures: [{<<: *total_benefit_units, column: AD, source_column_id: september_2023, expected_column_header: September 2023}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_10
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_10.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_10
   period: 2023-10
   measures: [{<<: *benefit_units, column: AF, source_column_id: october_2023, expected_column_header: October 2023}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_10.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_10.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_10.total
   period: 2023-10
   measures: [{<<: *total_benefit_units, column: AF, source_column_id: october_2023, expected_column_header: October 2023}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_11
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_11.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_11
   period: 2023-11
   measures: [{<<: *benefit_units, column: AH, source_column_id: november_2023, expected_column_header: November 2023}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_11.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_11.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_11.total
   period: 2023-11
   measures: [{<<: *total_benefit_units, column: AH, source_column_id: november_2023, expected_column_header: November 2023}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_12
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_12.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_12
   period: 2023-12
   measures: [{<<: *benefit_units, column: AJ, source_column_id: december_2023, expected_column_header: December 2023}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2023_12.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2023_12.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2023_12.total
@@ -269,108 +285,126 @@ record_sets:
   measures: [{<<: *total_benefit_units, column: AJ, source_column_id: december_2023, expected_column_header: December 2023}]
 
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_04
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_04.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_04
   period: 2024-04
   measures: [{<<: *benefit_units, column: B, source_column_id: april_2024, expected_column_header: April 2024}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_04.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_04.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_04.total
   period: 2024-04
   measures: [{<<: *total_benefit_units, column: B, source_column_id: april_2024, expected_column_header: April 2024}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_05
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_05.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_05
   period: 2024-05
   measures: [{<<: *benefit_units, column: D, source_column_id: may_2024, expected_column_header: May 2024}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_05.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_05.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_05.total
   period: 2024-05
   measures: [{<<: *total_benefit_units, column: D, source_column_id: may_2024, expected_column_header: May 2024}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_06
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_06.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_06
   period: 2024-06
   measures: [{<<: *benefit_units, column: F, source_column_id: june_2024, expected_column_header: 'June 2024 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_06.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_06.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_06.total
   period: 2024-06
   measures: [{<<: *total_benefit_units, column: F, source_column_id: june_2024, expected_column_header: 'June 2024 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_07
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_07.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_07
   period: 2024-07
   measures: [{<<: *benefit_units, column: H, source_column_id: july_2024, expected_column_header: 'July 2024 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_07.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_07.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_07.total
   period: 2024-07
   measures: [{<<: *total_benefit_units, column: H, source_column_id: july_2024, expected_column_header: 'July 2024 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_08
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_08.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_08
   period: 2024-08
   measures: [{<<: *benefit_units, column: J, source_column_id: august_2024, expected_column_header: 'August 2024 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_08.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_08.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_08.total
   period: 2024-08
   measures: [{<<: *total_benefit_units, column: J, source_column_id: august_2024, expected_column_header: 'August 2024 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_09
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_09.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_09
   period: 2024-09
   measures: [{<<: *benefit_units, column: L, source_column_id: september_2024, expected_column_header: 'September 2024 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_09.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_09.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_09.total
   period: 2024-09
   measures: [{<<: *total_benefit_units, column: L, source_column_id: september_2024, expected_column_header: 'September 2024 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_10
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_10.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_10
   period: 2024-10
   measures: [{<<: *benefit_units, column: N, source_column_id: october_2024, expected_column_header: 'October 2024 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_10.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_10.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_10.total
   period: 2024-10
   measures: [{<<: *total_benefit_units, column: N, source_column_id: october_2024, expected_column_header: 'October 2024 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_11
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_11.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_11
   period: 2024-11
   measures: [{<<: *benefit_units, column: P, source_column_id: november_2024, expected_column_header: 'November 2024 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_11.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_11.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_11.total
   period: 2024-11
   measures: [{<<: *total_benefit_units, column: P, source_column_id: november_2024, expected_column_header: 'November 2024 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_12
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_12.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_12
   period: 2024-12
   measures: [{<<: *benefit_units, column: R, source_column_id: december_2024, expected_column_header: 'December 2024 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2024_12.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2024_12.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2024_12.total
@@ -378,108 +412,126 @@ record_sets:
   measures: [{<<: *total_benefit_units, column: R, source_column_id: december_2024, expected_column_header: 'December 2024 (r)'}]
 
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_04
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_04.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_04
   period: 2025-04
   measures: [{<<: *benefit_units, column: AL, source_column_id: april_2025, expected_column_header: 'April 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_04.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_04.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_04.total
   period: 2025-04
   measures: [{<<: *total_benefit_units, column: AL, source_column_id: april_2025, expected_column_header: 'April 2025 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_05
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_05.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_05
   period: 2025-05
   measures: [{<<: *benefit_units, column: AN, source_column_id: may_2025, expected_column_header: 'May 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_05.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_05.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_05.total
   period: 2025-05
   measures: [{<<: *total_benefit_units, column: AN, source_column_id: may_2025, expected_column_header: 'May 2025 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_06
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_06.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_06
   period: 2025-06
   measures: [{<<: *benefit_units, column: AP, source_column_id: june_2025, expected_column_header: 'June 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_06.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_06.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_06.total
   period: 2025-06
   measures: [{<<: *total_benefit_units, column: AP, source_column_id: june_2025, expected_column_header: 'June 2025 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_07
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_07.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_07
   period: 2025-07
   measures: [{<<: *benefit_units, column: AR, source_column_id: july_2025, expected_column_header: 'July 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_07.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_07.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_07.total
   period: 2025-07
   measures: [{<<: *total_benefit_units, column: AR, source_column_id: july_2025, expected_column_header: 'July 2025 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_08
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_08.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_08
   period: 2025-08
   measures: [{<<: *benefit_units, column: AT, source_column_id: august_2025, expected_column_header: 'August 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_08.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_08.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_08.total
   period: 2025-08
   measures: [{<<: *total_benefit_units, column: AT, source_column_id: august_2025, expected_column_header: 'August 2025 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_09
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_09.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_09
   period: 2025-09
   measures: [{<<: *benefit_units, column: AV, source_column_id: september_2025, expected_column_header: 'September 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_09.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_09.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_09.total
   period: 2025-09
   measures: [{<<: *total_benefit_units, column: AV, source_column_id: september_2025, expected_column_header: 'September 2025 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_10
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_10.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_10
   period: 2025-10
   measures: [{<<: *benefit_units, column: AX, source_column_id: october_2025, expected_column_header: 'October 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_10.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_10.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_10.total
   period: 2025-10
   measures: [{<<: *total_benefit_units, column: AX, source_column_id: october_2025, expected_column_header: 'October 2025 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_11
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_11.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_11
   period: 2025-11
   measures: [{<<: *benefit_units, column: AZ, source_column_id: november_2025, expected_column_header: 'November 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_11.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_11.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_11.total
   period: 2025-11
   measures: [{<<: *total_benefit_units, column: AZ, source_column_id: november_2025, expected_column_header: 'November 2025 (r)'}]
 - <<: *detail
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_12
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_12.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_12
   period: 2025-12
   measures: [{<<: *benefit_units, column: BB, source_column_id: december_2025, expected_column_header: 'December 2025 (r)'}]
 - <<: *total
+  provenance_class: administrative
   record_set_id: dwp.statx.uc_benefit_units.family_type.month2025_12.total
   record_set_spec_id: dwp.statx.uc_benefit_units.family_type.month2025_12.total.v1
   source_record_id_prefix: dwp.statx.uc_benefit_units.family_type.month2025_12.total
