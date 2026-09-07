@@ -13,7 +13,15 @@ artifact:
   manifest: manifest.yaml
   vintage: stat_xplore_2026_09_07
   extracted_at: '2026-09-07'
-  extraction_method: Stat-Xplore publisher CSV download preserving five family-type rows, the published Total row, revision annotations, and disclosure-control notice
+  extraction_method: >-
+    Stat-Xplore publisher CSV download from table path "Households on Universal
+    Credit / Family Type by Month" in database URI
+    str:database:UC_Households, using measure URI
+    str:count:UC_Households:V_F_UC_HOUSEHOLDS and dimension field URIs
+    str:field:UC_Households:F_UC_HH_DATE:DATE_NAME and
+    str:field:UC_Households:V_F_UC_HOUSEHOLDS:hnfamily_type; preserves five
+    family-type rows, the publisher-emitted Total row, revision annotations,
+    and the disclosure-control notice
   parser: delimited_text_full_rows
   header_row: 10
   selected_rows:
