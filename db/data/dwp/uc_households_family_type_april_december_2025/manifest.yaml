@@ -2,17 +2,18 @@ source_id: dwp
 package_id: dwp-uc-households-family-type-april-december-2025
 dataset: dwp_dwp-uc-households-family-type-april-december-2025
 source_page: https://stat-xplore.dwp.gov.uk/
-table: Households on Universal Credit by family type, April to December 2025
+table: Households on Universal Credit by family type, April to December 2023 through
+  2025
 files:
   2025:
-    filename: uc_households_by_family_type_april_december_2025.json
-    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
-    sha256: 44d67348da8c34465611ac00efdfcb80a69ad0f52e788d53f82517b34594377f
-    size_bytes: 6719
-    fetched_at: '2026-08-21T11:45:49Z'
+    filename: uc_households_by_family_type_april_december_2023_2025.csv
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/jsf/tableView/tableView.xhtml
+    sha256: 3783b64b9b0b5d35fb8ce7488f1e0238db89d67e6da96563140a151dfa4e5764
+    size_bytes: 4343
+    fetched_at: '2026-09-07T07:38:34Z'
     storage:
       r2:
         provider: r2
         bucket: ledger-raw
-        key: raw/dwp/dwp-uc-households-family-type-april-december-2025/2025/44d67348da8c34465611ac00efdfcb80a69ad0f52e788d53f82517b34594377f/uc_households_by_family_type_april_december_2025.json
-        uri: r2://ledger-raw/raw/dwp/dwp-uc-households-family-type-april-december-2025/2025/44d67348da8c34465611ac00efdfcb80a69ad0f52e788d53f82517b34594377f/uc_households_by_family_type_april_december_2025.json
+        key: raw/uk/dwp/dwp-uc-households-family-type-april-december-2025/2025/3783b64b9b0b5d35fb8ce7488f1e0238db89d67e6da96563140a151dfa4e5764/uc_households_by_family_type_april_december_2023_2025.csv
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-uc-households-family-type-april-december-2025/2025/3783b64b9b0b5d35fb8ce7488f1e0238db89d67e6da96563140a151dfa4e5764/uc_households_by_family_type_april_december_2023_2025.csv
