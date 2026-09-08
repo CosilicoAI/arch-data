@@ -1,0 +1,32 @@
+Stat-Xplore
+
+"Households on Universal Credit (I II III IV z)"
+"Family Type by Month"
+"Counting: Households on Universal Credit"
+
+Filters:
+"Default Summation","Households on Universal Credit"
+
+"Month","April 2024","April 2024 - Annotations","May 2024","May 2024 - Annotations","June 2024 (r)","June 2024 - Annotations","July 2024 (r)","July 2024 - Annotations","August 2024 (r)","August 2024 - Annotations","September 2024 (r)","September 2024 - Annotations","October 2024 (r)","October 2024 - Annotations","November 2024 (r)","November 2024 - Annotations","December 2024 (r)","December 2024 - Annotations","April 2023","April 2023 - Annotations","May 2023","May 2023 - Annotations","June 2023","June 2023 - Annotations","July 2023","July 2023 - Annotations","August 2023","August 2023 - Annotations","September 2023","September 2023 - Annotations","October 2023","October 2023 - Annotations","November 2023","November 2023 - Annotations","December 2023","December 2023 - Annotations","April 2025 (r)","April 2025 - Annotations","May 2025 (r)","May 2025 - Annotations","June 2025 (r)","June 2025 - Annotations","July 2025 (r)","July 2025 - Annotations","August 2025 (r)","August 2025 - Annotations","September 2025 (r)","September 2025 - Annotations","October 2025 (r)","October 2025 - Annotations","November 2025 (r)","November 2025 - Annotations","December 2025 (r)","December 2025 - Annotations",
+"Family Type",
+"Single, no children",2706575,,2712106,,2723460,,2743844,,2766134,,2798252,,2823250,,2858415,,2896968,,2473370,,2481406,,2493624,,2515891,,2534581,,2556314,,2578790,,2604763,,2634407,,3134001,,3193287,,3282370,,3362245,,3460441,,3550437,,3623576,,3690997,,3725304,,
+"Single, with children",1964494,,1998179,,2027919,,2066556,,2104721,,2125571,,2144071,,2170644,,2184171,,1733859,,1746189,,1759681,,1778847,,1795426,,1825682,,1856372,,1881018,,1904309,,2207559,,2212526,,2219462,,2225365,,2228790,,2231333,,2234296,,2237019,,2239630,,
+"Couple, no children",217781,,219594,,219799,,221981,,225284,,231939,,233971,,237209,,240452,,198021,,198387,,199033,,199840,,200649,,201264,,202372,,203938,,205801,,260740,,266117,,274424,,280070,,286102,,291802,,296932,,300679,,302244,,
+"Couple, with children",795356,,816067,,826955,,830896,,842927,,875196,,885411,,898910,,906064,,657801,,659255,,661324,,663134,,664168,,666793,,671892,,678520,,688185,,915707,,911319,,907142,,902225,,897867,,895566,,892226,,888199,,885561,,
+"Unknown or missing family type",1787,,1795,,1612,,1618,,1530,,1282,,1253,,1227,,1241,,2322,,2387,,2367,,2412,,2541,,2796,,2928,,2973,,3034,,1193,,1193,,1217,,1259,,1223,,1176,,1197,,1261,,1301,,
+"Total",5685995,,5747730,,5799748,,5864899,,5940590,,6032248,,6087962,,6166404,,6228895,,5065371,,5087622,,5116034,,5160124,,5197374,,5252845,,5312353,,5371220,,5435736,,6519195,,6584436,,6684615,,6771172,,6874424,,6970315,,7048227,,7118153,,7154045,,
+
+
+"INFO","Statistical disclosure control has been applied to this table to avoid the release of confidential data.  Totals may not sum due to the disclosure control applied."
+
+
+Symbol,Description
+"I","A limited test of the full Universal Credit service was launched in Sutton, South London on 26th November 2014, and has expanded to other areas since. This publication now includes statistics covering both the live and full Universal Credit service. Please see https://www.gov.uk/government/publications/universal-credit-transition-to-full-service for details of the areas in which the full Universal Credit service is operating."
+"II","Data for more recent months will be subject to a higher degree of revision. Universal Credit award amounts may be retrospectively revised."
+"III","Monthly award amounts include any awards due to entitlement such as the standard allowance or housing entitlement plus any advance payments. Advance payments will normally be recovered during subsequent assessment periods."
+"IV","Award, entitlement and payment information may be missing for a very small number of households on Universal Credit, where more limited information is entered onto IT systems."
+"z",""".."" denotes a nil or negligible number of claimants or award amount based on a nil or negligible number of claimants."
+"r","Figures marked ""r"" have been revised since the previous release."
+
+
+Source: Department for Work and Pensions

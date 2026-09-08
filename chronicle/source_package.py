@@ -1765,6 +1765,10 @@ def _row_from_mapping(payload: dict[str, Any], *, year: int) -> SourceRecordSetR
             _constraint_from_mapping(constraint, year=year)
             for constraint in payload.get("constraints", ())
         ),
+        source_row_dimensions={
+            str(key): _render_value(value, year=year)
+            for key, value in payload.get("source_row_dimensions", {}).items()
+        },
         value_scale=_render_value(payload.get("value_scale", 1), year=year),
         source_row_id=payload.get("source_row_id"),
         table_record_kind=payload.get("table_record_kind", "detail"),

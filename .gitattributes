@@ -1,2 +1,3 @@
 # Keep pinned source artifacts byte-for-byte identical to their publishers.
 db/data/dfe/funded_early_education_childcare_2026/headline_figures_feeac_2011_2026.csv -diff
+db/data/dwp/uc_households_family_type_april_december_2025/uc_households_by_family_type_april_december_2023_2025.csv -diff

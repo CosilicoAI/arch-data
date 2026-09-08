@@ -879,22 +879,14 @@ def test_dwp_uc_element_packages_emit_one_benefit_unit_fact_per_month(
     assert validate_consumer_fact_contract(facts).valid
 
 
-@pytest.mark.parametrize(
-    ("alias", "facts_per_month"),
-    [
-        ("dwp-uc-households-family-type-april-december-2025", 5),
-        ("dwp-uc-households-children-april-december-2025", 8),
-    ],
-)
-def test_dwp_uc_composition_packages_cover_the_caseload_months(
-    alias,
-    facts_per_month,
-):
-    facts = load_source_package(alias).build_facts(2025)
+def test_dwp_uc_children_composition_package_covers_the_caseload_months():
+    facts = load_source_package(
+        "dwp-uc-households-children-april-december-2025"
+    ).build_facts(2025)
     consumer_rows = consumer_fact_rows(facts)
     periods = [f"2025-{month:02d}" for month in range(4, 13)]
 
-    assert len(facts) == facts_per_month * len(periods)
+    assert len(facts) == 8 * len(periods)
     assert {fact.period.value for fact in facts} == set(periods)
     assert all(fact.measure.concept == "dwp.uc_benefit_units" for fact in facts)
     assert all(fact.period.type == "month" for fact in facts)
@@ -910,6 +902,70 @@ def test_dwp_uc_composition_packages_cover_the_caseload_months(
     assert {row["observed_measure"]["source_measure_id"] for row in consumer_rows} == {
         "benefit_units"
     }
+
+
+def test_dwp_uc_family_type_package_preserves_published_totals_from_2023(tmp_path):
+    facts = load_source_package(
+        "dwp-uc-households-family-type-april-december-2025"
+    ).build_facts(2025)
+    consumer_rows = consumer_fact_rows(facts)
+    periods = {
+        f"{year}-{month:02d}" for year in range(2023, 2026) for month in range(4, 13)
+    }
+
+    assert len(facts) == 162
+    assert {fact.period.value for fact in facts} == periods
+    assert all(fact.measure.concept == "dwp.uc_benefit_units" for fact in facts)
+    assert all(fact.period.type == "month" for fact in facts)
+    assert all(fact.entity.name == "benefit_unit" for fact in facts)
+    assert all(fact.geography.id == "K03000001" for fact in facts)
+    assert all(fact.assertion == "observation" for fact in facts)
+    assert all(fact.provenance_class == "administrative" for fact in facts)
+    assert all(fact.source_row_keys for fact in facts)
+    assert validate_consumer_fact_contract(facts).valid
+
+    detail_rows = [
+        row
+        for row in consumer_rows
+        if row["observed_measure"]["source_measure_id"] == "benefit_units"
+    ]
+    total_rows = [
+        row
+        for row in consumer_rows
+        if row["observed_measure"]["source_measure_id"] == "total_benefit_units"
+    ]
+    assert len(detail_rows) == 135
+    assert len(total_rows) == 27
+    assert all(row["layout"]["table_record_kind"] == "detail" for row in detail_rows)
+    assert all(row["layout"]["table_record_kind"] == "total" for row in total_rows)
+    assert all(row["dimensions"] == {"family_type": "all"} for row in total_rows)
+    assert {row["observed_measure"]["source_concept"] for row in consumer_rows} == {
+        "dwp.uc_households"
+    }
+
+    for period in sorted(periods):
+        detail_sum = sum(
+            row["value"] for row in detail_rows if row["period"]["value"] == period
+        )
+        published_total = next(
+            row["value"] for row in total_rows if row["period"]["value"] == period
+        )
+        # DWP warns that disclosure control can keep displayed totals from
+        # summing exactly; the archived table differs by at most 11 units.
+        assert abs(published_total - detail_sum) <= 15
+
+    published_totals = {row["period"]["value"]: row["value"] for row in total_rows}
+    assert published_totals["2023-04"] == 5_065_371
+    assert published_totals["2024-04"] == 5_685_995
+    assert published_totals["2025-12"] == 7_154_045
+
+    suite = build_source_suite(
+        "dwp-uc-households-family-type-april-december-2025",
+        tmp_path / "dwp-uc-households-family-type-april-december-2025",
+        year=2025,
+    )
+    assert suite.agent_acceptance.valid
+    assert suite.agent_acceptance.counts["row_semantic_error_count"] == 0
 
 
 def test_source_package_alias_compiles_soi_table_1_1_specs():

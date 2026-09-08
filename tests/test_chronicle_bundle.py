@@ -129,7 +129,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "aggregate_duplicate_key_count": 0,
         "entity_count": 12,
         "error_count": 0,
-        "fact_count": 192460,
+        "fact_count": 192577,
         "geography_count": 12539,
         "period_count": 269,
         "semantic_duplicate_key_count": 177,
@@ -138,7 +138,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "source_package_count": 167,
         "warning_count": 1,
     }
-    assert len(rows) == 192460
+    assert len(rows) == 192577
     assert {row["provenance_class"] for row in rows} <= {
         "administrative",
         "census",
@@ -170,7 +170,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "jct-obbba-revenue-estimates-2025",
         "jct-tax-expenditures-2024",
     ]
-    assert coverage["fact_count"] == 192460
+    assert coverage["fact_count"] == 192577
     assert coverage["counts"]["by_source"] == {
         "bea": 445,
         "bfp_economic_outlook": 5,
@@ -185,7 +185,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "dfe": 770,
         "dfc_ni": 1189,
         "dft": 233,
-        "dwp": 8130,
+        "dwp": 8247,
         "eurostat": 207,
         "federal_reserve": 1,
         "fpb_economic_outlook": 1000,
@@ -306,9 +306,10 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert (
         table_counts[
-            "dwp:Households on Universal Credit by family type, April to December 2025"
+            "dwp:Households on Universal Credit by family type, "
+            "April to December 2023 through 2025"
         ]
-        == 45
+        == 162
     )
     assert (
         table_counts[
@@ -756,39 +757,39 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "month:2023-01": 380,
         "month:2023-02": 379,
         "month:2023-03": 387,
-        "month:2023-04": 379,
-        "month:2023-05": 400,
-        "month:2023-06": 387,
-        "month:2023-07": 379,
-        "month:2023-08": 402,
-        "month:2023-09": 387,
-        "month:2023-10": 379,
-        "month:2023-11": 379,
-        "month:2023-12": 393,
+        "month:2023-04": 385,
+        "month:2023-05": 406,
+        "month:2023-06": 393,
+        "month:2023-07": 385,
+        "month:2023-08": 408,
+        "month:2023-09": 393,
+        "month:2023-10": 385,
+        "month:2023-11": 385,
+        "month:2023-12": 399,
         "month:2024-01": 380,
         "month:2024-02": 379,
         "month:2024-03": 387,
-        "month:2024-04": 379,
-        "month:2024-05": 400,
-        "month:2024-06": 387,
-        "month:2024-07": 379,
-        "month:2024-08": 402,
-        "month:2024-09": 387,
-        "month:2024-10": 485,
-        "month:2024-11": 485,
-        "month:2024-12": 763,
+        "month:2024-04": 385,
+        "month:2024-05": 406,
+        "month:2024-06": 393,
+        "month:2024-07": 385,
+        "month:2024-08": 408,
+        "month:2024-09": 393,
+        "month:2024-10": 491,
+        "month:2024-11": 491,
+        "month:2024-12": 769,
         "month:2025-01": 487,
         "month:2025-02": 485,
         "month:2025-03": 615,
-        "month:2025-04": 684,
-        "month:2025-05": 6651,
-        "month:2025-06": 600,
-        "month:2025-07": 592,
-        "month:2025-08": 1029,
-        "month:2025-09": 608,
-        "month:2025-10": 591,
-        "month:2025-11": 606,
-        "month:2025-12": 855,
+        "month:2025-04": 685,
+        "month:2025-05": 6652,
+        "month:2025-06": 601,
+        "month:2025-07": 593,
+        "month:2025-08": 1030,
+        "month:2025-09": 609,
+        "month:2025-10": 592,
+        "month:2025-11": 607,
+        "month:2025-12": 856,
         "month:2026-01": 381,
         "month:2026-02": 385,
         "month:2026-03": 386,
@@ -877,10 +878,10 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert coverage["counts"]["by_geography"]["country:K02000001"] == 6373
     assert coverage["counts"]["by_geography"]["country:E92000001"] == 1437
-    assert coverage["counts"]["by_geography"]["country:K03000001"] == 1975
+    assert coverage["counts"]["by_geography"]["country:K03000001"] == 2092
     assert len(coverage["counts"]["by_geography"]) == 12539
     assert coverage["counts"]["by_entity"] == {
-        "benefit_unit": 1979,
+        "benefit_unit": 2096,
         "dwelling": 27041,
         "family": 1299,
         "firm": 1439,
