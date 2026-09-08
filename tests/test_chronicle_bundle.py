@@ -129,7 +129,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "aggregate_duplicate_key_count": 0,
         "entity_count": 12,
         "error_count": 0,
-        "fact_count": 195161,
+        "fact_count": 195193,
         "geography_count": 12539,
         "period_count": 269,
         "semantic_duplicate_key_count": 177,
@@ -138,7 +138,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "source_package_count": 169,
         "warning_count": 1,
     }
-    assert len(rows) == 195161
+    assert len(rows) == 195193
     assert {row["provenance_class"] for row in rows} <= {
         "administrative",
         "census",
@@ -170,7 +170,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "jct-obbba-revenue-estimates-2025",
         "jct-tax-expenditures-2024",
     ]
-    assert coverage["fact_count"] == 195161
+    assert coverage["fact_count"] == 195193
     assert coverage["counts"]["by_source"] == {
         "bea": 445,
         "bfp_economic_outlook": 5,
@@ -200,7 +200,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "mhclg": 2712,
         "nbb_national_accounts": 1,
         "nisra": 533,
-        "nrs": 5615,
+        "nrs": 5647,
         "obr": 270,
         "onem_rva_unemployment": 1,
         "ons": 80741,
@@ -673,7 +673,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "calendar_year:2019": 175,
         "calendar_year:2020": 175,
         "calendar_year:2021": 4196,
-        "calendar_year:2022": 2191,
+        "calendar_year:2022": 2223,
         "calendar_year:2023": 6445,
         "calendar_year:2024": 34038,
         "calendar_year:2025": 4661,
@@ -900,7 +900,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "family": 1299,
         "firm": 1439,
         "government": 1350,
-        "household": 40676,
+        "household": 40708,
         "institutional_sector": 261,
         "pension_plan": 2,
         "person": 63282,
