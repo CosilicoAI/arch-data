@@ -785,6 +785,44 @@ def test_composition_crosses_reconcile_with_the_pairwise_cubes_within_disclosure
         assert all(gap <= 15 for gap in gaps)
 
 
+def test_family_type_cross_reconciles_with_the_family_type_history_detail_cells(
+    composition_cross_facts_251,
+):
+    # chronicle#250 carries DWP's family-type history for April-December 2023,
+    # 2024 and 2025 (135 detail cells plus the separately published Total).
+    # Summing the four payment x child-entitlement cells of the #251 cross per
+    # family type and month must land on the published detail cell within
+    # disclosure control: observed maximum 11 (126/135 nonzero) on the
+    # 18 August 2026 release, against the same 15-household tolerance #250
+    # applies between its Total and its detail cells. The published Total
+    # (family_type: all) is not compared; nothing here emits a fact.
+    cross = composition_cross_facts_251[FAMILY_CROSS_251]
+    history = load_source_package(
+        "dwp-uc-households-family-type-april-december-2025"
+    ).build_facts(2025)
+    detail = [fact for fact in history if fact.layout.measure_id == "benefit_units"]
+    assert len(detail) == 135
+    assert {fact.period.value for fact in detail} <= set(MONTHS_251)
+    gaps = []
+    for published in detail:
+        cross_sum = sum(
+            _fact(
+                cross,
+                period=published.period.value,
+                family_type=published.filters["family_type"],
+                payment_indicator=payment,
+                child_entitlement=entitlement,
+            ).value
+            for payment in ("No", "Yes")
+            for entitlement in ("No", "Yes")
+        )
+        gaps.append(abs(published.value - cross_sum))
+    assert len(gaps) == 135
+    assert max(gaps) == 11
+    assert sum(gap != 0 for gap in gaps) == 126
+    assert all(gap <= 15 for gap in gaps)
+
+
 @pytest.mark.parametrize("alias", [FAMILY_CROSS_251, CHILDREN_CROSS_251])
 def test_uc_composition_cross_packages_pass_agent_acceptance(alias, tmp_path):
     output_dir = tmp_path / alias
