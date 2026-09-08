@@ -400,6 +400,18 @@ uv run chronicle build-suite dwp-uc-households-family-type-payment-indicator-apr
   --out /tmp/chronicle-dwp-uc-family-type-payment-indicator-2025 \
   --replace
 
+uv run chronicle validate-package dwp-uc-households-family-type-payment-indicator-child-entitlement-april-2023-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-households-family-type-payment-indicator-child-entitlement-april-2023-may-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-uc-family-type-payment-indicator-child-entitlement-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-uc-children-payment-indicator-child-entitlement-2023-2026 \
+  --replace
+
 uv run chronicle validate-package hmrc-child-benefit-august-2025 --year 2025
 uv run chronicle build-suite hmrc-child-benefit-august-2025 \
   --year 2025 \
