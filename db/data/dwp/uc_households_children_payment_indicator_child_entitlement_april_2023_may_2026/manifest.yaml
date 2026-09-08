@@ -1,0 +1,19 @@
+source_id: dwp
+package_id: dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026
+dataset: dwp_dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026
+source_page: https://stat-xplore.dwp.gov.uk/
+table: Households on Universal Credit by number of children, payment indicator and
+  child entitlement, April 2023 to May 2026
+files:
+  2025:
+    filename: uc_households_by_number_of_children_payment_indicator_and_child_entitlement_april_2023_may_2026.json
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
+    sha256: c3d640fc68b09667b5974d503969e2885afe7947ea4b56a72af20b9de38204b6
+    size_bytes: 31427
+    fetched_at: '2026-09-08T09:43:56Z'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026/2025/c3d640fc68b09667b5974d503969e2885afe7947ea4b56a72af20b9de38204b6/uc_households_by_number_of_children_payment_indicator_and_child_entitlement_april_2023_may_2026.json
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026/2025/c3d640fc68b09667b5974d503969e2885afe7947ea4b56a72af20b9de38204b6/uc_households_by_number_of_children_payment_indicator_and_child_entitlement_april_2023_may_2026.json
