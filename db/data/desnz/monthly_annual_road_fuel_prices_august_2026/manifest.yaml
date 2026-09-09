@@ -1,0 +1,18 @@
+source_id: desnz
+package_id: desnz-monthly-annual-road-fuel-prices-august-2026
+dataset: desnz_desnz-monthly-annual-road-fuel-prices-august-2026
+source_page: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+table: Digest of UK Energy Statistics tables 4.1.1 and 4.1.2
+files:
+  2026:
+    filename: table_411_413.xlsx
+    source_url: https://assets.publishing.service.gov.uk/media/6a8d7214f5b35599aec18cfe/table_411_413.xlsx
+    sha256: 30b19fdfda95adcf73ef4cdb5ab9993223595ebd3c0284d76a86210264dd358f
+    size_bytes: 542455
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/desnz/desnz-monthly-annual-road-fuel-prices-august-2026/2026/30b19fdfda95adcf73ef4cdb5ab9993223595ebd3c0284d76a86210264dd358f/table_411_413.xlsx
+        uri: r2://ledger-raw/raw/desnz/desnz-monthly-annual-road-fuel-prices-august-2026/2026/30b19fdfda95adcf73ef4cdb5ab9993223595ebd3c0284d76a86210264dd358f/table_411_413.xlsx

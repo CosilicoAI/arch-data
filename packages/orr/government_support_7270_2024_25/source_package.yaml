@@ -1,0 +1,415 @@
+schema_version: ledger.source_package.v1
+package_id: orr-government-support-7270-2024-25
+label: ORR total government support to the rail industry, 2015-16 to 2024-25
+artifact:
+  source_name: orr
+  source_table: Table 7270 government support to the rail industry
+  resource_package: db
+  resource_directory: data/orr/government_support_7270_2024_25
+  manifest: manifest.yaml
+  vintage: '2024_25'
+  extracted_at: '2026-09-09'
+  extraction_method: ODS whole-workbook used-range cell parse
+  parser: ods_used_range
+  artifact_year: 2025
+record_sets:
+- record_set_id: orr.government_support.table_7270.fy2015
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2015.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2015
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2015
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 36
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2015 to Mar 2016 [b]
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2016
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2016.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2016
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2016
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 37
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2016 to Mar 2017
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2017
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2017.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2017
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2017
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 38
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2017 to Mar 2018
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2018
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2018.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2018
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2018
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 39
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2018 to Mar 2019
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2019
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2019.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2019
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2019
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 40
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2019 to Mar 2020 [b]
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2020
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2020.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2020
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2020
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 41
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2020 to Mar 2021
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2021
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2021.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2021
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2021
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 42
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2021 to Mar 2022
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2022
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2022.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2022
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2022
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 43
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2022 to Mar 2023
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2023.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2023
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2023
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 44
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2023 to Mar 2024
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7270.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7270.fy2024.v1
+  source_record_id_prefix: orr.government_support.table_7270.fy2024
+  sheet_name: 7270_government_support
+  period_type: fiscal_year
+  period: 2024
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.rail_scope
+  rows:
+  - value_id: great_britain
+    label: Great Britain
+    ordinal: 0
+    row_number: 45
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Apr 2024 to Mar 2025
+  measures:
+  - measure_id: total_government_support
+    label: Total government support to the rail industry
+    ordinal: 0
+    column: N
+    source_column_id: total_government_support
+    concept: orr.rail.total_government_support
+    source_concept: orr.rail.total_government_support
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Total government support to the rail industry
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000

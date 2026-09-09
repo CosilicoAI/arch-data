@@ -1,0 +1,18 @@
+source_id: desnz
+package_id: desnz-need-england-wales-2023
+dataset: desnz_desnz-need-england-wales-2023
+source_page: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+table: NEED consumption headline tables, England and Wales, 2023
+files:
+  2023:
+    filename: need-ew-2023.xlsx
+    source_url: https://assets.publishing.service.gov.uk/media/685bd3947d72089d199760d5/Consumption_headline_EW_2023.xlsx
+    sha256: b46fa7bb9e9bc4e048077b6e4ed432bc53dfaa1f02152fa8cbb29f3c9a99f0f9
+    size_bytes: 508380
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/desnz/desnz-need-england-wales-2023/2023/b46fa7bb9e9bc4e048077b6e4ed432bc53dfaa1f02152fa8cbb29f3c9a99f0f9/need-ew-2023.xlsx
+        uri: r2://ledger-raw/raw/desnz/desnz-need-england-wales-2023/2023/b46fa7bb9e9bc4e048077b6e4ed432bc53dfaa1f02152fa8cbb29f3c9a99f0f9/need-ew-2023.xlsx

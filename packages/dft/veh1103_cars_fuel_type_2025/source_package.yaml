@@ -1,0 +1,903 @@
+schema_version: ledger.source_package.v1
+package_id: dft-veh1103-cars-fuel-type-2025
+label: DfT licensed cars by fuel type, Great Britain, 2023 to 2025
+artifact:
+  source_name: dft
+  source_table: VEH1103a licensed vehicles by body type and fuel type
+  resource_package: db
+  resource_directory: data/dft/veh1103_cars_fuel_type_2025
+  manifest: manifest.yaml
+  vintage: vehicle_licensing_2025
+  extracted_at: '2026-09-09'
+  extraction_method: ODS whole-workbook used-range cell parse
+  parser: ods_used_range
+  artifact_year: 2025
+record_sets:
+- record_set_id: dft.veh1103a.cars.cy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dft.veh1103a.cars.cy2023.v1
+  source_record_id_prefix: dft.veh1103a.cars.cy2023
+  sheet_name: VEH1103a_RoadUsing
+  period_type: calendar_year
+  period: 2023
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: licensed_car_stock
+  domain: licensed_road_using_cars
+  groupby_dimension: dft.vehicle_body_type
+  rows:
+  - value_id: cars
+    label: Cars
+    ordinal: 0
+    row_number: 1951
+    table_record_kind: detail
+    expected_row_header_column: D
+    expected_row_header: Cars
+    filters:
+      body_type: cars
+    constraints:
+    - variable: body_type
+      operator: ==
+      value: cars
+      label: Body Type
+  measures:
+  - measure_id: cars_petrol
+    label: 'Licensed cars: Petrol'
+    ordinal: 0
+    column: E
+    source_column_id: cars_petrol
+    concept: dft.licensed_cars.petrol
+    source_concept: dft.licensed_cars.petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Petrol'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: petrol
+      label: Fuel Type
+  - measure_id: cars_diesel
+    label: 'Licensed cars: Diesel'
+    ordinal: 1
+    column: F
+    source_column_id: cars_diesel
+    concept: dft.licensed_cars.diesel
+    source_concept: dft.licensed_cars.diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Diesel'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: diesel
+      label: Fuel Type
+  - measure_id: cars_hybrid_electric_petrol
+    label: 'Licensed cars: Hybrid electric (petrol)'
+    ordinal: 2
+    column: G
+    source_column_id: cars_hybrid_electric_petrol
+    concept: dft.licensed_cars.hybrid_electric_petrol
+    source_concept: dft.licensed_cars.hybrid_electric_petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Hybrid electric (petrol)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: hybrid_electric_petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: hybrid_electric_petrol
+      label: Fuel Type
+  - measure_id: cars_hybrid_electric_diesel
+    label: 'Licensed cars: Hybrid electric (diesel)'
+    ordinal: 3
+    column: H
+    source_column_id: cars_hybrid_electric_diesel
+    concept: dft.licensed_cars.hybrid_electric_diesel
+    source_concept: dft.licensed_cars.hybrid_electric_diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Hybrid electric (diesel)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: hybrid_electric_diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: hybrid_electric_diesel
+      label: Fuel Type
+  - measure_id: cars_plug_in_hybrid_petrol
+    label: 'Licensed cars: Plug-in hybrid electric (petrol)'
+    ordinal: 4
+    column: I
+    source_column_id: cars_plug_in_hybrid_petrol
+    concept: dft.licensed_cars.plug_in_hybrid_petrol
+    source_concept: dft.licensed_cars.plug_in_hybrid_petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Plug-in hybrid electric (petrol)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: plug_in_hybrid_petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: plug_in_hybrid_petrol
+      label: Fuel Type
+  - measure_id: cars_plug_in_hybrid_diesel
+    label: 'Licensed cars: Plug-in hybrid electric (diesel)'
+    ordinal: 5
+    column: J
+    source_column_id: cars_plug_in_hybrid_diesel
+    concept: dft.licensed_cars.plug_in_hybrid_diesel
+    source_concept: dft.licensed_cars.plug_in_hybrid_diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Plug-in hybrid electric (diesel)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: plug_in_hybrid_diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: plug_in_hybrid_diesel
+      label: Fuel Type
+  - measure_id: cars_battery_electric
+    label: 'Licensed cars: Battery electric'
+    ordinal: 6
+    column: K
+    source_column_id: cars_battery_electric
+    concept: dft.licensed_cars.battery_electric
+    source_concept: dft.licensed_cars.battery_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Battery electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: battery_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: battery_electric
+      label: Fuel Type
+  - measure_id: cars_range_extended_electric
+    label: 'Licensed cars: Range extended electric'
+    ordinal: 7
+    column: L
+    source_column_id: cars_range_extended_electric
+    concept: dft.licensed_cars.range_extended_electric
+    source_concept: dft.licensed_cars.range_extended_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Range extended electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: range_extended_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: range_extended_electric
+      label: Fuel Type
+  - measure_id: cars_fuel_cell_electric
+    label: 'Licensed cars: Fuel cell electric'
+    ordinal: 8
+    column: M
+    source_column_id: cars_fuel_cell_electric
+    concept: dft.licensed_cars.fuel_cell_electric
+    source_concept: dft.licensed_cars.fuel_cell_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Fuel cell electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: fuel_cell_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: fuel_cell_electric
+      label: Fuel Type
+  - measure_id: cars_gas
+    label: 'Licensed cars: Gas'
+    ordinal: 9
+    column: N
+    source_column_id: cars_gas
+    concept: dft.licensed_cars.gas
+    source_concept: dft.licensed_cars.gas
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Gas'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: gas
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: gas
+      label: Fuel Type
+  - measure_id: cars_other
+    label: 'Licensed cars: Other'
+    ordinal: 10
+    column: O
+    source_column_id: cars_other
+    concept: dft.licensed_cars.other
+    source_concept: dft.licensed_cars.other
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Other'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: other
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: other
+      label: Fuel Type
+  - measure_id: cars_all
+    label: 'Licensed cars: Total'
+    ordinal: 11
+    column: P
+    source_column_id: cars_all
+    concept: dft.licensed_cars.all
+    source_concept: dft.licensed_cars.all
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Total'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: all
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: all
+      label: Fuel Type
+- record_set_id: dft.veh1103a.cars.cy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dft.veh1103a.cars.cy2024.v1
+  source_record_id_prefix: dft.veh1103a.cars.cy2024
+  sheet_name: VEH1103a_RoadUsing
+  period_type: calendar_year
+  period: 2024
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: licensed_car_stock
+  domain: licensed_road_using_cars
+  groupby_dimension: dft.vehicle_body_type
+  rows:
+  - value_id: cars
+    label: Cars
+    ordinal: 0
+    row_number: 1955
+    table_record_kind: detail
+    expected_row_header_column: D
+    expected_row_header: Cars
+    filters:
+      body_type: cars
+    constraints:
+    - variable: body_type
+      operator: ==
+      value: cars
+      label: Body Type
+  measures:
+  - measure_id: cars_petrol
+    label: 'Licensed cars: Petrol'
+    ordinal: 0
+    column: E
+    source_column_id: cars_petrol
+    concept: dft.licensed_cars.petrol
+    source_concept: dft.licensed_cars.petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Petrol'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: petrol
+      label: Fuel Type
+  - measure_id: cars_diesel
+    label: 'Licensed cars: Diesel'
+    ordinal: 1
+    column: F
+    source_column_id: cars_diesel
+    concept: dft.licensed_cars.diesel
+    source_concept: dft.licensed_cars.diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Diesel'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: diesel
+      label: Fuel Type
+  - measure_id: cars_hybrid_electric_petrol
+    label: 'Licensed cars: Hybrid electric (petrol)'
+    ordinal: 2
+    column: G
+    source_column_id: cars_hybrid_electric_petrol
+    concept: dft.licensed_cars.hybrid_electric_petrol
+    source_concept: dft.licensed_cars.hybrid_electric_petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Hybrid electric (petrol)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: hybrid_electric_petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: hybrid_electric_petrol
+      label: Fuel Type
+  - measure_id: cars_hybrid_electric_diesel
+    label: 'Licensed cars: Hybrid electric (diesel)'
+    ordinal: 3
+    column: H
+    source_column_id: cars_hybrid_electric_diesel
+    concept: dft.licensed_cars.hybrid_electric_diesel
+    source_concept: dft.licensed_cars.hybrid_electric_diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Hybrid electric (diesel)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: hybrid_electric_diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: hybrid_electric_diesel
+      label: Fuel Type
+  - measure_id: cars_plug_in_hybrid_petrol
+    label: 'Licensed cars: Plug-in hybrid electric (petrol)'
+    ordinal: 4
+    column: I
+    source_column_id: cars_plug_in_hybrid_petrol
+    concept: dft.licensed_cars.plug_in_hybrid_petrol
+    source_concept: dft.licensed_cars.plug_in_hybrid_petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Plug-in hybrid electric (petrol)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: plug_in_hybrid_petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: plug_in_hybrid_petrol
+      label: Fuel Type
+  - measure_id: cars_plug_in_hybrid_diesel
+    label: 'Licensed cars: Plug-in hybrid electric (diesel)'
+    ordinal: 5
+    column: J
+    source_column_id: cars_plug_in_hybrid_diesel
+    concept: dft.licensed_cars.plug_in_hybrid_diesel
+    source_concept: dft.licensed_cars.plug_in_hybrid_diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Plug-in hybrid electric (diesel)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: plug_in_hybrid_diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: plug_in_hybrid_diesel
+      label: Fuel Type
+  - measure_id: cars_battery_electric
+    label: 'Licensed cars: Battery electric'
+    ordinal: 6
+    column: K
+    source_column_id: cars_battery_electric
+    concept: dft.licensed_cars.battery_electric
+    source_concept: dft.licensed_cars.battery_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Battery electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: battery_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: battery_electric
+      label: Fuel Type
+  - measure_id: cars_range_extended_electric
+    label: 'Licensed cars: Range extended electric'
+    ordinal: 7
+    column: L
+    source_column_id: cars_range_extended_electric
+    concept: dft.licensed_cars.range_extended_electric
+    source_concept: dft.licensed_cars.range_extended_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Range extended electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: range_extended_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: range_extended_electric
+      label: Fuel Type
+  - measure_id: cars_fuel_cell_electric
+    label: 'Licensed cars: Fuel cell electric'
+    ordinal: 8
+    column: M
+    source_column_id: cars_fuel_cell_electric
+    concept: dft.licensed_cars.fuel_cell_electric
+    source_concept: dft.licensed_cars.fuel_cell_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Fuel cell electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: fuel_cell_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: fuel_cell_electric
+      label: Fuel Type
+  - measure_id: cars_gas
+    label: 'Licensed cars: Gas'
+    ordinal: 9
+    column: N
+    source_column_id: cars_gas
+    concept: dft.licensed_cars.gas
+    source_concept: dft.licensed_cars.gas
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Gas'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: gas
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: gas
+      label: Fuel Type
+  - measure_id: cars_other
+    label: 'Licensed cars: Other'
+    ordinal: 10
+    column: O
+    source_column_id: cars_other
+    concept: dft.licensed_cars.other
+    source_concept: dft.licensed_cars.other
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Other'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: other
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: other
+      label: Fuel Type
+  - measure_id: cars_all
+    label: 'Licensed cars: Total'
+    ordinal: 11
+    column: P
+    source_column_id: cars_all
+    concept: dft.licensed_cars.all
+    source_concept: dft.licensed_cars.all
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Total'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: all
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: all
+      label: Fuel Type
+- record_set_id: dft.veh1103a.cars.cy2025
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dft.veh1103a.cars.cy2025.v1
+  source_record_id_prefix: dft.veh1103a.cars.cy2025
+  sheet_name: VEH1103a_RoadUsing
+  period_type: calendar_year
+  period: 2025
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: licensed_car_stock
+  domain: licensed_road_using_cars
+  groupby_dimension: dft.vehicle_body_type
+  rows:
+  - value_id: cars
+    label: Cars
+    ordinal: 0
+    row_number: 1959
+    table_record_kind: detail
+    expected_row_header_column: D
+    expected_row_header: Cars
+    filters:
+      body_type: cars
+    constraints:
+    - variable: body_type
+      operator: ==
+      value: cars
+      label: Body Type
+  measures:
+  - measure_id: cars_petrol
+    label: 'Licensed cars: Petrol'
+    ordinal: 0
+    column: E
+    source_column_id: cars_petrol
+    concept: dft.licensed_cars.petrol
+    source_concept: dft.licensed_cars.petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Petrol'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: petrol
+      label: Fuel Type
+  - measure_id: cars_diesel
+    label: 'Licensed cars: Diesel'
+    ordinal: 1
+    column: F
+    source_column_id: cars_diesel
+    concept: dft.licensed_cars.diesel
+    source_concept: dft.licensed_cars.diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Diesel'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: diesel
+      label: Fuel Type
+  - measure_id: cars_hybrid_electric_petrol
+    label: 'Licensed cars: Hybrid electric (petrol)'
+    ordinal: 2
+    column: G
+    source_column_id: cars_hybrid_electric_petrol
+    concept: dft.licensed_cars.hybrid_electric_petrol
+    source_concept: dft.licensed_cars.hybrid_electric_petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Hybrid electric (petrol)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: hybrid_electric_petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: hybrid_electric_petrol
+      label: Fuel Type
+  - measure_id: cars_hybrid_electric_diesel
+    label: 'Licensed cars: Hybrid electric (diesel)'
+    ordinal: 3
+    column: H
+    source_column_id: cars_hybrid_electric_diesel
+    concept: dft.licensed_cars.hybrid_electric_diesel
+    source_concept: dft.licensed_cars.hybrid_electric_diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Hybrid electric (diesel)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: hybrid_electric_diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: hybrid_electric_diesel
+      label: Fuel Type
+  - measure_id: cars_plug_in_hybrid_petrol
+    label: 'Licensed cars: Plug-in hybrid electric (petrol)'
+    ordinal: 4
+    column: I
+    source_column_id: cars_plug_in_hybrid_petrol
+    concept: dft.licensed_cars.plug_in_hybrid_petrol
+    source_concept: dft.licensed_cars.plug_in_hybrid_petrol
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Plug-in hybrid electric (petrol)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: plug_in_hybrid_petrol
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: plug_in_hybrid_petrol
+      label: Fuel Type
+  - measure_id: cars_plug_in_hybrid_diesel
+    label: 'Licensed cars: Plug-in hybrid electric (diesel)'
+    ordinal: 5
+    column: J
+    source_column_id: cars_plug_in_hybrid_diesel
+    concept: dft.licensed_cars.plug_in_hybrid_diesel
+    source_concept: dft.licensed_cars.plug_in_hybrid_diesel
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Plug-in hybrid electric (diesel)'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: plug_in_hybrid_diesel
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: plug_in_hybrid_diesel
+      label: Fuel Type
+  - measure_id: cars_battery_electric
+    label: 'Licensed cars: Battery electric'
+    ordinal: 6
+    column: K
+    source_column_id: cars_battery_electric
+    concept: dft.licensed_cars.battery_electric
+    source_concept: dft.licensed_cars.battery_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Battery electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: battery_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: battery_electric
+      label: Fuel Type
+  - measure_id: cars_range_extended_electric
+    label: 'Licensed cars: Range extended electric'
+    ordinal: 7
+    column: L
+    source_column_id: cars_range_extended_electric
+    concept: dft.licensed_cars.range_extended_electric
+    source_concept: dft.licensed_cars.range_extended_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Range extended electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: range_extended_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: range_extended_electric
+      label: Fuel Type
+  - measure_id: cars_fuel_cell_electric
+    label: 'Licensed cars: Fuel cell electric'
+    ordinal: 8
+    column: M
+    source_column_id: cars_fuel_cell_electric
+    concept: dft.licensed_cars.fuel_cell_electric
+    source_concept: dft.licensed_cars.fuel_cell_electric
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Fuel cell electric'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: fuel_cell_electric
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: fuel_cell_electric
+      label: Fuel Type
+  - measure_id: cars_gas
+    label: 'Licensed cars: Gas'
+    ordinal: 9
+    column: N
+    source_column_id: cars_gas
+    concept: dft.licensed_cars.gas
+    source_concept: dft.licensed_cars.gas
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Gas'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: gas
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: gas
+      label: Fuel Type
+  - measure_id: cars_other
+    label: 'Licensed cars: Other'
+    ordinal: 10
+    column: O
+    source_column_id: cars_other
+    concept: dft.licensed_cars.other
+    source_concept: dft.licensed_cars.other
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Other'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: other
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: other
+      label: Fuel Type
+  - measure_id: cars_all
+    label: 'Licensed cars: Total'
+    ordinal: 11
+    column: P
+    source_column_id: cars_all
+    concept: dft.licensed_cars.all
+    source_concept: dft.licensed_cars.all
+    concept_relation: source_label
+    concept_authority: dft
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+    concept_evidence_notes: 'Licensed cars: Total'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000
+    filters:
+      fuel_type: all
+    constraints:
+    - variable: fuel_type
+      operator: ==
+      value: all
+      label: Fuel Type

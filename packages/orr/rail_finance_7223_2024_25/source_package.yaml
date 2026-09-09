@@ -1,0 +1,55 @@
+schema_version: ledger.source_package.v1
+package_id: orr-rail-finance-7223-2024-25
+label: ORR franchised passenger train operator fare income, 2024-25
+artifact:
+  source_name: orr
+  source_table: Table 7223 franchised passenger train operator finances
+  resource_package: db
+  resource_directory: data/orr/rail_finance_7223_2024_25
+  manifest: manifest.yaml
+  vintage: '2024_25'
+  extracted_at: '2026-09-09'
+  extraction_method: ODS whole-workbook used-range cell parse
+  parser: ods_used_range
+  artifact_year: 2025
+record_sets:
+- record_set_id: orr.rail_finance.table_7223.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.rail_finance.table_7223.fy2024.v1
+  source_record_id_prefix: orr.rail_finance.table_7223.fy2024
+  sheet_name: 7223_finance_franchised
+  period_type: fiscal_year
+  period: 2024
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: franchised_passenger_train_operators
+  domain: rail_finance
+  groupby_dimension: orr.finance_line
+  rows:
+  - value_id: fare_income
+    label: Fare income
+    ordinal: 0
+    row_number: 6
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: Fare income
+  measures:
+  - measure_id: fare_income
+    label: Fare income
+    ordinal: 0
+    column: B
+    source_column_id: fare_income
+    concept: orr.rail.franchised_operator_fare_income
+    source_concept: orr.rail.franchised_operator_fare_income
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Fare income
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000

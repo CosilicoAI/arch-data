@@ -1,0 +1,18 @@
+source_id: orr
+package_id: orr-rail-fares-7180-2026
+dataset: orr_orr-rail-fares-7180-2026
+source_page: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
+table: Table 7180 average change in fares by regulated and unregulated tickets
+files:
+  2026:
+    filename: table-7180.ods
+    source_url: https://dataportal.orr.gov.uk/media/1692/table-7180-average-change-in-fares-by-regulated-and-unregulated-tickets.ods?cb=06dd92c7-0492-4022-ae1f-4887abfd6ffe
+    sha256: 24c815928171b952cc3554ce23ea0c717dfd18bd44ea964ea9efb580a92ce115
+    size_bytes: 20574
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/orr/orr-rail-fares-7180-2026/2026/24c815928171b952cc3554ce23ea0c717dfd18bd44ea964ea9efb580a92ce115/table-7180.ods
+        uri: r2://ledger-raw/raw/orr/orr-rail-fares-7180-2026/2026/24c815928171b952cc3554ce23ea0c717dfd18bd44ea964ea9efb580a92ce115/table-7180.ods

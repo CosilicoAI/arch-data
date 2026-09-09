@@ -1,0 +1,18 @@
+source_id: hmrc
+package_id: hmrc-hydrocarbon-oils-quantities-june-2026
+dataset: hmrc_hmrc-hydrocarbon-oils-quantities-june-2026
+source_page: https://www.gov.uk/government/statistics/hydrocarbon-oils-bulletin
+table: Hydrocarbon Oils Bulletin tables 2a and 2c
+files:
+  2026:
+    filename: Oils_Tab_Jun_26.ods
+    source_url: https://assets.publishing.service.gov.uk/media/6a68808f83f71b8684d020c6/Oils_Tab_Jun_26.ods
+    sha256: a8c237fb4adc7a0b9bcb76c1c1737deb567a288c0bad56c2ffb8c35e9c861b97
+    size_bytes: 216510
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/hmrc/hmrc-hydrocarbon-oils-quantities-june-2026/2026/a8c237fb4adc7a0b9bcb76c1c1737deb567a288c0bad56c2ffb8c35e9c861b97/Oils_Tab_Jun_26.ods
+        uri: r2://ledger-raw/raw/hmrc/hmrc-hydrocarbon-oils-quantities-june-2026/2026/a8c237fb4adc7a0b9bcb76c1c1737deb567a288c0bad56c2ffb8c35e9c861b97/Oils_Tab_Jun_26.ods

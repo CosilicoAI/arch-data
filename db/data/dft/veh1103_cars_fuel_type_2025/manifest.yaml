@@ -1,0 +1,18 @@
+source_id: dft
+package_id: dft-veh1103-cars-fuel-type-2025
+dataset: dft_dft-veh1103-cars-fuel-type-2025
+source_page: https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-tables
+table: VEH1103a licensed vehicles by body type and fuel type
+files:
+  2025:
+    filename: veh1103.ods
+    source_url: https://assets.publishing.service.gov.uk/media/6a5613d531fb6daf31413625/veh1103.ods
+    sha256: 2e1107fd9ea55f213ee8c207018cb445b8217932211c65136dd05a715e244849
+    size_bytes: 634787
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/dft/dft-veh1103-cars-fuel-type-2025/2025/2e1107fd9ea55f213ee8c207018cb445b8217932211c65136dd05a715e244849/veh1103.ods
+        uri: r2://ledger-raw/raw/dft/dft-veh1103-cars-fuel-type-2025/2025/2e1107fd9ea55f213ee8c207018cb445b8217932211c65136dd05a715e244849/veh1103.ods

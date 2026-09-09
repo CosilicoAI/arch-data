@@ -1,0 +1,244 @@
+# Ofgem's Q1 2024 announcement publishes four GB-average direct-debit rates.
+# The accompanying official workbook contains benchmark annual caps, not the
+# requested region-by-payment-method unit-rate matrix. This package therefore
+# carries only the four explicit published rates and derives no regional rates.
+schema_version: ledger.source_package.v1
+package_id: ofgem-energy-price-cap-q1-2024
+label: Ofgem average direct-debit unit rates and standing charges, January to March 2024
+artifact:
+  source_name: ofgem
+  source_table: New energy price cap level for January to March 2024
+  resource_package: db
+  resource_directory: data/ofgem/energy_price_cap_q1_2024
+  manifest: manifest.yaml
+  vintage: q1_2024
+  extracted_at: '2026-09-09'
+  extraction_method: HTML table and document-text number parse; official release exposes GB-average direct-debit
+    rates, not regional rates
+  parser: html_tables_and_text
+  artifact_year: 2024
+record_sets:
+- record_set_id: ofgem.price_cap.q1_2024.electricity_unit_rate
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ofgem.price_cap.q1_2024.electricity_unit_rate.v1
+  source_record_id_prefix: ofgem.price_cap.q1_2024.electricity_unit_rate
+  sheet_name: document_numbers
+  period_type: calendar_year
+  period: 2024
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: household
+  entity_role: default_tariff_customer
+  domain: domestic_energy_prices
+  groupby_dimension: ofgem.price_component
+  rows:
+  - value_id: electricity_unit_rate
+    label: Electricity unit rate
+    ordinal: 0
+    row_number: 11
+    table_record_kind: detail
+    expected_row_header_column: D
+    expected_row_header: '28.62'
+    filters:
+      quarter: Q1
+      payment_method: direct_debit
+      price_component: electricity_unit_rate
+    constraints:
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
+    - variable: payment_method
+      operator: ==
+      value: direct_debit
+      label: Payment Method
+    - variable: price_component
+      operator: ==
+      value: electricity_unit_rate
+      label: Price Component
+  measures:
+  - measure_id: electricity_unit_rate
+    label: Electricity unit rate
+    ordinal: 0
+    column: E
+    source_column_id: electricity_unit_rate
+    concept: ofgem.price_cap.electricity_unit_rate
+    source_concept: ofgem.price_cap.electricity_unit_rate
+    concept_relation: source_label
+    concept_authority: ofgem
+    concept_evidence_url: https://www.ofgem.gov.uk/news/new-energy-price-cap-level-january-march-2024-starts-today
+    concept_evidence_notes: Electricity unit rate
+    unit: pence_per_kwh
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: ofgem.price_cap.q1_2024.electricity_standing_charge
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ofgem.price_cap.q1_2024.electricity_standing_charge.v1
+  source_record_id_prefix: ofgem.price_cap.q1_2024.electricity_standing_charge
+  sheet_name: document_numbers
+  period_type: calendar_year
+  period: 2024
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: household
+  entity_role: default_tariff_customer
+  domain: domestic_energy_prices
+  groupby_dimension: ofgem.price_component
+  rows:
+  - value_id: electricity_standing_charge
+    label: Electricity standing charge
+    ordinal: 0
+    row_number: 12
+    table_record_kind: detail
+    expected_row_header_column: D
+    expected_row_header: '53.35'
+    filters:
+      quarter: Q1
+      payment_method: direct_debit
+      price_component: electricity_standing_charge
+    constraints:
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
+    - variable: payment_method
+      operator: ==
+      value: direct_debit
+      label: Payment Method
+    - variable: price_component
+      operator: ==
+      value: electricity_standing_charge
+      label: Price Component
+  measures:
+  - measure_id: electricity_standing_charge
+    label: Electricity standing charge
+    ordinal: 0
+    column: E
+    source_column_id: electricity_standing_charge
+    concept: ofgem.price_cap.electricity_standing_charge
+    source_concept: ofgem.price_cap.electricity_standing_charge
+    concept_relation: source_label
+    concept_authority: ofgem
+    concept_evidence_url: https://www.ofgem.gov.uk/news/new-energy-price-cap-level-january-march-2024-starts-today
+    concept_evidence_notes: Electricity standing charge
+    unit: pence_per_day
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: ofgem.price_cap.q1_2024.gas_unit_rate
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ofgem.price_cap.q1_2024.gas_unit_rate.v1
+  source_record_id_prefix: ofgem.price_cap.q1_2024.gas_unit_rate
+  sheet_name: document_numbers
+  period_type: calendar_year
+  period: 2024
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: household
+  entity_role: default_tariff_customer
+  domain: domestic_energy_prices
+  groupby_dimension: ofgem.price_component
+  rows:
+  - value_id: gas_unit_rate
+    label: Gas unit rate
+    ordinal: 0
+    row_number: 13
+    table_record_kind: detail
+    expected_row_header_column: D
+    expected_row_header: '7.42'
+    filters:
+      quarter: Q1
+      payment_method: direct_debit
+      price_component: gas_unit_rate
+    constraints:
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
+    - variable: payment_method
+      operator: ==
+      value: direct_debit
+      label: Payment Method
+    - variable: price_component
+      operator: ==
+      value: gas_unit_rate
+      label: Price Component
+  measures:
+  - measure_id: gas_unit_rate
+    label: Gas unit rate
+    ordinal: 0
+    column: E
+    source_column_id: gas_unit_rate
+    concept: ofgem.price_cap.gas_unit_rate
+    source_concept: ofgem.price_cap.gas_unit_rate
+    concept_relation: source_label
+    concept_authority: ofgem
+    concept_evidence_url: https://www.ofgem.gov.uk/news/new-energy-price-cap-level-january-march-2024-starts-today
+    concept_evidence_notes: Gas unit rate
+    unit: pence_per_kwh
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: ofgem.price_cap.q1_2024.gas_standing_charge
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ofgem.price_cap.q1_2024.gas_standing_charge.v1
+  source_record_id_prefix: ofgem.price_cap.q1_2024.gas_standing_charge
+  sheet_name: document_numbers
+  period_type: calendar_year
+  period: 2024
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: household
+  entity_role: default_tariff_customer
+  domain: domestic_energy_prices
+  groupby_dimension: ofgem.price_component
+  rows:
+  - value_id: gas_standing_charge
+    label: Gas standing charge
+    ordinal: 0
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: D
+    expected_row_header: '29.60'
+    filters:
+      quarter: Q1
+      payment_method: direct_debit
+      price_component: gas_standing_charge
+    constraints:
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
+    - variable: payment_method
+      operator: ==
+      value: direct_debit
+      label: Payment Method
+    - variable: price_component
+      operator: ==
+      value: gas_standing_charge
+      label: Price Component
+  measures:
+  - measure_id: gas_standing_charge
+    label: Gas standing charge
+    ordinal: 0
+    column: E
+    source_column_id: gas_standing_charge
+    concept: ofgem.price_cap.gas_standing_charge
+    source_concept: ofgem.price_cap.gas_standing_charge
+    concept_relation: source_label
+    concept_authority: ofgem
+    concept_evidence_url: https://www.ofgem.gov.uk/news/new-energy-price-cap-level-january-march-2024-starts-today
+    concept_evidence_notes: Gas standing charge
+    unit: pence_per_day
+    aggregation: mean
+    expected_cell_type: number

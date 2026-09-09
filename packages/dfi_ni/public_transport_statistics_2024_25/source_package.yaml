@@ -1,0 +1,747 @@
+schema_version: ledger.source_package.v1
+package_id: dfi-ni-public-transport-statistics-2024-25
+label: DfI Northern Ireland Translink bus journeys and passenger receipts, 2019-20 to 2024-25
+artifact:
+  source_name: dfi_ni
+  source_table: Northern Ireland Transport Statistics 2024-25 figures 3 and 4
+  resource_package: db
+  resource_directory: data/dfi_ni/public_transport_statistics_2024_25
+  manifest: manifest.yaml
+  vintage: '2024_25'
+  extracted_at: '2026-09-09'
+  extraction_method: XLSX whole-workbook used-range cell parse
+  parser: xlsx_used_range
+  artifact_year: 2025
+record_sets:
+- record_set_id: dfi_ni.public_transport.figure_3.fy2019
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_3.fy2019.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_3.fy2019
+  sheet_name: Fig3
+  period_type: fiscal_year
+  period: 2019
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: person
+  entity_role: translink_bus_passenger
+  domain: public_transport
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/ Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_journeys
+    label: Passenger journeys
+    ordinal: 0
+    column: B
+    source_column_id: passenger_journeys
+    concept: dfi_ni.translink_bus.passenger_journeys
+    source_concept: dfi_ni.translink_bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_4.fy2019
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_4.fy2019.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_4.fy2019
+  sheet_name: Fig4
+  period_type: fiscal_year
+  period: 2019
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: translink_bus_operator
+  domain: public_transport_finance
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_receipts
+    label: Passenger receipts
+    ordinal: 0
+    column: B
+    source_column_id: passenger_receipts
+    concept: dfi_ni.translink_bus.passenger_receipts
+    source_concept: dfi_ni.translink_bus.passenger_receipts
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_3.fy2020
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_3.fy2020.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_3.fy2020
+  sheet_name: Fig3
+  period_type: fiscal_year
+  period: 2020
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: person
+  entity_role: translink_bus_passenger
+  domain: public_transport
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/ Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_journeys
+    label: Passenger journeys
+    ordinal: 0
+    column: C
+    source_column_id: passenger_journeys
+    concept: dfi_ni.translink_bus.passenger_journeys
+    source_concept: dfi_ni.translink_bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_4.fy2020
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_4.fy2020.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_4.fy2020
+  sheet_name: Fig4
+  period_type: fiscal_year
+  period: 2020
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: translink_bus_operator
+  domain: public_transport_finance
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_receipts
+    label: Passenger receipts
+    ordinal: 0
+    column: C
+    source_column_id: passenger_receipts
+    concept: dfi_ni.translink_bus.passenger_receipts
+    source_concept: dfi_ni.translink_bus.passenger_receipts
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_3.fy2021
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_3.fy2021.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_3.fy2021
+  sheet_name: Fig3
+  period_type: fiscal_year
+  period: 2021
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: person
+  entity_role: translink_bus_passenger
+  domain: public_transport
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/ Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_journeys
+    label: Passenger journeys
+    ordinal: 0
+    column: D
+    source_column_id: passenger_journeys
+    concept: dfi_ni.translink_bus.passenger_journeys
+    source_concept: dfi_ni.translink_bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_4.fy2021
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_4.fy2021.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_4.fy2021
+  sheet_name: Fig4
+  period_type: fiscal_year
+  period: 2021
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: translink_bus_operator
+  domain: public_transport_finance
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_receipts
+    label: Passenger receipts
+    ordinal: 0
+    column: D
+    source_column_id: passenger_receipts
+    concept: dfi_ni.translink_bus.passenger_receipts
+    source_concept: dfi_ni.translink_bus.passenger_receipts
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_3.fy2022
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_3.fy2022.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_3.fy2022
+  sheet_name: Fig3
+  period_type: fiscal_year
+  period: 2022
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: person
+  entity_role: translink_bus_passenger
+  domain: public_transport
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/ Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_journeys
+    label: Passenger journeys
+    ordinal: 0
+    column: E
+    source_column_id: passenger_journeys
+    concept: dfi_ni.translink_bus.passenger_journeys
+    source_concept: dfi_ni.translink_bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_4.fy2022
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_4.fy2022.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_4.fy2022
+  sheet_name: Fig4
+  period_type: fiscal_year
+  period: 2022
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: translink_bus_operator
+  domain: public_transport_finance
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_receipts
+    label: Passenger receipts
+    ordinal: 0
+    column: E
+    source_column_id: passenger_receipts
+    concept: dfi_ni.translink_bus.passenger_receipts
+    source_concept: dfi_ni.translink_bus.passenger_receipts
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_3.fy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_3.fy2023.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_3.fy2023
+  sheet_name: Fig3
+  period_type: fiscal_year
+  period: 2023
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: person
+  entity_role: translink_bus_passenger
+  domain: public_transport
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/ Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_journeys
+    label: Passenger journeys
+    ordinal: 0
+    column: F
+    source_column_id: passenger_journeys
+    concept: dfi_ni.translink_bus.passenger_journeys
+    source_concept: dfi_ni.translink_bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_4.fy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_4.fy2023.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_4.fy2023
+  sheet_name: Fig4
+  period_type: fiscal_year
+  period: 2023
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: translink_bus_operator
+  domain: public_transport_finance
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_receipts
+    label: Passenger receipts
+    ordinal: 0
+    column: F
+    source_column_id: passenger_receipts
+    concept: dfi_ni.translink_bus.passenger_receipts
+    source_concept: dfi_ni.translink_bus.passenger_receipts
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_3.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_3.fy2024.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_3.fy2024
+  sheet_name: Fig3
+  period_type: fiscal_year
+  period: 2024
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: person
+  entity_role: translink_bus_passenger
+  domain: public_transport
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/ Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_journeys
+    label: Passenger journeys
+    ordinal: 0
+    column: G
+    source_column_id: passenger_journeys
+    concept: dfi_ni.translink_bus.passenger_journeys
+    source_concept: dfi_ni.translink_bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: dfi_ni.public_transport.figure_4.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: dfi_ni.public_transport.figure_4.fy2024.v1
+  source_record_id_prefix: dfi_ni.public_transport.figure_4.fy2024
+  sheet_name: Fig4
+  period_type: fiscal_year
+  period: 2024
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: translink_bus_operator
+  domain: public_transport_finance
+  groupby_dimension: dfi_ni.bus_service
+  rows:
+  - value_id: ulsterbus
+    label: Ulsterbus
+    ordinal: 0
+    row_number: 5
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Ulsterbus
+    filters:
+      service: ulsterbus
+    constraints:
+    - variable: service
+      operator: ==
+      value: ulsterbus
+      label: Service
+  - value_id: metro_glider
+    label: Metro / Glider
+    ordinal: 1
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Metro/Glider
+    filters:
+      service: metro_glider
+    constraints:
+    - variable: service
+      operator: ==
+      value: metro_glider
+      label: Service
+  measures:
+  - measure_id: passenger_receipts
+    label: Passenger receipts
+    ordinal: 0
+    column: G
+    source_column_id: passenger_receipts
+    concept: dfi_ni.translink_bus.passenger_receipts
+    source_concept: dfi_ni.translink_bus.passenger_receipts
+    concept_relation: source_label
+    concept_authority: dfi_ni
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_notes: Passenger receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000

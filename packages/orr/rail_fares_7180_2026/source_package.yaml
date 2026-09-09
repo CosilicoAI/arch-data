@@ -1,0 +1,631 @@
+schema_version: ledger.source_package.v1
+package_id: orr-rail-fares-7180-2026
+label: ORR regulated and unregulated rail fare indices, 2020 to 2026
+artifact:
+  source_name: orr
+  source_table: Table 7180 average change in fares by regulated and unregulated tickets
+  resource_package: db
+  resource_directory: data/orr/rail_fares_7180_2026
+  manifest: manifest.yaml
+  vintage: '2026'
+  extracted_at: '2026-09-09'
+  extraction_method: ODS whole-workbook used-range cell parse
+  parser: ods_used_range
+  artifact_year: 2026
+record_sets:
+- record_set_id: orr.rail_fares.table_7180.cy2020
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.rail_fares.table_7180.cy2020.v1
+  source_record_id_prefix: orr.rail_fares.table_7180.cy2020
+  sheet_name: 7180_Change_by_regulated_status
+  period_type: calendar_year
+  period: 2020
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: passenger_rail_market
+  domain: rail_fares
+  groupby_dimension: orr.fare_category
+  rows:
+  - value_id: regulated_standard
+    label: Standard class regulated fares
+    ordinal: 0
+    row_number: 22
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class regulated
+    filters:
+      fare_category: regulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: regulated_standard
+      label: Fare Category
+  - value_id: unregulated_standard
+    label: Standard class unregulated fares
+    ordinal: 1
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class unregulated
+    filters:
+      fare_category: unregulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: unregulated_standard
+      label: Fare Category
+  - value_id: all_standard
+    label: All standard class fares
+    ordinal: 2
+    row_number: 24
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: All standard class
+    filters:
+      fare_category: all_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_standard
+      label: Fare Category
+  - value_id: all_tickets
+    label: All tickets
+    ordinal: 3
+    row_number: 25
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: All tickets
+    filters:
+      fare_category: all_tickets
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_tickets
+      label: Fare Category
+  measures:
+  - measure_id: fare_index
+    label: Rail fare index (January 1995 = 100)
+    ordinal: 0
+    column: AB
+    source_column_id: fare_index
+    concept: orr.rail.fare_index
+    source_concept: orr.rail.fare_index
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
+    concept_evidence_notes: Rail fare index (January 1995 = 100)
+    unit: index_1995_100
+    aggregation: ratio
+    expected_cell_type: number
+- record_set_id: orr.rail_fares.table_7180.cy2021
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.rail_fares.table_7180.cy2021.v1
+  source_record_id_prefix: orr.rail_fares.table_7180.cy2021
+  sheet_name: 7180_Change_by_regulated_status
+  period_type: calendar_year
+  period: 2021
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: passenger_rail_market
+  domain: rail_fares
+  groupby_dimension: orr.fare_category
+  rows:
+  - value_id: regulated_standard
+    label: Standard class regulated fares
+    ordinal: 0
+    row_number: 22
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class regulated
+    filters:
+      fare_category: regulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: regulated_standard
+      label: Fare Category
+  - value_id: unregulated_standard
+    label: Standard class unregulated fares
+    ordinal: 1
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class unregulated
+    filters:
+      fare_category: unregulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: unregulated_standard
+      label: Fare Category
+  - value_id: all_standard
+    label: All standard class fares
+    ordinal: 2
+    row_number: 24
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: All standard class
+    filters:
+      fare_category: all_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_standard
+      label: Fare Category
+  - value_id: all_tickets
+    label: All tickets
+    ordinal: 3
+    row_number: 25
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: All tickets
+    filters:
+      fare_category: all_tickets
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_tickets
+      label: Fare Category
+  measures:
+  - measure_id: fare_index
+    label: Rail fare index (January 1995 = 100)
+    ordinal: 0
+    column: AC
+    source_column_id: fare_index
+    concept: orr.rail.fare_index
+    source_concept: orr.rail.fare_index
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
+    concept_evidence_notes: Rail fare index (January 1995 = 100)
+    unit: index_1995_100
+    aggregation: ratio
+    expected_cell_type: number
+- record_set_id: orr.rail_fares.table_7180.cy2022
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.rail_fares.table_7180.cy2022.v1
+  source_record_id_prefix: orr.rail_fares.table_7180.cy2022
+  sheet_name: 7180_Change_by_regulated_status
+  period_type: calendar_year
+  period: 2022
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: passenger_rail_market
+  domain: rail_fares
+  groupby_dimension: orr.fare_category
+  rows:
+  - value_id: regulated_standard
+    label: Standard class regulated fares
+    ordinal: 0
+    row_number: 22
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class regulated
+    filters:
+      fare_category: regulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: regulated_standard
+      label: Fare Category
+  - value_id: unregulated_standard
+    label: Standard class unregulated fares
+    ordinal: 1
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class unregulated
+    filters:
+      fare_category: unregulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: unregulated_standard
+      label: Fare Category
+  - value_id: all_standard
+    label: All standard class fares
+    ordinal: 2
+    row_number: 24
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: All standard class
+    filters:
+      fare_category: all_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_standard
+      label: Fare Category
+  - value_id: all_tickets
+    label: All tickets
+    ordinal: 3
+    row_number: 25
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: All tickets
+    filters:
+      fare_category: all_tickets
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_tickets
+      label: Fare Category
+  measures:
+  - measure_id: fare_index
+    label: Rail fare index (January 1995 = 100)
+    ordinal: 0
+    column: AD
+    source_column_id: fare_index
+    concept: orr.rail.fare_index
+    source_concept: orr.rail.fare_index
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
+    concept_evidence_notes: Rail fare index (January 1995 = 100)
+    unit: index_1995_100
+    aggregation: ratio
+    expected_cell_type: number
+- record_set_id: orr.rail_fares.table_7180.cy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.rail_fares.table_7180.cy2023.v1
+  source_record_id_prefix: orr.rail_fares.table_7180.cy2023
+  sheet_name: 7180_Change_by_regulated_status
+  period_type: calendar_year
+  period: 2023
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: passenger_rail_market
+  domain: rail_fares
+  groupby_dimension: orr.fare_category
+  rows:
+  - value_id: regulated_standard
+    label: Standard class regulated fares
+    ordinal: 0
+    row_number: 22
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class regulated
+    filters:
+      fare_category: regulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: regulated_standard
+      label: Fare Category
+  - value_id: unregulated_standard
+    label: Standard class unregulated fares
+    ordinal: 1
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class unregulated
+    filters:
+      fare_category: unregulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: unregulated_standard
+      label: Fare Category
+  - value_id: all_standard
+    label: All standard class fares
+    ordinal: 2
+    row_number: 24
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: All standard class
+    filters:
+      fare_category: all_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_standard
+      label: Fare Category
+  - value_id: all_tickets
+    label: All tickets
+    ordinal: 3
+    row_number: 25
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: All tickets
+    filters:
+      fare_category: all_tickets
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_tickets
+      label: Fare Category
+  measures:
+  - measure_id: fare_index
+    label: Rail fare index (January 1995 = 100)
+    ordinal: 0
+    column: AE
+    source_column_id: fare_index
+    concept: orr.rail.fare_index
+    source_concept: orr.rail.fare_index
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
+    concept_evidence_notes: Rail fare index (January 1995 = 100)
+    unit: index_1995_100
+    aggregation: ratio
+    expected_cell_type: number
+- record_set_id: orr.rail_fares.table_7180.cy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.rail_fares.table_7180.cy2024.v1
+  source_record_id_prefix: orr.rail_fares.table_7180.cy2024
+  sheet_name: 7180_Change_by_regulated_status
+  period_type: calendar_year
+  period: 2024
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: passenger_rail_market
+  domain: rail_fares
+  groupby_dimension: orr.fare_category
+  rows:
+  - value_id: regulated_standard
+    label: Standard class regulated fares
+    ordinal: 0
+    row_number: 22
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class regulated
+    filters:
+      fare_category: regulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: regulated_standard
+      label: Fare Category
+  - value_id: unregulated_standard
+    label: Standard class unregulated fares
+    ordinal: 1
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class unregulated
+    filters:
+      fare_category: unregulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: unregulated_standard
+      label: Fare Category
+  - value_id: all_standard
+    label: All standard class fares
+    ordinal: 2
+    row_number: 24
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: All standard class
+    filters:
+      fare_category: all_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_standard
+      label: Fare Category
+  - value_id: all_tickets
+    label: All tickets
+    ordinal: 3
+    row_number: 25
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: All tickets
+    filters:
+      fare_category: all_tickets
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_tickets
+      label: Fare Category
+  measures:
+  - measure_id: fare_index
+    label: Rail fare index (January 1995 = 100)
+    ordinal: 0
+    column: AF
+    source_column_id: fare_index
+    concept: orr.rail.fare_index
+    source_concept: orr.rail.fare_index
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
+    concept_evidence_notes: Rail fare index (January 1995 = 100)
+    unit: index_1995_100
+    aggregation: ratio
+    expected_cell_type: number
+- record_set_id: orr.rail_fares.table_7180.cy2025
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.rail_fares.table_7180.cy2025.v1
+  source_record_id_prefix: orr.rail_fares.table_7180.cy2025
+  sheet_name: 7180_Change_by_regulated_status
+  period_type: calendar_year
+  period: 2025
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: passenger_rail_market
+  domain: rail_fares
+  groupby_dimension: orr.fare_category
+  rows:
+  - value_id: regulated_standard
+    label: Standard class regulated fares
+    ordinal: 0
+    row_number: 22
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class regulated
+    filters:
+      fare_category: regulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: regulated_standard
+      label: Fare Category
+  - value_id: unregulated_standard
+    label: Standard class unregulated fares
+    ordinal: 1
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class unregulated
+    filters:
+      fare_category: unregulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: unregulated_standard
+      label: Fare Category
+  - value_id: all_standard
+    label: All standard class fares
+    ordinal: 2
+    row_number: 24
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: All standard class
+    filters:
+      fare_category: all_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_standard
+      label: Fare Category
+  - value_id: all_tickets
+    label: All tickets
+    ordinal: 3
+    row_number: 25
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: All tickets
+    filters:
+      fare_category: all_tickets
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_tickets
+      label: Fare Category
+  measures:
+  - measure_id: fare_index
+    label: Rail fare index (January 1995 = 100)
+    ordinal: 0
+    column: AG
+    source_column_id: fare_index
+    concept: orr.rail.fare_index
+    source_concept: orr.rail.fare_index
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
+    concept_evidence_notes: Rail fare index (January 1995 = 100)
+    unit: index_1995_100
+    aggregation: ratio
+    expected_cell_type: number
+- record_set_id: orr.rail_fares.table_7180.cy2026
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.rail_fares.table_7180.cy2026.v1
+  source_record_id_prefix: orr.rail_fares.table_7180.cy2026
+  sheet_name: 7180_Change_by_regulated_status
+  period_type: calendar_year
+  period: 2026
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: passenger_rail_market
+  domain: rail_fares
+  groupby_dimension: orr.fare_category
+  rows:
+  - value_id: regulated_standard
+    label: Standard class regulated fares
+    ordinal: 0
+    row_number: 22
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class regulated
+    filters:
+      fare_category: regulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: regulated_standard
+      label: Fare Category
+  - value_id: unregulated_standard
+    label: Standard class unregulated fares
+    ordinal: 1
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Standard class unregulated
+    filters:
+      fare_category: unregulated_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: unregulated_standard
+      label: Fare Category
+  - value_id: all_standard
+    label: All standard class fares
+    ordinal: 2
+    row_number: 24
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: All standard class
+    filters:
+      fare_category: all_standard
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_standard
+      label: Fare Category
+  - value_id: all_tickets
+    label: All tickets
+    ordinal: 3
+    row_number: 25
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: All tickets
+    filters:
+      fare_category: all_tickets
+    constraints:
+    - variable: fare_category
+      operator: ==
+      value: all_tickets
+      label: Fare Category
+  measures:
+  - measure_id: fare_index
+    label: Rail fare index (January 1995 = 100)
+    ordinal: 0
+    column: AH
+    source_column_id: fare_index
+    concept: orr.rail.fare_index
+    source_concept: orr.rail.fare_index
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
+    concept_evidence_notes: Rail fare index (January 1995 = 100)
+    unit: index_1995_100
+    aggregation: ratio
+    expected_cell_type: number
