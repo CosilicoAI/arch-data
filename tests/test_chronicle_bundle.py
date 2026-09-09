@@ -130,8 +130,8 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "entity_count": 12,
         "error_count": 0,
         "fact_count": 196389,
-        "geography_count": 12539,
-        "period_count": 269,
+        "geography_count": 12540,
+        "period_count": 272,
         "semantic_duplicate_key_count": 177,
         "skipped_source_count": 10,
         "source_count": 49,
@@ -881,6 +881,47 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         key = f"month:{year}-{month:02d}"
         expected_period_counts[key] = expected_period_counts.get(key, 0) + 1
         year, month = (year + 1, 1) if month == 12 else (year, month + 1)
+    for year, count in {
+        2020: 19,
+        2021: 19,
+        2022: 19,
+        2023: 265,
+        2024: 38,
+        2025: 33,
+        2026: 7,
+    }.items():
+        expected_period_counts[f"calendar_year:{year}"] += count
+    for year, count in {
+        2015: 7,
+        2016: 7,
+        2017: 7,
+        2018: 7,
+        2019: 11,
+        2020: 13,
+        2021: 13,
+        2022: 21,
+        2023: 28,
+        2024: 22,
+        2025: 9,
+        2026: 7,
+        2027: 7,
+        2028: 7,
+    }.items():
+        expected_period_counts[f"fiscal_year:{year}"] += count
+    for year in range(2020, 2023):
+        for month in range(1, 13):
+            key = f"month:{year}-{month:02d}"
+            expected_period_counts[key] = expected_period_counts.get(key, 0) + 2
+    issue_254_monthly_increments = {
+        2023: (14, 12, 12, 12, 14, 12, 14, 12, 12, 14, 12, 12),
+        2024: (14, 12, 12, 14, 12, 12, 14, 12, 14, 12, 12, 14),
+        2025: (12, 12, 14, 12, 12, 14, 12, 12, 14, 12, 12, 14),
+        2026: (12, 12, 14, 12, 12, 14, 10, 12, 2),
+    }
+    for year, increments in issue_254_monthly_increments.items():
+        for month, count in enumerate(increments, start=1):
+            key = f"month:{year}-{month:02d}"
+            expected_period_counts[key] = expected_period_counts.get(key, 0) + count
     assert coverage["counts"]["by_period"] == expected_period_counts
     assert coverage["counts"]["by_geography"]["country:BE"] == 4888
     assert coverage["counts"]["by_geography"]["country:DE"] == 36
@@ -894,20 +935,20 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     assert (
         coverage["counts"]["by_geography"]["congressional_district:5001700US0601"] == 56
     )
-    assert coverage["counts"]["by_geography"]["country:K02000001"] == 6373
+    assert coverage["counts"]["by_geography"]["country:K02000001"] == 7163
     assert coverage["counts"]["by_geography"]["country:E92000001"] == 1437
-    assert coverage["counts"]["by_geography"]["country:K03000001"] == 4676
-    assert len(coverage["counts"]["by_geography"]) == 12539
+    assert coverage["counts"]["by_geography"]["country:K03000001"] == 4815
+    assert len(coverage["counts"]["by_geography"]) == 12540
     assert coverage["counts"]["by_entity"] == {
         "benefit_unit": 4680,
-        "dwelling": 27041,
+        "dwelling": 27273,
         "family": 1299,
         "firm": 1439,
-        "government": 1350,
-        "household": 40708,
-        "institutional_sector": 261,
+        "government": 1473,
+        "household": 40805,
+        "institutional_sector": 988,
         "pension_plan": 2,
-        "person": 63282,
+        "person": 63299,
         "return": 14600,
         "social_protection_scheme": 36,
         "tax_unit": 40495,
