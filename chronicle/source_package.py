@@ -188,6 +188,12 @@ SOURCE_PACKAGE_ALIASES = {
     "dwp-uc-households-family-type-payment-indicator-april-december-2025": Path(
         "dwp/uc_households_family_type_payment_indicator_april_december_2025"
     ),
+    "dwp-uc-households-family-type-payment-indicator-child-entitlement-april-2023-may-2026": Path(
+        "dwp/uc_households_family_type_payment_indicator_child_entitlement_april_2023_may_2026"
+    ),
+    "dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026": Path(
+        "dwp/uc_households_children_payment_indicator_child_entitlement_april_2023_may_2026"
+    ),
     "dwp-uc-payment-distribution-april-december-2025": Path(
         "dwp/uc_payment_distribution_april_december_2025"
     ),

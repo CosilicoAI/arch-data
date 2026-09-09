@@ -28,6 +28,15 @@
 # one category (no council/housing-association split), and "Shared Equity
 # (e.g. LIFT or Help-to-Buy)" has no E&W counterpart, so it carries its own
 # shared_equity bucket rather than being forced into one.
+#
+# chronicle#253: the same 32 all-occupied-households cells are filed a second time
+# as nrs.census2022.uv404.council.households on the local-authority households spec
+# uk.local_geography.households.by_local_authority.v1 (domain household_count,
+# geography groupby, the publisher's 'All occupied households' row label kept as the
+# evidenced filter), mirroring the NRS constituency leg, so a consumer resolves all
+# 361 UK local authorities from one spec. Same artifact, same rows, same values;
+# the household_count domain keeps its fact and semantic keys distinct from the
+# tenure record set above.
 schema_version: ledger.source_package.v1
 package_id: nrs-census2022-uv404-tenure-council-area
 label: 'Scotland''s Census 2022 UV404: households by tenure, council areas'
@@ -61,6 +70,553 @@ record_sets:
   entity_role: occupied_household
   domain: housing_tenure
   groupby_dimension: tenure
+  shared_filters:
+    household_tenure: 'All occupied households'
+  shared_constraints:
+  - variable: household_tenure
+    operator: ==
+    value: 'All occupied households'
+    label: publisher tenure category
+  measures:
+  - measure_id: households
+    label: Occupied households
+    ordinal: 0
+    column: D
+    source_column_id: Count
+    concept: nrs.census2022_households
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    expected_column_header_row: 1
+    expected_column_header: Count
+  rows:
+  - value_id: s12000005
+    label: 'Clackmannanshire'
+    ordinal: 0
+    row_number: 2
+    expected_row_header_column: B
+    expected_row_header: 'Clackmannanshire'
+    geography_id: S12000005
+    geography_level: local_authority
+    geography_name: 'Clackmannanshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 2
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000006
+    label: 'Dumfries and Galloway'
+    ordinal: 1
+    row_number: 13
+    expected_row_header_column: B
+    expected_row_header: 'Dumfries and Galloway'
+    geography_id: S12000006
+    geography_level: local_authority
+    geography_name: 'Dumfries and Galloway'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 13
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000008
+    label: 'East Ayrshire'
+    ordinal: 2
+    row_number: 24
+    expected_row_header_column: B
+    expected_row_header: 'East Ayrshire'
+    geography_id: S12000008
+    geography_level: local_authority
+    geography_name: 'East Ayrshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 24
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000010
+    label: 'East Lothian'
+    ordinal: 3
+    row_number: 35
+    expected_row_header_column: B
+    expected_row_header: 'East Lothian'
+    geography_id: S12000010
+    geography_level: local_authority
+    geography_name: 'East Lothian'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 35
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000011
+    label: 'East Renfrewshire'
+    ordinal: 4
+    row_number: 46
+    expected_row_header_column: B
+    expected_row_header: 'East Renfrewshire'
+    geography_id: S12000011
+    geography_level: local_authority
+    geography_name: 'East Renfrewshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 46
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000013
+    label: 'Na h-Eileanan Siar'
+    ordinal: 5
+    row_number: 57
+    expected_row_header_column: B
+    expected_row_header: 'Na h-Eileanan Siar'
+    geography_id: S12000013
+    geography_level: local_authority
+    geography_name: 'Na h-Eileanan Siar'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 57
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000014
+    label: 'Falkirk'
+    ordinal: 6
+    row_number: 68
+    expected_row_header_column: B
+    expected_row_header: 'Falkirk'
+    geography_id: S12000014
+    geography_level: local_authority
+    geography_name: 'Falkirk'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 68
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000017
+    label: 'Highland'
+    ordinal: 7
+    row_number: 79
+    expected_row_header_column: B
+    expected_row_header: 'Highland'
+    geography_id: S12000017
+    geography_level: local_authority
+    geography_name: 'Highland'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 79
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000018
+    label: 'Inverclyde'
+    ordinal: 8
+    row_number: 90
+    expected_row_header_column: B
+    expected_row_header: 'Inverclyde'
+    geography_id: S12000018
+    geography_level: local_authority
+    geography_name: 'Inverclyde'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 90
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000019
+    label: 'Midlothian'
+    ordinal: 9
+    row_number: 101
+    expected_row_header_column: B
+    expected_row_header: 'Midlothian'
+    geography_id: S12000019
+    geography_level: local_authority
+    geography_name: 'Midlothian'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 101
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000020
+    label: 'Moray'
+    ordinal: 10
+    row_number: 112
+    expected_row_header_column: B
+    expected_row_header: 'Moray'
+    geography_id: S12000020
+    geography_level: local_authority
+    geography_name: 'Moray'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 112
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000021
+    label: 'North Ayrshire'
+    ordinal: 11
+    row_number: 123
+    expected_row_header_column: B
+    expected_row_header: 'North Ayrshire'
+    geography_id: S12000021
+    geography_level: local_authority
+    geography_name: 'North Ayrshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 123
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000023
+    label: 'Orkney Islands'
+    ordinal: 12
+    row_number: 134
+    expected_row_header_column: B
+    expected_row_header: 'Orkney Islands'
+    geography_id: S12000023
+    geography_level: local_authority
+    geography_name: 'Orkney Islands'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 134
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000026
+    label: 'Scottish Borders'
+    ordinal: 13
+    row_number: 145
+    expected_row_header_column: B
+    expected_row_header: 'Scottish Borders'
+    geography_id: S12000026
+    geography_level: local_authority
+    geography_name: 'Scottish Borders'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 145
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000027
+    label: 'Shetland Islands'
+    ordinal: 14
+    row_number: 156
+    expected_row_header_column: B
+    expected_row_header: 'Shetland Islands'
+    geography_id: S12000027
+    geography_level: local_authority
+    geography_name: 'Shetland Islands'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 156
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000028
+    label: 'South Ayrshire'
+    ordinal: 15
+    row_number: 167
+    expected_row_header_column: B
+    expected_row_header: 'South Ayrshire'
+    geography_id: S12000028
+    geography_level: local_authority
+    geography_name: 'South Ayrshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 167
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000029
+    label: 'South Lanarkshire'
+    ordinal: 16
+    row_number: 178
+    expected_row_header_column: B
+    expected_row_header: 'South Lanarkshire'
+    geography_id: S12000029
+    geography_level: local_authority
+    geography_name: 'South Lanarkshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 178
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000030
+    label: 'Stirling'
+    ordinal: 17
+    row_number: 189
+    expected_row_header_column: B
+    expected_row_header: 'Stirling'
+    geography_id: S12000030
+    geography_level: local_authority
+    geography_name: 'Stirling'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 189
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000033
+    label: 'Aberdeen City'
+    ordinal: 18
+    row_number: 200
+    expected_row_header_column: B
+    expected_row_header: 'Aberdeen City'
+    geography_id: S12000033
+    geography_level: local_authority
+    geography_name: 'Aberdeen City'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 200
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000034
+    label: 'Aberdeenshire'
+    ordinal: 19
+    row_number: 211
+    expected_row_header_column: B
+    expected_row_header: 'Aberdeenshire'
+    geography_id: S12000034
+    geography_level: local_authority
+    geography_name: 'Aberdeenshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 211
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000035
+    label: 'Argyll and Bute'
+    ordinal: 20
+    row_number: 222
+    expected_row_header_column: B
+    expected_row_header: 'Argyll and Bute'
+    geography_id: S12000035
+    geography_level: local_authority
+    geography_name: 'Argyll and Bute'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 222
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000036
+    label: 'City of Edinburgh'
+    ordinal: 21
+    row_number: 233
+    expected_row_header_column: B
+    expected_row_header: 'City of Edinburgh'
+    geography_id: S12000036
+    geography_level: local_authority
+    geography_name: 'City of Edinburgh'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 233
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000038
+    label: 'Renfrewshire'
+    ordinal: 22
+    row_number: 244
+    expected_row_header_column: B
+    expected_row_header: 'Renfrewshire'
+    geography_id: S12000038
+    geography_level: local_authority
+    geography_name: 'Renfrewshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 244
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000039
+    label: 'West Dunbartonshire'
+    ordinal: 23
+    row_number: 255
+    expected_row_header_column: B
+    expected_row_header: 'West Dunbartonshire'
+    geography_id: S12000039
+    geography_level: local_authority
+    geography_name: 'West Dunbartonshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 255
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000040
+    label: 'West Lothian'
+    ordinal: 24
+    row_number: 266
+    expected_row_header_column: B
+    expected_row_header: 'West Lothian'
+    geography_id: S12000040
+    geography_level: local_authority
+    geography_name: 'West Lothian'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 266
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000041
+    label: 'Angus'
+    ordinal: 25
+    row_number: 277
+    expected_row_header_column: B
+    expected_row_header: 'Angus'
+    geography_id: S12000041
+    geography_level: local_authority
+    geography_name: 'Angus'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 277
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000042
+    label: 'Dundee City'
+    ordinal: 26
+    row_number: 288
+    expected_row_header_column: B
+    expected_row_header: 'Dundee City'
+    geography_id: S12000042
+    geography_level: local_authority
+    geography_name: 'Dundee City'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 288
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000045
+    label: 'East Dunbartonshire'
+    ordinal: 27
+    row_number: 299
+    expected_row_header_column: B
+    expected_row_header: 'East Dunbartonshire'
+    geography_id: S12000045
+    geography_level: local_authority
+    geography_name: 'East Dunbartonshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 299
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000047
+    label: 'Fife'
+    ordinal: 28
+    row_number: 310
+    expected_row_header_column: B
+    expected_row_header: 'Fife'
+    geography_id: S12000047
+    geography_level: local_authority
+    geography_name: 'Fife'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 310
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000048
+    label: 'Perth and Kinross'
+    ordinal: 29
+    row_number: 321
+    expected_row_header_column: B
+    expected_row_header: 'Perth and Kinross'
+    geography_id: S12000048
+    geography_level: local_authority
+    geography_name: 'Perth and Kinross'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 321
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000049
+    label: 'Glasgow City'
+    ordinal: 30
+    row_number: 332
+    expected_row_header_column: B
+    expected_row_header: 'Glasgow City'
+    geography_id: S12000049
+    geography_level: local_authority
+    geography_name: 'Glasgow City'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 332
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+  - value_id: s12000050
+    label: 'North Lanarkshire'
+    ordinal: 31
+    row_number: 343
+    expected_row_header_column: B
+    expected_row_header: 'North Lanarkshire'
+    geography_id: S12000050
+    geography_level: local_authority
+    geography_name: 'North Lanarkshire'
+    geography_vintage: ca_2019
+    table_record_kind: total
+    guard_cells:
+    - column: C
+      row: 343
+      expected_value: 'All occupied households'
+      label: publisher tenure category
+- record_set_id: nrs.census2022.uv404.council.households
+  provenance_class: census
+  record_set_spec_id: uk.local_geography.households.by_local_authority.v1
+  source_record_id_prefix: nrs.census2022.uv404.council.households
+  sheet_name: census2022_uv404_tenure_households_council_area.csv
+  period_type: calendar_year
+  period: 2022
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: gss_2022
+  entity: household
+  entity_role: occupied_household
+  domain: household_count
+  groupby_dimension: geography
   shared_filters:
     household_tenure: 'All occupied households'
   shared_constraints:
