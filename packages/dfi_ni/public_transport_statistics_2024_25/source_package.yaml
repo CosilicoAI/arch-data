@@ -3,7 +3,7 @@ package_id: dfi-ni-public-transport-statistics-2024-25
 label: DfI Northern Ireland Translink bus journeys and passenger receipts, 2019-20 to 2024-25
 artifact:
   source_name: dfi_ni
-  source_table: Northern Ireland Transport Statistics 2024-25 figures 3 and 4
+  source_table: Public Transport Statistics Northern Ireland 2024-25 figures 3 and 4
   resource_package: db
   resource_directory: data/dfi_ni/public_transport_statistics_2024_25
   manifest: manifest.yaml
@@ -21,6 +21,12 @@ record_sets:
   sheet_name: Fig3
   period_type: fiscal_year
   period: 2019
+  period_coverage:
+    start_date: '2019-04-01'
+    end_date: '2020-03-31'
+    basis: fiscal
+    source_period_label: '2019-20'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -68,7 +74,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_journeys
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger journeys
     unit: count
     aggregation: sum
@@ -82,6 +88,12 @@ record_sets:
   sheet_name: Fig4
   period_type: fiscal_year
   period: 2019
+  period_coverage:
+    start_date: '2019-04-01'
+    end_date: '2020-03-31'
+    basis: fiscal
+    source_period_label: '2019-20'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -129,7 +141,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_receipts
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger receipts
     unit: gbp
     aggregation: sum
@@ -143,6 +155,12 @@ record_sets:
   sheet_name: Fig3
   period_type: fiscal_year
   period: 2020
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2021-03-31'
+    basis: fiscal
+    source_period_label: '2020-21'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -190,7 +208,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_journeys
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger journeys
     unit: count
     aggregation: sum
@@ -204,6 +222,12 @@ record_sets:
   sheet_name: Fig4
   period_type: fiscal_year
   period: 2020
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2021-03-31'
+    basis: fiscal
+    source_period_label: '2020-21'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -251,7 +275,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_receipts
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger receipts
     unit: gbp
     aggregation: sum
@@ -265,6 +289,12 @@ record_sets:
   sheet_name: Fig3
   period_type: fiscal_year
   period: 2021
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2022-03-31'
+    basis: fiscal
+    source_period_label: '2021-22'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -312,7 +342,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_journeys
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger journeys
     unit: count
     aggregation: sum
@@ -326,6 +356,12 @@ record_sets:
   sheet_name: Fig4
   period_type: fiscal_year
   period: 2021
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2022-03-31'
+    basis: fiscal
+    source_period_label: '2021-22'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -373,7 +409,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_receipts
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger receipts
     unit: gbp
     aggregation: sum
@@ -387,6 +423,12 @@ record_sets:
   sheet_name: Fig3
   period_type: fiscal_year
   period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -434,7 +476,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_journeys
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger journeys
     unit: count
     aggregation: sum
@@ -448,6 +490,12 @@ record_sets:
   sheet_name: Fig4
   period_type: fiscal_year
   period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -495,7 +543,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_receipts
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger receipts
     unit: gbp
     aggregation: sum
@@ -509,6 +557,12 @@ record_sets:
   sheet_name: Fig3
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -556,7 +610,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_journeys
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger journeys
     unit: count
     aggregation: sum
@@ -570,6 +624,12 @@ record_sets:
   sheet_name: Fig4
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -617,7 +677,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_receipts
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger receipts
     unit: gbp
     aggregation: sum
@@ -631,6 +691,12 @@ record_sets:
   sheet_name: Fig3
   period_type: fiscal_year
   period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -678,7 +744,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_journeys
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger journeys
     unit: count
     aggregation: sum
@@ -692,6 +758,12 @@ record_sets:
   sheet_name: Fig4
   period_type: fiscal_year
   period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: N92000002
   geography_level: country
   geography_name: Northern Ireland
@@ -739,7 +811,7 @@ record_sets:
     source_concept: dfi_ni.translink_bus.passenger_receipts
     concept_relation: source_label
     concept_authority: dfi_ni
-    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
+    concept_evidence_url: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
     concept_evidence_notes: Passenger receipts
     unit: gbp
     aggregation: sum

@@ -21,6 +21,12 @@ record_sets:
   sheet_name: Table 2.2a
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -61,7 +67,7 @@ record_sets:
     source_concept: scotgov.bus.passenger_journeys
     concept_relation: source_label
     concept_authority: scotgov
-    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2023/2-bus-and-coach-travel/
+    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2024/chapter-2-bus-and-coach-travel/
     concept_evidence_notes: Passenger journeys
     unit: count
     aggregation: sum
@@ -75,6 +81,11 @@ record_sets:
   sheet_name: table 2.5
   period_type: calendar_year
   period: 2024
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -101,7 +112,7 @@ record_sets:
     source_concept: scotgov.bus.local_fare_index
     concept_relation: source_label
     concept_authority: scotgov
-    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2023/2-bus-and-coach-travel/
+    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2024/chapter-2-bus-and-coach-travel/
     concept_evidence_notes: Local bus fare index
     unit: index_2005_100
     aggregation: ratio
@@ -114,6 +125,12 @@ record_sets:
   sheet_name: Table 2.8
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -140,7 +157,7 @@ record_sets:
     source_concept: scotgov.bus.passenger_revenue
     concept_relation: source_label
     concept_authority: scotgov
-    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2023/2-bus-and-coach-travel/
+    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2024/chapter-2-bus-and-coach-travel/
     concept_evidence_notes: Passenger revenue at current prices
     unit: gbp
     aggregation: sum
@@ -154,6 +171,12 @@ record_sets:
   sheet_name: Table 2.9
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -170,6 +193,10 @@ record_sets:
     table_record_kind: detail
     expected_row_header_column: B
     expected_row_header: Local Authority bus support [Note 37]
+    guard_cells:
+    - column: C
+      expected_value: Scotland [Note 46]
+      label: published geography split
     filters:
       funding_component: local_authority_bus_support
     constraints:
@@ -184,6 +211,10 @@ record_sets:
     table_record_kind: detail
     expected_row_header_column: B
     expected_row_header: Concessionary fares
+    guard_cells:
+    - column: C
+      expected_value: Scotland (bus) [Note 38] [Note 50]
+      label: published geography and mode split
     filters:
       funding_component: concessionary_fares
     constraints:
@@ -198,6 +229,10 @@ record_sets:
     table_record_kind: detail
     expected_row_header_column: B
     expected_row_header: Network Support Grant  [Note 42]
+    guard_cells:
+    - column: C
+      expected_value: Scotland [Note 48]  [Note49]
+      label: published geography split
     filters:
       funding_component: network_support_grant
     constraints:
@@ -212,6 +247,10 @@ record_sets:
     table_record_kind: total
     expected_row_header_column: B
     expected_row_header: All government support [Note 44]
+    guard_cells:
+    - column: C
+      expected_value: Scotland (bus) [Note 45]
+      label: published geography and mode split
     filters:
       funding_component: all_government_support
     constraints:
@@ -229,7 +268,7 @@ record_sets:
     source_concept: scotgov.bus.government_support
     concept_relation: source_label
     concept_authority: scotgov
-    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2023/2-bus-and-coach-travel/
+    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2024/chapter-2-bus-and-coach-travel/
     concept_evidence_notes: Government support
     unit: gbp
     aggregation: sum

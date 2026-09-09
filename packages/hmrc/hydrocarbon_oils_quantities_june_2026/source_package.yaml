@@ -21,6 +21,12 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: fiscal_year
   period: 2020
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2021-03-31'
+    basis: fiscal
+    source_period_label: '2020-21'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -76,6 +82,12 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: fiscal_year
   period: 2021
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2022-03-31'
+    basis: fiscal
+    source_period_label: '2021-22'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -131,6 +143,12 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: fiscal_year
   period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -186,6 +204,12 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -241,6 +265,12 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: fiscal_year
   period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -296,6 +326,12 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: fiscal_year
   period: 2025
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2026-03-31'
+    basis: fiscal
+    source_period_label: '2025-26'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -351,6 +387,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-01
+  period_coverage:
+    start_date: '2020-01-01'
+    end_date: '2020-01-31'
+    basis: calendar
+    source_period_label: '2020-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -406,6 +447,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-02
+  period_coverage:
+    start_date: '2020-02-01'
+    end_date: '2020-02-29'
+    basis: calendar
+    source_period_label: '2020-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -461,6 +507,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-03
+  period_coverage:
+    start_date: '2020-03-01'
+    end_date: '2020-03-31'
+    basis: calendar
+    source_period_label: '2020-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -516,6 +567,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-04
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2020-04-30'
+    basis: calendar
+    source_period_label: '2020-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -571,6 +627,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-05
+  period_coverage:
+    start_date: '2020-05-01'
+    end_date: '2020-05-31'
+    basis: calendar
+    source_period_label: '2020-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -626,6 +687,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-06
+  period_coverage:
+    start_date: '2020-06-01'
+    end_date: '2020-06-30'
+    basis: calendar
+    source_period_label: '2020-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -681,6 +747,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-07
+  period_coverage:
+    start_date: '2020-07-01'
+    end_date: '2020-07-31'
+    basis: calendar
+    source_period_label: '2020-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -736,6 +807,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-08
+  period_coverage:
+    start_date: '2020-08-01'
+    end_date: '2020-08-31'
+    basis: calendar
+    source_period_label: '2020-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -791,6 +867,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-09
+  period_coverage:
+    start_date: '2020-09-01'
+    end_date: '2020-09-30'
+    basis: calendar
+    source_period_label: '2020-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -846,6 +927,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-10
+  period_coverage:
+    start_date: '2020-10-01'
+    end_date: '2020-10-31'
+    basis: calendar
+    source_period_label: '2020-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -901,6 +987,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-11
+  period_coverage:
+    start_date: '2020-11-01'
+    end_date: '2020-11-30'
+    basis: calendar
+    source_period_label: '2020-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -956,6 +1047,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2020-12
+  period_coverage:
+    start_date: '2020-12-01'
+    end_date: '2020-12-31'
+    basis: calendar
+    source_period_label: '2020-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1011,6 +1107,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-01
+  period_coverage:
+    start_date: '2021-01-01'
+    end_date: '2021-01-31'
+    basis: calendar
+    source_period_label: '2021-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1066,6 +1167,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-02
+  period_coverage:
+    start_date: '2021-02-01'
+    end_date: '2021-02-28'
+    basis: calendar
+    source_period_label: '2021-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1121,6 +1227,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-03
+  period_coverage:
+    start_date: '2021-03-01'
+    end_date: '2021-03-31'
+    basis: calendar
+    source_period_label: '2021-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1176,6 +1287,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-04
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2021-04-30'
+    basis: calendar
+    source_period_label: '2021-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1231,6 +1347,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-05
+  period_coverage:
+    start_date: '2021-05-01'
+    end_date: '2021-05-31'
+    basis: calendar
+    source_period_label: '2021-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1286,6 +1407,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-06
+  period_coverage:
+    start_date: '2021-06-01'
+    end_date: '2021-06-30'
+    basis: calendar
+    source_period_label: '2021-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1341,6 +1467,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-07
+  period_coverage:
+    start_date: '2021-07-01'
+    end_date: '2021-07-31'
+    basis: calendar
+    source_period_label: '2021-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1396,6 +1527,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-08
+  period_coverage:
+    start_date: '2021-08-01'
+    end_date: '2021-08-31'
+    basis: calendar
+    source_period_label: '2021-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1451,6 +1587,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-09
+  period_coverage:
+    start_date: '2021-09-01'
+    end_date: '2021-09-30'
+    basis: calendar
+    source_period_label: '2021-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1506,6 +1647,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-10
+  period_coverage:
+    start_date: '2021-10-01'
+    end_date: '2021-10-31'
+    basis: calendar
+    source_period_label: '2021-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1561,6 +1707,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-11
+  period_coverage:
+    start_date: '2021-11-01'
+    end_date: '2021-11-30'
+    basis: calendar
+    source_period_label: '2021-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1616,6 +1767,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2021-12
+  period_coverage:
+    start_date: '2021-12-01'
+    end_date: '2021-12-31'
+    basis: calendar
+    source_period_label: '2021-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1671,6 +1827,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-01
+  period_coverage:
+    start_date: '2022-01-01'
+    end_date: '2022-01-31'
+    basis: calendar
+    source_period_label: '2022-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1726,6 +1887,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-02
+  period_coverage:
+    start_date: '2022-02-01'
+    end_date: '2022-02-28'
+    basis: calendar
+    source_period_label: '2022-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1781,6 +1947,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-03
+  period_coverage:
+    start_date: '2022-03-01'
+    end_date: '2022-03-31'
+    basis: calendar
+    source_period_label: '2022-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1836,6 +2007,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-04
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2022-04-30'
+    basis: calendar
+    source_period_label: '2022-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1891,6 +2067,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-05
+  period_coverage:
+    start_date: '2022-05-01'
+    end_date: '2022-05-31'
+    basis: calendar
+    source_period_label: '2022-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1946,6 +2127,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-06
+  period_coverage:
+    start_date: '2022-06-01'
+    end_date: '2022-06-30'
+    basis: calendar
+    source_period_label: '2022-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2001,6 +2187,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-07
+  period_coverage:
+    start_date: '2022-07-01'
+    end_date: '2022-07-31'
+    basis: calendar
+    source_period_label: '2022-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2056,6 +2247,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-08
+  period_coverage:
+    start_date: '2022-08-01'
+    end_date: '2022-08-31'
+    basis: calendar
+    source_period_label: '2022-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2111,6 +2307,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-09
+  period_coverage:
+    start_date: '2022-09-01'
+    end_date: '2022-09-30'
+    basis: calendar
+    source_period_label: '2022-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2166,6 +2367,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-10
+  period_coverage:
+    start_date: '2022-10-01'
+    end_date: '2022-10-31'
+    basis: calendar
+    source_period_label: '2022-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2221,6 +2427,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-11
+  period_coverage:
+    start_date: '2022-11-01'
+    end_date: '2022-11-30'
+    basis: calendar
+    source_period_label: '2022-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2276,6 +2487,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2022-12
+  period_coverage:
+    start_date: '2022-12-01'
+    end_date: '2022-12-31'
+    basis: calendar
+    source_period_label: '2022-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2331,6 +2547,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-01
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-01-31'
+    basis: calendar
+    source_period_label: '2023-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2386,6 +2607,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-02
+  period_coverage:
+    start_date: '2023-02-01'
+    end_date: '2023-02-28'
+    basis: calendar
+    source_period_label: '2023-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2441,6 +2667,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-03
+  period_coverage:
+    start_date: '2023-03-01'
+    end_date: '2023-03-31'
+    basis: calendar
+    source_period_label: '2023-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2496,6 +2727,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-04
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2023-04-30'
+    basis: calendar
+    source_period_label: '2023-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2551,6 +2787,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-05
+  period_coverage:
+    start_date: '2023-05-01'
+    end_date: '2023-05-31'
+    basis: calendar
+    source_period_label: '2023-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2606,6 +2847,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-06
+  period_coverage:
+    start_date: '2023-06-01'
+    end_date: '2023-06-30'
+    basis: calendar
+    source_period_label: '2023-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2661,6 +2907,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-07
+  period_coverage:
+    start_date: '2023-07-01'
+    end_date: '2023-07-31'
+    basis: calendar
+    source_period_label: '2023-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2716,6 +2967,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-08
+  period_coverage:
+    start_date: '2023-08-01'
+    end_date: '2023-08-31'
+    basis: calendar
+    source_period_label: '2023-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2771,6 +3027,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-09
+  period_coverage:
+    start_date: '2023-09-01'
+    end_date: '2023-09-30'
+    basis: calendar
+    source_period_label: '2023-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2826,6 +3087,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-10
+  period_coverage:
+    start_date: '2023-10-01'
+    end_date: '2023-10-31'
+    basis: calendar
+    source_period_label: '2023-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2881,6 +3147,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-11
+  period_coverage:
+    start_date: '2023-11-01'
+    end_date: '2023-11-30'
+    basis: calendar
+    source_period_label: '2023-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2936,6 +3207,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2023-12
+  period_coverage:
+    start_date: '2023-12-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2991,6 +3267,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-01
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-01-31'
+    basis: calendar
+    source_period_label: '2024-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3046,6 +3327,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-02
+  period_coverage:
+    start_date: '2024-02-01'
+    end_date: '2024-02-29'
+    basis: calendar
+    source_period_label: '2024-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3101,6 +3387,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-03
+  period_coverage:
+    start_date: '2024-03-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: '2024-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3156,6 +3447,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-04
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2024-04-30'
+    basis: calendar
+    source_period_label: '2024-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3211,6 +3507,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-05
+  period_coverage:
+    start_date: '2024-05-01'
+    end_date: '2024-05-31'
+    basis: calendar
+    source_period_label: '2024-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3266,6 +3567,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-06
+  period_coverage:
+    start_date: '2024-06-01'
+    end_date: '2024-06-30'
+    basis: calendar
+    source_period_label: '2024-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3321,6 +3627,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-07
+  period_coverage:
+    start_date: '2024-07-01'
+    end_date: '2024-07-31'
+    basis: calendar
+    source_period_label: '2024-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3376,6 +3687,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-08
+  period_coverage:
+    start_date: '2024-08-01'
+    end_date: '2024-08-31'
+    basis: calendar
+    source_period_label: '2024-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3431,6 +3747,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-09
+  period_coverage:
+    start_date: '2024-09-01'
+    end_date: '2024-09-30'
+    basis: calendar
+    source_period_label: '2024-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3486,6 +3807,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-10
+  period_coverage:
+    start_date: '2024-10-01'
+    end_date: '2024-10-31'
+    basis: calendar
+    source_period_label: '2024-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3541,6 +3867,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-11
+  period_coverage:
+    start_date: '2024-11-01'
+    end_date: '2024-11-30'
+    basis: calendar
+    source_period_label: '2024-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3596,6 +3927,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2024-12
+  period_coverage:
+    start_date: '2024-12-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3651,6 +3987,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-01
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-01-31'
+    basis: calendar
+    source_period_label: '2025-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3706,6 +4047,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-02
+  period_coverage:
+    start_date: '2025-02-01'
+    end_date: '2025-02-28'
+    basis: calendar
+    source_period_label: '2025-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3761,6 +4107,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-03
+  period_coverage:
+    start_date: '2025-03-01'
+    end_date: '2025-03-31'
+    basis: calendar
+    source_period_label: '2025-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3816,6 +4167,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-04
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2025-04-30'
+    basis: calendar
+    source_period_label: '2025-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3871,6 +4227,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-05
+  period_coverage:
+    start_date: '2025-05-01'
+    end_date: '2025-05-31'
+    basis: calendar
+    source_period_label: '2025-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3926,6 +4287,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-06
+  period_coverage:
+    start_date: '2025-06-01'
+    end_date: '2025-06-30'
+    basis: calendar
+    source_period_label: '2025-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3981,6 +4347,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-07
+  period_coverage:
+    start_date: '2025-07-01'
+    end_date: '2025-07-31'
+    basis: calendar
+    source_period_label: '2025-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4036,6 +4407,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-08
+  period_coverage:
+    start_date: '2025-08-01'
+    end_date: '2025-08-31'
+    basis: calendar
+    source_period_label: '2025-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4091,6 +4467,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-09
+  period_coverage:
+    start_date: '2025-09-01'
+    end_date: '2025-09-30'
+    basis: calendar
+    source_period_label: '2025-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4146,6 +4527,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-10
+  period_coverage:
+    start_date: '2025-10-01'
+    end_date: '2025-10-31'
+    basis: calendar
+    source_period_label: '2025-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4201,6 +4587,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-11
+  period_coverage:
+    start_date: '2025-11-01'
+    end_date: '2025-11-30'
+    basis: calendar
+    source_period_label: '2025-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4256,6 +4647,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2025-12
+  period_coverage:
+    start_date: '2025-12-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4311,6 +4707,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2026-01
+  period_coverage:
+    start_date: '2026-01-01'
+    end_date: '2026-01-31'
+    basis: calendar
+    source_period_label: '2026-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4366,6 +4767,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2026-02
+  period_coverage:
+    start_date: '2026-02-01'
+    end_date: '2026-02-28'
+    basis: calendar
+    source_period_label: '2026-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4421,6 +4827,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2026-03
+  period_coverage:
+    start_date: '2026-03-01'
+    end_date: '2026-03-31'
+    basis: calendar
+    source_period_label: '2026-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4476,6 +4887,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2026-04
+  period_coverage:
+    start_date: '2026-04-01'
+    end_date: '2026-04-30'
+    basis: calendar
+    source_period_label: '2026-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4531,6 +4947,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2026-05
+  period_coverage:
+    start_date: '2026-05-01'
+    end_date: '2026-05-31'
+    basis: calendar
+    source_period_label: '2026-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4586,6 +5007,11 @@ record_sets:
   sheet_name: Table_2_quantities
   period_type: month
   period: 2026-06
+  period_coverage:
+    start_date: '2026-06-01'
+    end_date: '2026-06-30'
+    basis: calendar
+    source_period_label: '2026-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom

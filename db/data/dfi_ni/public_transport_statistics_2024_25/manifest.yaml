@@ -1,8 +1,8 @@
 source_id: dfi_ni
 package_id: dfi-ni-public-transport-statistics-2024-25
 dataset: dfi_ni_dfi-ni-public-transport-statistics-2024-25
-source_page: https://www.infrastructure-ni.gov.uk/publications/northern-ireland-transport-statistics-2024-2025
-table: Northern Ireland Transport Statistics 2024-25 figures 3 and 4
+source_page: https://www.infrastructure-ni.gov.uk/publications/public-transport-statistics-northern-ireland-2024-25
+table: Public Transport Statistics Northern Ireland 2024-25 figures 3 and 4
 files:
   2025:
     filename: public-transport-statistics-2024-25.xlsx

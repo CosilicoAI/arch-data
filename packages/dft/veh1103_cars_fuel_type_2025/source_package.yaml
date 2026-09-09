@@ -21,6 +21,12 @@ record_sets:
   sheet_name: VEH1103a_RoadUsing
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-12-31'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023 Q4 (end December)'
+    notes: Licensed-car stock at the end of December, not an annual flow.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -37,6 +43,10 @@ record_sets:
     table_record_kind: detail
     expected_row_header_column: D
     expected_row_header: Cars
+    guard_cells:
+    - column: B
+      expected_value: 2023 Q4 (end December)
+      label: end-of-period snapshot label
     filters:
       body_type: cars
     constraints:
@@ -317,6 +327,12 @@ record_sets:
   sheet_name: VEH1103a_RoadUsing
   period_type: calendar_year
   period: 2024
+  period_coverage:
+    start_date: '2024-12-31'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024 Q4 (end December)'
+    notes: Licensed-car stock at the end of December, not an annual flow.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -333,6 +349,10 @@ record_sets:
     table_record_kind: detail
     expected_row_header_column: D
     expected_row_header: Cars
+    guard_cells:
+    - column: B
+      expected_value: 2024 Q4 (end December)
+      label: end-of-period snapshot label
     filters:
       body_type: cars
     constraints:
@@ -613,6 +633,12 @@ record_sets:
   sheet_name: VEH1103a_RoadUsing
   period_type: calendar_year
   period: 2025
+  period_coverage:
+    start_date: '2025-12-31'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025 Q4 (end December)'
+    notes: Licensed-car stock at the end of December, not an annual flow.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -629,6 +655,10 @@ record_sets:
     table_record_kind: detail
     expected_row_header_column: D
     expected_row_header: Cars
+    guard_cells:
+    - column: B
+      expected_value: 2025 Q4 (end December)
+      label: end-of-period snapshot label
     filters:
       body_type: cars
     constraints:

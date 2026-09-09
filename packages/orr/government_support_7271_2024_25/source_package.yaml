@@ -1,3 +1,6 @@
+# Table 7271 decomposes net operational funding by government source and rail
+# recipient. Its "Total support" row matches Table 7270 operational funding,
+# not Table 7270 column N, which also includes enhancements and miscellaneous.
 schema_version: ledger.source_package.v1
 package_id: orr-government-support-7271-2024-25
 label: ORR government support to rail by source and recipient, 2015-16 to 2024-25
@@ -21,6 +24,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2015
+  period_coverage:
+    start_date: '2015-04-01'
+    end_date: '2016-03-31'
+    basis: fiscal
+    source_period_label: '2015-16'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -116,7 +125,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: C
     source_column_id: support
@@ -125,7 +134,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -138,6 +147,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2016
+  period_coverage:
+    start_date: '2016-04-01'
+    end_date: '2017-03-31'
+    basis: fiscal
+    source_period_label: '2016-17'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -233,7 +248,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: D
     source_column_id: support
@@ -242,7 +257,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -255,6 +270,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2017
+  period_coverage:
+    start_date: '2017-04-01'
+    end_date: '2018-03-31'
+    basis: fiscal
+    source_period_label: '2017-18'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -350,7 +371,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: E
     source_column_id: support
@@ -359,7 +380,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -372,6 +393,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2018
+  period_coverage:
+    start_date: '2018-04-01'
+    end_date: '2019-03-31'
+    basis: fiscal
+    source_period_label: '2018-19'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -467,7 +494,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: F
     source_column_id: support
@@ -476,7 +503,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -489,6 +516,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2019
+  period_coverage:
+    start_date: '2019-04-01'
+    end_date: '2020-03-31'
+    basis: fiscal
+    source_period_label: '2019-20'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -584,7 +617,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: G
     source_column_id: support
@@ -593,7 +626,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -606,6 +639,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2020
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2021-03-31'
+    basis: fiscal
+    source_period_label: '2020-21'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -701,7 +740,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: H
     source_column_id: support
@@ -710,7 +749,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -723,6 +762,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2021
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2022-03-31'
+    basis: fiscal
+    source_period_label: '2021-22'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -818,7 +863,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: I
     source_column_id: support
@@ -827,7 +872,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -840,6 +885,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -935,7 +986,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: J
     source_column_id: support
@@ -944,7 +995,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -957,6 +1008,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -1052,7 +1109,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: K
     source_column_id: support
@@ -1061,7 +1118,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -1074,6 +1131,12 @@ record_sets:
   sheet_name: 7271_govt_support_by_recipient
   period_type: fiscal_year
   period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -1169,7 +1232,7 @@ record_sets:
       label: Funding Source
   measures:
   - measure_id: support
-    label: Government support to the rail industry
+    label: Net operational government support by source and recipient
     ordinal: 0
     column: L
     source_column_id: support
@@ -1178,7 +1241,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Government support to the rail industry
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number

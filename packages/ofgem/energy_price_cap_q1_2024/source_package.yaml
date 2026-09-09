@@ -1,7 +1,7 @@
-# Ofgem's Q1 2024 announcement publishes four GB-average direct-debit rates.
-# The accompanying official workbook contains benchmark annual caps, not the
-# requested region-by-payment-method unit-rate matrix. This package therefore
-# carries only the four explicit published rates and derives no regional rates.
+# Ofgem's Q1 2024 announcement publishes four GB-average direct-debit rates and
+# links separate regional rates for October 2023 to March 2024. This package
+# deliberately preserves only the four narrative GB averages for Q1 2024; it
+# does not claim regional coverage or the later Q2 2026 consumer-price vintage.
 schema_version: ledger.source_package.v1
 package_id: ofgem-energy-price-cap-q1-2024
 label: Ofgem average direct-debit unit rates and standing charges, January to March 2024
@@ -24,8 +24,13 @@ record_sets:
   record_set_spec_id: ofgem.price_cap.q1_2024.electricity_unit_rate.v1
   source_record_id_prefix: ofgem.price_cap.q1_2024.electricity_unit_rate
   sheet_name: document_numbers
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q1'
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2024'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -40,8 +45,12 @@ record_sets:
     ordinal: 0
     row_number: 11
     table_record_kind: detail
-    expected_row_header_column: D
-    expected_row_header: '28.62'
+    expected_row_header_column: C
+    expected_row_header: 'If you are on a standard variable tariff (default tariff) and pay for your electricity by Direct Debit, you will pay on average 28.62 pence per kilowatt hour (kWh). The daily standing charge is 53.35 pence per day. This is based on the average across England, Scotland and Wales and includes VAT.'
+    guard_cells:
+    - column: D
+      expected_value: '28.62'
+      label: published numeric token
     filters:
       quarter: Q1
       payment_method: direct_debit
@@ -80,8 +89,13 @@ record_sets:
   record_set_spec_id: ofgem.price_cap.q1_2024.electricity_standing_charge.v1
   source_record_id_prefix: ofgem.price_cap.q1_2024.electricity_standing_charge
   sheet_name: document_numbers
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q1'
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2024'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -96,8 +110,12 @@ record_sets:
     ordinal: 0
     row_number: 12
     table_record_kind: detail
-    expected_row_header_column: D
-    expected_row_header: '53.35'
+    expected_row_header_column: C
+    expected_row_header: 'If you are on a standard variable tariff (default tariff) and pay for your electricity by Direct Debit, you will pay on average 28.62 pence per kilowatt hour (kWh). The daily standing charge is 53.35 pence per day. This is based on the average across England, Scotland and Wales and includes VAT.'
+    guard_cells:
+    - column: D
+      expected_value: '53.35'
+      label: published numeric token
     filters:
       quarter: Q1
       payment_method: direct_debit
@@ -136,8 +154,13 @@ record_sets:
   record_set_spec_id: ofgem.price_cap.q1_2024.gas_unit_rate.v1
   source_record_id_prefix: ofgem.price_cap.q1_2024.gas_unit_rate
   sheet_name: document_numbers
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q1'
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2024'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -152,8 +175,12 @@ record_sets:
     ordinal: 0
     row_number: 13
     table_record_kind: detail
-    expected_row_header_column: D
-    expected_row_header: '7.42'
+    expected_row_header_column: C
+    expected_row_header: 'If you are on a standard variable tariff (default tariff) and pay for your gas by Direct Debit, you will pay on average 7.42 pence per kilowatt hour (kWh). The daily standard charge is 29.60 pence per day. This is based on the average across England, Scotland and Wales and includes VAT.'
+    guard_cells:
+    - column: D
+      expected_value: '7.42'
+      label: published numeric token
     filters:
       quarter: Q1
       payment_method: direct_debit
@@ -192,8 +219,13 @@ record_sets:
   record_set_spec_id: ofgem.price_cap.q1_2024.gas_standing_charge.v1
   source_record_id_prefix: ofgem.price_cap.q1_2024.gas_standing_charge
   sheet_name: document_numbers
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q1'
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2024'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -208,8 +240,12 @@ record_sets:
     ordinal: 0
     row_number: 14
     table_record_kind: detail
-    expected_row_header_column: D
-    expected_row_header: '29.60'
+    expected_row_header_column: C
+    expected_row_header: 'If you are on a standard variable tariff (default tariff) and pay for your gas by Direct Debit, you will pay on average 7.42 pence per kilowatt hour (kWh). The daily standard charge is 29.60 pence per day. This is based on the average across England, Scotland and Wales and includes VAT.'
+    guard_cells:
+    - column: D
+      expected_value: '29.60'
+      label: published numeric token
     filters:
       quarter: Q1
       payment_method: direct_debit

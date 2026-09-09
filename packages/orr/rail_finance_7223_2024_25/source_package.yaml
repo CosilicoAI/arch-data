@@ -21,6 +21,12 @@ record_sets:
   sheet_name: 7223_finance_franchised
   period_type: fiscal_year
   period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain

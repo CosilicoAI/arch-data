@@ -26,6 +26,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: W92000004
   geography_level: country
   geography_name: Wales
@@ -40,15 +46,15 @@ record_sets:
     ordinal: 0
     row_number: 20
     table_record_kind: total
-    expected_row_header_column: D
-    expected_row_header: 71.7 million
+    expected_row_header_column: C
+    expected_row_header: &welsh_bus_context A total of 71.7 million passenger journeys were undertaken
+      on local buses in Wales during 2024 to 2025. This compares to 71.4 million journeys in 2023 to
+      2024 and 61.2 million journeys in 2022 to 2023. However, this is still lower than the 92.4 million
+      passenger journeys in 2019 to 2020, prior to the COVID-19 pandemic.
     guard_cells:
-    - column: C
-      expected_value: A total of 71.7 million passenger journeys were undertaken on local buses in Wales
-        during 2024 to 2025. This compares to 71.4 million journeys in 2023 to 2024 and 61.2 million journeys
-        in 2022 to 2023. However, this is still lower than the 92.4 million passenger journeys in 2019
-        to 2020, prior to the COVID-19 pandemic.
-      label: publisher paragraph
+    - column: D
+      expected_value: 71.7 million
+      label: published journey total token
   measures:
   - measure_id: passenger_journeys
     label: Local bus passenger journeys
@@ -72,6 +78,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: W92000004
   geography_level: country
   geography_name: Wales
@@ -86,15 +98,12 @@ record_sets:
     ordinal: 0
     row_number: 22
     table_record_kind: total
-    expected_row_header_column: D
-    expected_row_header: 71.4 million
+    expected_row_header_column: C
+    expected_row_header: *welsh_bus_context
     guard_cells:
-    - column: C
-      expected_value: A total of 71.7 million passenger journeys were undertaken on local buses in Wales
-        during 2024 to 2025. This compares to 71.4 million journeys in 2023 to 2024 and 61.2 million journeys
-        in 2022 to 2023. However, this is still lower than the 92.4 million passenger journeys in 2019
-        to 2020, prior to the COVID-19 pandemic.
-      label: publisher paragraph
+    - column: D
+      expected_value: 71.4 million
+      label: published journey total token
   measures:
   - measure_id: passenger_journeys
     label: Local bus passenger journeys
@@ -118,6 +127,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: W92000004
   geography_level: country
   geography_name: Wales
@@ -132,15 +147,12 @@ record_sets:
     ordinal: 0
     row_number: 25
     table_record_kind: total
-    expected_row_header_column: D
-    expected_row_header: 61.2 million
+    expected_row_header_column: C
+    expected_row_header: *welsh_bus_context
     guard_cells:
-    - column: C
-      expected_value: A total of 71.7 million passenger journeys were undertaken on local buses in Wales
-        during 2024 to 2025. This compares to 71.4 million journeys in 2023 to 2024 and 61.2 million journeys
-        in 2022 to 2023. However, this is still lower than the 92.4 million passenger journeys in 2019
-        to 2020, prior to the COVID-19 pandemic.
-      label: publisher paragraph
+    - column: D
+      expected_value: 61.2 million
+      label: published journey total token
   measures:
   - measure_id: passenger_journeys
     label: Local bus passenger journeys

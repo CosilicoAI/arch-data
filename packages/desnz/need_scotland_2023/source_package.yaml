@@ -1,7 +1,6 @@
 # The Scotland workbook has property, tenure and income tables but no
-# sub-national region table. The regional record sets below use only the
-# workbook's explicit Scotland all-dwellings cells; no internal-region values
-# are imputed.
+# sub-national region table. The all-dwellings record sets below preserve the
+# workbook's explicit Scotland totals; no internal-region values are imputed.
 schema_version: ledger.source_package.v1
 package_id: desnz-need-scotland-2023
 label: DESNZ NEED 2023 domestic gas and electricity consumption by household characteristics, Scotland
@@ -25,6 +24,11 @@ record_sets:
   sheet_name: Table_3
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -104,6 +108,11 @@ record_sets:
   sheet_name: Table_3
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -183,6 +192,11 @@ record_sets:
   sheet_name: Table_3
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -262,6 +276,11 @@ record_sets:
   sheet_name: Table_3
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -341,6 +360,11 @@ record_sets:
   sheet_name: Table_3
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -420,6 +444,11 @@ record_sets:
   sheet_name: Table_3
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -499,6 +528,11 @@ record_sets:
   sheet_name: Table_4
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -578,6 +612,11 @@ record_sets:
   sheet_name: Table_4
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -657,6 +696,11 @@ record_sets:
   sheet_name: Table_4
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -736,6 +780,11 @@ record_sets:
   sheet_name: Table_4
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -815,6 +864,11 @@ record_sets:
   sheet_name: Table_4
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -894,6 +948,11 @@ record_sets:
   sheet_name: Table_4
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -973,6 +1032,11 @@ record_sets:
   sheet_name: Table_7
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1052,6 +1116,11 @@ record_sets:
   sheet_name: Table_7
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1131,6 +1200,11 @@ record_sets:
   sheet_name: Table_7
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1210,6 +1284,11 @@ record_sets:
   sheet_name: Table_7
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1289,6 +1368,11 @@ record_sets:
   sheet_name: Table_8
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1368,6 +1452,11 @@ record_sets:
   sheet_name: Table_8
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1447,6 +1536,11 @@ record_sets:
   sheet_name: Table_8
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1526,6 +1620,11 @@ record_sets:
   sheet_name: Table_8
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1605,6 +1704,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1684,6 +1788,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1763,6 +1872,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1842,6 +1956,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -1921,6 +2040,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2000,6 +2124,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2079,6 +2208,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2158,6 +2292,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2237,6 +2376,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2316,6 +2460,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2395,6 +2544,11 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2474,6 +2628,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2553,6 +2712,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2632,6 +2796,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2711,6 +2880,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2790,6 +2964,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2869,6 +3048,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -2948,6 +3132,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -3027,6 +3216,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -3106,6 +3300,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -3185,6 +3384,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -3264,6 +3468,11 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -3317,156 +3526,6 @@ record_sets:
     label: Median electricity consumption
     ordinal: 1
     column: AO
-    source_column_id: median_consumption
-    concept: desnz.need.household_electricity_consumption
-    source_concept: desnz.need.household_electricity_consumption
-    concept_relation: source_label
-    concept_authority: desnz
-    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
-    concept_evidence_notes: Median electricity consumption
-    unit: kwh
-    aggregation: median
-    expected_cell_type: number
-    filters:
-      statistic: median
-    constraints:
-    - variable: statistic
-      operator: ==
-      value: median
-      label: Statistic
-  survey_instrument: National Energy Efficiency Data-Framework (NEED)
-- record_set_id: desnz.need_2023.table_3.region.scotland
-  provenance_class: survey_aggregate
-  assertion: observation
-  record_set_spec_id: desnz.need_2023.table_3.region.scotland.v1
-  source_record_id_prefix: desnz.need_2023.table_3.region.scotland
-  sheet_name: Table_3
-  period_type: calendar_year
-  period: 2023
-  geography_id: S92000003
-  geography_level: country
-  geography_name: Scotland
-  geography_vintage: current
-  entity: dwelling
-  entity_role: domestic_dwelling
-  domain: domestic_energy_consumption
-  groupby_dimension: desnz.need.region
-  rows:
-  - value_id: scotland
-    label: Scotland
-    ordinal: 0
-    row_number: 20
-    table_record_kind: total
-    expected_row_header_column: J
-    expected_row_header: 2023
-    filters:
-      region: scotland
-    constraints:
-    - variable: region
-      operator: ==
-      value: scotland
-      label: Region
-  measures:
-  - measure_id: mean_consumption
-    label: Mean gas consumption
-    ordinal: 0
-    column: Q
-    source_column_id: mean_consumption
-    concept: desnz.need.household_gas_consumption
-    source_concept: desnz.need.household_gas_consumption
-    concept_relation: source_label
-    concept_authority: desnz
-    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
-    concept_evidence_notes: Mean gas consumption
-    unit: kwh
-    aggregation: mean
-    expected_cell_type: number
-    filters:
-      statistic: mean
-    constraints:
-    - variable: statistic
-      operator: ==
-      value: mean
-      label: Statistic
-  - measure_id: median_consumption
-    label: Median gas consumption
-    ordinal: 1
-    column: Z
-    source_column_id: median_consumption
-    concept: desnz.need.household_gas_consumption
-    source_concept: desnz.need.household_gas_consumption
-    concept_relation: source_label
-    concept_authority: desnz
-    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
-    concept_evidence_notes: Median gas consumption
-    unit: kwh
-    aggregation: median
-    expected_cell_type: number
-    filters:
-      statistic: median
-    constraints:
-    - variable: statistic
-      operator: ==
-      value: median
-      label: Statistic
-  survey_instrument: National Energy Efficiency Data-Framework (NEED)
-- record_set_id: desnz.need_2023.table_4.region.scotland
-  provenance_class: survey_aggregate
-  assertion: observation
-  record_set_spec_id: desnz.need_2023.table_4.region.scotland.v1
-  source_record_id_prefix: desnz.need_2023.table_4.region.scotland
-  sheet_name: Table_4
-  period_type: calendar_year
-  period: 2023
-  geography_id: S92000003
-  geography_level: country
-  geography_name: Scotland
-  geography_vintage: current
-  entity: dwelling
-  entity_role: domestic_dwelling
-  domain: domestic_energy_consumption
-  groupby_dimension: desnz.need.region
-  rows:
-  - value_id: scotland
-    label: Scotland
-    ordinal: 0
-    row_number: 20
-    table_record_kind: total
-    expected_row_header_column: J
-    expected_row_header: 2023
-    filters:
-      region: scotland
-    constraints:
-    - variable: region
-      operator: ==
-      value: scotland
-      label: Region
-  measures:
-  - measure_id: mean_consumption
-    label: Mean electricity consumption
-    ordinal: 0
-    column: Q
-    source_column_id: mean_consumption
-    concept: desnz.need.household_electricity_consumption
-    source_concept: desnz.need.household_electricity_consumption
-    concept_relation: source_label
-    concept_authority: desnz
-    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
-    concept_evidence_notes: Mean electricity consumption
-    unit: kwh
-    aggregation: mean
-    expected_cell_type: number
-    filters:
-      statistic: mean
-    constraints:
-    - variable: statistic
-      operator: ==
-      value: mean
-      label: Statistic
-  - measure_id: median_consumption
-    label: Median electricity consumption
-    ordinal: 1
-    column: Z
     source_column_id: median_consumption
     concept: desnz.need.household_electricity_consumption
     source_concept: desnz.need.household_electricity_consumption

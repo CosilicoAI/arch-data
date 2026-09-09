@@ -22,8 +22,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -101,8 +106,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -180,8 +190,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -259,8 +274,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -338,8 +358,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -417,8 +442,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -496,8 +526,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -575,8 +610,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -654,8 +694,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -733,8 +778,13 @@ record_sets:
   sheet_name: Table_5
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -812,8 +862,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -891,8 +946,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -970,8 +1030,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1049,8 +1114,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1128,8 +1198,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1207,8 +1282,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1286,8 +1366,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1365,8 +1450,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1444,8 +1534,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1523,8 +1618,13 @@ record_sets:
   sheet_name: Table_6
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1602,8 +1702,13 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1681,8 +1786,13 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1760,8 +1870,13 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1839,8 +1954,13 @@ record_sets:
   sheet_name: Table_9
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1918,8 +2038,13 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -1997,8 +2122,13 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2076,8 +2206,13 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2155,8 +2290,13 @@ record_sets:
   sheet_name: Table_10
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2234,8 +2374,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2313,8 +2458,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2392,8 +2542,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2471,8 +2626,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2550,8 +2710,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2629,8 +2794,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2708,8 +2878,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2787,8 +2962,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2866,8 +3046,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -2945,8 +3130,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3024,8 +3214,13 @@ record_sets:
   sheet_name: Table_11
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3103,8 +3298,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3182,8 +3382,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3261,8 +3466,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3340,8 +3550,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3419,8 +3634,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3498,8 +3718,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3577,8 +3802,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3656,8 +3886,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3735,8 +3970,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3814,8 +4054,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3893,8 +4138,13 @@ record_sets:
   sheet_name: Table_12
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -3972,8 +4222,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4051,8 +4306,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4130,8 +4390,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4209,8 +4474,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4288,8 +4558,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4367,8 +4642,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4446,8 +4726,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4525,8 +4810,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4604,8 +4894,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4683,8 +4978,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4762,8 +5062,13 @@ record_sets:
   sheet_name: Table_15
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4841,8 +5146,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4920,8 +5230,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -4999,8 +5314,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -5078,8 +5398,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -5157,8 +5482,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -5236,8 +5566,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -5315,8 +5650,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -5394,8 +5734,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -5473,8 +5818,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -5552,8 +5902,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling
@@ -5631,8 +5986,13 @@ record_sets:
   sheet_name: Table_16
   period_type: calendar_year
   period: 2023
-  geography_id: desnz:england_and_wales
-  geography_level: statistical_scope
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K04000001
+  geography_level: country
   geography_name: England and Wales
   geography_vintage: current
   entity: dwelling

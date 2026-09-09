@@ -25,6 +25,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -39,8 +45,8 @@ record_sets:
     ordinal: 0
     row_number: 34
     table_record_kind: total
-    expected_row_header_column: E
-    expected_row_header: 25.1
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
     filters:
       vehicle_category: total
     constraints:
@@ -53,8 +59,8 @@ record_sets:
     ordinal: 1
     row_number: 41
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 24.8
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
     filters:
       vehicle_category: road_fuels
     constraints:
@@ -67,8 +73,8 @@ record_sets:
     ordinal: 2
     row_number: 48
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 0.3
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
     filters:
       vehicle_category: other_fuels
     constraints:
@@ -81,8 +87,8 @@ record_sets:
     ordinal: 3
     row_number: 55
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 14.4
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
     filters:
       vehicle_category: cars
     constraints:
@@ -95,8 +101,8 @@ record_sets:
     ordinal: 4
     row_number: 62
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.3
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
     filters:
       vehicle_category: light_goods_vehicles
     constraints:
@@ -109,8 +115,8 @@ record_sets:
     ordinal: 5
     row_number: 69
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.3
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
     filters:
       vehicle_category: heavy_goods_vehicles
     constraints:
@@ -123,8 +129,8 @@ record_sets:
     ordinal: 6
     row_number: 76
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 1.8
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
     filters:
       vehicle_category: other_petrol_diesel
     constraints:
@@ -156,6 +162,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -170,8 +182,8 @@ record_sets:
     ordinal: 0
     row_number: 35
     table_record_kind: total
-    expected_row_header_column: E
-    expected_row_header: 24.6
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
     filters:
       vehicle_category: total
     constraints:
@@ -184,8 +196,8 @@ record_sets:
     ordinal: 1
     row_number: 42
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 24.4
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
     filters:
       vehicle_category: road_fuels
     constraints:
@@ -198,8 +210,8 @@ record_sets:
     ordinal: 2
     row_number: 49
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 0.2
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
     filters:
       vehicle_category: other_fuels
     constraints:
@@ -212,8 +224,8 @@ record_sets:
     ordinal: 3
     row_number: 56
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 14.2
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
     filters:
       vehicle_category: cars
     constraints:
@@ -226,8 +238,8 @@ record_sets:
     ordinal: 4
     row_number: 63
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.4
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
     filters:
       vehicle_category: light_goods_vehicles
     constraints:
@@ -240,8 +252,8 @@ record_sets:
     ordinal: 5
     row_number: 70
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.2
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
     filters:
       vehicle_category: heavy_goods_vehicles
     constraints:
@@ -254,8 +266,8 @@ record_sets:
     ordinal: 6
     row_number: 77
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 1.7
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
     filters:
       vehicle_category: other_petrol_diesel
     constraints:
@@ -287,6 +299,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -301,8 +319,8 @@ record_sets:
     ordinal: 0
     row_number: 36
     table_record_kind: total
-    expected_row_header_column: E
-    expected_row_header: 24.7
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
     filters:
       vehicle_category: total
     constraints:
@@ -315,8 +333,8 @@ record_sets:
     ordinal: 1
     row_number: 43
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 24.5
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
     filters:
       vehicle_category: road_fuels
     constraints:
@@ -329,8 +347,8 @@ record_sets:
     ordinal: 2
     row_number: 50
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 0.2
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
     filters:
       vehicle_category: other_fuels
     constraints:
@@ -343,8 +361,8 @@ record_sets:
     ordinal: 3
     row_number: 57
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 14.4
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
     filters:
       vehicle_category: cars
     constraints:
@@ -357,8 +375,8 @@ record_sets:
     ordinal: 4
     row_number: 64
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.5
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
     filters:
       vehicle_category: light_goods_vehicles
     constraints:
@@ -371,8 +389,8 @@ record_sets:
     ordinal: 5
     row_number: 71
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.2
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
     filters:
       vehicle_category: heavy_goods_vehicles
     constraints:
@@ -385,8 +403,8 @@ record_sets:
     ordinal: 6
     row_number: 78
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 1.4
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
     filters:
       vehicle_category: other_petrol_diesel
     constraints:
@@ -418,6 +436,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2025
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2026-03-31'
+    basis: fiscal
+    source_period_label: '2025-26'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -432,8 +456,8 @@ record_sets:
     ordinal: 0
     row_number: 37
     table_record_kind: total
-    expected_row_header_column: E
-    expected_row_header: 27.3
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
     filters:
       vehicle_category: total
     constraints:
@@ -446,8 +470,8 @@ record_sets:
     ordinal: 1
     row_number: 44
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 27.0
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
     filters:
       vehicle_category: road_fuels
     constraints:
@@ -460,8 +484,8 @@ record_sets:
     ordinal: 2
     row_number: 51
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 0.2
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
     filters:
       vehicle_category: other_fuels
     constraints:
@@ -474,8 +498,8 @@ record_sets:
     ordinal: 3
     row_number: 58
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 15.9
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
     filters:
       vehicle_category: cars
     constraints:
@@ -488,8 +512,8 @@ record_sets:
     ordinal: 4
     row_number: 65
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 5.1
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
     filters:
       vehicle_category: light_goods_vehicles
     constraints:
@@ -502,8 +526,8 @@ record_sets:
     ordinal: 5
     row_number: 72
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.6
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
     filters:
       vehicle_category: heavy_goods_vehicles
     constraints:
@@ -516,8 +540,8 @@ record_sets:
     ordinal: 6
     row_number: 79
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 1.5
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
     filters:
       vehicle_category: other_petrol_diesel
     constraints:
@@ -549,6 +573,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2026
+  period_coverage:
+    start_date: '2026-04-01'
+    end_date: '2027-03-31'
+    basis: fiscal
+    source_period_label: '2026-27'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -563,8 +593,8 @@ record_sets:
     ordinal: 0
     row_number: 38
     table_record_kind: total
-    expected_row_header_column: E
-    expected_row_header: 27.6
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
     filters:
       vehicle_category: total
     constraints:
@@ -577,8 +607,8 @@ record_sets:
     ordinal: 1
     row_number: 45
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 27.4
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
     filters:
       vehicle_category: road_fuels
     constraints:
@@ -591,8 +621,8 @@ record_sets:
     ordinal: 2
     row_number: 52
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 0.3
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
     filters:
       vehicle_category: other_fuels
     constraints:
@@ -605,8 +635,8 @@ record_sets:
     ordinal: 3
     row_number: 59
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 16.0
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
     filters:
       vehicle_category: cars
     constraints:
@@ -619,8 +649,8 @@ record_sets:
     ordinal: 4
     row_number: 66
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 5.2
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
     filters:
       vehicle_category: light_goods_vehicles
     constraints:
@@ -633,8 +663,8 @@ record_sets:
     ordinal: 5
     row_number: 73
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.6
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
     filters:
       vehicle_category: heavy_goods_vehicles
     constraints:
@@ -647,8 +677,8 @@ record_sets:
     ordinal: 6
     row_number: 80
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 1.5
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
     filters:
       vehicle_category: other_petrol_diesel
     constraints:
@@ -680,6 +710,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2027
+  period_coverage:
+    start_date: '2027-04-01'
+    end_date: '2028-03-31'
+    basis: fiscal
+    source_period_label: '2027-28'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -694,8 +730,8 @@ record_sets:
     ordinal: 0
     row_number: 39
     table_record_kind: total
-    expected_row_header_column: E
-    expected_row_header: 28.0
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
     filters:
       vehicle_category: total
     constraints:
@@ -708,8 +744,8 @@ record_sets:
     ordinal: 1
     row_number: 46
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 27.8
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
     filters:
       vehicle_category: road_fuels
     constraints:
@@ -722,8 +758,8 @@ record_sets:
     ordinal: 2
     row_number: 53
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 0.3
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
     filters:
       vehicle_category: other_fuels
     constraints:
@@ -736,8 +772,8 @@ record_sets:
     ordinal: 3
     row_number: 60
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 16.1
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
     filters:
       vehicle_category: cars
     constraints:
@@ -750,8 +786,8 @@ record_sets:
     ordinal: 4
     row_number: 67
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 5.5
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
     filters:
       vehicle_category: light_goods_vehicles
     constraints:
@@ -764,8 +800,8 @@ record_sets:
     ordinal: 5
     row_number: 74
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.7
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
     filters:
       vehicle_category: heavy_goods_vehicles
     constraints:
@@ -778,8 +814,8 @@ record_sets:
     ordinal: 6
     row_number: 81
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 1.5
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
     filters:
       vehicle_category: other_petrol_diesel
     constraints:
@@ -811,6 +847,12 @@ record_sets:
   sheet_name: document_numbers
   period_type: fiscal_year
   period: 2028
+  period_coverage:
+    start_date: '2028-04-01'
+    end_date: '2029-03-31'
+    basis: fiscal
+    source_period_label: '2028-29'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -825,8 +867,8 @@ record_sets:
     ordinal: 0
     row_number: 40
     table_record_kind: total
-    expected_row_header_column: E
-    expected_row_header: 28.2
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
     filters:
       vehicle_category: total
     constraints:
@@ -839,8 +881,8 @@ record_sets:
     ordinal: 1
     row_number: 47
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 27.9
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
     filters:
       vehicle_category: road_fuels
     constraints:
@@ -853,8 +895,8 @@ record_sets:
     ordinal: 2
     row_number: 54
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 0.3
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
     filters:
       vehicle_category: other_fuels
     constraints:
@@ -867,8 +909,8 @@ record_sets:
     ordinal: 3
     row_number: 61
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 16.0
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
     filters:
       vehicle_category: cars
     constraints:
@@ -881,8 +923,8 @@ record_sets:
     ordinal: 4
     row_number: 68
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 5.7
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
     filters:
       vehicle_category: light_goods_vehicles
     constraints:
@@ -895,8 +937,8 @@ record_sets:
     ordinal: 5
     row_number: 75
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 4.8
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
     filters:
       vehicle_category: heavy_goods_vehicles
     constraints:
@@ -909,8 +951,8 @@ record_sets:
     ordinal: 6
     row_number: 82
     table_record_kind: detail
-    expected_row_header_column: E
-    expected_row_header: 1.4
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
     filters:
       vehicle_category: other_petrol_diesel
     constraints:

@@ -21,6 +21,11 @@ record_sets:
   sheet_name: 7180_Change_by_regulated_status
   period_type: calendar_year
   period: 2020
+  period_coverage:
+    start_date: '2020-01-01'
+    end_date: '2020-12-31'
+    basis: calendar
+    source_period_label: '2020'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -109,6 +114,11 @@ record_sets:
   sheet_name: 7180_Change_by_regulated_status
   period_type: calendar_year
   period: 2021
+  period_coverage:
+    start_date: '2021-01-01'
+    end_date: '2021-12-31'
+    basis: calendar
+    source_period_label: '2021'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -197,6 +207,11 @@ record_sets:
   sheet_name: 7180_Change_by_regulated_status
   period_type: calendar_year
   period: 2022
+  period_coverage:
+    start_date: '2022-01-01'
+    end_date: '2022-12-31'
+    basis: calendar
+    source_period_label: '2022'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -285,6 +300,11 @@ record_sets:
   sheet_name: 7180_Change_by_regulated_status
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -373,6 +393,11 @@ record_sets:
   sheet_name: 7180_Change_by_regulated_status
   period_type: calendar_year
   period: 2024
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -461,6 +486,11 @@ record_sets:
   sheet_name: 7180_Change_by_regulated_status
   period_type: calendar_year
   period: 2025
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -549,6 +579,11 @@ record_sets:
   sheet_name: 7180_Change_by_regulated_status
   period_type: calendar_year
   period: 2026
+  period_coverage:
+    start_date: '2026-01-01'
+    end_date: '2026-12-31'
+    basis: calendar
+    source_period_label: '2026'
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain

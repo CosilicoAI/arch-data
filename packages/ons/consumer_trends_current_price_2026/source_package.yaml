@@ -22,6 +22,11 @@ record_sets:
   sheet_name: 04CN
   period_type: calendar_year
   period: 2020
+  period_coverage:
+    start_date: '2020-01-01'
+    end_date: '2020-12-31'
+    basis: calendar
+    source_period_label: '2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -74,6 +79,11 @@ record_sets:
   sheet_name: 07CN
   period_type: calendar_year
   period: 2020
+  period_coverage:
+    start_date: '2020-01-01'
+    end_date: '2020-12-31'
+    basis: calendar
+    source_period_label: '2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -150,6 +160,11 @@ record_sets:
   sheet_name: 04CN
   period_type: calendar_year
   period: 2021
+  period_coverage:
+    start_date: '2021-01-01'
+    end_date: '2021-12-31'
+    basis: calendar
+    source_period_label: '2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -202,6 +217,11 @@ record_sets:
   sheet_name: 07CN
   period_type: calendar_year
   period: 2021
+  period_coverage:
+    start_date: '2021-01-01'
+    end_date: '2021-12-31'
+    basis: calendar
+    source_period_label: '2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -278,6 +298,11 @@ record_sets:
   sheet_name: 04CN
   period_type: calendar_year
   period: 2022
+  period_coverage:
+    start_date: '2022-01-01'
+    end_date: '2022-12-31'
+    basis: calendar
+    source_period_label: '2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -330,6 +355,11 @@ record_sets:
   sheet_name: 07CN
   period_type: calendar_year
   period: 2022
+  period_coverage:
+    start_date: '2022-01-01'
+    end_date: '2022-12-31'
+    basis: calendar
+    source_period_label: '2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -406,6 +436,11 @@ record_sets:
   sheet_name: 04CN
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -458,6 +493,11 @@ record_sets:
   sheet_name: 07CN
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -534,6 +574,11 @@ record_sets:
   sheet_name: 04CN
   period_type: calendar_year
   period: 2024
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -586,6 +631,11 @@ record_sets:
   sheet_name: 07CN
   period_type: calendar_year
   period: 2024
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -662,6 +712,11 @@ record_sets:
   sheet_name: 04CN
   period_type: calendar_year
   period: 2025
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -714,6 +769,11 @@ record_sets:
   sheet_name: 07CN
   period_type: calendar_year
   period: 2025
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -788,8 +848,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2020_q1.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2020_q1
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2020
+  period_type: quarter
+  period: '2020-Q1'
+  period_coverage:
+    start_date: '2020-01-01'
+    end_date: '2020-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -845,8 +910,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2020_q1.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2020_q1
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2020
+  period_type: quarter
+  period: '2020-Q1'
+  period_coverage:
+    start_date: '2020-01-01'
+    end_date: '2020-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -926,8 +996,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2020_q2.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2020_q2
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2020
+  period_type: quarter
+  period: '2020-Q2'
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2020-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -983,8 +1058,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2020_q2.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2020_q2
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2020
+  period_type: quarter
+  period: '2020-Q2'
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2020-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1064,8 +1144,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2020_q3.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2020_q3
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2020
+  period_type: quarter
+  period: '2020-Q3'
+  period_coverage:
+    start_date: '2020-07-01'
+    end_date: '2020-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1121,8 +1206,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2020_q3.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2020_q3
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2020
+  period_type: quarter
+  period: '2020-Q3'
+  period_coverage:
+    start_date: '2020-07-01'
+    end_date: '2020-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1202,8 +1292,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2020_q4.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2020_q4
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2020
+  period_type: quarter
+  period: '2020-Q4'
+  period_coverage:
+    start_date: '2020-10-01'
+    end_date: '2020-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1259,8 +1354,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2020_q4.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2020_q4
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2020
+  period_type: quarter
+  period: '2020-Q4'
+  period_coverage:
+    start_date: '2020-10-01'
+    end_date: '2020-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2020'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1340,8 +1440,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2021_q1.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2021_q1
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2021
+  period_type: quarter
+  period: '2021-Q1'
+  period_coverage:
+    start_date: '2021-01-01'
+    end_date: '2021-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1397,8 +1502,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2021_q1.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2021_q1
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2021
+  period_type: quarter
+  period: '2021-Q1'
+  period_coverage:
+    start_date: '2021-01-01'
+    end_date: '2021-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1478,8 +1588,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2021_q2.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2021_q2
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2021
+  period_type: quarter
+  period: '2021-Q2'
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2021-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1535,8 +1650,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2021_q2.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2021_q2
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2021
+  period_type: quarter
+  period: '2021-Q2'
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2021-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1616,8 +1736,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2021_q3.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2021_q3
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2021
+  period_type: quarter
+  period: '2021-Q3'
+  period_coverage:
+    start_date: '2021-07-01'
+    end_date: '2021-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1673,8 +1798,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2021_q3.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2021_q3
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2021
+  period_type: quarter
+  period: '2021-Q3'
+  period_coverage:
+    start_date: '2021-07-01'
+    end_date: '2021-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1754,8 +1884,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2021_q4.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2021_q4
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2021
+  period_type: quarter
+  period: '2021-Q4'
+  period_coverage:
+    start_date: '2021-10-01'
+    end_date: '2021-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1811,8 +1946,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2021_q4.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2021_q4
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2021
+  period_type: quarter
+  period: '2021-Q4'
+  period_coverage:
+    start_date: '2021-10-01'
+    end_date: '2021-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2021'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1892,8 +2032,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2022_q1.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2022_q1
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2022
+  period_type: quarter
+  period: '2022-Q1'
+  period_coverage:
+    start_date: '2022-01-01'
+    end_date: '2022-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1949,8 +2094,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2022_q1.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2022_q1
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2022
+  period_type: quarter
+  period: '2022-Q1'
+  period_coverage:
+    start_date: '2022-01-01'
+    end_date: '2022-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2030,8 +2180,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2022_q2.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2022_q2
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2022
+  period_type: quarter
+  period: '2022-Q2'
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2022-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2087,8 +2242,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2022_q2.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2022_q2
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2022
+  period_type: quarter
+  period: '2022-Q2'
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2022-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2168,8 +2328,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2022_q3.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2022_q3
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2022
+  period_type: quarter
+  period: '2022-Q3'
+  period_coverage:
+    start_date: '2022-07-01'
+    end_date: '2022-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2225,8 +2390,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2022_q3.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2022_q3
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2022
+  period_type: quarter
+  period: '2022-Q3'
+  period_coverage:
+    start_date: '2022-07-01'
+    end_date: '2022-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2306,8 +2476,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2022_q4.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2022_q4
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2022
+  period_type: quarter
+  period: '2022-Q4'
+  period_coverage:
+    start_date: '2022-10-01'
+    end_date: '2022-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2363,8 +2538,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2022_q4.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2022_q4
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2022
+  period_type: quarter
+  period: '2022-Q4'
+  period_coverage:
+    start_date: '2022-10-01'
+    end_date: '2022-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2022'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2444,8 +2624,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2023_q1.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2023_q1
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2023
+  period_type: quarter
+  period: '2023-Q1'
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2501,8 +2686,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2023_q1.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2023_q1
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2023
+  period_type: quarter
+  period: '2023-Q1'
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2582,8 +2772,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2023_q2.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2023_q2
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2023
+  period_type: quarter
+  period: '2023-Q2'
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2023-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2639,8 +2834,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2023_q2.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2023_q2
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2023
+  period_type: quarter
+  period: '2023-Q2'
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2023-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2720,8 +2920,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2023_q3.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2023_q3
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2023
+  period_type: quarter
+  period: '2023-Q3'
+  period_coverage:
+    start_date: '2023-07-01'
+    end_date: '2023-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2777,8 +2982,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2023_q3.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2023_q3
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2023
+  period_type: quarter
+  period: '2023-Q3'
+  period_coverage:
+    start_date: '2023-07-01'
+    end_date: '2023-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2858,8 +3068,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2023_q4.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2023_q4
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2023
+  period_type: quarter
+  period: '2023-Q4'
+  period_coverage:
+    start_date: '2023-10-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2915,8 +3130,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2023_q4.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2023_q4
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2023
+  period_type: quarter
+  period: '2023-Q4'
+  period_coverage:
+    start_date: '2023-10-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2996,8 +3216,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2024_q1.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2024_q1
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q1'
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3053,8 +3278,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2024_q1.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2024_q1
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q1'
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3134,8 +3364,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2024_q2.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2024_q2
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q2'
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2024-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3191,8 +3426,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2024_q2.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2024_q2
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q2'
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2024-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3272,8 +3512,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2024_q3.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2024_q3
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q3'
+  period_coverage:
+    start_date: '2024-07-01'
+    end_date: '2024-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3329,8 +3574,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2024_q3.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2024_q3
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q3'
+  period_coverage:
+    start_date: '2024-07-01'
+    end_date: '2024-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3410,8 +3660,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2024_q4.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2024_q4
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q4'
+  period_coverage:
+    start_date: '2024-10-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3467,8 +3722,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2024_q4.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2024_q4
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2024
+  period_type: quarter
+  period: '2024-Q4'
+  period_coverage:
+    start_date: '2024-10-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3548,8 +3808,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2025_q1.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2025_q1
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2025
+  period_type: quarter
+  period: '2025-Q1'
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3605,8 +3870,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2025_q1.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2025_q1
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2025
+  period_type: quarter
+  period: '2025-Q1'
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3686,8 +3956,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2025_q2.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2025_q2
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2025
+  period_type: quarter
+  period: '2025-Q2'
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2025-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3743,8 +4018,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2025_q2.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2025_q2
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2025
+  period_type: quarter
+  period: '2025-Q2'
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2025-06-30'
+    basis: calendar
+    source_period_label: 'Q2 2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3824,8 +4104,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2025_q3.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2025_q3
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2025
+  period_type: quarter
+  period: '2025-Q3'
+  period_coverage:
+    start_date: '2025-07-01'
+    end_date: '2025-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3881,8 +4166,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2025_q3.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2025_q3
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2025
+  period_type: quarter
+  period: '2025-Q3'
+  period_coverage:
+    start_date: '2025-07-01'
+    end_date: '2025-09-30'
+    basis: calendar
+    source_period_label: 'Q3 2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3962,8 +4252,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2025_q4.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2025_q4
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2025
+  period_type: quarter
+  period: '2025-Q4'
+  period_coverage:
+    start_date: '2025-10-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4019,8 +4314,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2025_q4.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2025_q4
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2025
+  period_type: quarter
+  period: '2025-Q4'
+  period_coverage:
+    start_date: '2025-10-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: 'Q4 2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4100,8 +4400,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.04cn.2026_q1.v1
   source_record_id_prefix: ons.consumer_trends.04cn.2026_q1
   sheet_name: 04CN
-  period_type: calendar_year
-  period: 2026
+  period_type: quarter
+  period: '2026-Q1'
+  period_coverage:
+    start_date: '2026-01-01'
+    end_date: '2026-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2026'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4157,8 +4462,13 @@ record_sets:
   record_set_spec_id: ons.consumer_trends.07cn.2026_q1.v1
   source_record_id_prefix: ons.consumer_trends.07cn.2026_q1
   sheet_name: 07CN
-  period_type: calendar_year
-  period: 2026
+  period_type: quarter
+  period: '2026-Q1'
+  period_coverage:
+    start_date: '2026-01-01'
+    end_date: '2026-03-31'
+    basis: calendar
+    source_period_label: 'Q1 2026'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom

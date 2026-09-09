@@ -1,3 +1,6 @@
+# Table 7270 column N is the broad ORR total: operational funding plus
+# enhancements funding and miscellaneous support. It is not interchangeable
+# with Table 7271's operational-funding source/recipient matrix.
 schema_version: ledger.source_package.v1
 package_id: orr-government-support-7270-2024-25
 label: ORR total government support to the rail industry, 2015-16 to 2024-25
@@ -21,6 +24,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2015
+  period_coverage:
+    start_date: '2015-04-01'
+    end_date: '2016-03-31'
+    basis: fiscal
+    source_period_label: '2015-16'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -48,7 +57,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -61,6 +70,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2016
+  period_coverage:
+    start_date: '2016-04-01'
+    end_date: '2017-03-31'
+    basis: fiscal
+    source_period_label: '2016-17'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -88,7 +103,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -101,6 +116,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2017
+  period_coverage:
+    start_date: '2017-04-01'
+    end_date: '2018-03-31'
+    basis: fiscal
+    source_period_label: '2017-18'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -128,7 +149,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -141,6 +162,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2018
+  period_coverage:
+    start_date: '2018-04-01'
+    end_date: '2019-03-31'
+    basis: fiscal
+    source_period_label: '2018-19'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -168,7 +195,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -181,6 +208,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2019
+  period_coverage:
+    start_date: '2019-04-01'
+    end_date: '2020-03-31'
+    basis: fiscal
+    source_period_label: '2019-20'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -208,7 +241,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -221,6 +254,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2020
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2021-03-31'
+    basis: fiscal
+    source_period_label: '2020-21'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -248,7 +287,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -261,6 +300,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2021
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2022-03-31'
+    basis: fiscal
+    source_period_label: '2021-22'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -288,7 +333,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -301,6 +346,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -328,7 +379,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -341,6 +392,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -368,7 +425,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number
@@ -381,6 +438,12 @@ record_sets:
   sheet_name: 7270_government_support
   period_type: fiscal_year
   period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
   geography_id: K03000001
   geography_level: country
   geography_name: Great Britain
@@ -408,7 +471,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: orr
     concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
-    concept_evidence_notes: Total government support to the rail industry
+    concept_evidence_notes: Table 7270 column N; total operational funding plus total enhancements funding and miscellaneous support
     unit: gbp
     aggregation: sum
     expected_cell_type: number

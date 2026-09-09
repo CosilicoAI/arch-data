@@ -3,7 +3,7 @@ package_id: desnz-monthly-annual-road-fuel-prices-august-2026
 label: DESNZ monthly and annual road-fuel pump prices through August 2026
 artifact:
   source_name: desnz
-  source_table: Digest of UK Energy Statistics tables 4.1.1 and 4.1.2
+  source_table: Digest of UK Energy Statistics tables 4.1.1 to 4.1.3 workbook; emitted sheets 4.1.1 and 4.1.2
   resource_package: db
   resource_directory: data/desnz/monthly_annual_road_fuel_prices_august_2026
   manifest: manifest.yaml
@@ -21,6 +21,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-01
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-01-31'
+    basis: calendar
+    source_period_label: '2023-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -35,8 +40,8 @@ record_sets:
     ordinal: 0
     row_number: 419
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-01-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -74,6 +79,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-02
+  period_coverage:
+    start_date: '2023-02-01'
+    end_date: '2023-02-28'
+    basis: calendar
+    source_period_label: '2023-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -88,8 +98,8 @@ record_sets:
     ordinal: 0
     row_number: 420
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-02-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -127,6 +137,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-03
+  period_coverage:
+    start_date: '2023-03-01'
+    end_date: '2023-03-31'
+    basis: calendar
+    source_period_label: '2023-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -141,8 +156,8 @@ record_sets:
     ordinal: 0
     row_number: 421
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-03-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -180,6 +195,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-04
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2023-04-30'
+    basis: calendar
+    source_period_label: '2023-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -194,8 +214,8 @@ record_sets:
     ordinal: 0
     row_number: 422
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-04-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -233,6 +253,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-05
+  period_coverage:
+    start_date: '2023-05-01'
+    end_date: '2023-05-31'
+    basis: calendar
+    source_period_label: '2023-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -247,8 +272,8 @@ record_sets:
     ordinal: 0
     row_number: 423
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-05-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -286,6 +311,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-06
+  period_coverage:
+    start_date: '2023-06-01'
+    end_date: '2023-06-30'
+    basis: calendar
+    source_period_label: '2023-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -300,8 +330,8 @@ record_sets:
     ordinal: 0
     row_number: 424
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-06-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -339,6 +369,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-07
+  period_coverage:
+    start_date: '2023-07-01'
+    end_date: '2023-07-31'
+    basis: calendar
+    source_period_label: '2023-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -353,8 +388,8 @@ record_sets:
     ordinal: 0
     row_number: 425
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-07-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -392,6 +427,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-08
+  period_coverage:
+    start_date: '2023-08-01'
+    end_date: '2023-08-31'
+    basis: calendar
+    source_period_label: '2023-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -406,8 +446,8 @@ record_sets:
     ordinal: 0
     row_number: 426
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-08-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -445,6 +485,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-09
+  period_coverage:
+    start_date: '2023-09-01'
+    end_date: '2023-09-30'
+    basis: calendar
+    source_period_label: '2023-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -459,8 +504,8 @@ record_sets:
     ordinal: 0
     row_number: 427
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-09-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -498,6 +543,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-10
+  period_coverage:
+    start_date: '2023-10-01'
+    end_date: '2023-10-31'
+    basis: calendar
+    source_period_label: '2023-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -512,8 +562,8 @@ record_sets:
     ordinal: 0
     row_number: 428
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-10-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -551,6 +601,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-11
+  period_coverage:
+    start_date: '2023-11-01'
+    end_date: '2023-11-30'
+    basis: calendar
+    source_period_label: '2023-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -565,8 +620,8 @@ record_sets:
     ordinal: 0
     row_number: 429
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-11-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -604,6 +659,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2023-12
+  period_coverage:
+    start_date: '2023-12-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -618,8 +678,8 @@ record_sets:
     ordinal: 0
     row_number: 430
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2023
+    expected_row_header_column: B
+    expected_row_header: '2023-12-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -657,6 +717,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-01
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-01-31'
+    basis: calendar
+    source_period_label: '2024-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -671,8 +736,8 @@ record_sets:
     ordinal: 0
     row_number: 431
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-01-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -710,6 +775,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-02
+  period_coverage:
+    start_date: '2024-02-01'
+    end_date: '2024-02-29'
+    basis: calendar
+    source_period_label: '2024-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -724,8 +794,8 @@ record_sets:
     ordinal: 0
     row_number: 432
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-02-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -763,6 +833,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-03
+  period_coverage:
+    start_date: '2024-03-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: '2024-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -777,8 +852,8 @@ record_sets:
     ordinal: 0
     row_number: 433
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-03-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -816,6 +891,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-04
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2024-04-30'
+    basis: calendar
+    source_period_label: '2024-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -830,8 +910,8 @@ record_sets:
     ordinal: 0
     row_number: 434
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-04-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -869,6 +949,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-05
+  period_coverage:
+    start_date: '2024-05-01'
+    end_date: '2024-05-31'
+    basis: calendar
+    source_period_label: '2024-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -883,8 +968,8 @@ record_sets:
     ordinal: 0
     row_number: 435
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-05-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -922,6 +1007,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-06
+  period_coverage:
+    start_date: '2024-06-01'
+    end_date: '2024-06-30'
+    basis: calendar
+    source_period_label: '2024-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -936,8 +1026,8 @@ record_sets:
     ordinal: 0
     row_number: 436
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-06-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -975,6 +1065,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-07
+  period_coverage:
+    start_date: '2024-07-01'
+    end_date: '2024-07-31'
+    basis: calendar
+    source_period_label: '2024-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -989,8 +1084,8 @@ record_sets:
     ordinal: 0
     row_number: 437
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-07-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1028,6 +1123,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-08
+  period_coverage:
+    start_date: '2024-08-01'
+    end_date: '2024-08-31'
+    basis: calendar
+    source_period_label: '2024-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1042,8 +1142,8 @@ record_sets:
     ordinal: 0
     row_number: 438
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-08-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1081,6 +1181,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-09
+  period_coverage:
+    start_date: '2024-09-01'
+    end_date: '2024-09-30'
+    basis: calendar
+    source_period_label: '2024-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1095,8 +1200,8 @@ record_sets:
     ordinal: 0
     row_number: 439
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-09-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1134,6 +1239,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-10
+  period_coverage:
+    start_date: '2024-10-01'
+    end_date: '2024-10-31'
+    basis: calendar
+    source_period_label: '2024-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1148,8 +1258,8 @@ record_sets:
     ordinal: 0
     row_number: 440
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-10-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1187,6 +1297,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-11
+  period_coverage:
+    start_date: '2024-11-01'
+    end_date: '2024-11-30'
+    basis: calendar
+    source_period_label: '2024-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1201,8 +1316,8 @@ record_sets:
     ordinal: 0
     row_number: 441
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-11-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1240,6 +1355,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2024-12
+  period_coverage:
+    start_date: '2024-12-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1254,8 +1374,8 @@ record_sets:
     ordinal: 0
     row_number: 442
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2024
+    expected_row_header_column: B
+    expected_row_header: '2024-12-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1293,6 +1413,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-01
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-01-31'
+    basis: calendar
+    source_period_label: '2025-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1307,8 +1432,8 @@ record_sets:
     ordinal: 0
     row_number: 443
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-01-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1346,6 +1471,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-02
+  period_coverage:
+    start_date: '2025-02-01'
+    end_date: '2025-02-28'
+    basis: calendar
+    source_period_label: '2025-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1360,8 +1490,8 @@ record_sets:
     ordinal: 0
     row_number: 444
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-02-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1399,6 +1529,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-03
+  period_coverage:
+    start_date: '2025-03-01'
+    end_date: '2025-03-31'
+    basis: calendar
+    source_period_label: '2025-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1413,8 +1548,8 @@ record_sets:
     ordinal: 0
     row_number: 445
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-03-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1452,6 +1587,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-04
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2025-04-30'
+    basis: calendar
+    source_period_label: '2025-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1466,8 +1606,8 @@ record_sets:
     ordinal: 0
     row_number: 446
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-04-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1505,6 +1645,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-05
+  period_coverage:
+    start_date: '2025-05-01'
+    end_date: '2025-05-31'
+    basis: calendar
+    source_period_label: '2025-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1519,8 +1664,8 @@ record_sets:
     ordinal: 0
     row_number: 447
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-05-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1558,6 +1703,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-06
+  period_coverage:
+    start_date: '2025-06-01'
+    end_date: '2025-06-30'
+    basis: calendar
+    source_period_label: '2025-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1572,8 +1722,8 @@ record_sets:
     ordinal: 0
     row_number: 448
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-06-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1611,6 +1761,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-07
+  period_coverage:
+    start_date: '2025-07-01'
+    end_date: '2025-07-31'
+    basis: calendar
+    source_period_label: '2025-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1625,8 +1780,8 @@ record_sets:
     ordinal: 0
     row_number: 449
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-07-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1664,6 +1819,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-08
+  period_coverage:
+    start_date: '2025-08-01'
+    end_date: '2025-08-31'
+    basis: calendar
+    source_period_label: '2025-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1678,8 +1838,8 @@ record_sets:
     ordinal: 0
     row_number: 450
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-08-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1717,6 +1877,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-09
+  period_coverage:
+    start_date: '2025-09-01'
+    end_date: '2025-09-30'
+    basis: calendar
+    source_period_label: '2025-09'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1731,8 +1896,8 @@ record_sets:
     ordinal: 0
     row_number: 451
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-09-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1770,6 +1935,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-10
+  period_coverage:
+    start_date: '2025-10-01'
+    end_date: '2025-10-31'
+    basis: calendar
+    source_period_label: '2025-10'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1784,8 +1954,8 @@ record_sets:
     ordinal: 0
     row_number: 452
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-10-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1823,6 +1993,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-11
+  period_coverage:
+    start_date: '2025-11-01'
+    end_date: '2025-11-30'
+    basis: calendar
+    source_period_label: '2025-11'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1837,8 +2012,8 @@ record_sets:
     ordinal: 0
     row_number: 453
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-11-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1876,6 +2051,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2025-12
+  period_coverage:
+    start_date: '2025-12-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025-12'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1890,8 +2070,8 @@ record_sets:
     ordinal: 0
     row_number: 454
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2025
+    expected_row_header_column: B
+    expected_row_header: '2025-12-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1929,6 +2109,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2026-01
+  period_coverage:
+    start_date: '2026-01-01'
+    end_date: '2026-01-31'
+    basis: calendar
+    source_period_label: '2026-01'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1943,8 +2128,8 @@ record_sets:
     ordinal: 0
     row_number: 455
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2026
+    expected_row_header_column: B
+    expected_row_header: '2026-01-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -1982,6 +2167,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2026-02
+  period_coverage:
+    start_date: '2026-02-01'
+    end_date: '2026-02-28'
+    basis: calendar
+    source_period_label: '2026-02'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1996,8 +2186,8 @@ record_sets:
     ordinal: 0
     row_number: 456
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2026
+    expected_row_header_column: B
+    expected_row_header: '2026-02-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -2035,6 +2225,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2026-03
+  period_coverage:
+    start_date: '2026-03-01'
+    end_date: '2026-03-31'
+    basis: calendar
+    source_period_label: '2026-03'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2049,8 +2244,8 @@ record_sets:
     ordinal: 0
     row_number: 457
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2026
+    expected_row_header_column: B
+    expected_row_header: '2026-03-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -2088,6 +2283,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2026-04
+  period_coverage:
+    start_date: '2026-04-01'
+    end_date: '2026-04-30'
+    basis: calendar
+    source_period_label: '2026-04'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2102,8 +2302,8 @@ record_sets:
     ordinal: 0
     row_number: 458
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2026
+    expected_row_header_column: B
+    expected_row_header: '2026-04-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -2141,6 +2341,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2026-05
+  period_coverage:
+    start_date: '2026-05-01'
+    end_date: '2026-05-31'
+    basis: calendar
+    source_period_label: '2026-05'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2155,8 +2360,8 @@ record_sets:
     ordinal: 0
     row_number: 459
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2026
+    expected_row_header_column: B
+    expected_row_header: '2026-05-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -2194,6 +2399,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2026-06
+  period_coverage:
+    start_date: '2026-06-01'
+    end_date: '2026-06-30'
+    basis: calendar
+    source_period_label: '2026-06'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2208,8 +2418,8 @@ record_sets:
     ordinal: 0
     row_number: 460
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2026
+    expected_row_header_column: B
+    expected_row_header: '2026-06-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -2247,6 +2457,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2026-07
+  period_coverage:
+    start_date: '2026-07-01'
+    end_date: '2026-07-31'
+    basis: calendar
+    source_period_label: '2026-07'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2261,8 +2476,8 @@ record_sets:
     ordinal: 0
     row_number: 461
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2026
+    expected_row_header_column: B
+    expected_row_header: '2026-07-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -2300,6 +2515,11 @@ record_sets:
   sheet_name: 4.1.1
   period_type: month
   period: 2026-08
+  period_coverage:
+    start_date: '2026-08-01'
+    end_date: '2026-08-31'
+    basis: calendar
+    source_period_label: '2026-08'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2314,8 +2534,8 @@ record_sets:
     ordinal: 0
     row_number: 462
     table_record_kind: total
-    expected_row_header_column: A
-    expected_row_header: 2026
+    expected_row_header_column: B
+    expected_row_header: '2026-08-01T00:00:00'
   measures:
   - measure_id: ulsp_price
     label: Monthly ultra-low sulphur petrol pump price
@@ -2353,6 +2573,11 @@ record_sets:
   sheet_name: 4.1.2
   period_type: calendar_year
   period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2406,6 +2631,11 @@ record_sets:
   sheet_name: 4.1.2
   period_type: calendar_year
   period: 2024
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2459,6 +2689,11 @@ record_sets:
   sheet_name: 4.1.2
   period_type: calendar_year
   period: 2025
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025'
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
