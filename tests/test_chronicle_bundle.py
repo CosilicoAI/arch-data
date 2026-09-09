@@ -129,16 +129,16 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "aggregate_duplicate_key_count": 0,
         "entity_count": 12,
         "error_count": 0,
-        "fact_count": 195193,
+        "fact_count": 196389,
         "geography_count": 12539,
         "period_count": 269,
         "semantic_duplicate_key_count": 177,
         "skipped_source_count": 10,
-        "source_count": 45,
-        "source_package_count": 169,
+        "source_count": 49,
+        "source_package_count": 185,
         "warning_count": 1,
     }
-    assert len(rows) == 195193
+    assert len(rows) == 196389
     assert {row["provenance_class"] for row in rows} <= {
         "administrative",
         "census",
@@ -156,7 +156,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert rows[0]["aggregate_fact_key"].startswith("ledger.aggregate_fact.v2:")
     assert rows[0]["semantic_fact_key"].startswith("ledger.semantic_fact.v2:")
-    assert source_packages["source_package_count"] == 169
+    assert source_packages["source_package_count"] == 185
     assert source_packages["skipped_source_count"] == 10
     assert sorted(item["source"] for item in source_packages["skipped_sources"]) == [
         "census-acs-s0101-congressional-district-age-2024",
@@ -170,7 +170,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "jct-obbba-revenue-estimates-2025",
         "jct-tax-expenditures-2024",
     ]
-    assert coverage["fact_count"] == 195193
+    assert coverage["fact_count"] == 196389
     assert coverage["counts"]["by_source"] == {
         "bea": 445,
         "bfp_economic_outlook": 5,
@@ -182,16 +182,18 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "cms_medicaid": 515,
         "cms_medicare": 1,
         "cms_nhe": 3,
+        "desnz": 712,
         "dfe": 770,
         "dfc_ni": 1189,
-        "dft": 233,
+        "dfi_ni": 24,
+        "dft": 269,
         "dwp": 10831,
         "eurostat": 207,
         "federal_reserve": 1,
         "fpb_economic_outlook": 1000,
         "hhs_acf_liheap": 2,
         "hhs_acf_tanf": 110,
-        "hmrc": 22319,
+        "hmrc": 22487,
         "ici": 12,
         "irs_soi": 40063,
         "isc": 2,
@@ -201,12 +203,14 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "nbb_national_accounts": 1,
         "nisra": 533,
         "nrs": 5647,
-        "obr": 270,
+        "obr": 319,
+        "ofgem": 4,
         "onem_rva_unemployment": 1,
-        "ons": 80741,
+        "ons": 80834,
         "onss_contributions": 1,
         "opgroeien_groeipakket": 11,
-        "scotgov": 2787,
+        "orr": 99,
+        "scotgov": 2795,
         "sfpd_pensions": 4,
         "slc": 199,
         "spf_finances_pit": 1,
@@ -216,10 +220,10 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "statbel_population_structure": 36,
         "usda_snap": 852,
         "voa": 3001,
-        "welshgov": 216,
+        "welshgov": 219,
     }
     table_counts = coverage["counts"]["by_source_table"]
-    assert len(table_counts) == 164
+    assert len(table_counts) == 180
     assert (
         table_counts[
             "dwp:Households on Universal Credit by family type, "
