@@ -1,0 +1,1248 @@
+# Table 7271 decomposes net operational funding by government source and rail
+# recipient. Its "Total support" row matches Table 7270 operational funding,
+# not Table 7270 column N, which also includes enhancements and miscellaneous.
+schema_version: ledger.source_package.v1
+package_id: orr-government-support-7271-2024-25
+label: ORR government support to rail by source and recipient, 2015-16 to 2024-25
+artifact:
+  source_name: orr
+  source_table: Table 7271 government support to the rail industry by source and recipient
+  resource_package: db
+  resource_directory: data/orr/government_support_7271_2024_25
+  manifest: manifest.yaml
+  vintage: '2024_25'
+  extracted_at: '2026-09-09'
+  extraction_method: ODS whole-workbook used-range cell parse
+  parser: ods_used_range
+  artifact_year: 2025
+record_sets:
+- record_set_id: orr.government_support.table_7271.fy2015
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2015.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2015
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2015
+  period_coverage:
+    start_date: '2015-04-01'
+    end_date: '2016-03-31'
+    basis: fiscal
+    source_period_label: '2015-16'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: C
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2016
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2016.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2016
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2016
+  period_coverage:
+    start_date: '2016-04-01'
+    end_date: '2017-03-31'
+    basis: fiscal
+    source_period_label: '2016-17'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: D
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2017
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2017.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2017
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2017
+  period_coverage:
+    start_date: '2017-04-01'
+    end_date: '2018-03-31'
+    basis: fiscal
+    source_period_label: '2017-18'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: E
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2018
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2018.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2018
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2018
+  period_coverage:
+    start_date: '2018-04-01'
+    end_date: '2019-03-31'
+    basis: fiscal
+    source_period_label: '2018-19'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: F
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2019
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2019.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2019
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2019
+  period_coverage:
+    start_date: '2019-04-01'
+    end_date: '2020-03-31'
+    basis: fiscal
+    source_period_label: '2019-20'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: G
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2020
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2020.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2020
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2020
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2021-03-31'
+    basis: fiscal
+    source_period_label: '2020-21'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: H
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2021
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2021.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2021
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2021
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2022-03-31'
+    basis: fiscal
+    source_period_label: '2021-22'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: I
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2022
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2022.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2022
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: J
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2023.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2023
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: K
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: orr.government_support.table_7271.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: orr.government_support.table_7271.fy2024.v1
+  source_record_id_prefix: orr.government_support.table_7271.fy2024
+  sheet_name: 7271_govt_support_by_recipient
+  period_type: fiscal_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: government
+  entity_role: rail_funding_authority
+  domain: rail_finance
+  groupby_dimension: orr.funding_source
+  rows:
+  - value_id: all_sources
+    label: All sources
+    ordinal: 0
+    row_number: 10
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: All (Great Britain)
+    filters:
+      funding_source: all_sources
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: all_sources
+      label: Funding Source
+  - value_id: department_for_transport
+    label: Department for Transport
+    ordinal: 1
+    row_number: 14
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Department for Transport
+    filters:
+      funding_source: department_for_transport
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: department_for_transport
+      label: Funding Source
+  - value_id: transport_scotland
+    label: Transport Scotland
+    ordinal: 2
+    row_number: 18
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport Scotland
+    filters:
+      funding_source: transport_scotland
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_scotland
+      label: Funding Source
+  - value_id: welsh_government
+    label: Welsh Government
+    ordinal: 3
+    row_number: 21
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Welsh Government
+    filters:
+      funding_source: welsh_government
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: welsh_government
+      label: Funding Source
+  - value_id: transport_for_london
+    label: Transport for London
+    ordinal: 4
+    row_number: 23
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Transport for London
+    filters:
+      funding_source: transport_for_london
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: transport_for_london
+      label: Funding Source
+  - value_id: passenger_transport_executives
+    label: Passenger Transport Executives
+    ordinal: 5
+    row_number: 25
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: Passenger Transport Executives
+    filters:
+      funding_source: passenger_transport_executives
+    constraints:
+    - variable: funding_source
+      operator: ==
+      value: passenger_transport_executives
+      label: Funding Source
+  measures:
+  - measure_id: support
+    label: Net operational government support by source and recipient
+    ordinal: 0
+    column: L
+    source_column_id: support
+    concept: orr.rail.government_support_by_source
+    source_concept: orr.rail.government_support_by_source
+    concept_relation: source_label
+    concept_authority: orr
+    concept_evidence_url: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+    concept_evidence_notes: Table 7271 net operational funding by government source and rail recipient; excludes enhancements and miscellaneous support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000

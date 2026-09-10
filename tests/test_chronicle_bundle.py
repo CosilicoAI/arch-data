@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
@@ -129,16 +130,16 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "aggregate_duplicate_key_count": 0,
         "entity_count": 12,
         "error_count": 0,
-        "fact_count": 195193,
+        "fact_count": 196578,
         "geography_count": 12539,
-        "period_count": 269,
+        "period_count": 489,
         "semantic_duplicate_key_count": 177,
         "skipped_source_count": 10,
-        "source_count": 45,
-        "source_package_count": 169,
+        "source_count": 49,
+        "source_package_count": 185,
         "warning_count": 1,
     }
-    assert len(rows) == 195193
+    assert len(rows) == 196578
     assert {row["provenance_class"] for row in rows} <= {
         "administrative",
         "census",
@@ -156,7 +157,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert rows[0]["aggregate_fact_key"].startswith("ledger.aggregate_fact.v2:")
     assert rows[0]["semantic_fact_key"].startswith("ledger.semantic_fact.v2:")
-    assert source_packages["source_package_count"] == 169
+    assert source_packages["source_package_count"] == 185
     assert source_packages["skipped_source_count"] == 10
     assert sorted(item["source"] for item in source_packages["skipped_sources"]) == [
         "census-acs-s0101-congressional-district-age-2024",
@@ -170,7 +171,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "jct-obbba-revenue-estimates-2025",
         "jct-tax-expenditures-2024",
     ]
-    assert coverage["fact_count"] == 195193
+    assert coverage["fact_count"] == 196578
     assert coverage["counts"]["by_source"] == {
         "bea": 445,
         "bfp_economic_outlook": 5,
@@ -182,16 +183,18 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "cms_medicaid": 515,
         "cms_medicare": 1,
         "cms_nhe": 3,
+        "desnz": 901,
         "dfe": 770,
         "dfc_ni": 1189,
-        "dft": 233,
+        "dfi_ni": 24,
+        "dft": 269,
         "dwp": 10831,
         "eurostat": 207,
         "federal_reserve": 1,
         "fpb_economic_outlook": 1000,
         "hhs_acf_liheap": 2,
         "hhs_acf_tanf": 110,
-        "hmrc": 22319,
+        "hmrc": 22487,
         "ici": 12,
         "irs_soi": 40063,
         "isc": 2,
@@ -201,12 +204,14 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "nbb_national_accounts": 1,
         "nisra": 533,
         "nrs": 5647,
-        "obr": 270,
+        "obr": 319,
+        "ofgem": 4,
         "onem_rva_unemployment": 1,
-        "ons": 80741,
+        "ons": 80834,
         "onss_contributions": 1,
         "opgroeien_groeipakket": 11,
-        "scotgov": 2787,
+        "orr": 99,
+        "scotgov": 2795,
         "sfpd_pensions": 4,
         "slc": 199,
         "spf_finances_pit": 1,
@@ -216,10 +221,10 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "statbel_population_structure": 36,
         "usda_snap": 852,
         "voa": 3001,
-        "welshgov": 216,
+        "welshgov": 219,
     }
     table_counts = coverage["counts"]["by_source_table"]
-    assert len(table_counts) == 164
+    assert len(table_counts) == 180
     assert (
         table_counts[
             "dwp:Households on Universal Credit by family type, "
@@ -877,6 +882,57 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         key = f"month:{year}-{month:02d}"
         expected_period_counts[key] = expected_period_counts.get(key, 0) + 1
         year, month = (year + 1, 1) if month == 12 else (year, month + 1)
+    for year, count in {
+        2020: 7,
+        2021: 7,
+        2022: 7,
+        2023: 249,
+        2024: 22,
+        2025: 21,
+        2026: 4,
+    }.items():
+        expected_period_counts[f"calendar_year:{year}"] += count
+    for year, count in {
+        2015: 7,
+        2016: 7,
+        2017: 7,
+        2018: 7,
+        2019: 11,
+        2020: 13,
+        2021: 13,
+        2022: 21,
+        2023: 28,
+        2024: 22,
+        2025: 9,
+        2026: 7,
+        2027: 7,
+        2028: 7,
+    }.items():
+        expected_period_counts[f"fiscal_year:{year}"] += count
+    for year in range(2020, 2023):
+        for month in range(1, 13):
+            key = f"month:{year}-{month:02d}"
+            expected_period_counts[key] = expected_period_counts.get(key, 0) + 2
+    issue_254_monthly_increments = {
+        2023: (4,) * 12,
+        2024: (4,) * 12,
+        2025: (4,) * 12,
+        2026: (4, 4, 4, 4, 4, 4, 2, 2),
+    }
+    for year, increments in issue_254_monthly_increments.items():
+        for month, count in enumerate(increments, start=1):
+            key = f"month:{year}-{month:02d}"
+            expected_period_counts[key] = expected_period_counts.get(key, 0) + count
+    for year in range(2020, 2026):
+        for quarter in range(1, 5):
+            count = 7 if (year, quarter) == (2024, 1) else 3
+            expected_period_counts[f"quarter:{year}-Q{quarter}"] = count
+    expected_period_counts["quarter:2026-Q1"] = 3
+    observation_date = date(2023, 1, 2)
+    while observation_date <= date(2026, 9, 7):
+        iso_year, iso_week, _ = observation_date.isocalendar()
+        expected_period_counts[f"week:{iso_year}-W{iso_week:02d}"] = 3
+        observation_date += timedelta(days=7)
     assert coverage["counts"]["by_period"] == expected_period_counts
     assert coverage["counts"]["by_geography"]["country:BE"] == 4888
     assert coverage["counts"]["by_geography"]["country:DE"] == 36
@@ -890,20 +946,20 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     assert (
         coverage["counts"]["by_geography"]["congressional_district:5001700US0601"] == 56
     )
-    assert coverage["counts"]["by_geography"]["country:K02000001"] == 6373
+    assert coverage["counts"]["by_geography"]["country:K02000001"] == 7356
     assert coverage["counts"]["by_geography"]["country:E92000001"] == 1437
-    assert coverage["counts"]["by_geography"]["country:K03000001"] == 4676
+    assert coverage["counts"]["by_geography"]["country:K03000001"] == 4815
     assert len(coverage["counts"]["by_geography"]) == 12539
     assert coverage["counts"]["by_entity"] == {
         "benefit_unit": 4680,
-        "dwelling": 27041,
+        "dwelling": 27269,
         "family": 1299,
         "firm": 1439,
-        "government": 1350,
-        "household": 40708,
-        "institutional_sector": 261,
+        "government": 1473,
+        "household": 40805,
+        "institutional_sector": 1181,
         "pension_plan": 2,
-        "person": 63282,
+        "person": 63299,
         "return": 14600,
         "social_protection_scheme": 36,
         "tax_unit": 40495,

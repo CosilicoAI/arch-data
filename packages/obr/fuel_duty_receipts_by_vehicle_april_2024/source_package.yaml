@@ -1,0 +1,978 @@
+# The April 2024 supplementary release is the issue-named OBR source. Its
+# published forecast horizon ends at 2028-29, despite the issue's shorthand
+# request for values through 2030, so this package stops at the publisher's
+# final column and does not extrapolate two additional years.
+schema_version: ledger.source_package.v1
+package_id: obr-fuel-duty-receipts-by-vehicle-april-2024
+label: OBR fuel duty receipts by vehicle type, 2022-23 to 2028-29
+artifact:
+  source_name: obr
+  source_table: 'Fuel duty supplementary release: receipts by vehicle type'
+  resource_package: db
+  resource_directory: data/obr/fuel_duty_receipts_by_vehicle_april_2024
+  manifest: manifest.yaml
+  vintage: april_2024
+  extracted_at: '2026-09-09'
+  extraction_method: PDF text-line number extraction
+  parser: pdf_text_numbers
+  artifact_year: 2024
+record_sets:
+- record_set_id: obr.fuel_duty_receipts_by_vehicle.fy2022
+  provenance_class: model_output
+  assertion: observation
+  record_set_spec_id: obr.fuel_duty_receipts_by_vehicle.fy2022.v1
+  source_record_id_prefix: obr.fuel_duty_receipts_by_vehicle.fy2022
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: government
+  entity_role: central_government
+  domain: fuel_duty_receipts
+  groupby_dimension: obr.vehicle_category
+  rows:
+  - value_id: total
+    label: Total fuel duty receipts
+    ordinal: 0
+    row_number: 34
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
+    filters:
+      vehicle_category: total
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: total
+      label: Vehicle Category
+  - value_id: road_fuels
+    label: Road-fuel duty receipts
+    ordinal: 1
+    row_number: 41
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
+    filters:
+      vehicle_category: road_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: road_fuels
+      label: Vehicle Category
+  - value_id: other_fuels
+    label: Other-fuel duty receipts
+    ordinal: 2
+    row_number: 48
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
+    filters:
+      vehicle_category: other_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_fuels
+      label: Vehicle Category
+  - value_id: cars
+    label: Cars
+    ordinal: 3
+    row_number: 55
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
+    filters:
+      vehicle_category: cars
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: cars
+      label: Vehicle Category
+  - value_id: light_goods_vehicles
+    label: Light goods vehicles
+    ordinal: 4
+    row_number: 62
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
+    filters:
+      vehicle_category: light_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: light_goods_vehicles
+      label: Vehicle Category
+  - value_id: heavy_goods_vehicles
+    label: Heavy goods vehicles
+    ordinal: 5
+    row_number: 69
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
+    filters:
+      vehicle_category: heavy_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: heavy_goods_vehicles
+      label: Vehicle Category
+  - value_id: other_petrol_diesel
+    label: Other petrol and diesel
+    ordinal: 6
+    row_number: 76
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
+    filters:
+      vehicle_category: other_petrol_diesel
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_petrol_diesel
+      label: Vehicle Category
+  measures:
+  - measure_id: receipts
+    label: Fuel-duty receipts
+    ordinal: 0
+    column: E
+    source_column_id: receipts
+    concept: obr.fuel_duty.receipts
+    source_concept: obr.fuel_duty.receipts
+    concept_relation: source_label
+    concept_authority: obr
+    concept_evidence_url: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
+    concept_evidence_notes: Fuel-duty receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000000
+- record_set_id: obr.fuel_duty_receipts_by_vehicle.fy2023
+  provenance_class: model_output
+  assertion: source_projection
+  record_set_spec_id: obr.fuel_duty_receipts_by_vehicle.fy2023.v1
+  source_record_id_prefix: obr.fuel_duty_receipts_by_vehicle.fy2023
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: government
+  entity_role: central_government
+  domain: fuel_duty_receipts
+  groupby_dimension: obr.vehicle_category
+  rows:
+  - value_id: total
+    label: Total fuel duty receipts
+    ordinal: 0
+    row_number: 35
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
+    filters:
+      vehicle_category: total
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: total
+      label: Vehicle Category
+  - value_id: road_fuels
+    label: Road-fuel duty receipts
+    ordinal: 1
+    row_number: 42
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
+    filters:
+      vehicle_category: road_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: road_fuels
+      label: Vehicle Category
+  - value_id: other_fuels
+    label: Other-fuel duty receipts
+    ordinal: 2
+    row_number: 49
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
+    filters:
+      vehicle_category: other_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_fuels
+      label: Vehicle Category
+  - value_id: cars
+    label: Cars
+    ordinal: 3
+    row_number: 56
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
+    filters:
+      vehicle_category: cars
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: cars
+      label: Vehicle Category
+  - value_id: light_goods_vehicles
+    label: Light goods vehicles
+    ordinal: 4
+    row_number: 63
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
+    filters:
+      vehicle_category: light_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: light_goods_vehicles
+      label: Vehicle Category
+  - value_id: heavy_goods_vehicles
+    label: Heavy goods vehicles
+    ordinal: 5
+    row_number: 70
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
+    filters:
+      vehicle_category: heavy_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: heavy_goods_vehicles
+      label: Vehicle Category
+  - value_id: other_petrol_diesel
+    label: Other petrol and diesel
+    ordinal: 6
+    row_number: 77
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
+    filters:
+      vehicle_category: other_petrol_diesel
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_petrol_diesel
+      label: Vehicle Category
+  measures:
+  - measure_id: receipts
+    label: Fuel-duty receipts
+    ordinal: 0
+    column: E
+    source_column_id: receipts
+    concept: obr.fuel_duty.receipts
+    source_concept: obr.fuel_duty.receipts
+    concept_relation: source_label
+    concept_authority: obr
+    concept_evidence_url: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
+    concept_evidence_notes: Fuel-duty receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000000
+- record_set_id: obr.fuel_duty_receipts_by_vehicle.fy2024
+  provenance_class: model_output
+  assertion: source_projection
+  record_set_spec_id: obr.fuel_duty_receipts_by_vehicle.fy2024.v1
+  source_record_id_prefix: obr.fuel_duty_receipts_by_vehicle.fy2024
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: government
+  entity_role: central_government
+  domain: fuel_duty_receipts
+  groupby_dimension: obr.vehicle_category
+  rows:
+  - value_id: total
+    label: Total fuel duty receipts
+    ordinal: 0
+    row_number: 36
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
+    filters:
+      vehicle_category: total
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: total
+      label: Vehicle Category
+  - value_id: road_fuels
+    label: Road-fuel duty receipts
+    ordinal: 1
+    row_number: 43
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
+    filters:
+      vehicle_category: road_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: road_fuels
+      label: Vehicle Category
+  - value_id: other_fuels
+    label: Other-fuel duty receipts
+    ordinal: 2
+    row_number: 50
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
+    filters:
+      vehicle_category: other_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_fuels
+      label: Vehicle Category
+  - value_id: cars
+    label: Cars
+    ordinal: 3
+    row_number: 57
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
+    filters:
+      vehicle_category: cars
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: cars
+      label: Vehicle Category
+  - value_id: light_goods_vehicles
+    label: Light goods vehicles
+    ordinal: 4
+    row_number: 64
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
+    filters:
+      vehicle_category: light_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: light_goods_vehicles
+      label: Vehicle Category
+  - value_id: heavy_goods_vehicles
+    label: Heavy goods vehicles
+    ordinal: 5
+    row_number: 71
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
+    filters:
+      vehicle_category: heavy_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: heavy_goods_vehicles
+      label: Vehicle Category
+  - value_id: other_petrol_diesel
+    label: Other petrol and diesel
+    ordinal: 6
+    row_number: 78
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
+    filters:
+      vehicle_category: other_petrol_diesel
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_petrol_diesel
+      label: Vehicle Category
+  measures:
+  - measure_id: receipts
+    label: Fuel-duty receipts
+    ordinal: 0
+    column: E
+    source_column_id: receipts
+    concept: obr.fuel_duty.receipts
+    source_concept: obr.fuel_duty.receipts
+    concept_relation: source_label
+    concept_authority: obr
+    concept_evidence_url: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
+    concept_evidence_notes: Fuel-duty receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000000
+- record_set_id: obr.fuel_duty_receipts_by_vehicle.fy2025
+  provenance_class: model_output
+  assertion: source_projection
+  record_set_spec_id: obr.fuel_duty_receipts_by_vehicle.fy2025.v1
+  source_record_id_prefix: obr.fuel_duty_receipts_by_vehicle.fy2025
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2025
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2026-03-31'
+    basis: fiscal
+    source_period_label: '2025-26'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: government
+  entity_role: central_government
+  domain: fuel_duty_receipts
+  groupby_dimension: obr.vehicle_category
+  rows:
+  - value_id: total
+    label: Total fuel duty receipts
+    ordinal: 0
+    row_number: 37
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
+    filters:
+      vehicle_category: total
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: total
+      label: Vehicle Category
+  - value_id: road_fuels
+    label: Road-fuel duty receipts
+    ordinal: 1
+    row_number: 44
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
+    filters:
+      vehicle_category: road_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: road_fuels
+      label: Vehicle Category
+  - value_id: other_fuels
+    label: Other-fuel duty receipts
+    ordinal: 2
+    row_number: 51
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
+    filters:
+      vehicle_category: other_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_fuels
+      label: Vehicle Category
+  - value_id: cars
+    label: Cars
+    ordinal: 3
+    row_number: 58
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
+    filters:
+      vehicle_category: cars
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: cars
+      label: Vehicle Category
+  - value_id: light_goods_vehicles
+    label: Light goods vehicles
+    ordinal: 4
+    row_number: 65
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
+    filters:
+      vehicle_category: light_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: light_goods_vehicles
+      label: Vehicle Category
+  - value_id: heavy_goods_vehicles
+    label: Heavy goods vehicles
+    ordinal: 5
+    row_number: 72
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
+    filters:
+      vehicle_category: heavy_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: heavy_goods_vehicles
+      label: Vehicle Category
+  - value_id: other_petrol_diesel
+    label: Other petrol and diesel
+    ordinal: 6
+    row_number: 79
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
+    filters:
+      vehicle_category: other_petrol_diesel
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_petrol_diesel
+      label: Vehicle Category
+  measures:
+  - measure_id: receipts
+    label: Fuel-duty receipts
+    ordinal: 0
+    column: E
+    source_column_id: receipts
+    concept: obr.fuel_duty.receipts
+    source_concept: obr.fuel_duty.receipts
+    concept_relation: source_label
+    concept_authority: obr
+    concept_evidence_url: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
+    concept_evidence_notes: Fuel-duty receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000000
+- record_set_id: obr.fuel_duty_receipts_by_vehicle.fy2026
+  provenance_class: model_output
+  assertion: source_projection
+  record_set_spec_id: obr.fuel_duty_receipts_by_vehicle.fy2026.v1
+  source_record_id_prefix: obr.fuel_duty_receipts_by_vehicle.fy2026
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2026
+  period_coverage:
+    start_date: '2026-04-01'
+    end_date: '2027-03-31'
+    basis: fiscal
+    source_period_label: '2026-27'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: government
+  entity_role: central_government
+  domain: fuel_duty_receipts
+  groupby_dimension: obr.vehicle_category
+  rows:
+  - value_id: total
+    label: Total fuel duty receipts
+    ordinal: 0
+    row_number: 38
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
+    filters:
+      vehicle_category: total
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: total
+      label: Vehicle Category
+  - value_id: road_fuels
+    label: Road-fuel duty receipts
+    ordinal: 1
+    row_number: 45
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
+    filters:
+      vehicle_category: road_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: road_fuels
+      label: Vehicle Category
+  - value_id: other_fuels
+    label: Other-fuel duty receipts
+    ordinal: 2
+    row_number: 52
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
+    filters:
+      vehicle_category: other_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_fuels
+      label: Vehicle Category
+  - value_id: cars
+    label: Cars
+    ordinal: 3
+    row_number: 59
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
+    filters:
+      vehicle_category: cars
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: cars
+      label: Vehicle Category
+  - value_id: light_goods_vehicles
+    label: Light goods vehicles
+    ordinal: 4
+    row_number: 66
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
+    filters:
+      vehicle_category: light_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: light_goods_vehicles
+      label: Vehicle Category
+  - value_id: heavy_goods_vehicles
+    label: Heavy goods vehicles
+    ordinal: 5
+    row_number: 73
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
+    filters:
+      vehicle_category: heavy_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: heavy_goods_vehicles
+      label: Vehicle Category
+  - value_id: other_petrol_diesel
+    label: Other petrol and diesel
+    ordinal: 6
+    row_number: 80
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
+    filters:
+      vehicle_category: other_petrol_diesel
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_petrol_diesel
+      label: Vehicle Category
+  measures:
+  - measure_id: receipts
+    label: Fuel-duty receipts
+    ordinal: 0
+    column: E
+    source_column_id: receipts
+    concept: obr.fuel_duty.receipts
+    source_concept: obr.fuel_duty.receipts
+    concept_relation: source_label
+    concept_authority: obr
+    concept_evidence_url: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
+    concept_evidence_notes: Fuel-duty receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000000
+- record_set_id: obr.fuel_duty_receipts_by_vehicle.fy2027
+  provenance_class: model_output
+  assertion: source_projection
+  record_set_spec_id: obr.fuel_duty_receipts_by_vehicle.fy2027.v1
+  source_record_id_prefix: obr.fuel_duty_receipts_by_vehicle.fy2027
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2027
+  period_coverage:
+    start_date: '2027-04-01'
+    end_date: '2028-03-31'
+    basis: fiscal
+    source_period_label: '2027-28'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: government
+  entity_role: central_government
+  domain: fuel_duty_receipts
+  groupby_dimension: obr.vehicle_category
+  rows:
+  - value_id: total
+    label: Total fuel duty receipts
+    ordinal: 0
+    row_number: 39
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
+    filters:
+      vehicle_category: total
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: total
+      label: Vehicle Category
+  - value_id: road_fuels
+    label: Road-fuel duty receipts
+    ordinal: 1
+    row_number: 46
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
+    filters:
+      vehicle_category: road_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: road_fuels
+      label: Vehicle Category
+  - value_id: other_fuels
+    label: Other-fuel duty receipts
+    ordinal: 2
+    row_number: 53
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
+    filters:
+      vehicle_category: other_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_fuels
+      label: Vehicle Category
+  - value_id: cars
+    label: Cars
+    ordinal: 3
+    row_number: 60
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
+    filters:
+      vehicle_category: cars
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: cars
+      label: Vehicle Category
+  - value_id: light_goods_vehicles
+    label: Light goods vehicles
+    ordinal: 4
+    row_number: 67
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
+    filters:
+      vehicle_category: light_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: light_goods_vehicles
+      label: Vehicle Category
+  - value_id: heavy_goods_vehicles
+    label: Heavy goods vehicles
+    ordinal: 5
+    row_number: 74
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
+    filters:
+      vehicle_category: heavy_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: heavy_goods_vehicles
+      label: Vehicle Category
+  - value_id: other_petrol_diesel
+    label: Other petrol and diesel
+    ordinal: 6
+    row_number: 81
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
+    filters:
+      vehicle_category: other_petrol_diesel
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_petrol_diesel
+      label: Vehicle Category
+  measures:
+  - measure_id: receipts
+    label: Fuel-duty receipts
+    ordinal: 0
+    column: E
+    source_column_id: receipts
+    concept: obr.fuel_duty.receipts
+    source_concept: obr.fuel_duty.receipts
+    concept_relation: source_label
+    concept_authority: obr
+    concept_evidence_url: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
+    concept_evidence_notes: Fuel-duty receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000000
+- record_set_id: obr.fuel_duty_receipts_by_vehicle.fy2028
+  provenance_class: model_output
+  assertion: source_projection
+  record_set_spec_id: obr.fuel_duty_receipts_by_vehicle.fy2028.v1
+  source_record_id_prefix: obr.fuel_duty_receipts_by_vehicle.fy2028
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2028
+  period_coverage:
+    start_date: '2028-04-01'
+    end_date: '2029-03-31'
+    basis: fiscal
+    source_period_label: '2028-29'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: government
+  entity_role: central_government
+  domain: fuel_duty_receipts
+  groupby_dimension: obr.vehicle_category
+  rows:
+  - value_id: total
+    label: Total fuel duty receipts
+    ordinal: 0
+    row_number: 40
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: 'Fuel duty forecast 25.1 24.6 24.7 27.3 27.6 28.0 28.2'
+    filters:
+      vehicle_category: total
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: total
+      label: Vehicle Category
+  - value_id: road_fuels
+    label: Road-fuel duty receipts
+    ordinal: 1
+    row_number: 47
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Road fuels 24.8 24.4 24.5 27.0 27.4 27.8 27.9'
+    filters:
+      vehicle_category: road_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: road_fuels
+      label: Vehicle Category
+  - value_id: other_fuels
+    label: Other-fuel duty receipts
+    ordinal: 2
+    row_number: 54
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other fuels1 0.3 0.2 0.2 0.2 0.3 0.3 0.3'
+    filters:
+      vehicle_category: other_fuels
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_fuels
+      label: Vehicle Category
+  - value_id: cars
+    label: Cars
+    ordinal: 3
+    row_number: 61
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Cars 14.4 14.2 14.4 15.9 16.0 16.1 16.0'
+    filters:
+      vehicle_category: cars
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: cars
+      label: Vehicle Category
+  - value_id: light_goods_vehicles
+    label: Light goods vehicles
+    ordinal: 4
+    row_number: 68
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'LGVs 4.3 4.4 4.5 5.1 5.2 5.5 5.7'
+    filters:
+      vehicle_category: light_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: light_goods_vehicles
+      label: Vehicle Category
+  - value_id: heavy_goods_vehicles
+    label: Heavy goods vehicles
+    ordinal: 5
+    row_number: 75
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'HGVs 4.3 4.2 4.2 4.6 4.6 4.7 4.8'
+    filters:
+      vehicle_category: heavy_goods_vehicles
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: heavy_goods_vehicles
+      label: Vehicle Category
+  - value_id: other_petrol_diesel
+    label: Other petrol and diesel
+    ordinal: 6
+    row_number: 82
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: 'Other petrol and diesel2 1.8 1.7 1.4 1.5 1.5 1.5 1.4'
+    filters:
+      vehicle_category: other_petrol_diesel
+    constraints:
+    - variable: vehicle_category
+      operator: ==
+      value: other_petrol_diesel
+      label: Vehicle Category
+  measures:
+  - measure_id: receipts
+    label: Fuel-duty receipts
+    ordinal: 0
+    column: E
+    source_column_id: receipts
+    concept: obr.fuel_duty.receipts
+    source_concept: obr.fuel_duty.receipts
+    concept_relation: source_label
+    concept_authority: obr
+    concept_evidence_url: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
+    concept_evidence_notes: Fuel-duty receipts
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000000

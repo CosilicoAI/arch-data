@@ -1,0 +1,18 @@
+source_id: obr
+package_id: obr-fuel-duty-receipts-by-vehicle-april-2024
+dataset: obr_obr-fuel-duty-receipts-by-vehicle-april-2024
+source_page: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
+table: 'Fuel duty supplementary release: receipts by vehicle type'
+files:
+  2024:
+    filename: fuel-duty-receipts-by-vehicle-type.pdf
+    source_url: https://obr.uk/docs/dlm_uploads/Fuel-duty-supplementary-release_receipts-by-vehicle-type.pdf
+    sha256: 4c5a65745550fbc62fb281c43dbde602a64f465b6095e3383e0473d66b31f018
+    size_bytes: 110064
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/obr/obr-fuel-duty-receipts-by-vehicle-april-2024/2024/4c5a65745550fbc62fb281c43dbde602a64f465b6095e3383e0473d66b31f018/fuel-duty-receipts-by-vehicle-type.pdf
+        uri: r2://ledger-raw/raw/obr/obr-fuel-duty-receipts-by-vehicle-april-2024/2024/4c5a65745550fbc62fb281c43dbde602a64f465b6095e3383e0473d66b31f018/fuel-duty-receipts-by-vehicle-type.pdf

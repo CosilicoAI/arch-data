@@ -6,6 +6,8 @@ import hashlib
 import json
 from pathlib import Path
 
+import pytest
+
 from chronicle.core import (
     Aggregation,
     EntityDimension,
@@ -89,6 +91,15 @@ def test_valid_fact_passes_validation():
 
 def test_academic_year_period_type_is_valid():
     fact = _fact(period=PeriodDimension(type="academic_year", value=2024))
+    assert validate_fact(fact) == ()
+
+
+@pytest.mark.parametrize(
+    ("period_type", "value"),
+    (("quarter", "2024-Q1"), ("week", "2026-W36")),
+)
+def test_subannual_period_types_are_valid(period_type, value):
+    fact = _fact(period=PeriodDimension(type=period_type, value=value))
     assert validate_fact(fact) == ()
 
 

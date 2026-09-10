@@ -1,0 +1,18 @@
+source_id: desnz
+package_id: desnz-weekly-road-fuel-prices-september-2026
+dataset: desnz_desnz-weekly-road-fuel-prices-september-2026
+source_page: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-weekly-statistics
+table: Weekly road fuel prices
+files:
+  2026:
+    filename: Weekly_Fuel_Prices_07-09-26.xlsx
+    source_url: https://assets.publishing.service.gov.uk/media/6a9ec4436beb5206555555d1/Weekly_Fuel_Prices_07-09-26.xlsx
+    sha256: 65cfb716a6934ae6df82c3213c4f6f9dfa551ecb7075400e1f7eeb343eeb0ad7
+    size_bytes: 260185
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/desnz/desnz-weekly-road-fuel-prices-september-2026/2026/65cfb716a6934ae6df82c3213c4f6f9dfa551ecb7075400e1f7eeb343eeb0ad7/Weekly_Fuel_Prices_07-09-26.xlsx
+        uri: r2://ledger-raw/raw/desnz/desnz-weekly-road-fuel-prices-september-2026/2026/65cfb716a6934ae6df82c3213c4f6f9dfa551ecb7075400e1f7eeb343eeb0ad7/Weekly_Fuel_Prices_07-09-26.xlsx

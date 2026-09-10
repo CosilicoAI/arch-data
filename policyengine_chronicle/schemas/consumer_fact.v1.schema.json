@@ -117,7 +117,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "description": "Publisher-asserted period kind; the ledger.core.ALLOWED_PERIOD_TYPES vocabulary: calendar_year, tax_year, fiscal_year, academic_year, month. Split-label years store the opening year of the publisher's label (UK FY2024-25 -> fiscal_year 2024; AY 2024/25 -> academic_year 2024). Publishers labelling a fiscal year with a single year keep that label year (US federal FY2024 -> 2024)."
+          "description": "Publisher-asserted period kind; the ledger.core.ALLOWED_PERIOD_TYPES vocabulary: calendar_year, tax_year, fiscal_year, academic_year, month, quarter, week. Split-label years store the opening year of the publisher's label (UK FY2024-25 -> fiscal_year 2024; AY 2024/25 -> academic_year 2024). Publishers labelling a fiscal year with a single year keep that label year (US federal FY2024 -> 2024). Quarter values use YYYY-QN and ISO week values use YYYY-Www, with exact dates in period_coverage."
         },
         "value": {
           "type": [

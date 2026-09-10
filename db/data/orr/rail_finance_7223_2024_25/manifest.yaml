@@ -1,0 +1,18 @@
+source_id: orr
+package_id: orr-rail-finance-7223-2024-25
+dataset: orr_orr-rail-finance-7223-2024-25
+source_page: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+table: Table 7223 franchised passenger train operator finances
+files:
+  2025:
+    filename: table-7223.ods
+    source_url: https://dataportal.orr.gov.uk/media/1894/table-7223-franchised-passenger-train-operator-finances-for-the-latest-financial-year-by-franchise.ods?cb=f3158d34-4100-4f73-a57b-3e4883ff417e
+    sha256: 69d7382ab218927c08547818ee421fc2a928206b9f7105ae67e626fa3f22a5ec
+    size_bytes: 16638
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/orr/orr-rail-finance-7223-2024-25/2025/69d7382ab218927c08547818ee421fc2a928206b9f7105ae67e626fa3f22a5ec/table-7223.ods
+        uri: r2://ledger-raw/raw/orr/orr-rail-finance-7223-2024-25/2025/69d7382ab218927c08547818ee421fc2a928206b9f7105ae67e626fa3f22a5ec/table-7223.ods
