@@ -130,16 +130,16 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "aggregate_duplicate_key_count": 0,
         "entity_count": 12,
         "error_count": 0,
-        "fact_count": 196578,
-        "geography_count": 12539,
-        "period_count": 489,
+        "fact_count": 202590,
+        "geography_count": 12553,
+        "period_count": 492,
         "semantic_duplicate_key_count": 177,
         "skipped_source_count": 10,
-        "source_count": 49,
-        "source_package_count": 185,
+        "source_count": 50,
+        "source_package_count": 191,
         "warning_count": 1,
     }
-    assert len(rows) == 196578
+    assert len(rows) == 202590
     assert {row["provenance_class"] for row in rows} <= {
         "administrative",
         "census",
@@ -157,7 +157,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert rows[0]["aggregate_fact_key"].startswith("ledger.aggregate_fact.v2:")
     assert rows[0]["semantic_fact_key"].startswith("ledger.semantic_fact.v2:")
-    assert source_packages["source_package_count"] == 185
+    assert source_packages["source_package_count"] == 191
     assert source_packages["skipped_source_count"] == 10
     assert sorted(item["source"] for item in source_packages["skipped_sources"]) == [
         "census-acs-s0101-congressional-district-age-2024",
@@ -171,7 +171,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "jct-obbba-revenue-estimates-2025",
         "jct-tax-expenditures-2024",
     ]
-    assert coverage["fact_count"] == 196578
+    assert coverage["fact_count"] == 202590
     assert coverage["counts"]["by_source"] == {
         "bea": 445,
         "bfp_economic_outlook": 5,
@@ -187,7 +187,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "dfe": 770,
         "dfc_ni": 1189,
         "dfi_ni": 24,
-        "dft": 269,
+        "dft": 1799,
         "dwp": 10831,
         "eurostat": 207,
         "federal_reserve": 1,
@@ -203,15 +203,16 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "mhclg": 2712,
         "nbb_national_accounts": 1,
         "nisra": 533,
+        "nithc": 8,
         "nrs": 5647,
         "obr": 319,
-        "ofgem": 4,
+        "ofgem": 3640,
         "onem_rva_unemployment": 1,
         "ons": 80834,
         "onss_contributions": 1,
         "opgroeien_groeipakket": 11,
         "orr": 99,
-        "scotgov": 2795,
+        "scotgov": 2805,
         "sfpd_pensions": 4,
         "slc": 199,
         "spf_finances_pit": 1,
@@ -221,10 +222,10 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "statbel_population_structure": 36,
         "usda_snap": 852,
         "voa": 3001,
-        "welshgov": 219,
+        "welshgov": 1047,
     }
     table_counts = coverage["counts"]["by_source_table"]
-    assert len(table_counts) == 180
+    assert len(table_counts) == 186
     assert (
         table_counts[
             "dwp:Households on Universal Credit by family type, "
@@ -933,6 +934,47 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         iso_year, iso_week, _ = observation_date.isocalendar()
         expected_period_counts[f"week:{iso_year}-W{iso_week:02d}"] = 3
         observation_date += timedelta(days=7)
+    issue_257_period_increments = {
+        "calendar_year:2003": 63,
+        "calendar_year:2005": 63,
+        "calendar_year:2006": 36,
+        "calendar_year:2007": 63,
+        "calendar_year:2008": 36,
+        "calendar_year:2009": 72,
+        "calendar_year:2010": 72,
+        "calendar_year:2011": 72,
+        "calendar_year:2012": 72,
+        "calendar_year:2013": 72,
+        "calendar_year:2014": 72,
+        "calendar_year:2015": 72,
+        "calendar_year:2016": 72,
+        "calendar_year:2017": 72,
+        "calendar_year:2018": 72,
+        "calendar_year:2019": 72,
+        "calendar_year:2020": 72,
+        "calendar_year:2021": 81,
+        "calendar_year:2022": 81,
+        "calendar_year:2023": 81,
+        "calendar_year:2024": 81,
+        "calendar_year:2025": 82,
+        "fiscal_year:2022": 276,
+        "fiscal_year:2023": 280,
+        "fiscal_year:2024": 289,
+        "quarter:2024-Q1": 303,
+        "quarter:2024-Q2": 303,
+        "quarter:2024-Q3": 303,
+        "quarter:2024-Q4": 303,
+        "quarter:2025-Q1": 303,
+        "quarter:2025-Q2": 303,
+        "quarter:2025-Q3": 303,
+        "quarter:2025-Q4": 303,
+        "quarter:2026-Q1": 303,
+        "quarter:2026-Q2": 303,
+        "quarter:2026-Q3": 303,
+        "quarter:2026-Q4": 303,
+    }
+    for key, count in issue_257_period_increments.items():
+        expected_period_counts[key] = expected_period_counts.get(key, 0) + count
     assert coverage["counts"]["by_period"] == expected_period_counts
     assert coverage["counts"]["by_geography"]["country:BE"] == 4888
     assert coverage["counts"]["by_geography"]["country:DE"] == 36
@@ -947,19 +989,20 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         coverage["counts"]["by_geography"]["congressional_district:5001700US0601"] == 56
     )
     assert coverage["counts"]["by_geography"]["country:K02000001"] == 7356
-    assert coverage["counts"]["by_geography"]["country:E92000001"] == 1437
-    assert coverage["counts"]["by_geography"]["country:K03000001"] == 4815
-    assert len(coverage["counts"]["by_geography"]) == 12539
+    assert coverage["counts"]["by_geography"]["country:E92000001"] == 2967
+    assert coverage["counts"]["by_geography"]["country:K03000001"] == 5427
+    assert coverage["counts"]["by_geography"]["statistical_scope:ofgem:london"] == 216
+    assert len(coverage["counts"]["by_geography"]) == 12553
     assert coverage["counts"]["by_entity"] == {
         "benefit_unit": 4680,
         "dwelling": 27269,
         "family": 1299,
         "firm": 1439,
-        "government": 1473,
-        "household": 40805,
-        "institutional_sector": 1181,
+        "government": 2313,
+        "household": 44441,
+        "institutional_sector": 1185,
         "pension_plan": 2,
-        "person": 63299,
+        "person": 64831,
         "return": 14600,
         "social_protection_scheme": 36,
         "tax_unit": 40495,

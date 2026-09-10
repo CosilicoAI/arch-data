@@ -35,6 +35,7 @@ UK_BUNDLE_SOURCE_PREFIXES = (
     "isc",
     "mhclg",
     "nisra",
+    "nithc",
     "nrs",
     "obr",
     "ofgem",
@@ -56,6 +57,8 @@ UK_BUNDLE_SOURCES = (
     "dft-bus0415-fares-index-2026",
     "dft-bus05i-revenue-support-2025",
     "dft-nts-vehicle-ownership-2024",
+    "dft-nts0313-mode-use-frequency-2025",
+    "dft-nts0621-local-bus-use-frequency-2025",
     "dft-nts0705-local-bus-trips-2024",
     "dft-veh1103-cars-fuel-type-2025",
     "dwp-benefit-cap-november-2025",
@@ -104,6 +107,7 @@ UK_BUNDLE_SOURCES = (
     "nisra-census2021-households-pcon24",
     "nisra-census2021-tenure-lgd",
     "nisra-pcon24-population-by-age-2024",
+    "nithc-annual-report-accounts-2024-25",
     "nrs-census2022-households-ukpc24",
     "nrs-census2022-uv113-household-composition-country",
     "nrs-census2022-uv404-tenure-council-area",
@@ -113,6 +117,7 @@ UK_BUNDLE_SOURCES = (
     "obr-efo-expenditure-march-2026",
     "obr-efo-receipts-march-2026",
     "obr-fuel-duty-receipts-by-vehicle-april-2024",
+    "ofgem-energy-price-cap-levels-2024-2026",
     "ofgem-energy-price-cap-q1-2024",
     "ons-census2021-ts003-household-composition-country",
     "ons-census2021-ts041-households-lad",
@@ -143,6 +148,7 @@ UK_BUNDLE_SOURCES = (
     "scotgov-band-d-council-tax-rates-2026-27",
     "scotgov-band-d-equivalents-2025",
     "scotgov-bus-coach-statistics-2023-24",
+    "scotgov-bus-coach-statistics-2024-25",
     "scotgov-council-tax-bands-2025",
     "scotgov-council-tax-collection-2024-25",
     "scotgov-council-tax-collection-2025-26",
@@ -162,6 +168,7 @@ UK_BUNDLE_SOURCES = (
     "welshgov-council-tax-levels-2026-27",
     "welshgov-ctrs-annual-report-2024-25",
     "welshgov-ctrs-annual-report-2025-26",
+    "welshgov-transport-revenue-outturn-2024-25",
 )
 
 _KEY_DOMAINS = {

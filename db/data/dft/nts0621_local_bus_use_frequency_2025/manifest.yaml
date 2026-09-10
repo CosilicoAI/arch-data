@@ -1,0 +1,19 @@
+source_id: dft
+package_id: dft-nts0621-local-bus-use-frequency-2025
+dataset: dft_dft-nts0621-local-bus-use-frequency-2025
+source_page: https://www.gov.uk/government/statistical-data-sets/nts06-age-gender-and-modal-breakdown
+table: 'NTS0621: Frequency of local bus use for those aged 60 years and over: England,
+  2003 onwards'
+files:
+  2025:
+    filename: nts0621.ods
+    source_url: https://assets.publishing.service.gov.uk/media/6a9ed1b4f222242033e4643c/nts0621.ods
+    sha256: ac4b39cabae39149d0cdd3ac000ea4517c40dd6ba90eaa461b356ccc8f36716b
+    size_bytes: 12126
+    fetched_at: '2026-09-10T14:02:40+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dft/dft-nts0621-local-bus-use-frequency-2025/2025/ac4b39cabae39149d0cdd3ac000ea4517c40dd6ba90eaa461b356ccc8f36716b/nts0621.ods
+        uri: r2://ledger-raw/raw/uk/dft/dft-nts0621-local-bus-use-frequency-2025/2025/ac4b39cabae39149d0cdd3ac000ea4517c40dd6ba90eaa461b356ccc8f36716b/nts0621.ods

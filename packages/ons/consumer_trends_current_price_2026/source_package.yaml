@@ -1,3 +1,14 @@
+# ONS Consumer Trends, current price and not seasonally adjusted, sheets 04CN
+# and 07CN: household final consumption expenditure on domestic energy, road
+# fuels and passenger transport by road, annually from 2020 and quarterly from
+# 2020 Q1.
+#
+# Both sheets are wide, one COICOP class per column and one period per row, so
+# each COICOP class gets its own record set whose single row is the period row
+# and whose filters carry coicop. That gives 04CN and 07CN the same shape:
+# consumers select 04.5, 07.2.2 and 07.3.2 with one constraint key, and
+# layout.groupby_value_id names the class on every fact rather than naming the
+# class on 04CN and "all_households" on 07CN.
 schema_version: ledger.source_package.v1
 package_id: ons-consumer-trends-current-price-2026
 label: ONS Consumer Trends household expenditure on domestic energy, road fuels and road transport, 2020
@@ -71,11 +82,11 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.cy2020
+- record_set_id: ons.consumer_trends.07cn_07_2_2.cy2020
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.cy2020.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.cy2020
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.cy2020.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.cy2020
   sheet_name: 07CN
   period_type: calendar_year
   period: 2020
@@ -93,26 +104,31 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 32
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2020
     filters:
       frequency: annual
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
       value: annual
       label: Frequency
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -123,18 +139,53 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.cy2020
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.cy2020.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.cy2020
+  sheet_name: 07CN
+  period_type: calendar_year
+  period: 2020
+  period_coverage:
+    start_date: '2020-01-01'
+    end_date: '2020-12-31'
+    basis: calendar
+    source_period_label: '2020'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 32
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2020
     filters:
-      coicop: 07.2.2
+      frequency: annual
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: annual
+      label: Frequency
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -145,13 +196,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.cy2021
   provenance_class: administrative
   assertion: observation
@@ -209,11 +253,11 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.cy2021
+- record_set_id: ons.consumer_trends.07cn_07_2_2.cy2021
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.cy2021.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.cy2021
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.cy2021.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.cy2021
   sheet_name: 07CN
   period_type: calendar_year
   period: 2021
@@ -231,26 +275,31 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 33
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2021
     filters:
       frequency: annual
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
       value: annual
       label: Frequency
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -261,18 +310,53 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.cy2021
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.cy2021.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.cy2021
+  sheet_name: 07CN
+  period_type: calendar_year
+  period: 2021
+  period_coverage:
+    start_date: '2021-01-01'
+    end_date: '2021-12-31'
+    basis: calendar
+    source_period_label: '2021'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 33
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2021
     filters:
-      coicop: 07.2.2
+      frequency: annual
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: annual
+      label: Frequency
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -283,13 +367,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.cy2022
   provenance_class: administrative
   assertion: observation
@@ -347,11 +424,11 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.cy2022
+- record_set_id: ons.consumer_trends.07cn_07_2_2.cy2022
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.cy2022.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.cy2022
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.cy2022.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.cy2022
   sheet_name: 07CN
   period_type: calendar_year
   period: 2022
@@ -369,26 +446,31 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 34
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2022
     filters:
       frequency: annual
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
       value: annual
       label: Frequency
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -399,18 +481,53 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.cy2022
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.cy2022.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.cy2022
+  sheet_name: 07CN
+  period_type: calendar_year
+  period: 2022
+  period_coverage:
+    start_date: '2022-01-01'
+    end_date: '2022-12-31'
+    basis: calendar
+    source_period_label: '2022'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 34
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2022
     filters:
-      coicop: 07.2.2
+      frequency: annual
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: annual
+      label: Frequency
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -421,13 +538,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.cy2023
   provenance_class: administrative
   assertion: observation
@@ -485,11 +595,11 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.cy2023
+- record_set_id: ons.consumer_trends.07cn_07_2_2.cy2023
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.cy2023.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.cy2023
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.cy2023.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.cy2023
   sheet_name: 07CN
   period_type: calendar_year
   period: 2023
@@ -507,26 +617,31 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 35
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2023
     filters:
       frequency: annual
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
       value: annual
       label: Frequency
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -537,18 +652,53 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.cy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.cy2023.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.cy2023
+  sheet_name: 07CN
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 35
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2023
     filters:
-      coicop: 07.2.2
+      frequency: annual
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: annual
+      label: Frequency
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -559,13 +709,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.cy2024
   provenance_class: administrative
   assertion: observation
@@ -623,11 +766,11 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.cy2024
+- record_set_id: ons.consumer_trends.07cn_07_2_2.cy2024
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.cy2024.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.cy2024
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.cy2024.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.cy2024
   sheet_name: 07CN
   period_type: calendar_year
   period: 2024
@@ -645,26 +788,31 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 36
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2024
     filters:
       frequency: annual
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
       value: annual
       label: Frequency
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -675,18 +823,53 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.cy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.cy2024.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.cy2024
+  sheet_name: 07CN
+  period_type: calendar_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 36
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2024
     filters:
-      coicop: 07.2.2
+      frequency: annual
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: annual
+      label: Frequency
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -697,13 +880,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.cy2025
   provenance_class: administrative
   assertion: observation
@@ -761,11 +937,11 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.cy2025
+- record_set_id: ons.consumer_trends.07cn_07_2_2.cy2025
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.cy2025.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.cy2025
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.cy2025.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.cy2025
   sheet_name: 07CN
   period_type: calendar_year
   period: 2025
@@ -783,26 +959,31 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 37
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2025
     filters:
       frequency: annual
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
       value: annual
       label: Frequency
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -813,18 +994,53 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.cy2025
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.cy2025.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.cy2025
+  sheet_name: 07CN
+  period_type: calendar_year
+  period: 2025
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 37
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2025
     filters:
-      coicop: 07.2.2
+      frequency: annual
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: annual
+      label: Frequency
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -835,13 +1051,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2020_q1
   provenance_class: administrative
   assertion: observation
@@ -849,12 +1058,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2020_q1
   sheet_name: 04CN
   period_type: quarter
-  period: '2020-Q1'
+  period: 2020-Q1
   period_coverage:
     start_date: '2020-01-01'
     end_date: '2020-03-31'
     basis: calendar
-    source_period_label: 'Q1 2020'
+    source_period_label: Q1 2020
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -904,19 +1113,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2020_q1
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2020_q1
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2020_q1.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2020_q1
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2020_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2020_q1
   sheet_name: 07CN
   period_type: quarter
-  period: '2020-Q1'
+  period: 2020-Q1
   period_coverage:
     start_date: '2020-01-01'
     end_date: '2020-03-31'
     basis: calendar
-    source_period_label: 'Q1 2020'
+    source_period_label: Q1 2020
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -926,16 +1135,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 135
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2020 Q1
     filters:
       frequency: quarterly
       quarter: Q1
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -945,12 +1155,16 @@ record_sets:
       operator: ==
       value: Q1
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -961,18 +1175,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2020_q1
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2020_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2020_q1
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2020-Q1
+  period_coverage:
+    start_date: '2020-01-01'
+    end_date: '2020-03-31'
+    basis: calendar
+    source_period_label: Q1 2020
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 135
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2020 Q1
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q1
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -983,13 +1237,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2020_q2
   provenance_class: administrative
   assertion: observation
@@ -997,12 +1244,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2020_q2
   sheet_name: 04CN
   period_type: quarter
-  period: '2020-Q2'
+  period: 2020-Q2
   period_coverage:
     start_date: '2020-04-01'
     end_date: '2020-06-30'
     basis: calendar
-    source_period_label: 'Q2 2020'
+    source_period_label: Q2 2020
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1052,19 +1299,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2020_q2
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2020_q2
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2020_q2.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2020_q2
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2020_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2020_q2
   sheet_name: 07CN
   period_type: quarter
-  period: '2020-Q2'
+  period: 2020-Q2
   period_coverage:
     start_date: '2020-04-01'
     end_date: '2020-06-30'
     basis: calendar
-    source_period_label: 'Q2 2020'
+    source_period_label: Q2 2020
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1074,16 +1321,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 136
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2020 Q2
     filters:
       frequency: quarterly
       quarter: Q2
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -1093,12 +1341,16 @@ record_sets:
       operator: ==
       value: Q2
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -1109,18 +1361,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2020_q2
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2020_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2020_q2
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2020-Q2
+  period_coverage:
+    start_date: '2020-04-01'
+    end_date: '2020-06-30'
+    basis: calendar
+    source_period_label: Q2 2020
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 136
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2020 Q2
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q2
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q2
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -1131,13 +1423,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2020_q3
   provenance_class: administrative
   assertion: observation
@@ -1145,12 +1430,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2020_q3
   sheet_name: 04CN
   period_type: quarter
-  period: '2020-Q3'
+  period: 2020-Q3
   period_coverage:
     start_date: '2020-07-01'
     end_date: '2020-09-30'
     basis: calendar
-    source_period_label: 'Q3 2020'
+    source_period_label: Q3 2020
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1200,19 +1485,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2020_q3
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2020_q3
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2020_q3.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2020_q3
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2020_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2020_q3
   sheet_name: 07CN
   period_type: quarter
-  period: '2020-Q3'
+  period: 2020-Q3
   period_coverage:
     start_date: '2020-07-01'
     end_date: '2020-09-30'
     basis: calendar
-    source_period_label: 'Q3 2020'
+    source_period_label: Q3 2020
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1222,16 +1507,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 137
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2020 Q3
     filters:
       frequency: quarterly
       quarter: Q3
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -1241,12 +1527,16 @@ record_sets:
       operator: ==
       value: Q3
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -1257,18 +1547,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2020_q3
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2020_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2020_q3
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2020-Q3
+  period_coverage:
+    start_date: '2020-07-01'
+    end_date: '2020-09-30'
+    basis: calendar
+    source_period_label: Q3 2020
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 137
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2020 Q3
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q3
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q3
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -1279,13 +1609,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2020_q4
   provenance_class: administrative
   assertion: observation
@@ -1293,12 +1616,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2020_q4
   sheet_name: 04CN
   period_type: quarter
-  period: '2020-Q4'
+  period: 2020-Q4
   period_coverage:
     start_date: '2020-10-01'
     end_date: '2020-12-31'
     basis: calendar
-    source_period_label: 'Q4 2020'
+    source_period_label: Q4 2020
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1348,19 +1671,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2020_q4
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2020_q4
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2020_q4.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2020_q4
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2020_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2020_q4
   sheet_name: 07CN
   period_type: quarter
-  period: '2020-Q4'
+  period: 2020-Q4
   period_coverage:
     start_date: '2020-10-01'
     end_date: '2020-12-31'
     basis: calendar
-    source_period_label: 'Q4 2020'
+    source_period_label: Q4 2020
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1370,16 +1693,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 138
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2020 Q4
     filters:
       frequency: quarterly
       quarter: Q4
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -1389,12 +1713,16 @@ record_sets:
       operator: ==
       value: Q4
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -1405,18 +1733,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2020_q4
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2020_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2020_q4
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2020-Q4
+  period_coverage:
+    start_date: '2020-10-01'
+    end_date: '2020-12-31'
+    basis: calendar
+    source_period_label: Q4 2020
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 138
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2020 Q4
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q4
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q4
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -1427,13 +1795,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2021_q1
   provenance_class: administrative
   assertion: observation
@@ -1441,12 +1802,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2021_q1
   sheet_name: 04CN
   period_type: quarter
-  period: '2021-Q1'
+  period: 2021-Q1
   period_coverage:
     start_date: '2021-01-01'
     end_date: '2021-03-31'
     basis: calendar
-    source_period_label: 'Q1 2021'
+    source_period_label: Q1 2021
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1496,19 +1857,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2021_q1
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2021_q1
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2021_q1.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2021_q1
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2021_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2021_q1
   sheet_name: 07CN
   period_type: quarter
-  period: '2021-Q1'
+  period: 2021-Q1
   period_coverage:
     start_date: '2021-01-01'
     end_date: '2021-03-31'
     basis: calendar
-    source_period_label: 'Q1 2021'
+    source_period_label: Q1 2021
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1518,16 +1879,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 139
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2021 Q1
     filters:
       frequency: quarterly
       quarter: Q1
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -1537,12 +1899,16 @@ record_sets:
       operator: ==
       value: Q1
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -1553,18 +1919,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2021_q1
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2021_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2021_q1
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2021-Q1
+  period_coverage:
+    start_date: '2021-01-01'
+    end_date: '2021-03-31'
+    basis: calendar
+    source_period_label: Q1 2021
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 139
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2021 Q1
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q1
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -1575,13 +1981,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2021_q2
   provenance_class: administrative
   assertion: observation
@@ -1589,12 +1988,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2021_q2
   sheet_name: 04CN
   period_type: quarter
-  period: '2021-Q2'
+  period: 2021-Q2
   period_coverage:
     start_date: '2021-04-01'
     end_date: '2021-06-30'
     basis: calendar
-    source_period_label: 'Q2 2021'
+    source_period_label: Q2 2021
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1644,19 +2043,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2021_q2
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2021_q2
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2021_q2.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2021_q2
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2021_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2021_q2
   sheet_name: 07CN
   period_type: quarter
-  period: '2021-Q2'
+  period: 2021-Q2
   period_coverage:
     start_date: '2021-04-01'
     end_date: '2021-06-30'
     basis: calendar
-    source_period_label: 'Q2 2021'
+    source_period_label: Q2 2021
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1666,16 +2065,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 140
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2021 Q2
     filters:
       frequency: quarterly
       quarter: Q2
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -1685,12 +2085,16 @@ record_sets:
       operator: ==
       value: Q2
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -1701,18 +2105,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2021_q2
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2021_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2021_q2
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2021-Q2
+  period_coverage:
+    start_date: '2021-04-01'
+    end_date: '2021-06-30'
+    basis: calendar
+    source_period_label: Q2 2021
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 140
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2021 Q2
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q2
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q2
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -1723,13 +2167,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2021_q3
   provenance_class: administrative
   assertion: observation
@@ -1737,12 +2174,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2021_q3
   sheet_name: 04CN
   period_type: quarter
-  period: '2021-Q3'
+  period: 2021-Q3
   period_coverage:
     start_date: '2021-07-01'
     end_date: '2021-09-30'
     basis: calendar
-    source_period_label: 'Q3 2021'
+    source_period_label: Q3 2021
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1792,19 +2229,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2021_q3
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2021_q3
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2021_q3.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2021_q3
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2021_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2021_q3
   sheet_name: 07CN
   period_type: quarter
-  period: '2021-Q3'
+  period: 2021-Q3
   period_coverage:
     start_date: '2021-07-01'
     end_date: '2021-09-30'
     basis: calendar
-    source_period_label: 'Q3 2021'
+    source_period_label: Q3 2021
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1814,16 +2251,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 141
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2021 Q3
     filters:
       frequency: quarterly
       quarter: Q3
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -1833,12 +2271,16 @@ record_sets:
       operator: ==
       value: Q3
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -1849,18 +2291,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2021_q3
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2021_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2021_q3
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2021-Q3
+  period_coverage:
+    start_date: '2021-07-01'
+    end_date: '2021-09-30'
+    basis: calendar
+    source_period_label: Q3 2021
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 141
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2021 Q3
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q3
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q3
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -1871,13 +2353,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2021_q4
   provenance_class: administrative
   assertion: observation
@@ -1885,12 +2360,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2021_q4
   sheet_name: 04CN
   period_type: quarter
-  period: '2021-Q4'
+  period: 2021-Q4
   period_coverage:
     start_date: '2021-10-01'
     end_date: '2021-12-31'
     basis: calendar
-    source_period_label: 'Q4 2021'
+    source_period_label: Q4 2021
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1940,19 +2415,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2021_q4
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2021_q4
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2021_q4.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2021_q4
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2021_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2021_q4
   sheet_name: 07CN
   period_type: quarter
-  period: '2021-Q4'
+  period: 2021-Q4
   period_coverage:
     start_date: '2021-10-01'
     end_date: '2021-12-31'
     basis: calendar
-    source_period_label: 'Q4 2021'
+    source_period_label: Q4 2021
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -1962,16 +2437,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 142
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2021 Q4
     filters:
       frequency: quarterly
       quarter: Q4
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -1981,12 +2457,16 @@ record_sets:
       operator: ==
       value: Q4
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -1997,18 +2477,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2021_q4
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2021_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2021_q4
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2021-Q4
+  period_coverage:
+    start_date: '2021-10-01'
+    end_date: '2021-12-31'
+    basis: calendar
+    source_period_label: Q4 2021
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 142
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2021 Q4
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q4
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q4
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -2019,13 +2539,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2022_q1
   provenance_class: administrative
   assertion: observation
@@ -2033,12 +2546,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2022_q1
   sheet_name: 04CN
   period_type: quarter
-  period: '2022-Q1'
+  period: 2022-Q1
   period_coverage:
     start_date: '2022-01-01'
     end_date: '2022-03-31'
     basis: calendar
-    source_period_label: 'Q1 2022'
+    source_period_label: Q1 2022
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2088,19 +2601,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2022_q1
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2022_q1
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2022_q1.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2022_q1
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2022_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2022_q1
   sheet_name: 07CN
   period_type: quarter
-  period: '2022-Q1'
+  period: 2022-Q1
   period_coverage:
     start_date: '2022-01-01'
     end_date: '2022-03-31'
     basis: calendar
-    source_period_label: 'Q1 2022'
+    source_period_label: Q1 2022
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2110,16 +2623,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 143
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2022 Q1
     filters:
       frequency: quarterly
       quarter: Q1
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -2129,12 +2643,16 @@ record_sets:
       operator: ==
       value: Q1
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -2145,18 +2663,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2022_q1
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2022_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2022_q1
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2022-Q1
+  period_coverage:
+    start_date: '2022-01-01'
+    end_date: '2022-03-31'
+    basis: calendar
+    source_period_label: Q1 2022
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 143
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2022 Q1
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q1
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -2167,13 +2725,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2022_q2
   provenance_class: administrative
   assertion: observation
@@ -2181,12 +2732,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2022_q2
   sheet_name: 04CN
   period_type: quarter
-  period: '2022-Q2'
+  period: 2022-Q2
   period_coverage:
     start_date: '2022-04-01'
     end_date: '2022-06-30'
     basis: calendar
-    source_period_label: 'Q2 2022'
+    source_period_label: Q2 2022
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2236,19 +2787,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2022_q2
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2022_q2
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2022_q2.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2022_q2
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2022_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2022_q2
   sheet_name: 07CN
   period_type: quarter
-  period: '2022-Q2'
+  period: 2022-Q2
   period_coverage:
     start_date: '2022-04-01'
     end_date: '2022-06-30'
     basis: calendar
-    source_period_label: 'Q2 2022'
+    source_period_label: Q2 2022
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2258,16 +2809,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 144
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2022 Q2
     filters:
       frequency: quarterly
       quarter: Q2
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -2277,12 +2829,16 @@ record_sets:
       operator: ==
       value: Q2
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -2293,18 +2849,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2022_q2
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2022_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2022_q2
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2022-Q2
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2022-06-30'
+    basis: calendar
+    source_period_label: Q2 2022
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 144
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2022 Q2
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q2
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q2
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -2315,13 +2911,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2022_q3
   provenance_class: administrative
   assertion: observation
@@ -2329,12 +2918,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2022_q3
   sheet_name: 04CN
   period_type: quarter
-  period: '2022-Q3'
+  period: 2022-Q3
   period_coverage:
     start_date: '2022-07-01'
     end_date: '2022-09-30'
     basis: calendar
-    source_period_label: 'Q3 2022'
+    source_period_label: Q3 2022
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2384,19 +2973,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2022_q3
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2022_q3
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2022_q3.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2022_q3
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2022_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2022_q3
   sheet_name: 07CN
   period_type: quarter
-  period: '2022-Q3'
+  period: 2022-Q3
   period_coverage:
     start_date: '2022-07-01'
     end_date: '2022-09-30'
     basis: calendar
-    source_period_label: 'Q3 2022'
+    source_period_label: Q3 2022
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2406,16 +2995,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 145
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2022 Q3
     filters:
       frequency: quarterly
       quarter: Q3
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -2425,12 +3015,16 @@ record_sets:
       operator: ==
       value: Q3
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -2441,18 +3035,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2022_q3
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2022_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2022_q3
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2022-Q3
+  period_coverage:
+    start_date: '2022-07-01'
+    end_date: '2022-09-30'
+    basis: calendar
+    source_period_label: Q3 2022
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 145
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2022 Q3
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q3
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q3
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -2463,13 +3097,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2022_q4
   provenance_class: administrative
   assertion: observation
@@ -2477,12 +3104,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2022_q4
   sheet_name: 04CN
   period_type: quarter
-  period: '2022-Q4'
+  period: 2022-Q4
   period_coverage:
     start_date: '2022-10-01'
     end_date: '2022-12-31'
     basis: calendar
-    source_period_label: 'Q4 2022'
+    source_period_label: Q4 2022
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2532,19 +3159,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2022_q4
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2022_q4
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2022_q4.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2022_q4
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2022_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2022_q4
   sheet_name: 07CN
   period_type: quarter
-  period: '2022-Q4'
+  period: 2022-Q4
   period_coverage:
     start_date: '2022-10-01'
     end_date: '2022-12-31'
     basis: calendar
-    source_period_label: 'Q4 2022'
+    source_period_label: Q4 2022
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2554,16 +3181,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 146
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2022 Q4
     filters:
       frequency: quarterly
       quarter: Q4
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -2573,12 +3201,16 @@ record_sets:
       operator: ==
       value: Q4
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -2589,18 +3221,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2022_q4
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2022_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2022_q4
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2022-Q4
+  period_coverage:
+    start_date: '2022-10-01'
+    end_date: '2022-12-31'
+    basis: calendar
+    source_period_label: Q4 2022
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 146
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2022 Q4
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q4
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q4
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -2611,13 +3283,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2023_q1
   provenance_class: administrative
   assertion: observation
@@ -2625,12 +3290,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2023_q1
   sheet_name: 04CN
   period_type: quarter
-  period: '2023-Q1'
+  period: 2023-Q1
   period_coverage:
     start_date: '2023-01-01'
     end_date: '2023-03-31'
     basis: calendar
-    source_period_label: 'Q1 2023'
+    source_period_label: Q1 2023
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2680,19 +3345,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2023_q1
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2023_q1
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2023_q1.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2023_q1
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2023_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2023_q1
   sheet_name: 07CN
   period_type: quarter
-  period: '2023-Q1'
+  period: 2023-Q1
   period_coverage:
     start_date: '2023-01-01'
     end_date: '2023-03-31'
     basis: calendar
-    source_period_label: 'Q1 2023'
+    source_period_label: Q1 2023
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2702,16 +3367,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 147
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2023 Q1
     filters:
       frequency: quarterly
       quarter: Q1
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -2721,12 +3387,16 @@ record_sets:
       operator: ==
       value: Q1
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -2737,18 +3407,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2023_q1
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2023_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2023_q1
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2023-Q1
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-03-31'
+    basis: calendar
+    source_period_label: Q1 2023
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 147
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2023 Q1
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q1
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -2759,13 +3469,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2023_q2
   provenance_class: administrative
   assertion: observation
@@ -2773,12 +3476,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2023_q2
   sheet_name: 04CN
   period_type: quarter
-  period: '2023-Q2'
+  period: 2023-Q2
   period_coverage:
     start_date: '2023-04-01'
     end_date: '2023-06-30'
     basis: calendar
-    source_period_label: 'Q2 2023'
+    source_period_label: Q2 2023
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2828,19 +3531,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2023_q2
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2023_q2
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2023_q2.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2023_q2
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2023_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2023_q2
   sheet_name: 07CN
   period_type: quarter
-  period: '2023-Q2'
+  period: 2023-Q2
   period_coverage:
     start_date: '2023-04-01'
     end_date: '2023-06-30'
     basis: calendar
-    source_period_label: 'Q2 2023'
+    source_period_label: Q2 2023
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2850,16 +3553,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 148
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2023 Q2
     filters:
       frequency: quarterly
       quarter: Q2
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -2869,12 +3573,16 @@ record_sets:
       operator: ==
       value: Q2
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -2885,18 +3593,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2023_q2
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2023_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2023_q2
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2023-Q2
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2023-06-30'
+    basis: calendar
+    source_period_label: Q2 2023
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 148
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2023 Q2
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q2
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q2
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -2907,13 +3655,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2023_q3
   provenance_class: administrative
   assertion: observation
@@ -2921,12 +3662,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2023_q3
   sheet_name: 04CN
   period_type: quarter
-  period: '2023-Q3'
+  period: 2023-Q3
   period_coverage:
     start_date: '2023-07-01'
     end_date: '2023-09-30'
     basis: calendar
-    source_period_label: 'Q3 2023'
+    source_period_label: Q3 2023
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2976,19 +3717,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2023_q3
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2023_q3
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2023_q3.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2023_q3
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2023_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2023_q3
   sheet_name: 07CN
   period_type: quarter
-  period: '2023-Q3'
+  period: 2023-Q3
   period_coverage:
     start_date: '2023-07-01'
     end_date: '2023-09-30'
     basis: calendar
-    source_period_label: 'Q3 2023'
+    source_period_label: Q3 2023
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -2998,16 +3739,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 149
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2023 Q3
     filters:
       frequency: quarterly
       quarter: Q3
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -3017,12 +3759,16 @@ record_sets:
       operator: ==
       value: Q3
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -3033,18 +3779,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2023_q3
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2023_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2023_q3
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2023-Q3
+  period_coverage:
+    start_date: '2023-07-01'
+    end_date: '2023-09-30'
+    basis: calendar
+    source_period_label: Q3 2023
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 149
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2023 Q3
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q3
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q3
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -3055,13 +3841,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2023_q4
   provenance_class: administrative
   assertion: observation
@@ -3069,12 +3848,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2023_q4
   sheet_name: 04CN
   period_type: quarter
-  period: '2023-Q4'
+  period: 2023-Q4
   period_coverage:
     start_date: '2023-10-01'
     end_date: '2023-12-31'
     basis: calendar
-    source_period_label: 'Q4 2023'
+    source_period_label: Q4 2023
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3124,19 +3903,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2023_q4
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2023_q4
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2023_q4.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2023_q4
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2023_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2023_q4
   sheet_name: 07CN
   period_type: quarter
-  period: '2023-Q4'
+  period: 2023-Q4
   period_coverage:
     start_date: '2023-10-01'
     end_date: '2023-12-31'
     basis: calendar
-    source_period_label: 'Q4 2023'
+    source_period_label: Q4 2023
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3146,16 +3925,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 150
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2023 Q4
     filters:
       frequency: quarterly
       quarter: Q4
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -3165,12 +3945,16 @@ record_sets:
       operator: ==
       value: Q4
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -3181,18 +3965,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2023_q4
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2023_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2023_q4
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2023-Q4
+  period_coverage:
+    start_date: '2023-10-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: Q4 2023
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 150
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2023 Q4
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q4
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q4
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -3203,13 +4027,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2024_q1
   provenance_class: administrative
   assertion: observation
@@ -3217,12 +4034,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2024_q1
   sheet_name: 04CN
   period_type: quarter
-  period: '2024-Q1'
+  period: 2024-Q1
   period_coverage:
     start_date: '2024-01-01'
     end_date: '2024-03-31'
     basis: calendar
-    source_period_label: 'Q1 2024'
+    source_period_label: Q1 2024
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3272,19 +4089,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2024_q1
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2024_q1
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2024_q1.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2024_q1
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2024_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2024_q1
   sheet_name: 07CN
   period_type: quarter
-  period: '2024-Q1'
+  period: 2024-Q1
   period_coverage:
     start_date: '2024-01-01'
     end_date: '2024-03-31'
     basis: calendar
-    source_period_label: 'Q1 2024'
+    source_period_label: Q1 2024
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3294,16 +4111,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 151
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2024 Q1
     filters:
       frequency: quarterly
       quarter: Q1
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -3313,12 +4131,16 @@ record_sets:
       operator: ==
       value: Q1
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -3329,18 +4151,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2024_q1
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2024_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2024_q1
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2024-Q1
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: Q1 2024
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 151
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2024 Q1
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q1
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -3351,13 +4213,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2024_q2
   provenance_class: administrative
   assertion: observation
@@ -3365,12 +4220,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2024_q2
   sheet_name: 04CN
   period_type: quarter
-  period: '2024-Q2'
+  period: 2024-Q2
   period_coverage:
     start_date: '2024-04-01'
     end_date: '2024-06-30'
     basis: calendar
-    source_period_label: 'Q2 2024'
+    source_period_label: Q2 2024
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3420,19 +4275,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2024_q2
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2024_q2
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2024_q2.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2024_q2
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2024_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2024_q2
   sheet_name: 07CN
   period_type: quarter
-  period: '2024-Q2'
+  period: 2024-Q2
   period_coverage:
     start_date: '2024-04-01'
     end_date: '2024-06-30'
     basis: calendar
-    source_period_label: 'Q2 2024'
+    source_period_label: Q2 2024
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3442,16 +4297,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 152
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2024 Q2
     filters:
       frequency: quarterly
       quarter: Q2
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -3461,12 +4317,16 @@ record_sets:
       operator: ==
       value: Q2
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -3477,18 +4337,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2024_q2
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2024_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2024_q2
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2024-Q2
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2024-06-30'
+    basis: calendar
+    source_period_label: Q2 2024
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 152
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2024 Q2
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q2
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q2
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -3499,13 +4399,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2024_q3
   provenance_class: administrative
   assertion: observation
@@ -3513,12 +4406,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2024_q3
   sheet_name: 04CN
   period_type: quarter
-  period: '2024-Q3'
+  period: 2024-Q3
   period_coverage:
     start_date: '2024-07-01'
     end_date: '2024-09-30'
     basis: calendar
-    source_period_label: 'Q3 2024'
+    source_period_label: Q3 2024
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3568,19 +4461,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2024_q3
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2024_q3
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2024_q3.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2024_q3
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2024_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2024_q3
   sheet_name: 07CN
   period_type: quarter
-  period: '2024-Q3'
+  period: 2024-Q3
   period_coverage:
     start_date: '2024-07-01'
     end_date: '2024-09-30'
     basis: calendar
-    source_period_label: 'Q3 2024'
+    source_period_label: Q3 2024
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3590,16 +4483,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 153
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2024 Q3
     filters:
       frequency: quarterly
       quarter: Q3
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -3609,12 +4503,16 @@ record_sets:
       operator: ==
       value: Q3
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -3625,18 +4523,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2024_q3
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2024_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2024_q3
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2024-Q3
+  period_coverage:
+    start_date: '2024-07-01'
+    end_date: '2024-09-30'
+    basis: calendar
+    source_period_label: Q3 2024
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 153
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2024 Q3
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q3
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q3
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -3647,13 +4585,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2024_q4
   provenance_class: administrative
   assertion: observation
@@ -3661,12 +4592,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2024_q4
   sheet_name: 04CN
   period_type: quarter
-  period: '2024-Q4'
+  period: 2024-Q4
   period_coverage:
     start_date: '2024-10-01'
     end_date: '2024-12-31'
     basis: calendar
-    source_period_label: 'Q4 2024'
+    source_period_label: Q4 2024
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3716,19 +4647,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2024_q4
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2024_q4
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2024_q4.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2024_q4
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2024_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2024_q4
   sheet_name: 07CN
   period_type: quarter
-  period: '2024-Q4'
+  period: 2024-Q4
   period_coverage:
     start_date: '2024-10-01'
     end_date: '2024-12-31'
     basis: calendar
-    source_period_label: 'Q4 2024'
+    source_period_label: Q4 2024
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3738,16 +4669,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 154
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2024 Q4
     filters:
       frequency: quarterly
       quarter: Q4
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -3757,12 +4689,16 @@ record_sets:
       operator: ==
       value: Q4
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -3773,18 +4709,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2024_q4
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2024_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2024_q4
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2024-Q4
+  period_coverage:
+    start_date: '2024-10-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: Q4 2024
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 154
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2024 Q4
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q4
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q4
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -3795,13 +4771,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2025_q1
   provenance_class: administrative
   assertion: observation
@@ -3809,12 +4778,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2025_q1
   sheet_name: 04CN
   period_type: quarter
-  period: '2025-Q1'
+  period: 2025-Q1
   period_coverage:
     start_date: '2025-01-01'
     end_date: '2025-03-31'
     basis: calendar
-    source_period_label: 'Q1 2025'
+    source_period_label: Q1 2025
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3864,19 +4833,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2025_q1
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2025_q1
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2025_q1.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2025_q1
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2025_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2025_q1
   sheet_name: 07CN
   period_type: quarter
-  period: '2025-Q1'
+  period: 2025-Q1
   period_coverage:
     start_date: '2025-01-01'
     end_date: '2025-03-31'
     basis: calendar
-    source_period_label: 'Q1 2025'
+    source_period_label: Q1 2025
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -3886,16 +4855,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 155
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2025 Q1
     filters:
       frequency: quarterly
       quarter: Q1
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -3905,12 +4875,16 @@ record_sets:
       operator: ==
       value: Q1
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -3921,18 +4895,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2025_q1
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2025_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2025_q1
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2025-Q1
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-03-31'
+    basis: calendar
+    source_period_label: Q1 2025
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 155
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2025 Q1
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q1
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -3943,13 +4957,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2025_q2
   provenance_class: administrative
   assertion: observation
@@ -3957,12 +4964,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2025_q2
   sheet_name: 04CN
   period_type: quarter
-  period: '2025-Q2'
+  period: 2025-Q2
   period_coverage:
     start_date: '2025-04-01'
     end_date: '2025-06-30'
     basis: calendar
-    source_period_label: 'Q2 2025'
+    source_period_label: Q2 2025
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4012,19 +5019,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2025_q2
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2025_q2
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2025_q2.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2025_q2
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2025_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2025_q2
   sheet_name: 07CN
   period_type: quarter
-  period: '2025-Q2'
+  period: 2025-Q2
   period_coverage:
     start_date: '2025-04-01'
     end_date: '2025-06-30'
     basis: calendar
-    source_period_label: 'Q2 2025'
+    source_period_label: Q2 2025
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4034,16 +5041,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 156
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2025 Q2
     filters:
       frequency: quarterly
       quarter: Q2
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -4053,12 +5061,16 @@ record_sets:
       operator: ==
       value: Q2
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -4069,18 +5081,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2025_q2
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2025_q2.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2025_q2
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2025-Q2
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2025-06-30'
+    basis: calendar
+    source_period_label: Q2 2025
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 156
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2025 Q2
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q2
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q2
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -4091,13 +5143,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2025_q3
   provenance_class: administrative
   assertion: observation
@@ -4105,12 +5150,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2025_q3
   sheet_name: 04CN
   period_type: quarter
-  period: '2025-Q3'
+  period: 2025-Q3
   period_coverage:
     start_date: '2025-07-01'
     end_date: '2025-09-30'
     basis: calendar
-    source_period_label: 'Q3 2025'
+    source_period_label: Q3 2025
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4160,19 +5205,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2025_q3
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2025_q3
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2025_q3.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2025_q3
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2025_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2025_q3
   sheet_name: 07CN
   period_type: quarter
-  period: '2025-Q3'
+  period: 2025-Q3
   period_coverage:
     start_date: '2025-07-01'
     end_date: '2025-09-30'
     basis: calendar
-    source_period_label: 'Q3 2025'
+    source_period_label: Q3 2025
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4182,16 +5227,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 157
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2025 Q3
     filters:
       frequency: quarterly
       quarter: Q3
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -4201,12 +5247,16 @@ record_sets:
       operator: ==
       value: Q3
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -4217,18 +5267,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2025_q3
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2025_q3.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2025_q3
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2025-Q3
+  period_coverage:
+    start_date: '2025-07-01'
+    end_date: '2025-09-30'
+    basis: calendar
+    source_period_label: Q3 2025
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 157
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2025 Q3
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q3
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q3
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -4239,13 +5329,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2025_q4
   provenance_class: administrative
   assertion: observation
@@ -4253,12 +5336,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2025_q4
   sheet_name: 04CN
   period_type: quarter
-  period: '2025-Q4'
+  period: 2025-Q4
   period_coverage:
     start_date: '2025-10-01'
     end_date: '2025-12-31'
     basis: calendar
-    source_period_label: 'Q4 2025'
+    source_period_label: Q4 2025
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4308,19 +5391,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2025_q4
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2025_q4
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2025_q4.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2025_q4
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2025_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2025_q4
   sheet_name: 07CN
   period_type: quarter
-  period: '2025-Q4'
+  period: 2025-Q4
   period_coverage:
     start_date: '2025-10-01'
     end_date: '2025-12-31'
     basis: calendar
-    source_period_label: 'Q4 2025'
+    source_period_label: Q4 2025
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4330,16 +5413,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 158
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2025 Q4
     filters:
       frequency: quarterly
       quarter: Q4
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -4349,12 +5433,16 @@ record_sets:
       operator: ==
       value: Q4
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -4365,18 +5453,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2025_q4
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2025_q4.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2025_q4
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2025-Q4
+  period_coverage:
+    start_date: '2025-10-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: Q4 2025
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 158
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2025 Q4
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q4
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q4
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -4387,13 +5515,6 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop
 - record_set_id: ons.consumer_trends.04cn.2026_q1
   provenance_class: administrative
   assertion: observation
@@ -4401,12 +5522,12 @@ record_sets:
   source_record_id_prefix: ons.consumer_trends.04cn.2026_q1
   sheet_name: 04CN
   period_type: quarter
-  period: '2026-Q1'
+  period: 2026-Q1
   period_coverage:
     start_date: '2026-01-01'
     end_date: '2026-03-31'
     basis: calendar
-    source_period_label: 'Q1 2026'
+    source_period_label: Q1 2026
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4456,19 +5577,19 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-- record_set_id: ons.consumer_trends.07cn.2026_q1
+- record_set_id: ons.consumer_trends.07cn_07_2_2.2026_q1
   provenance_class: administrative
   assertion: observation
-  record_set_spec_id: ons.consumer_trends.07cn.2026_q1.v1
-  source_record_id_prefix: ons.consumer_trends.07cn.2026_q1
+  record_set_spec_id: ons.consumer_trends.07cn_07_2_2.2026_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_2_2.2026_q1
   sheet_name: 07CN
   period_type: quarter
-  period: '2026-Q1'
+  period: 2026-Q1
   period_coverage:
     start_date: '2026-01-01'
     end_date: '2026-03-31'
     basis: calendar
-    source_period_label: 'Q1 2026'
+    source_period_label: Q1 2026
   geography_id: K02000001
   geography_level: country
   geography_name: United Kingdom
@@ -4478,16 +5599,17 @@ record_sets:
   domain: household_consumption_expenditure
   groupby_dimension: ons.coicop
   rows:
-  - value_id: all_households
-    label: All households
+  - value_id: coicop_07_2_2
+    label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     row_number: 159
-    table_record_kind: total
+    table_record_kind: detail
     expected_row_header_column: A
     expected_row_header: 2026 Q1
     filters:
       frequency: quarterly
       quarter: Q1
+      coicop: 07.2.2
     constraints:
     - variable: frequency
       operator: ==
@@ -4497,12 +5619,16 @@ record_sets:
       operator: ==
       value: Q1
       label: Quarter
+    - variable: coicop
+      operator: ==
+      value: 07.2.2
+      label: Coicop
   measures:
-  - measure_id: personal_transport_fuels
+  - measure_id: expenditure
     label: Fuels and lubricants for personal transport equipment
     ordinal: 0
     column: I
-    source_column_id: personal_transport_fuels
+    source_column_id: expenditure
     concept: ons.household_expenditure.personal_transport_fuels_lubricants
     source_concept: ons.household_expenditure.personal_transport_fuels_lubricants
     concept_relation: source_label
@@ -4513,18 +5639,58 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
+- record_set_id: ons.consumer_trends.07cn_07_3_2.2026_q1
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: ons.consumer_trends.07cn_07_3_2.2026_q1.v1
+  source_record_id_prefix: ons.consumer_trends.07cn_07_3_2.2026_q1
+  sheet_name: 07CN
+  period_type: quarter
+  period: 2026-Q1
+  period_coverage:
+    start_date: '2026-01-01'
+    end_date: '2026-03-31'
+    basis: calendar
+    source_period_label: Q1 2026
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: household
+  entity_role: resident_households
+  domain: household_consumption_expenditure
+  groupby_dimension: ons.coicop
+  rows:
+  - value_id: coicop_07_3_2
+    label: Passenger transport by road
+    ordinal: 0
+    row_number: 159
+    table_record_kind: detail
+    expected_row_header_column: A
+    expected_row_header: 2026 Q1
     filters:
-      coicop: 07.2.2
+      frequency: quarterly
+      quarter: Q1
+      coicop: 07.3.2
     constraints:
+    - variable: frequency
+      operator: ==
+      value: quarterly
+      label: Frequency
+    - variable: quarter
+      operator: ==
+      value: Q1
+      label: Quarter
     - variable: coicop
       operator: ==
-      value: 07.2.2
+      value: 07.3.2
       label: Coicop
-  - measure_id: road_transport_services
+  measures:
+  - measure_id: expenditure
     label: Passenger transport by road
-    ordinal: 1
+    ordinal: 0
     column: N
-    source_column_id: road_transport_services
+    source_column_id: expenditure
     concept: ons.household_expenditure.road_transport_services
     source_concept: ons.household_expenditure.road_transport_services
     concept_relation: source_label
@@ -4535,10 +5701,3 @@ record_sets:
     aggregation: sum
     expected_cell_type: number
     value_scale: 1000000
-    filters:
-      coicop: 07.3.2
-    constraints:
-    - variable: coicop
-      operator: ==
-      value: 07.3.2
-      label: Coicop

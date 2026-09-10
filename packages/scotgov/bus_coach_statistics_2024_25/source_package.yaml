@@ -1,0 +1,334 @@
+# The Scottish Transport Statistics 2025 edition of the bus and coach chapter,
+# which carries FY2024-25 where the landed scotgov-bus-coach-statistics-2023-24
+# package stopped at FY2023-24. Same workbook layout as the 2024 edition with
+# one column added per table, so the record sets mirror it and shift the
+# measure column: Table 2.2a and Table 2.8 to AL, table 2.5 to AG (a calendar
+# year, so 2025 not FY2024-25) and Table 2.9 to X.
+#
+# This edition adds the two Table 2.8 rows the 2024-edition package did not
+# take, government support and total passenger revenue, because the follow-up
+# asks for the support components alongside passenger revenue.
+#
+# Table 2.9 publishes Scotland on two scopes, "(bus)" and "(all modes)", which
+# carry identical values for every recent year; only the bus rows are ported,
+# matching the 2024-edition package.
+schema_version: ledger.source_package.v1
+package_id: scotgov-bus-coach-statistics-2024-25
+label: Transport Scotland bus and coach statistics, 2024-25
+artifact:
+  source_name: scotgov
+  source_table: Scottish Transport Statistics 2025 bus and coach reference tables
+  resource_package: db
+  resource_directory: data/scotgov/bus_coach_statistics_2024_25
+  manifest: manifest.yaml
+  vintage: '2024_25'
+  extracted_at: '2026-09-10'
+  extraction_method: XLS whole-workbook used-range cell parse
+  parser: xls_used_range
+  artifact_year: 2025
+record_sets:
+- record_set_id: scotgov.bus.table_2_2a.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: scotgov.bus.table_2_2a.fy2024.v1
+  source_record_id_prefix: scotgov.bus.table_2_2a.fy2024
+  sheet_name: Table 2.2a
+  period_type: fiscal_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: person
+  entity_role: bus_passenger
+  domain: local_bus_travel
+  groupby_dimension: scotgov.journey_category
+  rows:
+  - value_id: all_passenger_journeys
+    label: All passenger journeys
+    ordinal: 0
+    row_number: 6
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: Scotland
+  - value_id: concessionary_passenger_journeys
+    label: Concessionary passenger journeys
+    ordinal: 1
+    row_number: 8
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Scotland [Note 9] [Note 10]
+    filters:
+      journey_category: concessionary
+    constraints:
+    - variable: journey_category
+      operator: ==
+      value: concessionary
+      label: Journey Category
+  measures:
+  - measure_id: passenger_journeys
+    label: Passenger journeys
+    ordinal: 0
+    column: AL
+    source_column_id: passenger_journeys
+    concept: scotgov.bus.passenger_journeys
+    source_concept: scotgov.bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: scotgov
+    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2025/chapter-2-bus-and-coach-travel/
+    concept_evidence_notes: Passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+    expected_column_header_row: 5
+    expected_column_header: 2024-25 [Note 72]
+- record_set_id: scotgov.bus.table_2_5.cy2025
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: scotgov.bus.table_2_5.cy2025.v1
+  source_record_id_prefix: scotgov.bus.table_2_5.cy2025
+  sheet_name: table 2.5
+  period_type: calendar_year
+  period: 2025
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: local_bus_market
+  domain: local_bus_fares
+  groupby_dimension: scotgov.bus_scope
+  rows:
+  - value_id: scotland
+    label: Scotland
+    ordinal: 0
+    row_number: 6
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: Scotland
+  measures:
+  - measure_id: local_bus_fare_index
+    label: Local bus fare index
+    ordinal: 0
+    column: AG
+    source_column_id: local_bus_fare_index
+    concept: scotgov.bus.local_fare_index
+    source_concept: scotgov.bus.local_fare_index
+    concept_relation: source_label
+    concept_authority: scotgov
+    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2025/chapter-2-bus-and-coach-travel/
+    concept_evidence_notes: Local bus fare index
+    unit: index_2005_100
+    aggregation: ratio
+    expected_cell_type: number
+    expected_column_header_row: 5
+    expected_column_header: 2025
+- record_set_id: scotgov.bus.table_2_8.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: scotgov.bus.table_2_8.fy2024.v1
+  source_record_id_prefix: scotgov.bus.table_2_8.fy2024
+  sheet_name: Table 2.8
+  period_type: fiscal_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: local_bus_operators
+  domain: local_bus_finance
+  groupby_dimension: scotgov.revenue_component
+  rows:
+  - value_id: passenger_revenue
+    label: Passenger revenue at current prices
+    ordinal: 0
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: 'Scotland  [Note 32] [Note 35]'
+    filters:
+      revenue_component: passenger_revenue
+    constraints:
+    - variable: revenue_component
+      operator: ==
+      value: passenger_revenue
+      label: Revenue Component
+  - value_id: government_support
+    label: Government support at current prices
+    ordinal: 1
+    row_number: 8
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: 'Scotland   [Note 34]'
+    guard_cells:
+    - column: A
+      expected_value: 'Government support current prices  [Note 33]'
+      label: published revenue component
+    filters:
+      revenue_component: government_support
+    constraints:
+    - variable: revenue_component
+      operator: ==
+      value: government_support
+      label: Revenue Component
+  - value_id: total_passenger_revenue
+    label: Total passenger revenue at current prices
+    ordinal: 2
+    row_number: 9
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: 'Scotland   [Note 34]'
+    guard_cells:
+    - column: A
+      expected_value: 'Total passenger revenue current prices   [Note 33]'
+      label: published revenue component
+  measures:
+  - measure_id: revenue
+    label: Bus operator revenue at current prices
+    ordinal: 0
+    column: AL
+    source_column_id: revenue
+    concept: scotgov.bus.operator_revenue
+    source_concept: scotgov.bus.operator_revenue
+    concept_relation: source_label
+    concept_authority: scotgov
+    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2025/chapter-2-bus-and-coach-travel/
+    concept_evidence_notes: Bus operator revenue at current prices
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+    expected_column_header_row: 5
+    expected_column_header: '2024-25'
+- record_set_id: scotgov.bus.table_2_9.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: scotgov.bus.table_2_9.fy2024.v1
+  source_record_id_prefix: scotgov.bus.table_2_9.fy2024
+  sheet_name: Table 2.9
+  period_type: fiscal_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: government
+  entity_role: bus_funding_authority
+  domain: local_bus_finance
+  groupby_dimension: scotgov.funding_component
+  rows:
+  - value_id: local_authority_bus_support
+    label: Local authority bus support
+    ordinal: 0
+    row_number: 6
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: 'Local Authority bus support [Note 37]'
+    guard_cells:
+    - column: C
+      expected_value: Scotland [Note 46]
+      label: published geography split
+    filters:
+      funding_component: local_authority_bus_support
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: local_authority_bus_support
+      label: Funding Component
+  - value_id: concessionary_fares
+    label: Concessionary fares
+    ordinal: 1
+    row_number: 9
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: Concessionary fares
+    guard_cells:
+    - column: C
+      expected_value: Scotland (bus) [Note 38] [Note 50]
+      label: published geography and mode split
+    filters:
+      funding_component: concessionary_fares
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: concessionary_fares
+      label: Funding Component
+  - value_id: network_support_grant
+    label: Network Support Grant
+    ordinal: 2
+    row_number: 15
+    table_record_kind: detail
+    expected_row_header_column: B
+    expected_row_header: 'Network Support Grant  [Note 42]'
+    guard_cells:
+    - column: C
+      expected_value: 'Scotland [Note 48]  [Note49]'
+      label: published geography split
+    filters:
+      funding_component: network_support_grant
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: network_support_grant
+      label: Funding Component
+  - value_id: all_government_support
+    label: All government support
+    ordinal: 3
+    row_number: 18
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: 'All government support [Note 44]'
+    guard_cells:
+    - column: C
+      expected_value: Scotland (bus) [Note 45]
+      label: published geography and mode split
+    filters:
+      funding_component: all_government_support
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: all_government_support
+      label: Funding Component
+  measures:
+  - measure_id: support
+    label: Government support
+    ordinal: 0
+    column: X
+    source_column_id: support
+    concept: scotgov.bus.government_support
+    source_concept: scotgov.bus.government_support
+    concept_relation: source_label
+    concept_authority: scotgov
+    concept_evidence_url: https://www.transport.gov.scot/publication/scottish-transport-statistics-2025/chapter-2-bus-and-coach-travel/
+    concept_evidence_notes: Government support
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+    expected_column_header_row: 5
+    expected_column_header: '2024-25'

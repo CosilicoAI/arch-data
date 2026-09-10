@@ -1,0 +1,18 @@
+source_id: dft
+package_id: dft-nts0313-mode-use-frequency-2025
+dataset: dft_dft-nts0313-mode-use-frequency-2025
+source_page: https://www.gov.uk/government/statistical-data-sets/nts03-modal-comparisons
+table: 'NTS0313: Frequency of use of different transport modes: England, 2003 onwards'
+files:
+  2025:
+    filename: nts0313.ods
+    source_url: https://assets.publishing.service.gov.uk/media/6a9eca62f36e1f225ecb7e80/nts0313.ods
+    sha256: 0d9f158cf31e76f6b773717f2657f22055500ff3b8f385a6f87d71342bfd2106
+    size_bytes: 30610
+    fetched_at: '2026-09-10T14:02:39+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dft/dft-nts0313-mode-use-frequency-2025/2025/0d9f158cf31e76f6b773717f2657f22055500ff3b8f385a6f87d71342bfd2106/nts0313.ods
+        uri: r2://ledger-raw/raw/uk/dft/dft-nts0313-mode-use-frequency-2025/2025/0d9f158cf31e76f6b773717f2657f22055500ff3b8f385a6f87d71342bfd2106/nts0313.ods

@@ -1,0 +1,18 @@
+source_id: ofgem
+package_id: ofgem-energy-price-cap-levels-2024-2026
+dataset: ofgem_ofgem-energy-price-cap-levels-2024-2026
+source_page: https://www.ofgem.gov.uk/energy-regulation/domestic-and-non-domestic/energy-pricing-rules/energy-price-cap/energy-price-cap-default-tariff-levels
+table: 'Final levelised cap rates model (Annex 9): 1 October to 31 December 2026'
+files:
+  2026:
+    filename: annex-9-levelised-cap-levels-v1-11.xlsx
+    source_url: https://www.ofgem.gov.uk/sites/default/files/2026-08/Annex-9-Levelisation-allowance-methodology-and-levelised-cap-levels-v1.11.xlsx
+    sha256: 5a7277ca7af148d1b918d87a29fab5fa9100e8764a88b9042d7969b7dbe1a6f8
+    size_bytes: 1420551
+    fetched_at: '2026-09-10T14:02:23+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/ofgem/ofgem-energy-price-cap-levels-2024-2026/2026/5a7277ca7af148d1b918d87a29fab5fa9100e8764a88b9042d7969b7dbe1a6f8/annex-9-levelised-cap-levels-v1-11.xlsx
+        uri: r2://ledger-raw/raw/ofgem/ofgem-energy-price-cap-levels-2024-2026/2026/5a7277ca7af148d1b918d87a29fab5fa9100e8764a88b9042d7969b7dbe1a6f8/annex-9-levelised-cap-levels-v1-11.xlsx

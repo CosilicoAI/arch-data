@@ -1,0 +1,18 @@
+source_id: welshgov
+package_id: welshgov-transport-revenue-outturn-2024-25
+dataset: welshgov_welshgov-transport-revenue-outturn-2024-25
+source_page: https://stats.gov.wales/en-GB/475612f0-9e2f-4966-9fcd-b790b5a81b1f
+table: Roads and transport revenue outturn expenditure by authority and service
+files:
+  2025:
+    filename: roads-and-transport-revenue-outturn-expenditure.csv
+    source_url: https://stats.gov.wales/en-GB/475612f0-9e2f-4966-9fcd-b790b5a81b1f/download/w5tbwcb1tlq8?format=csv&download_language=en-GB&pivot=false
+    sha256: 2e08e36ecfdcdb7628025dd90fcabe5e7b7d1c830b4de16f75f448abe772b096
+    size_bytes: 15210569
+    fetched_at: '2026-09-10T14:02:53+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/welshgov/welshgov-transport-revenue-outturn-2024-25/2025/2e08e36ecfdcdb7628025dd90fcabe5e7b7d1c830b4de16f75f448abe772b096/roads-and-transport-revenue-outturn-expenditure.csv
+        uri: r2://ledger-raw/raw/uk/welshgov/welshgov-transport-revenue-outturn-2024-25/2025/2e08e36ecfdcdb7628025dd90fcabe5e7b7d1c830b4de16f75f448abe772b096/roads-and-transport-revenue-outturn-expenditure.csv
