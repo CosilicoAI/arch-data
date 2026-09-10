@@ -68,13 +68,13 @@ def _released_receipt_wheel():
     import receipt.append_gate
 
     distribution = metadata.distribution("receipt")
-    assert distribution.version == "0.6.0"
+    assert distribution.version == "0.6.1"
     assert distribution.read_text("WHEEL") is not None
     direct_url = distribution.read_text("direct_url.json")
     if direct_url is not None:
         source = json.loads(direct_url)
         assert "archive_info" in source
-        assert source["url"].endswith("receipt-0.6.0-py3-none-any.whl")
+        assert source["url"].endswith("receipt-0.6.1-py3-none-any.whl")
     installed = pathlib.Path(distribution.locate_file("")).resolve()
     assert (
         pathlib.Path(receipt.append_gate.__file__).resolve().is_relative_to(installed)
