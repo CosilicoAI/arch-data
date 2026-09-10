@@ -24,7 +24,7 @@ dependencies = [
     "odfpy>=1.4.1",
     "xlrd>=2.0.1",
     "pypdf>=6.0.0",
-    "receipt==0.6.0",
+    "receipt==0.6.1",
 ]
 
 [project.optional-dependencies]
