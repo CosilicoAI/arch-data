@@ -175,7 +175,114 @@ def test_ofgem_cap_levels_are_published_annual_levels_not_derived_rates():
     facts = _ofgem_cap_levels()
 
     assert {fact.measure.unit for fact in facts} == {"gbp_per_year"}
-    assert all(fact.aggregation.method == "mean" for fact in facts)
+    # A cap level is a regulated level per customer per year, not a mean of
+    # anything, and Microcosm refuses mean facts as sum-type targets.
+    assert all(fact.aggregation.method == "rate" for fact in facts)
+
+
+def test_ofgem_cap_levels_reconstruct_the_published_unit_rates_and_standing_charges():
+    """The conversion the package comment documents, checked end to end.
+
+    Ofgem publishes p/kWh and p/day only as GB averages in its news release,
+    which is what ofgem-energy-price-cap-q1-2024 carries. Those four rates have
+    to fall out of this package's levels, or the comment is telling consumers
+    to do the wrong arithmetic. The subtraction is the step that matters: the
+    benchmark level already contains the standing charge.
+    """
+    published = {
+        fact.measure.concept: fact.value
+        for fact in load_source_package("ofgem-energy-price-cap-q1-2024").build_facts(
+            2024
+        )
+    }
+    levels = {}
+    for fact in _facts("ofgem-energy-price-cap-levels-2024-2026"):
+        if fact.geography.id != "K03000001" or fact.period.value != "2024-Q1":
+            continue
+        if fact.measure.concept == "ofgem.price_cap.benchmark_consumption":
+            levels[("k", fact.filters["fuel"])] = fact.value
+        elif (
+            fact.measure.concept == "ofgem.price_cap.cap_level"
+            and fact.filters["payment_method"] == "direct_debit"
+            and fact.filters["vat_treatment"] == "including_vat"
+        ):
+            levels[(fact.filters["consumption_level"], fact.filters["fuel"])] = (
+                fact.value
+            )
+
+    for fuel, unit_concept, standing_concept in (
+        (
+            "electricity_single_rate",
+            "ofgem.price_cap.electricity_unit_rate",
+            "ofgem.price_cap.electricity_standing_charge",
+        ),
+        ("gas", "ofgem.price_cap.gas_unit_rate", "ofgem.price_cap.gas_standing_charge"),
+    ):
+        nil = levels[("nil_consumption", fuel)]
+        benchmark = levels[("benchmark_consumption", fuel)]
+        consumption = levels[("k", fuel)]
+
+        assert nil / 365 * 100 == pytest.approx(published[standing_concept], abs=0.005)
+        assert (benchmark - nil) / consumption * 100 == pytest.approx(
+            published[unit_concept], abs=0.005
+        )
+        # Without the subtraction the unit rate is far out, which is why the
+        # package comment spells the formula rather than describing it.
+        assert benchmark / consumption * 100 != pytest.approx(
+            published[unit_concept], abs=0.5
+        )
+
+
+def test_ofgem_gb_vat_pairs_follow_the_publisher_including_the_2026_electricity_holiday():
+    """Electricity VAT is zero for October 2026 to March 2027.
+
+    The government cut it from 5% to zero for that window, electricity only,
+    and Ofgem states so in its 26 August 2026 summary of changes. So the
+    2026-Q4 electricity pairs sit at 1.0 and dual fuel below 1.05 because only
+    its gas leg is taxed. This pins that as the publisher's position rather
+    than an unnoticed defect.
+    """
+    pairs = {}
+    for fact in _ofgem_cap_levels():
+        if fact.geography.id != "K03000001":
+            continue
+        key = (
+            fact.period.value,
+            fact.filters["payment_method"],
+            fact.filters["fuel"],
+            fact.filters["consumption_level"],
+        )
+        pairs.setdefault(key, {})[fact.filters["vat_treatment"]] = fact.value
+    ratios = {
+        key: value["including_vat"] / value["excluding_vat"]
+        for key, value in pairs.items()
+    }
+    exceptions = {
+        key: ratio for key, ratio in ratios.items() if round(ratio, 4) != 1.05
+    }
+
+    assert len(pairs) == 288
+    assert len(exceptions) == 18
+    assert {key[0] for key in exceptions} == {"2026-Q4"}
+    assert {key[2] for key in exceptions} == {
+        "electricity_single_rate",
+        "electricity_multi_register",
+        "dual_fuel",
+    }
+    electricity = [
+        ratio
+        for key, ratio in exceptions.items()
+        if key[2].startswith("electricity")
+    ]
+    dual_fuel = [ratio for key, ratio in exceptions.items() if key[2] == "dual_fuel"]
+    assert len(electricity) == 12
+    assert all(ratio == pytest.approx(1.0) for ratio in electricity)
+    assert len(dual_fuel) == 6
+    assert all(1.0 < ratio < 1.05 for ratio in dual_fuel)
+    # Gas keeps its 5% throughout, including the holiday window.
+    assert all(
+        round(ratio, 4) == 1.05 for key, ratio in ratios.items() if key[2] == "gas"
+    )
 
 
 def test_ofgem_publishes_the_benchmark_consumption_each_cap_level_is_set_at():

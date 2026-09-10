@@ -6,8 +6,15 @@
 # year, so 2025 not FY2024-25) and Table 2.9 to X.
 #
 # This edition adds the two Table 2.8 rows the 2024-edition package did not
-# take, government support and total passenger revenue, because the follow-up
-# asks for the support components alongside passenger revenue.
+# take, government support and the total row, because the follow-up asks for
+# the support components alongside passenger revenue.
+#
+# The publisher labels that total row "Total passenger revenue current prices",
+# but its Note 33 makes it passenger revenue plus government support: FY2024-25
+# is 391 + 499 = 890. A reader who takes the label at face value reads fares.
+# The publisher's label stays as the row-header guard, and the value id is
+# total_operator_revenue rather than total_passenger_revenue so the fact key
+# says what the number is.
 #
 # Table 2.9 publishes Scotland on two scopes, "(bus)" and "(all modes)", which
 # carry identical values for every recent year; only the bus rows are ported,
@@ -190,8 +197,8 @@ record_sets:
       operator: ==
       value: government_support
       label: Revenue Component
-  - value_id: total_passenger_revenue
-    label: Total passenger revenue at current prices
+  - value_id: total_operator_revenue
+    label: Total operator revenue at current prices, passenger revenue plus government support
     ordinal: 2
     row_number: 9
     table_record_kind: total

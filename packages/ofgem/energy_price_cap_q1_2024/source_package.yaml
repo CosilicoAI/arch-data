@@ -2,6 +2,14 @@
 # links separate regional rates for October 2023 to March 2024. This package
 # deliberately preserves only the four narrative GB averages for Q1 2024; it
 # does not claim regional coverage or the later Q2 2026 consumer-price vintage.
+#
+# These four rates INCLUDE VAT, as the news page states, and carry no
+# vat_treatment filter. The regional matrix in
+# ofgem-energy-price-cap-levels-2024-2026 excludes VAT, and only its GB-average
+# rows carry both treatments, so the two packages are not on a common basis;
+# converting is the consumer's job. That package also covers this quarter, and
+# its levels reproduce these four rates exactly once divided by 365 and by the
+# benchmark consumption.
 schema_version: ledger.source_package.v1
 package_id: ofgem-energy-price-cap-q1-2024
 label: Ofgem average direct-debit unit rates and standing charges, January to March 2024
