@@ -23,10 +23,16 @@ from chronicle.core import (
     build_aggregate_constraints,
     build_fact_key,
 )
-from chronicle.epoch import EMIT_EPOCH, HASH_DOMAINS, Epoch, hash_domain, schema_id
+from chronicle.epoch import (
+    CONSUMER_FACT_EMIT_SCHEMA_VERSION,
+    EMIT_EPOCH,
+    HASH_DOMAINS,
+    Epoch,
+    hash_domain,
+)
 from chronicle.store import fact_to_mapping
 
-CONSUMER_FACT_SCHEMA_VERSION = schema_id("consumer_fact")
+CONSUMER_FACT_SCHEMA_VERSION = CONSUMER_FACT_EMIT_SCHEMA_VERSION
 
 
 @dataclass(frozen=True)
@@ -655,7 +661,7 @@ def _consumer_fact_row(
     concept_alignment_key = build_concept_alignment_key(fact, epoch=emit_epoch)
 
     row: dict[str, Any] = {
-        "schema_version": schema_id("consumer_fact", emit_epoch),
+        "schema_version": CONSUMER_FACT_SCHEMA_VERSION,
         "aggregate_fact_key": aggregate_fact_key,
         "semantic_fact_key": semantic_fact_key,
         "legacy_fact_key": build_fact_key(fact, epoch=emit_epoch),
@@ -677,6 +683,11 @@ def _consumer_fact_row(
         "aggregation": _aggregation_payload(fact),
         "observed_measure": _observed_measure_payload(fact),
         "dimensions": _dimension_set_payload(fact),
+        "dimension_labels": dict(fact.dimension_labels),
+        "dimension_value_labels": {
+            dimension_id: dict(value_labels)
+            for dimension_id, value_labels in fact.dimension_value_labels.items()
+        },
         "universe_constraints": _universe_constraint_set_payload(fact),
         "source": _clean(fact_to_mapping(fact)["source"]),
         "lineage": {
@@ -711,10 +722,11 @@ def _require_ledger_emit(emit_epoch: Epoch | str, boundary: str) -> Epoch:
     """Refuse a non-Ledger emit at an artifact boundary; return the epoch.
 
     Mechanism 1 of the rename accepts both epochs on read and emits unchanged:
-    the only packaged, sha-pinned consumer-fact schema is the Ledger one, so
-    every artifact boundary emits Ledger-named rows (the artifact builder
-    canonicalizes whatever epoch it read) and refuses a Chronicle emit until a
-    successor schema is pinned by a separate, consumer-gated cutover.
+    every artifact boundary emits Ledger-named hash keys (the artifact builder
+    canonicalizes whatever epoch it read) and refuses a Chronicle emit until
+    the separate, consumer-gated key cutover. The row contract moves on its
+    own: rows are stamped ``chronicle.consumer_fact.v2`` whichever epoch their
+    keys use.
 
     ``emit_epoch`` may be the enum member or its string value; anything else is
     refused with :class:`ValueError` naming the boundary. Callers must check
@@ -731,9 +743,9 @@ def _require_ledger_emit(emit_epoch: Epoch | str, boundary: str) -> Epoch:
         ) from error
     if epoch != Epoch.LEDGER:
         raise ValueError(
-            f"{boundary}: emitting {epoch.value!r}-epoch identifiers needs a "
-            "packaged successor consumer-fact schema; until one is pinned, "
-            "artifacts are emitted Ledger-named (mechanism 1: emit unchanged)."
+            f"{boundary}: emitting {epoch.value!r}-epoch identifiers is the "
+            "separate, consumer-gated key cutover; until it happens, artifacts "
+            "are emitted with Ledger-named keys (mechanism 1: emit unchanged)."
         )
     return epoch
 
@@ -754,7 +766,7 @@ def write_consumer_facts_jsonl(
             file.write(json.dumps(row, sort_keys=True))
             file.write("\n")
     return ConsumerFactExportReport(
-        schema_version=schema_id("consumer_fact", emit_epoch),
+        schema_version=CONSUMER_FACT_SCHEMA_VERSION,
         fact_count=len(rows),
         output=str(output_path),
     )

@@ -240,6 +240,7 @@ class SourceRecordLayout:
     table_record_kind: str | None = None
     parent_record_set_id: str | None = None
     total_record_id: str | None = None
+    groupby_dimension_label: str | None = None
 
 
 @dataclass(frozen=True)
@@ -277,6 +278,11 @@ class AggregateFact:
     layout: SourceRecordLayout | None = None
     assertion: str = DEFAULT_ASSERTION
     period_coverage: PeriodCoverage | None = None
+    # Display metadata, never part of a fact key (chronicle#261): a label for
+    # each filter and layout groupby dimension id, and for each of their values
+    # keyed by ``consumer_contract.dimension_value_id``.
+    dimension_labels: dict[str, str] = field(default_factory=dict)
+    dimension_value_labels: dict[str, dict[str, str]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

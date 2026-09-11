@@ -286,7 +286,12 @@ concept plus duplicate `aggregate_fact_key` and `semantic_fact_key` diagnostics.
 The row-level downstream contract is `consumer_facts.jsonl`; the other bundle
 files are diagnostic reports for gating and review. Consumer-contract rows must
 carry canonical constraints explicitly in `universe_constraints`; source-layout
-`dimensions` are metadata and are not target constraints.
+`dimensions` are metadata and are not target constraints. Rows also carry
+Chronicle-owned labels for every dimension and dimension value
+(`dimension_labels`, `dimension_value_labels`, `layout.groupby_dimension_label`;
+chronicle#261), which Microcosm's calibration hierarchy displays. Every UK
+package must label all of them, and `build-bundle` reports a gap as an error;
+see `docs/agent-source-package-harness.md` for where labels come from.
 
 For the UK source-package feed, build the curated UK suite and then a facts-only
 consumer artifact:
@@ -522,13 +527,19 @@ payload as its Ledger key; only the prefix differs.
 - **Emitters stay Ledger-named.** `EMIT_EPOCH` is the one default a later,
   consumer-gated cutover flips. Package scaffolds, relational builds, and
   consumer artifacts emit Ledger identifiers today.
+- **The row contract moves on its own.** `chronicle.consumer_fact.v2`
+  (chronicle#261) is the frozen v1 row plus optional dimension and value
+  labels, so a v1 row restamped with the v2 id is a valid v2 row. Rows are
+  emitted as v2 with Ledger-named keys, and each row validates against the
+  schema of the contract it names.
 - **Artifacts canonicalize on emit.** The consumer artifact pins the sha256 of
-  the frozen v1 consumer-fact schema, whose identifiers are Ledger-named, so
-  `build_consumer_artifact` rewrites every row it read to the emit epoch before
-  writing it; an artifact built from mixed-epoch rows is byte-identical to one
-  built from the same rows written Ledger-named. Asking an artifact boundary to
-  emit Chronicle names is refused until a successor schema is packaged and
-  pinned, and the refusal happens before any existing output is touched.
+  the v2 consumer-fact schema, so `build_consumer_artifact` rewrites every row
+  it read to Ledger-named keys and the v2 contract before writing it; an
+  artifact built from mixed-epoch rows is byte-identical to one built from the
+  same rows written Ledger-named. Loads accept an artifact pinned to either
+  packaged schema whose rows use that contract. Asking an artifact boundary to
+  emit Chronicle-named keys is refused until the consumer-gated key cutover,
+  and the refusal happens before any existing output is touched.
 
 ## Chronicle Facts And Microcosm Targets
 

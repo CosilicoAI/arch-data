@@ -789,6 +789,30 @@ record_sets:
     record_set_spec_id: census_acs.s0101.national_age.v1
 ```
 
+Every fact also carries a label for each dimension it has (its filters and its
+record set's `groupby_dimension`) and for each of their values
+(chronicle#261): Microcosm's calibration hierarchy displays them and takes them
+only from Chronicle. Most labels come from the source itself: a Stat-Xplore
+field label, the publisher's text in a full-row table, the row label of the
+record set's groupby axis, a number or date, or the label on the `==`
+constraint that pairs with a filter (unless it only repeats the identifier).
+Declare the rest at the top of the package, quoting every id so YAML cannot
+load `No` or `Yes` as a boolean:
+
+```yaml
+dimension_labels:
+  dwp.carer_entitlement: 'Carer Entitlement, Payment Indicator'
+dimension_value_labels:
+  payment_indicator:
+    'all': Total
+```
+
+A declaration wins over every recovered label. `build-bundle` reports an error
+for a UK package fact with an unlabelled or doubly labelled dimension or value,
+and for a dimension id two UK packages label differently; publisher row labels
+that differ across one groupby value's rows are a warning, since Chronicle keeps
+them as published. `build_facts` refuses a declaration no fact uses.
+
 Agents may add new package directories and YAML specs. They should not modify
 `chronicle.core`, `chronicle.database`, or `chronicle.suite` unless the package cannot be
 expressed in the current contract and the failure is documented in the build

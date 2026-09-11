@@ -1491,10 +1491,10 @@ def test_bundle_jsonl_ingestion_accepts_mixed_epoch_rows(tmp_path):
     loaded = load_bundle_jsonl(path)
 
     assert loaded == [ledger_row, chronicle_row]
-    assert {row["schema_version"] for row in loaded} == {
-        "ledger.consumer_fact.v1",
-        "chronicle.consumer_fact.v2",
-    }
+    # Both rows use the v2 row contract; their keys are in different epochs.
+    assert {row["schema_version"] for row in loaded} == {"chronicle.consumer_fact.v2"}
+    assert loaded[0]["aggregate_fact_key"].startswith("ledger.aggregate_fact.v2:")
+    assert loaded[1]["aggregate_fact_key"].startswith("chronicle.aggregate_fact.v3:")
 
 
 def test_bundle_jsonl_ingestion_rejects_unknown_key_domain(tmp_path):

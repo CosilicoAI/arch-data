@@ -55,12 +55,14 @@ EUROSTAT_ARTIFACT_FILENAMES = {
     "eurostat-ilc-li02": "ilc_li02.json",
     "eurostat-ilc-di01": "ilc_di01.json",
 }
+# chronicle#261 added dimension and value labels to every fact; with those three
+# fields stripped, these facts still hash to 9db298bc... and 51768608... .
 PRIOR_VINTAGE_FACT_DIGESTS = {
     "eurostat-gov-10a-taxag": (
-        "9db298bc05f4c7c1987367d4c31feb3b91d9ed70320f5d808898b978e85dd1a9"
+        "af578be022bf0f8808851936edccdf5c4fd6e0282fcd1a241137ec796144a160"
     ),
     "eurostat-spr-exp-func": (
-        "51768608362aaf40a16ee5be00c0ce849c5b37918975cc647bfde3fde1048266"
+        "1a5569be1c59c4102576cc8e29d783e4795cb290368a8494f580f58401985398"
     ),
 }
 EXPECTED_QUERY_FILTERS = {

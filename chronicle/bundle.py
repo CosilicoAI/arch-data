@@ -9,6 +9,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Callable, Sequence
 
+from chronicle.dimension_labels import dimension_label_issues, dimension_labels_by_id
 from chronicle.epoch import canonicalize_key, schema_id
 from chronicle.source_package import (
     SOURCE_PACKAGE_ALIASES,
@@ -340,6 +341,7 @@ def build_bundle(
     warnings: list[BuildBundleIssue] = []
     source_reports: list[BundleSourceReport] = []
     consumer_rows: list[dict[str, Any]] = []
+    uk_dimension_labels: dict[str, dict[str, list[str]]] = {}
 
     for source in build_sources:
         suite_dir = sources_path / _safe_source_dir_name(source)
@@ -374,7 +376,17 @@ def build_bundle(
         rows = _load_jsonl(Path(suite_report.outputs["consumer_facts"]))
         consumer_rows.extend(rows)
         source_reports.append(_bundle_source_report(source, suite_report))
+        label_errors, label_warnings = _dimension_label_reports(source, rows)
+        errors.extend(label_errors)
+        warnings.extend(label_warnings)
+        if source in UK_BUNDLE_SOURCES:
+            for dimension_id, labels in dimension_labels_by_id(rows).items():
+                for label in labels:
+                    uk_dimension_labels.setdefault(dimension_id, {}).setdefault(
+                        label, []
+                    ).append(source)
 
+    errors.extend(_cross_package_dimension_label_errors(uk_dimension_labels))
     aggregate_duplicates = _duplicate_key_reports(
         consumer_rows,
         "aggregate_fact_key",
@@ -449,6 +461,65 @@ def build_bundle(
     )
     _write_report(report_path, report.to_dict())
     return report
+
+
+def _dimension_label_reports(
+    source: str,
+    rows: list[dict[str, Any]],
+) -> tuple[list[BuildBundleIssue], list[BuildBundleIssue]]:
+    """Report one source's dimension-label issues (chronicle#261).
+
+    UK packages must label every dimension and value, so their issues are
+    errors, except publisher row labels that differ across the rows of one
+    groupby value: Chronicle keeps that text as published and warns. Other
+    packages carry labels wherever they declare or evidence them, unchecked.
+    """
+    if source not in UK_BUNDLE_SOURCES:
+        return [], []
+    errors: list[BuildBundleIssue] = []
+    warnings: list[BuildBundleIssue] = []
+    for issue in dimension_label_issues(rows):
+        report = BuildBundleIssue(
+            code=issue.code,
+            message=issue.message,
+            source=source,
+            key=(
+                issue.dimension_id
+                if issue.value_id is None
+                else f"{issue.dimension_id}={issue.value_id}"
+            ),
+        )
+        if issue.code == "conflicting_groupby_value_label":
+            warnings.append(report)
+        else:
+            errors.append(report)
+    return errors, warnings
+
+
+def _cross_package_dimension_label_errors(
+    labels_by_dimension: dict[str, dict[str, list[str]]],
+) -> list[BuildBundleIssue]:
+    """Require one label per UK dimension id across packages.
+
+    A consumer target can select facts from several packages that share a
+    dimension id, such as ``geography``, and must see one name for it.
+    """
+    return [
+        BuildBundleIssue(
+            code="conflicting_dimension_label_across_packages",
+            message=(
+                f"UK packages label dimension {dimension_id!r} differently: "
+                + "; ".join(
+                    f"{label!r} in {sorted(sources)}"
+                    for label, sources in sorted(labels.items())
+                )
+                + "."
+            ),
+            key=dimension_id,
+        )
+        for dimension_id, labels in sorted(labels_by_dimension.items())
+        if len(labels) > 1
+    ]
 
 
 def build_bundle_coverage(

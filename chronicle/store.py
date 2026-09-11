@@ -85,6 +85,13 @@ def fact_from_mapping(payload: dict[str, Any]) -> AggregateFact:
             if payload.get("period_coverage")
             else None
         ),
+        dimension_labels=dict(payload.get("dimension_labels", {})),
+        dimension_value_labels={
+            dimension_id: dict(value_labels)
+            for dimension_id, value_labels in payload.get(
+                "dimension_value_labels", {}
+            ).items()
+        },
     )
 
 
@@ -94,6 +101,9 @@ def fact_to_mapping(fact: AggregateFact) -> dict[str, Any]:
     if isinstance(fact.value, Decimal):
         payload["value"] = str(fact.value)
         payload["value_type"] = "decimal"
+    for label_field in ("dimension_labels", "dimension_value_labels"):
+        if not payload[label_field]:
+            payload.pop(label_field)
     payload["measure"] = {
         key: value for key, value in payload["measure"].items() if value is not None
     }

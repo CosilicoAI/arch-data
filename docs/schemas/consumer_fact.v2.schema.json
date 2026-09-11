@@ -1,0 +1,484 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://policyengine.org/chronicle/schemas/consumer_fact.v2.schema.json",
+  "title": "Chronicle consumer fact contract row",
+  "description": "The v1 contract row plus optional Chronicle-owned labels for every dimension and dimension value (chronicle#261). Labels are display metadata: they never enter a fact key, and a v1 row restamped with this schema_version is a valid v2 row.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "aggregate_fact_key",
+    "semantic_fact_key",
+    "legacy_fact_key",
+    "source_release_key",
+    "source_series_key",
+    "observed_measure_key",
+    "dimension_set_key",
+    "universe_constraint_set_key",
+    "value",
+    "value_type",
+    "assertion",
+    "provenance_class",
+    "period",
+    "geography",
+    "entity",
+    "aggregation",
+    "observed_measure",
+    "dimensions",
+    "universe_constraints",
+    "source",
+    "lineage"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "provenance_class": {
+            "const": "survey_aggregate"
+          }
+        },
+        "required": [
+          "provenance_class"
+        ]
+      },
+      "then": {
+        "required": [
+          "survey_instrument"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "survey_instrument"
+          ]
+        }
+      }
+    }
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "chronicle.consumer_fact.v2"
+    },
+    "aggregate_fact_key": {
+      "type": "string",
+      "pattern": "^ledger\\.aggregate_fact\\.v2:[0-9a-f]{24}$"
+    },
+    "semantic_fact_key": {
+      "type": "string",
+      "pattern": "^ledger\\.semantic_fact\\.v2:[0-9a-f]{24}$"
+    },
+    "legacy_fact_key": {
+      "type": "string",
+      "pattern": "^ledger\\.fact\\.v1:[0-9a-f]{24}$"
+    },
+    "source_release_key": {
+      "type": "string",
+      "pattern": "^ledger\\.source_release\\.v2:[0-9a-f]{24}$"
+    },
+    "source_series_key": {
+      "type": "string",
+      "pattern": "^ledger\\.source_series\\.v2:[0-9a-f]{24}$"
+    },
+    "observed_measure_key": {
+      "type": "string",
+      "pattern": "^ledger\\.observed_measure\\.v2:[0-9a-f]{24}$"
+    },
+    "dimension_set_key": {
+      "type": "string",
+      "pattern": "^ledger\\.dimension_set\\.v2:[0-9a-f]{24}$"
+    },
+    "universe_constraint_set_key": {
+      "type": "string",
+      "pattern": "^ledger\\.universe_constraint_set\\.v2:[0-9a-f]{24}$"
+    },
+    "value": {
+      "type": [
+        "integer",
+        "number",
+        "string",
+        "boolean"
+      ]
+    },
+    "value_type": {
+      "enum": [
+        "integer",
+        "number",
+        "decimal",
+        "string",
+        "boolean"
+      ]
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Publisher-asserted period kind; the ledger.core.ALLOWED_PERIOD_TYPES vocabulary: calendar_year, tax_year, fiscal_year, academic_year, month, quarter, week. Split-label years store the opening year of the publisher's label (UK FY2024-25 -> fiscal_year 2024; AY 2024/25 -> academic_year 2024). Publishers labelling a fiscal year with a single year keep that label year (US federal FY2024 -> 2024). Quarter values use YYYY-QN and ISO week values use YYYY-Www, with exact dates in period_coverage."
+        },
+        "value": {
+          "type": [
+            "integer",
+            "string"
+          ]
+        }
+      }
+    },
+    "geography": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "id"
+      ],
+      "properties": {
+        "level": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "vintage": {
+          "type": "string"
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "aggregation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method"
+      ],
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "denominator": {
+          "type": "string"
+        }
+      }
+    },
+    "observed_measure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_name",
+        "source_table",
+        "source_measure_id",
+        "source_concept",
+        "unit"
+      ],
+      "properties": {
+        "source_name": {
+          "type": "string"
+        },
+        "source_table": {
+          "type": "string"
+        },
+        "source_measure_id": {
+          "type": "string"
+        },
+        "source_concept": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "integer",
+          "number",
+          "string",
+          "boolean"
+        ]
+      }
+    },
+    "dimension_labels": {
+      "type": "object",
+      "description": "Label for each dimension id: every key of dimensions and, when layout.groupby_dimension is set, that id.",
+      "additionalProperties": {
+        "$ref": "#/$defs/label"
+      }
+    },
+    "dimension_value_labels": {
+      "type": "object",
+      "description": "Label for each dimension value, keyed dimension id then value id. A value id is the value's string form: booleans lower-cased (true, false), integers, numbers and strings as Python str() writes them, lists and mappings JSON-serialised with sorted keys and no spaces. Covers every dimensions entry and, when layout.groupby_dimension is set, layout.groupby_value_id.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/$defs/label"
+        }
+      }
+    },
+    "universe_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain"
+      ],
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constraint"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "source_name",
+        "source_table",
+        "source_file",
+        "vintage",
+        "extracted_at",
+        "extraction_method",
+        "source_sha256",
+        "source_size_bytes",
+        "raw_r2_uri"
+      ],
+      "properties": {
+        "source_name": {
+          "type": "string"
+        },
+        "source_table": {
+          "type": "string"
+        },
+        "source_file": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "vintage": {
+          "type": "string"
+        },
+        "extracted_at": {
+          "type": "string"
+        },
+        "extraction_method": {
+          "type": "string"
+        },
+        "method_notes": {
+          "type": "string"
+        },
+        "source_sha256": {
+          "type": "string"
+        },
+        "source_size_bytes": {
+          "type": "integer"
+        },
+        "raw_r2_bucket": {
+          "type": "string"
+        },
+        "raw_r2_key": {
+          "type": "string"
+        },
+        "raw_r2_uri": {
+          "type": "string"
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_record_id",
+        "source_cell_keys"
+      ],
+      "properties": {
+        "source_record_id": {
+          "type": "string"
+        },
+        "source_cell_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_row_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "groupby_dimension_label": {
+          "$ref": "#/$defs/label",
+          "description": "Label of layout.groupby_dimension; equals dimension_labels for that id."
+        }
+      }
+    },
+    "label": {
+      "type": "string"
+    },
+    "concept_alignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "concept_alignment_key",
+        "source_concept",
+        "canonical_concept",
+        "relation",
+        "authority"
+      ],
+      "properties": {
+        "concept_alignment_key": {
+          "type": "string",
+          "pattern": "^ledger\\.concept_alignment\\.v2:[0-9a-f]{24}$"
+        },
+        "source_concept": {
+          "type": "string"
+        },
+        "canonical_concept": {
+          "type": "string"
+        },
+        "relation": {
+          "type": "string"
+        },
+        "authority": {
+          "type": "string"
+        },
+        "evidence_url": {
+          "type": "string"
+        },
+        "evidence_notes": {
+          "type": "string"
+        },
+        "legal_vintage": {
+          "type": "string"
+        }
+      }
+    },
+    "assertion": {
+      "type": "string",
+      "enum": [
+        "observation",
+        "source_projection"
+      ],
+      "description": "Who asserted the value: a publisher-measured outcome (observation) or the publisher's own forward-looking estimate (source_projection). PolicyEngine-computed values are never consumer facts."
+    },
+    "provenance_class": {
+      "type": "string",
+      "enum": [
+        "administrative",
+        "census",
+        "survey_aggregate",
+        "model_output"
+      ],
+      "description": "Publisher measurement basis. Consumers can gate calibration inputs on this required, closed classification."
+    },
+    "survey_instrument": {
+      "type": "string",
+      "pattern": ".*\\S.*",
+      "description": "Survey name required exactly when provenance_class is survey_aggregate."
+    },
+    "period_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Non-identity provenance for the fact's reference period: coverage dates, basis, the publisher's period label, and accounting basis.",
+      "properties": {
+        "start_date": {
+          "type": "string"
+        },
+        "end_date": {
+          "type": "string"
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "calendar",
+            "tax",
+            "fiscal",
+            "survey_reference",
+            "projection_horizon"
+          ]
+        },
+        "source_period_label": {
+          "type": "string"
+        },
+        "accounting_basis": {
+          "type": "string",
+          "enum": [
+            "cash",
+            "accrual"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "label": {
+      "type": "string",
+      "pattern": ".*\\S.*"
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variable",
+        "operator",
+        "value",
+        "role"
+      ],
+      "properties": {
+        "variable": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "integer",
+            "number",
+            "string",
+            "boolean"
+          ]
+        },
+        "unit": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

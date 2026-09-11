@@ -23,6 +23,7 @@ from chronicle.core import (
     DEFAULT_ASSERTION,
 )
 from chronicle.epoch import (
+    CONSUMER_FACT_EMIT_SCHEMA_VERSION,
     EMIT_EPOCH,
     HASH_DOMAINS,
     SCHEMA_IDS,
@@ -33,6 +34,7 @@ from chronicle.epoch import (
 )
 from policyengine_chronicle.schema import (
     CONSUMER_FACT_SCHEMA_SHA256,
+    CONSUMER_FACT_SCHEMA_SHA256_BY_VERSION,
     normalize_consumer_fact_row_epochs,
     validate_consumer_fact_row,
 )
@@ -73,10 +75,12 @@ def build_consumer_artifact(
 
     ``facts_path`` is a ``consumer_facts.jsonl`` file or a bundle directory
     containing one. Rows may carry either accepted naming epoch on each
-    identifier (mechanism 1: dual-domain acceptance); the artifact writes every
-    row canonicalized to ``emit_epoch`` so the rows conform to the schema
-    whose sha256 the manifest pins. Target contracts are packaged by the
-    consumer, not Chronicle.
+    identifier (mechanism 1: dual-domain acceptance) and either row contract;
+    the artifact writes every row with its keys canonicalized to
+    ``emit_epoch`` and stamped with the emitted ``chronicle.consumer_fact.v2``
+    contract, a superset of v1, so every row conforms to the schema whose
+    sha256 the manifest pins. Target contracts are packaged by the consumer,
+    not Chronicle.
 
     A refused call (unknown or non-Ledger ``emit_epoch``) raises before the
     output directory is touched, so an existing artifact survives it.
@@ -84,7 +88,10 @@ def build_consumer_artifact(
     emit_epoch = _require_ledger_emit(emit_epoch, "build_consumer_artifact")
     resolved_facts_path = _resolve_facts_path(facts_path)
     rows = [
-        normalize_consumer_fact_row_epochs(row, line_number, resolved_facts_path)
+        {
+            **normalize_consumer_fact_row_epochs(row, line_number, resolved_facts_path),
+            "schema_version": CONSUMER_FACT_EMIT_SCHEMA_VERSION,
+        }
         for line_number, row in enumerate(
             _load_consumer_rows(resolved_facts_path, validate_schema=True), start=1
         )
@@ -160,15 +167,28 @@ def load_consumer_artifact(path: str | Path) -> ConsumerArtifact:
                     f"{SCHEMA_IDS['consumer_fact'].chronicle!r}."
                 ) from error
     manifest_schema_sha256 = manifest.get("consumer_fact_schema_sha256")
-    if (
-        manifest_schema_sha256 is not None
-        and manifest_schema_sha256 != CONSUMER_FACT_SCHEMA_SHA256
-    ):
-        raise ValueError(
-            "Consumer artifact declares consumer_fact_schema_sha256 "
-            f"{manifest_schema_sha256!r}, which does not match the packaged "
-            f"consumer-fact schema {CONSUMER_FACT_SCHEMA_SHA256!r}."
+    if manifest_schema_sha256 is not None:
+        pinned_versions = sorted(
+            version
+            for version, sha256 in CONSUMER_FACT_SCHEMA_SHA256_BY_VERSION.items()
+            if sha256 == manifest_schema_sha256
         )
+        if not pinned_versions:
+            raise ValueError(
+                "Consumer artifact declares consumer_fact_schema_sha256 "
+                f"{manifest_schema_sha256!r}, which does not match the packaged "
+                "consumer-fact schema of either contract "
+                f"{dict(CONSUMER_FACT_SCHEMA_SHA256_BY_VERSION)!r}."
+            )
+        if (
+            declared_fact_schema_versions is not None
+            and declared_fact_schema_versions != pinned_versions
+        ):
+            raise ValueError(
+                "Consumer artifact declares consumer_fact_schema_versions "
+                f"{declared_fact_schema_versions!r} but pins the schema sha256 "
+                f"of {pinned_versions[0]!r}."
+            )
 
     facts_file = artifact_path / "consumer_facts.jsonl"
     actual_sha256 = _sha256_file(facts_file)

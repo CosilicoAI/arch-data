@@ -1,10 +1,13 @@
 """Consumer-fact row schema validation for Chronicle artifacts.
 
-The pinned ``consumer_fact.v1`` schema is packaged with the wheel so builds and
-loads validate every fact row against the exact contract the artifact claims.
-The packaged schema bytes are the single source of truth: their sha256 is
-recorded in each artifact manifest, and a load rejects any manifest that claims
-a different schema.
+Both consumer-fact row schemas are packaged with the wheel so builds and loads
+validate every fact row against the exact contract it claims: the frozen
+``consumer_fact.v1`` schema for ``ledger.consumer_fact.v1`` rows, and the
+``consumer_fact.v2`` schema, v1 plus optional dimension and value labels
+(chronicle#261), for ``chronicle.consumer_fact.v2`` rows. The packaged schema
+bytes are the single source of truth: each artifact manifest records the sha256
+of the schema its rows use, and a load rejects any manifest that claims a
+different one.
 """
 
 from __future__ import annotations
@@ -14,13 +17,23 @@ import hashlib
 import json
 from functools import lru_cache
 from importlib.resources import files as _resource_files
+from types import MappingProxyType
 from typing import Any
 
-from chronicle.epoch import SCHEMA_IDS, canonicalize_key
+from chronicle.epoch import (
+    CONSUMER_FACT_EMIT_SCHEMA_VERSION,
+    SCHEMA_IDS,
+    canonicalize_key,
+)
 from jsonschema import Draft202012Validator
 
 _SCHEMA_PACKAGE = "policyengine_chronicle.schemas"
-_SCHEMA_RESOURCE = "consumer_fact.v1.schema.json"
+_SCHEMA_RESOURCES = MappingProxyType(
+    {
+        SCHEMA_IDS["consumer_fact"].ledger: "consumer_fact.v1.schema.json",
+        SCHEMA_IDS["consumer_fact"].chronicle: "consumer_fact.v2.schema.json",
+    }
+)
 
 _TOP_LEVEL_KEY_DOMAINS = {
     "aggregate_fact_key": "aggregate_fact",
@@ -34,22 +47,36 @@ _TOP_LEVEL_KEY_DOMAINS = {
 }
 
 
-def _packaged_schema_bytes() -> bytes:
-    return _resource_files(_SCHEMA_PACKAGE).joinpath(_SCHEMA_RESOURCE).read_bytes()
+def _packaged_schema_bytes(schema_version: str) -> bytes:
+    resource = _SCHEMA_RESOURCES[schema_version]
+    return _resource_files(_SCHEMA_PACKAGE).joinpath(resource).read_bytes()
 
 
-CONSUMER_FACT_SCHEMA_SHA256 = hashlib.sha256(_packaged_schema_bytes()).hexdigest()
+CONSUMER_FACT_SCHEMA_SHA256_BY_VERSION = MappingProxyType(
+    {
+        schema_version: hashlib.sha256(
+            _packaged_schema_bytes(schema_version)
+        ).hexdigest()
+        for schema_version in _SCHEMA_RESOURCES
+    }
+)
+#: The schema Chronicle emits consumer-fact rows under and artifacts pin.
+CONSUMER_FACT_SCHEMA_SHA256 = CONSUMER_FACT_SCHEMA_SHA256_BY_VERSION[
+    CONSUMER_FACT_EMIT_SCHEMA_VERSION
+]
 
 
-@lru_cache(maxsize=1)
-def consumer_fact_schema() -> dict[str, Any]:
-    """Return the parsed, cached consumer-fact row schema."""
-    return json.loads(_packaged_schema_bytes())
+@lru_cache(maxsize=None)
+def consumer_fact_schema(
+    schema_version: str = CONSUMER_FACT_EMIT_SCHEMA_VERSION,
+) -> dict[str, Any]:
+    """Return the parsed, cached row schema of one consumer-fact contract."""
+    return json.loads(_packaged_schema_bytes(schema_version))
 
 
-@lru_cache(maxsize=1)
-def _validator() -> Draft202012Validator:
-    return Draft202012Validator(consumer_fact_schema())
+@lru_cache(maxsize=None)
+def _validator(schema_version: str) -> Draft202012Validator:
+    return Draft202012Validator(consumer_fact_schema(schema_version))
 
 
 def _epoch_validation_error(
@@ -88,36 +115,41 @@ def _normalize_key(
         ) from error
 
 
+def _check_schema_version(row: dict[str, Any], line_number: int, path: Any) -> None:
+    schema_version = row.get("schema_version")
+    if not isinstance(schema_version, str):
+        return
+    try:
+        SCHEMA_IDS["consumer_fact"].infer_identifier_epoch(schema_version)
+    except ValueError as error:
+        raise _epoch_validation_error(
+            line_number=line_number,
+            path=path,
+            location="schema_version",
+            error=error,
+        ) from error
+
+
 def normalize_consumer_fact_row_epochs(
     row: Any,
     line_number: int,
     path: Any,
 ) -> Any:
-    """Return a Ledger-canonical copy of a dual-epoch consumer-fact row.
+    """Return a copy of a consumer-fact row with every key in its Ledger form.
 
-    The frozen v1 JSON schema remains the byte-identical validation contract.
     This adapter accepts either registered naming epoch on each identifier,
-    independently, then normalizes only the copy passed to that schema. The
-    caller's row is never mutated, and mixed-epoch rows remain valid.
+    independently, and normalizes only the copy it returns. The caller's row is
+    never mutated, and mixed-epoch rows remain valid. ``schema_version`` must be
+    an accepted row contract but is kept as it is: ``ledger.consumer_fact.v1``
+    and ``chronicle.consumer_fact.v2`` are distinct contracts (v2 adds optional
+    labels), so each row validates against its own schema.
     """
 
     normalized = deepcopy(row)
     if not isinstance(normalized, dict):
         return normalized
 
-    schema_version = normalized.get("schema_version")
-    if isinstance(schema_version, str):
-        pair = SCHEMA_IDS["consumer_fact"]
-        try:
-            pair.infer_identifier_epoch(schema_version)
-        except ValueError as error:
-            raise _epoch_validation_error(
-                line_number=line_number,
-                path=path,
-                location="schema_version",
-                error=error,
-            ) from error
-        normalized["schema_version"] = pair.ledger
+    _check_schema_version(normalized, line_number, path)
 
     for field_name, domain_name in _TOP_LEVEL_KEY_DOMAINS.items():
         if field_name in normalized:
@@ -178,17 +210,7 @@ def validate_consumer_fact_row_epochs(
 
     if not isinstance(row, dict):
         return
-    schema_version = row.get("schema_version")
-    if isinstance(schema_version, str):
-        try:
-            SCHEMA_IDS["consumer_fact"].infer_identifier_epoch(schema_version)
-        except ValueError as error:
-            raise _epoch_validation_error(
-                line_number=line_number,
-                path=path,
-                location="schema_version",
-                error=error,
-            ) from error
+    _check_schema_version(row, line_number, path)
     for field_name, domain_name in _TOP_LEVEL_KEY_DOMAINS.items():
         if field_name in row:
             _normalize_key(
@@ -234,15 +256,22 @@ def validate_consumer_fact_row(
     line_number: int,
     path: Any,
 ) -> None:
-    """Validate one consumer-fact row against the pinned schema.
+    """Validate one consumer-fact row against the schema of its contract.
 
     Raises :class:`ValueError` naming the source ``path``, the 1-based
     ``line_number``, the failing JSON location, and the schema reason. The
-    first error by schema location is reported so the message is stable.
+    first error by schema location is reported so the message is stable. A row
+    without a recognizable ``schema_version`` is checked against the emitted
+    contract, which reports the missing or malformed id.
     """
     normalized = normalize_consumer_fact_row_epochs(row, line_number, path)
+    schema_version = (
+        normalized.get("schema_version") if isinstance(normalized, dict) else None
+    )
+    if not isinstance(schema_version, str) or schema_version not in _SCHEMA_RESOURCES:
+        schema_version = CONSUMER_FACT_EMIT_SCHEMA_VERSION
     errors = sorted(
-        _validator().iter_errors(normalized),
+        _validator(schema_version).iter_errors(normalized),
         key=lambda error: (
             [str(part) for part in error.absolute_path],
             error.message,
@@ -260,6 +289,7 @@ def validate_consumer_fact_row(
 
 __all__ = [
     "CONSUMER_FACT_SCHEMA_SHA256",
+    "CONSUMER_FACT_SCHEMA_SHA256_BY_VERSION",
     "consumer_fact_schema",
     "normalize_consumer_fact_row_epochs",
     "validate_consumer_fact_row",

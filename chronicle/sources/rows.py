@@ -1364,6 +1364,27 @@ def _statxplore_column_key(label: str) -> str:
     return key or "field"
 
 
+def _statxplore_field_keys(fields: list[dict[str, Any]]) -> list[str]:
+    """Return each Stat-Xplore field's source-row column key, in response order."""
+    keys: list[str] = []
+    for field in fields:
+        key = _statxplore_column_key(str(field.get("label") or field.get("uri")))
+        while key in keys:
+            key = f"{key}_"
+        keys.append(key)
+    return keys
+
+
+def statxplore_field_labels(content: bytes) -> dict[str, str]:
+    """Return the publisher label of each Stat-Xplore field by its column key."""
+    fields = json.loads(content.decode("utf-8")).get("fields") or []
+    return {
+        key: str(field["label"])
+        for key, field in zip(_statxplore_field_keys(fields), fields)
+        if field.get("label")
+    }
+
+
 def source_rows_from_statxplore_table(
     content: bytes,
     artifact: SourceArtifactMetadata,
@@ -1390,12 +1411,7 @@ def source_rows_from_statxplore_table(
         if measure.get("uri") == measure_uri:
             measure_label = str(measure.get("label") or measure_uri)
             break
-    field_keys: list[str] = []
-    for field in fields:
-        key = _statxplore_column_key(str(field.get("label") or field.get("uri")))
-        while key in field_keys:
-            key = f"{key}_"
-        field_keys.append(key)
+    field_keys = _statxplore_field_keys(fields)
     item_axes = [field.get("items") or [] for field in fields]
     values = cube.get("values") if isinstance(cube, dict) else None
     if values is None or any(not axis for axis in item_axes):

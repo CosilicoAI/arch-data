@@ -40,7 +40,7 @@ from policyengine_chronicle.consumer import (
 )
 
 CONSUMER_FACT_SCHEMA_PATH = (
-    Path(__file__).parents[1] / "docs" / "schemas" / "consumer_fact.v1.schema.json"
+    Path(__file__).parents[1] / "docs" / "schemas" / "consumer_fact.v2.schema.json"
 )
 CONSUMER_FACT_SAMPLE_PATH = (
     Path(__file__).parents[1] / "chronicle" / "fixtures" / "consumer_facts.jsonl"
@@ -210,7 +210,8 @@ def test_chronicle_epoch_consumer_row_uses_successor_ids_consistently():
     ledger_row = consumer_fact_row(fact)
     chronicle_row = consumer_fact_row(fact, emit_epoch=Epoch.CHRONICLE)
 
-    assert ledger_row["schema_version"] == SCHEMA_IDS["consumer_fact"].ledger
+    # The row contract is independent of the key epoch: both rows are v2.
+    assert ledger_row["schema_version"] == SCHEMA_IDS["consumer_fact"].chronicle
     assert chronicle_row["schema_version"] == SCHEMA_IDS["consumer_fact"].chronicle
     key_fields = {
         "aggregate_fact_key": "aggregate_fact",
@@ -287,7 +288,7 @@ def test_consumer_row_defensively_deduplicates_lineage_aliases(emit_epoch):
 def test_chronicle_epoch_writer_is_refused_until_a_schema_is_pinned(tmp_path):
     output = tmp_path / "consumer_facts.jsonl"
 
-    with pytest.raises(ValueError, match="successor consumer-fact schema"):
+    with pytest.raises(ValueError, match="consumer-gated key cutover"):
         write_consumer_facts_jsonl(
             [_soi_agi_fact()],
             output,
@@ -303,7 +304,7 @@ def test_chronicle_epoch_writer_is_refused_until_a_schema_is_pinned(tmp_path):
 @pytest.mark.parametrize(
     ("emit_epoch", "message"),
     [
-        ("chronicle", "successor consumer-fact schema"),
+        ("chronicle", "consumer-gated key cutover"),
         ("bogus", "unknown emit epoch"),
     ],
 )
@@ -325,7 +326,7 @@ def test_write_consumer_facts_jsonl_accepts_the_ledger_epoch_string(tmp_path):
         [_soi_agi_fact()], facts_path, emit_epoch="ledger"
     )
 
-    assert report.schema_version == "ledger.consumer_fact.v1"
+    assert report.schema_version == "chronicle.consumer_fact.v2"
     assert facts_path.exists()
 
 
