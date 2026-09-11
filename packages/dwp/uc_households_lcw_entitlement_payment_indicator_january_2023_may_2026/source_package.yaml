@@ -21,6 +21,8 @@
 # LCWRA' value is zero in every cell of the window and is not ported, as no all-zero
 # category is (the #239 award-band ruling). DWP's any-rate LCWRA count is the group value
 # set, in dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026.
+# This package replaces the retired dwp-uc-households-lcwra-entitlement-april-december-2025,
+# whose nine cells equal its 'LCWRA - Higher' / payment_indicator: all rows exactly.
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026
 label: 'DWP Stat-Xplore: Universal Credit benefit units by limited capability for work entitlement and payment indicator, Great Britain, January 2023 to May 2026'

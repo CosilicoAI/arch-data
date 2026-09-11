@@ -188,17 +188,11 @@ SOURCE_PACKAGE_ALIASES = {
     "dwp-uc-households-by-local-authority-may-2025": Path(
         "dwp/uc_households_by_local_authority_may_2025"
     ),
-    "dwp-uc-households-carer-entitlement-april-december-2025": Path(
-        "dwp/uc_households_carer_entitlement_april_december_2025"
-    ),
     "dwp-uc-households-children-april-december-2025": Path(
         "dwp/uc_households_children_april_december_2025"
     ),
     "dwp-uc-households-family-type-april-december-2025": Path(
         "dwp/uc_households_family_type_april_december_2025"
-    ),
-    "dwp-uc-households-lcwra-entitlement-april-december-2025": Path(
-        "dwp/uc_households_lcwra_entitlement_april_december_2025"
     ),
     "dwp-uc-households-family-type-child-entitlement-april-december-2025": Path(
         "dwp/uc_households_family_type_child_entitlement_april_december_2025"

@@ -17,6 +17,8 @@
 # caring responsibilities for at least 35 hours a week; Carer's Allowance receipt is not
 # part of the definition. One carer element per individual; a joint claim can carry two
 # where the partners do not care for the same disabled person.
+# This package replaces the retired dwp-uc-households-carer-entitlement-april-december-2025,
+# whose nine cells equal its 'Yes' / payment_indicator: all rows exactly.
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026
 label: 'DWP Stat-Xplore: Universal Credit benefit units by carer entitlement and payment indicator, Great Britain, January 2023 to May 2026'

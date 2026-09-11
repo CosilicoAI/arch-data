@@ -218,13 +218,16 @@ def test_issue_259_stat_xplore_labels_name_each_cross_once(
 
 def test_retired_packages_are_no_longer_registered():
     # #259 item 2: the grouped housing cell is replaced by DWP's Housing Entitlement
-    # 'Yes' value; the May 2026 childcare tables supersede the August 2025 vintage.
-    assert "dwp-uc-households-housing-entitlement-april-december-2025" not in (
-        SOURCE_PACKAGE_ALIASES
-    )
-    assert "dwp-uc-childcare-element-march-2021-august-2025" not in (
-        SOURCE_PACKAGE_ALIASES
-    )
+    # 'Yes' value; the May 2026 childcare tables supersede the August 2025 vintage;
+    # the April-December 2025 LCWRA and carer cells equal the crosses' all-claims rows
+    # exactly, so those duplicates are retired.
+    for retired in (
+        "dwp-uc-households-housing-entitlement-april-december-2025",
+        "dwp-uc-childcare-element-march-2021-august-2025",
+        "dwp-uc-households-lcwra-entitlement-april-december-2025",
+        "dwp-uc-households-carer-entitlement-april-december-2025",
+    ):
+        assert retired not in SOURCE_PACKAGE_ALIASES
     assert set(ALL_259) <= set(SOURCE_PACKAGE_ALIASES)
 
 
@@ -606,33 +609,44 @@ def test_lcw_categories_and_the_two_rate_lcwra_group(facts_259):
                 assert abs(group_value - sum(rates)) <= 6
 
 
-def test_element_crosses_reproduce_the_april_december_2025_all_claims_packages(
-    facts_259,
-):
-    # Same 18 August 2026 release: the publisher Totals equal the older single-category
-    # extracts cell for cell.
-    for old_alias, new_alias, element_key, category in (
-        (
-            "dwp-uc-households-lcwra-entitlement-april-december-2025",
-            LCW,
-            LCW_KEY,
-            "LCWRA - Higher",
-        ),
-        (
-            "dwp-uc-households-carer-entitlement-april-december-2025",
-            CARER,
-            "carer_entitlement",
-            "Yes",
-        ),
-    ):
-        old = load_source_package(old_alias).build_facts(2025)
-        assert len(old) == 9
-        for fact in old:
-            assert fact.value == _fact(
-                facts_259[new_alias],
-                period=fact.period.value,
+def test_element_crosses_carry_the_retired_april_december_2025_cells(facts_259):
+    # Same 18 August 2026 release: the publisher Totals equal the retired
+    # single-category extracts (archived 2026-08-21) cell for cell, which is why
+    # dwp-uc-households-lcwra-entitlement-april-december-2025 and
+    # dwp-uc-households-carer-entitlement-april-december-2025 are retired.
+    retired = {
+        (LCW, LCW_KEY, "LCWRA - Higher"): [
+            2_071_127,
+            2_148_135,
+            2_250_729,
+            2_333_430,
+            2_431_552,
+            2_525_780,
+            2_605_687,
+            2_675_966,
+            2_706_904,
+        ],
+        (CARER, "carer_entitlement", "Yes"): [
+            1_081_717,
+            1_093_895,
+            1_110_319,
+            1_122_413,
+            1_136_537,
+            1_148_536,
+            1_161_047,
+            1_173_567,
+            1_181_358,
+        ],
+    }
+    for (alias, element_key, category), values in retired.items():
+        assert [
+            _fact(
+                facts_259[alias],
+                period=period,
                 **{element_key: category, "payment_indicator": "all"},
             )
+            for period in _months("2025-04", "2025-12")
+        ] == values
 
 
 def test_employment_indicator_package_counts_people(facts_259):

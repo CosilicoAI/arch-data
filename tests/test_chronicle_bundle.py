@@ -130,16 +130,16 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "aggregate_duplicate_key_count": 0,
         "entity_count": 12,
         "error_count": 0,
-        "fact_count": 205161,
+        "fact_count": 205143,
         "geography_count": 12553,
         "period_count": 492,
         "semantic_duplicate_key_count": 177,
         "skipped_source_count": 10,
         "source_count": 50,
-        "source_package_count": 198,
+        "source_package_count": 196,
         "warning_count": 1,
     }
-    assert len(rows) == 205161
+    assert len(rows) == 205143
     assert {row["provenance_class"] for row in rows} <= {
         "administrative",
         "census",
@@ -157,7 +157,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert rows[0]["aggregate_fact_key"].startswith("ledger.aggregate_fact.v2:")
     assert rows[0]["semantic_fact_key"].startswith("ledger.semantic_fact.v2:")
-    assert source_packages["source_package_count"] == 198
+    assert source_packages["source_package_count"] == 196
     assert source_packages["skipped_source_count"] == 10
     assert sorted(item["source"] for item in source_packages["skipped_sources"]) == [
         "census-acs-s0101-congressional-district-age-2024",
@@ -171,7 +171,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "jct-obbba-revenue-estimates-2025",
         "jct-tax-expenditures-2024",
     ]
-    assert coverage["fact_count"] == 205161
+    assert coverage["fact_count"] == 205143
     assert coverage["counts"]["by_source"] == {
         "bea": 445,
         "bfp_economic_outlook": 5,
@@ -188,7 +188,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "dfc_ni": 1189,
         "dfi_ni": 24,
         "dft": 1799,
-        "dwp": 13402,
+        "dwp": 13384,
         "eurostat": 207,
         "federal_reserve": 1,
         "fpb_economic_outlook": 1000,
@@ -225,7 +225,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "welshgov": 1047,
     }
     table_counts = coverage["counts"]["by_source_table"]
-    assert len(table_counts) == 193
+    assert len(table_counts) == 191
     assert (
         table_counts[
             "dwp:Households on Universal Credit by family type, "
@@ -312,13 +312,6 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert (
         table_counts[
-            "dwp:Households on Universal Credit with carer entitlement, "
-            "April to December 2025"
-        ]
-        == 9
-    )
-    assert (
-        table_counts[
             "dwp:Households on Universal Credit by number of children, "
             "April to December 2025"
         ]
@@ -386,13 +379,6 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
             "September 2025 to February 2026"
         ]
         == 288
-    )
-    assert (
-        table_counts[
-            "dwp:Households on Universal Credit with LCWRA entitlement, "
-            "April to December 2025"
-        ]
-        == 9
     )
     assert table_counts["usda_snap:SNAP FY2025 Monthly State Participation"] == 636
     assert (
@@ -850,15 +836,15 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "month:2025-01": 610,
         "month:2025-02": 608,
         "month:2025-03": 738,
-        "month:2025-04": 807,
-        "month:2025-05": 6774,
-        "month:2025-06": 723,
-        "month:2025-07": 715,
-        "month:2025-08": 1152,
-        "month:2025-09": 780,
-        "month:2025-10": 763,
-        "month:2025-11": 778,
-        "month:2025-12": 1027,
+        "month:2025-04": 805,
+        "month:2025-05": 6772,
+        "month:2025-06": 721,
+        "month:2025-07": 713,
+        "month:2025-08": 1150,
+        "month:2025-09": 778,
+        "month:2025-10": 761,
+        "month:2025-11": 776,
+        "month:2025-12": 1025,
         "month:2026-01": 553,
         "month:2026-02": 557,
         "month:2026-03": 498,
@@ -1039,11 +1025,11 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert coverage["counts"]["by_geography"]["country:K02000001"] == 7356
     assert coverage["counts"]["by_geography"]["country:E92000001"] == 2967
-    assert coverage["counts"]["by_geography"]["country:K03000001"] == 7998
+    assert coverage["counts"]["by_geography"]["country:K03000001"] == 7980
     assert coverage["counts"]["by_geography"]["statistical_scope:ofgem:london"] == 216
     assert len(coverage["counts"]["by_geography"]) == 12553
     assert coverage["counts"]["by_entity"] == {
-        "benefit_unit": 7089,
+        "benefit_unit": 7071,
         "dwelling": 27269,
         "family": 1299,
         "firm": 1439,
@@ -1075,7 +1061,6 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026",
         "dwp-hb-claimants-client-type-tenure-january-2023-february-2026",
         "dwp-uc-childcare-element-march-2021-may-2026",
-        "dwp-uc-households-carer-entitlement-april-december-2025",
         "dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026",
         "dwp-uc-households-children-april-december-2025",
         "dwp-uc-households-family-type-april-december-2025",
@@ -1083,7 +1068,6 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026",
         "dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026",
         "dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026",
-        "dwp-uc-households-lcwra-entitlement-april-december-2025",
         "dwp-uc-people-employment-indicator-january-2023-may-2026",
         "hmrc-tax-free-childcare-march-2026",
         "dfc-ni-uc-statistics-may-2026",
