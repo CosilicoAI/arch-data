@@ -12,6 +12,7 @@ import yaml
 from chronicle.artifacts import (
     ArtifactCommandResult,
     fetch_source_artifact,
+    inventory_source_artifacts,
     microdata_staging_path,
     publish_source_artifacts,
 )
@@ -21,6 +22,7 @@ from tests.test_chronicle_microdata_registration import (
     PUBLIC_SHA,
     _fetch_release,
     _record_uploads,
+    _refuse_read,
     _serve,
 )
 
@@ -445,3 +447,249 @@ def test_table_fetch_rechecks_public_microdata_identity_under_lock(
     assert reads == []
     assert uploads == []
     assert {path.name: path.read_bytes() for path in package.iterdir()} == before
+
+
+TABLE_BYTES = b"person_id,age\n1,45\n2,31\n"
+TABLE_SHA = hashlib.sha256(TABLE_BYTES).hexdigest()
+RELEASE_BYTES = b"public household pums beside a publisher table"
+RELEASE_SHA = hashlib.sha256(RELEASE_BYTES).hexdigest()
+
+
+def _table_beside_public_microdata(package, staging, *, alias, identity):
+    """Stage a package whose table bytes carry a public release's identity.
+
+    Mirrors ``_table_fetch_beside_public_microdata`` for the publish and
+    inventory paths: the table file is already in the package directory and the
+    release's own bytes are staged outside it, so every entry is otherwise
+    publishable. Only the selected table's classification is wrong.
+    """
+
+    def locator(filename, sha256):
+        key = f"raw/publisher/package/2023/{sha256}/{filename}"
+        return {
+            "provider": "r2",
+            "bucket": "ledger-raw",
+            "key": key,
+            "uri": f"r2://ledger-raw/{key}",
+        }
+
+    release_name = "table.csv" if alias == "filename" else "microdata.csv"
+    release_sha = TABLE_SHA if alias == "sha256" else RELEASE_SHA
+    history = []
+    if alias == "archived-filename":
+        history.append(locator("table.csv", "b" * 64))
+    elif alias == "archived-sha256":
+        history.append(locator("old-microdata.csv", TABLE_SHA))
+    release_bytes = TABLE_BYTES if release_sha == TABLE_SHA else RELEASE_BYTES
+    entry = {
+        "filename": release_name,
+        "sha256": release_sha,
+        "size_bytes": len(release_bytes),
+        "source_url": f"https://publisher.example/{release_name}",
+        "access": "public",
+        "licence": "CC0-1.0",
+        "vintage": "2023",
+        "hash_source": "chronicle_fetch",
+        "attested_by": "chronicle",
+        "verified_at": "2026-09-05",
+        "storage": {"r2": locator(release_name, release_sha), "previous_r2": history},
+        "licence_evidence": {
+            "issuer": "Fixture publisher",
+            "scope": "This fixture public microdata release is dedicated to CC0.",
+            "url": "https://publisher.example/licence",
+            "licence": "CC0-1.0",
+            "sha256": release_sha,
+        },
+    }
+    assert (
+        validate_file_entry(
+            entry, kind="microdata_release", manifest={}, local_file_exists=False
+        )
+        == ()
+    )
+    selected = {
+        "filename": "table.csv",
+        "source_url": "https://publisher.example/table.csv",
+        "access": "public",
+        "licence": "CC0-1.0",
+    }
+    if identity == "declared":
+        selected["sha256"] = TABLE_SHA
+        selected["size_bytes"] = len(TABLE_BYTES)
+    elif identity == "r2-only":
+        selected["storage"] = {"r2": locator("table.csv", TABLE_SHA)}
+    package.mkdir(parents=True)
+    for name, kind, spec in (
+        ("manifest_tables.yaml", "publisher_table", selected),
+        ("manifest_release.yaml", "microdata_release", [entry]),
+    ):
+        (package / name).write_text(
+            yaml.safe_dump(
+                {
+                    "source_id": "publisher",
+                    "package_id": "package",
+                    "kind": kind,
+                    "files": {2023: spec},
+                }
+            )
+        )
+    (package / "table.csv").write_bytes(TABLE_BYTES)
+    (package / "README.txt").write_bytes(b"preserve unrelated package bytes\n")
+    staged = microdata_staging_path(
+        staging_dir=staging,
+        source_id="publisher",
+        package_id="package",
+        year=2023,
+        sha256=release_sha,
+        filename=release_name,
+    )
+    staged.parent.mkdir(parents=True)
+    staged.write_bytes(release_bytes)
+    return staged
+
+
+def _report_error_codes(report):
+    return [
+        *report.errors,
+        *(code for entry in report.entries for code in entry.errors),
+    ]
+
+
+@pytest.mark.parametrize("alias", ["sha256", "archived-filename", "archived-sha256"])
+@pytest.mark.parametrize("identity", ["declared", "observed", "r2-only"])
+def test_publish_raw_refuses_public_microdata_alias_without_upload_or_rewrite(
+    tmp_path, monkeypatch, alias, identity
+):
+    package = tmp_path / "package"
+    staging = tmp_path / "staging"
+    staged = _table_beside_public_microdata(
+        package, staging, alias=alias, identity=identity
+    )
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    staged_before = staged.read_bytes()
+    _refuse_read(monkeypatch, "a publisher was read")
+    uploads = _record_uploads(monkeypatch)
+    writes = []
+    reads = []
+    original_read_bytes = Path.read_bytes
+
+    def record_read(path):
+        if path == package / "table.csv":
+            reads.append(path)
+        return original_read_bytes(path)
+
+    monkeypatch.setattr(Path, "read_bytes", record_read)
+    # Record every manifest rewrite instead of performing it, so this
+    # regression cannot corrupt the package while the fix is missing.
+    monkeypatch.setattr(
+        Path,
+        "write_text",
+        lambda path, content, **kwargs: writes.append(path),
+    )
+
+    report = publish_source_artifacts(
+        package, manifest_filename="manifest_tables.yaml", staging_dir=staging
+    )
+
+    codes = _report_error_codes(report)
+    assert not report.valid, codes
+    assert any("bytes_identified_by_microdata_release" in code for code in codes), codes
+    assert uploads == []
+    assert writes == []
+    assert {path.name: path.read_bytes() for path in package.iterdir()} == before
+    assert staged.read_bytes() == staged_before
+    # Only an undeclared, unrecorded table digest needs the local bytes to be
+    # classified; every other alias is known from metadata alone.
+    known = identity != "observed" or alias == "archived-filename"
+    assert reads == ([] if known else [package / "table.csv"])
+
+
+@pytest.mark.parametrize("alias", ["sha256", "archived-filename", "archived-sha256"])
+@pytest.mark.parametrize("identity", ["declared", "observed", "r2-only"])
+def test_inventory_reports_public_microdata_alias_for_table_entry(
+    tmp_path, alias, identity
+):
+    package = tmp_path / "package"
+    staging = tmp_path / "staging"
+    _table_beside_public_microdata(package, staging, alias=alias, identity=identity)
+
+    report = inventory_source_artifacts(package, staging_dir=staging)
+
+    codes = _report_error_codes(report)
+    assert not report.valid, codes
+    assert any("bytes_identified_by_microdata_release" in code for code in codes), codes
+
+
+@pytest.mark.parametrize("identity", ["declared", "observed"])
+def test_publish_raw_accepts_distinct_table_bytes_beside_public_microdata(
+    tmp_path, monkeypatch, identity
+):
+    package = tmp_path / "package"
+    staging = tmp_path / "staging"
+    staged = _table_beside_public_microdata(
+        package, staging, alias="sha256", identity="observed"
+    )
+    content = b"year,total_people\n2023,1234\n"
+    digest = hashlib.sha256(content).hexdigest()
+    (package / "table.csv").write_bytes(content)
+    if identity == "declared":
+        manifest_path = package / "manifest_tables.yaml"
+        payload = yaml.safe_load(manifest_path.read_text())
+        payload["files"][2023]["sha256"] = digest
+        payload["files"][2023]["size_bytes"] = len(content)
+        manifest_path.write_text(yaml.safe_dump(payload))
+    release_before = (package / "manifest_release.yaml").read_bytes()
+    staged_before = staged.read_bytes()
+    _refuse_read(monkeypatch, "a publisher was read")
+    uploads = _record_uploads(monkeypatch)
+
+    report = publish_source_artifacts(
+        package, manifest_filename="manifest_tables.yaml", staging_dir=staging
+    )
+    inventory = inventory_source_artifacts(package, staging_dir=staging)
+
+    assert report.valid, _report_error_codes(report)
+    assert inventory.valid, _report_error_codes(inventory)
+    assert len(uploads) == 1
+    assert uploads[0][0].endswith(f"/2023/{digest}/table.csv")
+    assert (package / "manifest_release.yaml").read_bytes() == release_before
+    assert staged.read_bytes() == staged_before
+
+
+def test_publish_raw_keeps_two_manifests_sharing_one_public_table(
+    tmp_path, monkeypatch
+):
+    """The tracked shape: two non-release manifests record one public file."""
+    package = tmp_path / "package"
+    package.mkdir()
+    content = b"year,total_people\n2023,1234\n"
+    digest = hashlib.sha256(content).hexdigest()
+    entry = {
+        "filename": "table.csv",
+        "sha256": digest,
+        "size_bytes": len(content),
+        "source_url": "https://publisher.example/table.csv",
+        "access": "public",
+        "licence": "CC0-1.0",
+    }
+    for name in ("manifest.yaml", "manifest_tables.yaml"):
+        (package / name).write_text(
+            yaml.safe_dump(
+                {
+                    "source_id": "publisher",
+                    "package_id": "package",
+                    "kind": "publisher_table",
+                    "files": {2023: dict(entry)},
+                }
+            )
+        )
+    (package / "table.csv").write_bytes(content)
+    _refuse_read(monkeypatch, "a publisher was read")
+    uploads = _record_uploads(monkeypatch)
+
+    report = publish_source_artifacts(package, manifest_filename="manifest_tables.yaml")
+    inventory = inventory_source_artifacts(package)
+
+    assert report.valid, _report_error_codes(report)
+    assert inventory.valid, _report_error_codes(inventory)
+    assert len(uploads) == 1
