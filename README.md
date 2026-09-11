@@ -12,7 +12,13 @@ Chronicle may normalize structure: parse files, type values, declare units and
 scales, assign geography and period identifiers, preserve lineage back to
 source artifacts, and publish source-backed facts. Chronicle does not own
 selection or measurement contracts, reconcile inconsistent sources, impute
-missing data, store raw survey microdata, or execute simulator-specific calibration.
+missing data, parse survey or administrative microdata into records, rows,
+columns, row values, or cells, derive facts from raw microdata, hold licensed
+or restricted microdata bytes, or execute simulator-specific calibration. Once
+chronicle#221 lands, Chronicle registers the microdata releases its consumers
+build from (publisher, vintage, checksum, licence) and archives the bytes of
+public-use files that carry artifact-bound redistribution evidence; see
+[`docs/adr-chronicle-raw-microdata-identity.md`](docs/adr-chronicle-raw-microdata-identity.md).
 
 Microcosm consumes Chronicle facts, owns the contracts that select and bind
 them, applies declared period alignment, and runs calibration. Thesis can
@@ -49,13 +55,16 @@ The load-bearing rule:
 > consumer or transform it in ways that change its meaning.
 
 The store is facts-only, and the line is who asserted the value. Everything a
-publisher asserted — including the publisher's own projections — is a fact.
-Everything PolicyEngine computes (aged, uprated, forecast, or reconciled
-levels) is a downstream build artifact and never enters the store; Microcosm
-owns aging as a named, versioned model over Chronicle growth-factor facts. A
-fact's `period` is the period its value refers to. Consumers must enforce any
-contract that aligns it to another period (see
-[`docs/adr-chronicle-facts-only.md`](docs/adr-chronicle-facts-only.md)).
+publisher asserted — including the publisher's own projections — is a fact,
+except publisher-authored values at microdata grain, which are content and
+never facts; only the values a publisher asserted and published over that
+microdata are facts, whether the microdata's own publisher or another (see
+`docs/adr-chronicle-raw-microdata-identity.md`). Everything PolicyEngine
+computes (aged, uprated, forecast, or reconciled levels) is a downstream build
+artifact and never enters the store; Microcosm owns aging as a named, versioned
+model over Chronicle growth-factor facts. A fact's `period` is the period its
+value refers to. Consumers must enforce any contract that aligns it to another
+period (see [`docs/adr-chronicle-facts-only.md`](docs/adr-chronicle-facts-only.md)).
 
 | Layer | Owns | Examples |
 |-------|------|----------|

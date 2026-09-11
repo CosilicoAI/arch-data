@@ -16,7 +16,7 @@ validation, and build-harness layer. Jurisdiction source packages such as
 
 | Layer | Owns | Does not own |
 |-------|------|--------------|
-| Chronicle | Source artifacts, provenance, aggregate facts, constraints | Selection and measurement contracts, raw microdata storage, source reconciliation, aging, imputation, active target selection |
+| Chronicle | Source artifacts (including microdata release registrations), provenance, aggregate facts, constraints | Selection and measurement contracts, microdata records, rows, columns, row values, or cells; facts computed from raw microdata by Chronicle or a PolicyEngine-side consumer; licensed or restricted microdata bytes; source reconciliation, aging, imputation, active target selection |
 | Microcosm Targets | Selection and measurement contracts, reconciliation, aging, imputation, active target sets | Source artifact storage and provenance |
 | Microcosm | Entity model, weights, calibration interfaces, calibrated output | Source ETL and source provenance |
 | Jurisdiction source packages | Source-specific parsers and specs that emit Chronicle records | Forked fact or constraint schemas |

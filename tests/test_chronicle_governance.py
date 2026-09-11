@@ -53,6 +53,17 @@ def test_chronicle_governance_files_define_required_review_surface():
     for judge_id in required_judges:
         assert judge_id in pr_template
 
+    boundary_verdict = agents["required_judges"]["ledger-boundary"]["verdict"]
+    from chronicle.boundary import MICRODATA_BOUNDARY_CLAUSES
+
+    assert len(MICRODATA_BOUNDARY_CLAUSES) == 3
+    assert all(len(clause) > 60 for clause in MICRODATA_BOUNDARY_CLAUSES)
+    for clause in MICRODATA_BOUNDARY_CLAUSES:
+        assert clause in boundary_verdict
+    governance_doc = (ROOT / "docs" / "chronicle-governance.md").read_text()
+    for clause in MICRODATA_BOUNDARY_CLAUSES:
+        assert clause in governance_doc
+
 
 def test_ci_runs_boundary_and_governance_tests():
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text()

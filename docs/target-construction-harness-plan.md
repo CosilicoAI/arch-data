@@ -1,5 +1,10 @@
 # Fact Construction Harness Plan
 
+Scope: this plan covers publisher aggregate artifacts (workbooks, CSVs, API
+extracts of published statistics). Raw microdata releases are out of its
+scope: Chronicle registers them by identity only and never preserves or
+parses their content (`docs/adr-chronicle-raw-microdata-identity.md`).
+
 ## Goal
 
 Build a harness that verifies source fact construction end to end:

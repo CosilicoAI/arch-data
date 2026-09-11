@@ -19,6 +19,14 @@ Do not put Microcosm work in Chronicle:
 - no solver-ready target construction
 - no target profiles or model-measurement bindings
 - no PolicyEngine-computed values stored as facts
+- no microdata records, rows, columns, row values, or cells, no facts
+  computed from raw microdata by Chronicle or by a PolicyEngine-side consumer
+  (Microcosm, PolicyEngine, Thesis), and no licensed or restricted microdata
+  bytes in any Chronicle store (registering a release's identity is allowed
+  once chronicle#221 lands its access-aware refusals, and until then no
+  microdata release may be pointed at any Chronicle command; any value a
+  third party asserted and published remains an ordinary fact; see
+  `docs/adr-chronicle-raw-microdata-identity.md`)
 
 Chronicle records every fact's publisher reference period. Consumers own and
 enforce any declaration that aligns those facts to another period; Chronicle

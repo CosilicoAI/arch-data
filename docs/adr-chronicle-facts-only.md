@@ -9,11 +9,15 @@ Chronicle stores source-published values only. The boundary is **who asserted
 the value**, not level versus projection:
 
 1. Anything a publisher asserted is a fact — including the publisher's own
-   projections. "CBO's January 2026 baseline projects individual income tax
-   receipts of $X in 2027" is a source-backed claim with lineage, exactly
-   like an SOI observation. These facts carry
-   `assertion: source_projection`; measured or administered outcomes carry
-   the default `assertion: observation`.
+   projections — with one grain exception added by
+   `docs/adr-chronicle-raw-microdata-identity.md`: a publisher-authored value
+   at microdata grain (a record, row, column, row value, or cell of a microdata
+   release) is content, not a fact; only the values a publisher asserted and
+   published over that microdata are facts. "CBO's January 2026 baseline
+   projects individual income tax receipts of $X in 2027" is a source-backed
+   claim with lineage, exactly like an SOI observation. These facts carry
+   `assertion: source_projection`; measured or administered outcomes carry the
+   default `assertion: observation`.
 2. Anything PolicyEngine computed — an aged, uprated, forecast, or
    reconciled level — is never a Chronicle object. Such values are regenerable
    build artifacts and live in the consumer (Microcosm calibration owns

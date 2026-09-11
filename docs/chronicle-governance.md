@@ -20,6 +20,13 @@ without scoring model output against model output.
 Chronicle may:
 
 - register raw publisher artifacts and checksums
+- register raw microdata releases as source artifacts (publisher, access
+  route, vintage, checksum, licence, hash source, verification date) once
+  chronicle#221 lands its access-aware refusals, archiving bytes only when
+  the release is `public`, its licence is on the redistributable allowlist,
+  and the entry carries artifact-bound redistribution evidence naming the
+  file; until then no microdata release may be pointed at any Chronicle
+  command
 - parse source rows and cells
 - emit source-backed aggregate facts, including publisher projections typed
   `assertion: source_projection`
@@ -37,7 +44,10 @@ Chronicle must not:
   levels) as facts or in any other store object
 - compute aligned values; it publishes the source period and value unchanged
 - impute missing values
-- store raw survey or administrative microdata
+- parse survey or administrative microdata into records, rows, columns, row
+  values, or cells, compute facts from raw microdata (by Chronicle or a
+  PolicyEngine-side consumer), or hold licensed or restricted microdata bytes
+  in any Chronicle store
 - own selection, measurement, period-alignment, or model-binding contracts
 - choose a support-aware active target subset
 - build solver-ready calibration targets
@@ -65,5 +75,6 @@ types are:
 
 The overall verdict fails if any required judge fails. A judge must fail if a
 change moves reconciliation, aging, imputation, active target selection, or
-solver construction from Microcosm into Chronicle, or stores a
-PolicyEngine-computed value as a fact.
+solver construction from Microcosm into Chronicle, stores a
+PolicyEngine-computed value as a fact, or breaks any clause of the microdata
+boundary in `chronicle/boundary.py`, quoted here verbatim: (1) no microdata records, rows, columns, row values, or cells enter any Chronicle parsed-source surface, registry, derived artifact, or journal; (2) no fact computed from raw microdata by Chronicle or by a PolicyEngine-side consumer (Microcosm, PolicyEngine, Thesis, or any system that builds from a Chronicle registration) enters Chronicle, however many intermediate artifacts stand between them, while a value that a third party asserted and published, whether the microdata's own publisher or another, is an ordinary fact with ordinary provenance; (3) no licensed or restricted microdata bytes enter any Chronicle store, and public microdata bytes enter only with artifact-bound redistribution evidence.
