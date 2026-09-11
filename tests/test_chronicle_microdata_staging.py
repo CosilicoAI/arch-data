@@ -704,3 +704,141 @@ def test_publish_raw_keeps_two_manifests_sharing_one_public_table(
     assert report.valid, _report_error_codes(report)
     assert inventory.valid, _report_error_codes(inventory)
     assert len(uploads) == 1
+
+
+def _release_fetch_beside_public_table(package, *, alias):
+    """Register a public table, then prepare a release fetch for its identity.
+
+    The mirror of :func:`_table_beside_public_microdata`: the contradiction is
+    created by the release fetch rather than found by publish, so nothing may
+    reach the publisher, the staging directory, or either manifest.
+    """
+
+    def locator(filename, sha256):
+        key = f"raw/census_acs/census-acs-pums-2022-1yr/2022/{sha256}/{filename}"
+        return {
+            "provider": "r2",
+            "bucket": "ledger-raw",
+            "key": key,
+            "uri": f"r2://ledger-raw/{key}",
+        }
+
+    other = b"a second public release file in the same vintage"
+    other_sha = hashlib.sha256(other).hexdigest()
+    table = {
+        "filename": "table.csv",
+        "source_url": "https://publisher.example/table.csv",
+        "access": "public",
+        "licence": "CC0-1.0",
+    }
+    if alias == "sha256":
+        table["sha256"] = PUBLIC_SHA
+        table["size_bytes"] = len(PUBLIC_BYTES)
+    else:
+        table["storage"] = {"r2": locator("table.csv", PUBLIC_SHA)}
+        table["sha256"] = PUBLIC_SHA
+        table["size_bytes"] = len(PUBLIC_BYTES)
+    existing = {
+        "filename": "csv_pus.zip",
+        "sha256": other_sha,
+        "size_bytes": len(other),
+        "source_url": "https://publisher.example/pums/csv_pus.zip",
+        "access": "public",
+        "licence": "US-Government-Work",
+        "vintage": "2022",
+        "hash_source": "chronicle_fetch",
+        "attested_by": "chronicle",
+        "verified_at": "2026-09-05",
+        "storage": {"r2": locator("csv_pus.zip", other_sha)},
+        "licence_evidence": {
+            "issuer": "U.S. Census Bureau",
+            "scope": "Public-use file of a federal agency; 17 U.S.C. 105",
+            "url": "https://publisher.example/licence",
+            "licence": "US-Government-Work",
+            "sha256": other_sha,
+        },
+    }
+    package.mkdir(parents=True)
+    for name, kind, spec in (
+        ("manifest_tables.yaml", "publisher_table", table),
+        ("manifest_release.yaml", "microdata_release", [existing]),
+    ):
+        (package / name).write_text(
+            yaml.safe_dump(
+                {
+                    "source_id": "census_acs",
+                    "package_id": "census-acs-pums-2022-1yr",
+                    "kind": kind,
+                    "files": {2022: spec},
+                }
+            )
+        )
+    (package / "table.csv").write_bytes(PUBLIC_BYTES)
+
+
+@pytest.mark.parametrize("alias", ["sha256", "r2-only"])
+@pytest.mark.parametrize("upload", [False, True])
+def test_release_fetch_refuses_identity_a_public_table_already_claims(
+    tmp_path, monkeypatch, alias, upload
+):
+    package = tmp_path / "package"
+    staging = tmp_path / "staging"
+    _release_fetch_beside_public_table(package, alias=alias)
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    reads = _refuse_read(monkeypatch, "a publisher was read")
+    uploads = _record_uploads(monkeypatch)
+    writes = []
+    monkeypatch.setattr(
+        Path, "write_bytes", lambda path, content: writes.append(("stage", path))
+    )
+    monkeypatch.setattr(
+        Path,
+        "write_text",
+        lambda path, content, **kwargs: writes.append(("manifest", path)),
+    )
+
+    with pytest.raises(ManifestAccessError, match="microdata release"):
+        _fetch_release(
+            package,
+            staging_dir=staging,
+            manifest_filename="manifest_release.yaml",
+            upload_r2=upload,
+        )
+
+    assert reads == []
+    assert uploads == []
+    assert writes == []
+    assert {path.name: path.read_bytes() for path in package.iterdir()} == before
+    assert not staging.exists()
+
+
+@pytest.mark.parametrize("upload", [False, True])
+def test_release_fetch_accepts_a_distinct_public_table_sibling(
+    tmp_path, monkeypatch, upload
+):
+    package = tmp_path / "package"
+    staging = tmp_path / "staging"
+    _release_fetch_beside_public_table(package, alias="sha256")
+    table_path = package / "manifest_tables.yaml"
+    payload = yaml.safe_load(table_path.read_text())
+    content = b"year,total_people\n2022,1234\n"
+    payload["files"][2022]["sha256"] = hashlib.sha256(content).hexdigest()
+    payload["files"][2022]["size_bytes"] = len(content)
+    payload["files"][2022].pop("storage", None)
+    table_path.write_text(yaml.safe_dump(payload))
+    (package / "table.csv").write_bytes(content)
+    table_before = table_path.read_bytes()
+    _serve(monkeypatch, PUBLIC_BYTES)
+    uploads = _record_uploads(monkeypatch)
+
+    report = _fetch_release(
+        package,
+        staging_dir=staging,
+        manifest_filename="manifest_release.yaml",
+        upload_r2=upload,
+    )
+
+    assert report.valid
+    assert Path(report.local_path).read_bytes() == PUBLIC_BYTES
+    assert table_path.read_bytes() == table_before
+    assert len(uploads) == int(upload)

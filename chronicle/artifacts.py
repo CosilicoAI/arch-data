@@ -376,6 +376,52 @@ def _microdata_identity_errors(
     return []
 
 
+def _assert_no_table_claims_release_identity(
+    manifests: Mapping[str, dict[str, Any]],
+    *,
+    package_dir: Any,
+    filename: str,
+    digests: Iterable[str | None],
+) -> None:
+    """Refuse a release whose identity a public table sibling already claims.
+
+    The mirror of :func:`_assert_no_microdata_identity`, for the direction that
+    creates the contradiction rather than finding it: registering these bytes
+    as a release while a publisher table registers them as its own would leave
+    a directory publish and inventory refuse outright. One artifact has one
+    registration, and the release fetch is not entitled to overrule the
+    existing one silently. A hash-only sibling keeps the gated-bytes refusal
+    :func:`_assert_no_hash_only_bytes` already reports.
+    """
+    wanted_name = filename_key(filename)
+    wanted_digests = {digest for digest in digests if digest}
+    for name, key, _index, entry in iter_directory_entries(manifests):
+        sibling_path = package_dir.joinpath(Path(name).name)
+        kind, _error = safe_manifest_kind(manifests[name], manifest_path=sibling_path)
+        if kind == MICRODATA_RELEASE_KIND or not isinstance(entry, dict):
+            continue
+        if is_hash_only(safe_entry_access(entry)):
+            continue
+        identities = [
+            (filename_key(entry.get("filename")), entry.get("sha256")),
+            *(
+                (recorded_name, digest)
+                for recorded_name, digest, _ in _recorded_object_identities(entry)
+            ),
+        ]
+        if any(
+            recorded_name == wanted_name or digest in wanted_digests
+            for recorded_name, digest in identities
+        ):
+            raise ManifestAccessError(
+                f"{sibling_path} registers {entry.get('filename')!r} for "
+                f"{key!r} sharing the filename or checksum of the microdata "
+                f"release {filename!r}, including recorded R2 history. "
+                "Reconcile that registration before registering these bytes as "
+                "a release; no package keeps one artifact under two records."
+            )
+
+
 def _assert_no_package_microdata_identities(
     manifests: Mapping[str, dict[str, Any]],
 ) -> None:
@@ -1239,16 +1285,24 @@ def fetch_source_artifact(
         package_id=package_id,
         bind_registration_identity=release,
     )
-    if not release:
+    identity_digests = (
+        expected.sha256,
+        selected_spec.get("sha256"),
+        recorded_identity.sha256 if recorded_identity is not None else None,
+    )
+    if release:
+        _assert_no_table_claims_release_identity(
+            manifests,
+            package_dir=output,
+            filename=artifact_filename,
+            digests=identity_digests,
+        )
+    else:
         _assert_no_microdata_identity(
             manifests,
             package_dir=output,
             filename=artifact_filename,
-            digests=(
-                expected.sha256,
-                selected_spec.get("sha256"),
-                recorded_identity.sha256 if recorded_identity is not None else None,
-            ),
+            digests=identity_digests,
         )
     _assert_table_vintage_is_revisable(
         existing_value,
@@ -1373,7 +1427,14 @@ def fetch_source_artifact(
         filename=artifact_filename,
         what=f"the bytes served by {source_url}",
     )
-    if not release:
+    if release:
+        _assert_no_table_claims_release_identity(
+            manifests,
+            package_dir=output,
+            filename=artifact_filename,
+            digests=(sha256,),
+        )
+    else:
         _assert_no_microdata_identity(
             manifests,
             package_dir=output,
