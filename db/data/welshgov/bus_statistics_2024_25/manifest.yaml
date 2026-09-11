@@ -1,0 +1,18 @@
+source_id: welshgov
+package_id: welshgov-bus-statistics-2024-25
+dataset: welshgov_welshgov-bus-statistics-2024-25
+source_page: https://www.gov.wales/public-service-vehicles-buses-and-taxis-april-2024-march-2025-html
+table: Public service vehicles (buses and taxis), April 2024 to March 2025
+files:
+  2025:
+    filename: public-service-vehicles-2024-25.html
+    source_url: https://www.gov.wales/public-service-vehicles-buses-and-taxis-april-2024-march-2025-html
+    sha256: 381bb30937d5a5e899f93c7cf237bb53009f3b9551255066f95cbacb638f029e
+    size_bytes: 36930
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/welshgov/welshgov-bus-statistics-2024-25/2025/381bb30937d5a5e899f93c7cf237bb53009f3b9551255066f95cbacb638f029e/public-service-vehicles-2024-25.html
+        uri: r2://ledger-raw/raw/welshgov/welshgov-bus-statistics-2024-25/2025/381bb30937d5a5e899f93c7cf237bb53009f3b9551255066f95cbacb638f029e/public-service-vehicles-2024-25.html

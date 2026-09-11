@@ -1,9 +1,10 @@
 # NISRA Census 2021 Flexible Table Builder HOUSEHOLD extract. The
 # artifact has one count per area and no category dimension, so no
 # filters or constraints are invented.
-# Scotland's local-authority household count is already carried by
-# nrs-census2022-uv404-tenure-council-area. A second Scottish
-# council-area household package would collide on fact_key.
+# Scotland's local-authority household count is carried by the
+# nrs.census2022.uv404.council.households record set of
+# nrs-census2022-uv404-tenure-council-area on this same spec
+# (chronicle#253); it needs no second Scottish package.
 schema_version: ledger.source_package.v1
 package_id: nisra-census2021-households-lgd
 label: 'NISRA Census 2021: households by local government district 2014'

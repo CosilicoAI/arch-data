@@ -1,0 +1,18 @@
+source_id: orr
+package_id: orr-government-support-7271-2024-25
+dataset: orr_orr-government-support-7271-2024-25
+source_page: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
+table: Table 7271 government support to the rail industry by source and recipient
+files:
+  2025:
+    filename: table-7271.ods
+    source_url: https://dataportal.orr.gov.uk/media/1899/table-7271-government-support-to-the-rail-industry-by-source-and-recipient.ods?cb=86208aea-2f80-47e5-ba24-22f381549817
+    sha256: bfaae956cbd3abbcbed7e79597d053b561660b46d497cbf10d9336b119b73b29
+    size_bytes: 11441
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/orr/orr-government-support-7271-2024-25/2025/bfaae956cbd3abbcbed7e79597d053b561660b46d497cbf10d9336b119b73b29/table-7271.ods
+        uri: r2://ledger-raw/raw/orr/orr-government-support-7271-2024-25/2025/bfaae956cbd3abbcbed7e79597d053b561660b46d497cbf10d9336b119b73b29/table-7271.ods

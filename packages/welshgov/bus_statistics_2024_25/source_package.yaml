@@ -1,0 +1,170 @@
+# The 2024-25 Welsh Government release publishes passenger journeys but not
+# fare-revenue or public-support splits. This package preserves the three
+# publisher-reported journey totals and deliberately does not infer finance
+# values from DfT's broader operating-revenue total.
+schema_version: ledger.source_package.v1
+package_id: welshgov-bus-statistics-2024-25
+label: Welsh Government local bus passenger journeys, 2022-23 to 2024-25
+artifact:
+  source_name: welshgov
+  source_table: Public service vehicles (buses and taxis), April 2024 to March 2025
+  resource_package: db
+  resource_directory: data/welshgov/bus_statistics_2024_25
+  manifest: manifest.yaml
+  vintage: '2024_25'
+  extracted_at: '2026-09-09'
+  extraction_method: HTML table and document-text number parse; the release has no fare-revenue or public-support
+    split
+  parser: html_tables_and_text
+  artifact_year: 2025
+record_sets:
+- record_set_id: welshgov.bus_statistics.passenger_journeys.fy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: welshgov.bus_statistics.passenger_journeys.fy2024.v1
+  source_record_id_prefix: welshgov.bus_statistics.passenger_journeys.fy2024
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2024-25'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: W92000004
+  geography_level: country
+  geography_name: Wales
+  geography_vintage: current
+  entity: person
+  entity_role: bus_passenger
+  domain: local_bus_travel
+  groupby_dimension: welshgov.bus_scope
+  rows:
+  - value_id: wales
+    label: Wales
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: &welsh_bus_context A total of 71.7 million passenger journeys were undertaken
+      on local buses in Wales during 2024 to 2025. This compares to 71.4 million journeys in 2023 to
+      2024 and 61.2 million journeys in 2022 to 2023. However, this is still lower than the 92.4 million
+      passenger journeys in 2019 to 2020, prior to the COVID-19 pandemic.
+    guard_cells:
+    - column: D
+      expected_value: 71.7 million
+      label: published journey total token
+  measures:
+  - measure_id: passenger_journeys
+    label: Local bus passenger journeys
+    ordinal: 0
+    column: E
+    source_column_id: passenger_journeys
+    concept: welshgov.bus.passenger_journeys
+    source_concept: welshgov.bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: welshgov
+    concept_evidence_url: https://www.gov.wales/public-service-vehicles-buses-and-taxis-april-2024-march-2025-html
+    concept_evidence_notes: Local bus passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+- record_set_id: welshgov.bus_statistics.passenger_journeys.fy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: welshgov.bus_statistics.passenger_journeys.fy2023.v1
+  source_record_id_prefix: welshgov.bus_statistics.passenger_journeys.fy2023
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2023-24'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: W92000004
+  geography_level: country
+  geography_name: Wales
+  geography_vintage: current
+  entity: person
+  entity_role: bus_passenger
+  domain: local_bus_travel
+  groupby_dimension: welshgov.bus_scope
+  rows:
+  - value_id: wales
+    label: Wales
+    ordinal: 0
+    row_number: 22
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: *welsh_bus_context
+    guard_cells:
+    - column: D
+      expected_value: 71.4 million
+      label: published journey total token
+  measures:
+  - measure_id: passenger_journeys
+    label: Local bus passenger journeys
+    ordinal: 0
+    column: E
+    source_column_id: passenger_journeys
+    concept: welshgov.bus.passenger_journeys
+    source_concept: welshgov.bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: welshgov
+    concept_evidence_url: https://www.gov.wales/public-service-vehicles-buses-and-taxis-april-2024-march-2025-html
+    concept_evidence_notes: Local bus passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+- record_set_id: welshgov.bus_statistics.passenger_journeys.fy2022
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: welshgov.bus_statistics.passenger_journeys.fy2022.v1
+  source_record_id_prefix: welshgov.bus_statistics.passenger_journeys.fy2022
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2022
+  period_coverage:
+    start_date: '2022-04-01'
+    end_date: '2023-03-31'
+    basis: fiscal
+    source_period_label: '2022-23'
+    notes: period.value stores the opening year of the publisher fiscal-year label.
+  geography_id: W92000004
+  geography_level: country
+  geography_name: Wales
+  geography_vintage: current
+  entity: person
+  entity_role: bus_passenger
+  domain: local_bus_travel
+  groupby_dimension: welshgov.bus_scope
+  rows:
+  - value_id: wales
+    label: Wales
+    ordinal: 0
+    row_number: 25
+    table_record_kind: total
+    expected_row_header_column: C
+    expected_row_header: *welsh_bus_context
+    guard_cells:
+    - column: D
+      expected_value: 61.2 million
+      label: published journey total token
+  measures:
+  - measure_id: passenger_journeys
+    label: Local bus passenger journeys
+    ordinal: 0
+    column: E
+    source_column_id: passenger_journeys
+    concept: welshgov.bus.passenger_journeys
+    source_concept: welshgov.bus.passenger_journeys
+    concept_relation: source_label
+    concept_authority: welshgov
+    concept_evidence_url: https://www.gov.wales/public-service-vehicles-buses-and-taxis-april-2024-march-2025-html
+    concept_evidence_notes: Local bus passenger journeys
+    unit: count
+    aggregation: sum
+    expected_cell_type: number

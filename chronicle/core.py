@@ -27,6 +27,9 @@ Scalar = str | int | float | bool | None
 # New Zealand labels its April-March income tax year by the ending year, so the
 # publisher's "2024 tax year" is tax_year 2024 with PeriodCoverage 2023-04-01
 # through 2024-03-31 and the publisher label recorded in source_period_label.
+# Quarter values use YYYY-QN and ISO week values use YYYY-Www; exact coverage
+# dates remain explicit in PeriodCoverage so source observation dates are not
+# inferred from the compact period identity.
 # Caution: the EES helper _academic_year_end (chronicle/sources/rows.py) names
 # value COLUMNS
 # by the academic year's END year ("2024/25" -> 2025); that is source-layout
@@ -37,6 +40,8 @@ ALLOWED_PERIOD_TYPES = {
     "fiscal_year",
     "academic_year",
     "month",
+    "quarter",
+    "week",
 }
 ALLOWED_GEOGRAPHY_LEVELS = {
     "country",

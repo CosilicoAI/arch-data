@@ -143,6 +143,7 @@ class SourceRecordSetRow:
     geography_vintage: str | None = None
     filters: dict[str, Scalar] = field(default_factory=dict)
     constraints: tuple[AggregateConstraint, ...] = ()
+    source_row_dimensions: dict[str, Scalar] = field(default_factory=dict)
     value_scale: int | float = 1
     source_row_id: str | None = None
     table_record_kind: str = "detail"
@@ -818,6 +819,8 @@ def _record_set_spec_hash(spec: SourceRecordSetSpec) -> str:
             row.pop("expected_row_header", None)
         if row.get("expected_row_header_column") is None:
             row.pop("expected_row_header_column", None)
+        if not row.get("source_row_dimensions"):
+            row.pop("source_row_dimensions", None)
         if not row.get("guard_cells"):
             row.pop("guard_cells", None)
         else:

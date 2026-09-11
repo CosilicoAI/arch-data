@@ -101,12 +101,11 @@ jobs:
           # keeps the PR unable to influence what code judges it.
           uv sync --locked --no-dev --project "$base_gate"
 
-          # The gate judges the commit named here, which it checks out for
-          # itself into a private directory. The object id is always an
-          # argument and is never inferred from whatever the checkout at
-          # --root happens to be sitting at, so nothing that writes into that
-          # working tree between the fetch above and the run below can change
-          # what is judged. --root only says which clone the id is resolved in.
+          # Receipt 0.6 reads and rehashes the named commit's objects; the shim
+          # prints the commit and tree from that verdict. --root only locates
+          # the clone, so later working-tree or index writes cannot change the
+          # subject. A 0.5.2 base still establishes its own exact-checkout
+          # precondition for the same explicit --commit argument.
           # The judge is the BASE commit's copy of the script, and --commit was
           # introduced by a pull request into this branch. There is no ordering
           # of that merge and the default branch's copy of this file in which
@@ -137,8 +136,8 @@ jobs:
               ;;
             *)
               echo "note: the base gate at $BASE_SHA predates --commit, so it" \
-                "judges the working tree at $candidate rather than an isolated" \
-                "checkout of $MERGE_SHA. This is the base's own guarantee and" \
+                "judges the working tree at $candidate, without binding its" \
+                "verdict to $MERGE_SHA. This is the base's own guarantee and" \
                 "the only one available against that base." >&2
               PYTHONPATH="$base_gate/scripts" \
                 PYTHONNOUSERSITE=1 \
@@ -205,8 +204,8 @@ jobs:
                 ;;
               *)
                 echo "note: the base gate at $base_sha predates --commit, so" \
-                  "it judges the workspace rather than an isolated checkout" \
-                  "of $workspace_sha." >&2
+                  "it judges the workspace, without binding its verdict to" \
+                  "$workspace_sha." >&2
                 PYTHONPATH="$base_gate/scripts" \
                   PYTHONNOUSERSITE=1 \
                   uv run --locked --no-dev --project "$base_gate" \
@@ -234,14 +233,17 @@ jobs:
           python-version: "3.14"
 
       - name: Install dependencies
-        run: uv sync --locked --all-extras
+        run: |
+          set -euo pipefail
+          uv sync --locked --all-extras
 
       - name: Ledger observation invariants
-        run: >
-          uv run pytest
-          tests/test_policyengine_ledger.py
-          tests/test_release_chain.py
-          tests/test_thesis_append_adversarial.py
-          tests/test_thesis_append_shim_isolation.py
-          tests/test_receipt_shim_transparency.py
-          -q
+        run: |
+          set -euo pipefail
+          uv run pytest \
+            tests/test_policyengine_ledger.py \
+            tests/test_release_chain.py \
+            tests/test_thesis_append_adversarial.py \
+            tests/test_thesis_append_shim_isolation.py \
+            tests/test_receipt_shim_transparency.py \
+            -q

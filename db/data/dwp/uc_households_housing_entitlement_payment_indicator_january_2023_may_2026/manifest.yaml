@@ -1,0 +1,19 @@
+source_id: dwp
+package_id: dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026
+dataset: dwp_dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026
+source_page: https://stat-xplore.dwp.gov.uk/
+table: Households on Universal Credit by housing entitlement and payment indicator,
+  January 2023 to May 2026
+files:
+  2025:
+    filename: uc_households_by_housing_entitlement_and_payment_indicator_january_2023_may_2026.json
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
+    sha256: d59613d31b2c79c526bf6475b4221ca2e23357772baada549c288bc2adc09751
+    size_bytes: 17238
+    fetched_at: '2026-09-11T12:02:38Z'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026/2025/d59613d31b2c79c526bf6475b4221ca2e23357772baada549c288bc2adc09751/uc_households_by_housing_entitlement_and_payment_indicator_january_2023_may_2026.json
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026/2025/d59613d31b2c79c526bf6475b4221ca2e23357772baada549c288bc2adc09751/uc_households_by_housing_entitlement_and_payment_indicator_january_2023_may_2026.json

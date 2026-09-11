@@ -713,14 +713,19 @@ def test_dwp_uc_deductions_package_preserves_rows_and_derives_uc_units():
 
 
 def test_dwp_uc_childcare_element_package_preserves_monthly_publisher_series():
-    package = load_source_package("dwp-uc-childcare-element-march-2021-august-2025")
-    facts = package.build_facts(2025)
+    package = load_source_package("dwp-uc-childcare-element-march-2021-may-2026")
+    facts = [
+        fact
+        for fact in package.build_facts(2025)
+        if fact.layout.measure_id == "benefit_units"
+    ]
     values = {fact.period.value: fact.value for fact in facts}
 
-    assert len(facts) == 54
+    assert len(facts) == 63
     assert values["2021-03"] == 88_000
-    assert values["2024-08"] == 171_000
-    assert values["2025-08"] == 160_000
+    # The May 2026 tables revised August 2025 from 160,000 (August 2025 vintage).
+    assert values["2025-08"] == 165_000
+    assert values["2026-05"] == 164_000
     assert all(
         fact.measure.concept == "dwp.uc_benefit_units_with_childcare_element"
         for fact in facts
@@ -826,76 +831,14 @@ def test_ons_pipr_area_package_emits_2023_to_june_2026_months():
     assert validate_consumer_fact_contract(facts).valid
 
 
-@pytest.mark.parametrize(
-    ("alias", "concept", "april_value", "december_value"),
-    [
-        (
-            "dwp-uc-households-housing-entitlement-april-december-2025",
-            "dwp.uc_benefit_units_with_housing_element",
-            4_097_119,
-            4_464_277,
-        ),
-        (
-            "dwp-uc-households-lcwra-entitlement-april-december-2025",
-            "dwp.uc_benefit_units_with_lcwra_element",
-            2_071_127,
-            2_706_904,
-        ),
-        (
-            "dwp-uc-households-carer-entitlement-april-december-2025",
-            "dwp.uc_benefit_units_with_carer_element",
-            1_081_717,
-            1_181_358,
-        ),
-    ],
-)
-def test_dwp_uc_element_packages_emit_one_benefit_unit_fact_per_month(
-    alias,
-    concept,
-    april_value,
-    december_value,
-):
-    facts = load_source_package(alias).build_facts(2025)
-
-    assert [fact.period.value for fact in facts] == [
-        "2025-04",
-        "2025-05",
-        "2025-06",
-        "2025-07",
-        "2025-08",
-        "2025-09",
-        "2025-10",
-        "2025-11",
-        "2025-12",
-    ]
-    assert all(fact.measure.concept == concept for fact in facts)
-    assert all(fact.period.type == "month" for fact in facts)
-    assert all(fact.entity.name == "benefit_unit" for fact in facts)
-    assert all(fact.geography.id == "K03000001" for fact in facts)
-    assert all(fact.assertion == "observation" for fact in facts)
-    assert all(fact.provenance_class == "administrative" for fact in facts)
-    assert all(fact.source_row_keys for fact in facts)
-    assert facts[0].value == april_value
-    assert facts[-1].value == december_value
-    assert validate_consumer_fact_contract(facts).valid
-
-
-@pytest.mark.parametrize(
-    ("alias", "facts_per_month"),
-    [
-        ("dwp-uc-households-family-type-april-december-2025", 5),
-        ("dwp-uc-households-children-april-december-2025", 8),
-    ],
-)
-def test_dwp_uc_composition_packages_cover_the_caseload_months(
-    alias,
-    facts_per_month,
-):
-    facts = load_source_package(alias).build_facts(2025)
+def test_dwp_uc_children_composition_package_covers_the_caseload_months():
+    facts = load_source_package(
+        "dwp-uc-households-children-april-december-2025"
+    ).build_facts(2025)
     consumer_rows = consumer_fact_rows(facts)
     periods = [f"2025-{month:02d}" for month in range(4, 13)]
 
-    assert len(facts) == facts_per_month * len(periods)
+    assert len(facts) == 8 * len(periods)
     assert {fact.period.value for fact in facts} == set(periods)
     assert all(fact.measure.concept == "dwp.uc_benefit_units" for fact in facts)
     assert all(fact.period.type == "month" for fact in facts)
@@ -911,6 +854,70 @@ def test_dwp_uc_composition_packages_cover_the_caseload_months(
     assert {row["observed_measure"]["source_measure_id"] for row in consumer_rows} == {
         "benefit_units"
     }
+
+
+def test_dwp_uc_family_type_package_preserves_published_totals_from_2023(tmp_path):
+    facts = load_source_package(
+        "dwp-uc-households-family-type-april-december-2025"
+    ).build_facts(2025)
+    consumer_rows = consumer_fact_rows(facts)
+    periods = {
+        f"{year}-{month:02d}" for year in range(2023, 2026) for month in range(4, 13)
+    }
+
+    assert len(facts) == 162
+    assert {fact.period.value for fact in facts} == periods
+    assert all(fact.measure.concept == "dwp.uc_benefit_units" for fact in facts)
+    assert all(fact.period.type == "month" for fact in facts)
+    assert all(fact.entity.name == "benefit_unit" for fact in facts)
+    assert all(fact.geography.id == "K03000001" for fact in facts)
+    assert all(fact.assertion == "observation" for fact in facts)
+    assert all(fact.provenance_class == "administrative" for fact in facts)
+    assert all(fact.source_row_keys for fact in facts)
+    assert validate_consumer_fact_contract(facts).valid
+
+    detail_rows = [
+        row
+        for row in consumer_rows
+        if row["observed_measure"]["source_measure_id"] == "benefit_units"
+    ]
+    total_rows = [
+        row
+        for row in consumer_rows
+        if row["observed_measure"]["source_measure_id"] == "total_benefit_units"
+    ]
+    assert len(detail_rows) == 135
+    assert len(total_rows) == 27
+    assert all(row["layout"]["table_record_kind"] == "detail" for row in detail_rows)
+    assert all(row["layout"]["table_record_kind"] == "total" for row in total_rows)
+    assert all(row["dimensions"] == {"family_type": "all"} for row in total_rows)
+    assert {row["observed_measure"]["source_concept"] for row in consumer_rows} == {
+        "dwp.uc_households"
+    }
+
+    for period in sorted(periods):
+        detail_sum = sum(
+            row["value"] for row in detail_rows if row["period"]["value"] == period
+        )
+        published_total = next(
+            row["value"] for row in total_rows if row["period"]["value"] == period
+        )
+        # DWP warns that disclosure control can keep displayed totals from
+        # summing exactly; the archived table differs by at most 11 units.
+        assert abs(published_total - detail_sum) <= 15
+
+    published_totals = {row["period"]["value"]: row["value"] for row in total_rows}
+    assert published_totals["2023-04"] == 5_065_371
+    assert published_totals["2024-04"] == 5_685_995
+    assert published_totals["2025-12"] == 7_154_045
+
+    suite = build_source_suite(
+        "dwp-uc-households-family-type-april-december-2025",
+        tmp_path / "dwp-uc-households-family-type-april-december-2025",
+        year=2025,
+    )
+    assert suite.agent_acceptance.valid
+    assert suite.agent_acceptance.counts["row_semantic_error_count"] == 0
 
 
 def test_source_package_alias_compiles_soi_table_1_1_specs():

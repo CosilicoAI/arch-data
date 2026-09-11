@@ -1,0 +1,18 @@
+source_id: ofgem
+package_id: ofgem-energy-price-cap-q1-2024
+dataset: ofgem_ofgem-energy-price-cap-q1-2024
+source_page: https://www.ofgem.gov.uk/news/new-energy-price-cap-level-january-march-2024-starts-today
+table: New energy price cap level for January to March 2024
+files:
+  2024:
+    filename: ofgem-price-cap-q1-2024.html
+    source_url: https://www.ofgem.gov.uk/news/new-energy-price-cap-level-january-march-2024-starts-today
+    sha256: 07eb8e53a5023e70878828dd3cdecf95863253e30ce0d3c2255017be26fe0db7
+    size_bytes: 202876
+    fetched_at: '2026-09-09T00:00:00+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/ofgem/ofgem-energy-price-cap-q1-2024/2024/07eb8e53a5023e70878828dd3cdecf95863253e30ce0d3c2255017be26fe0db7/ofgem-price-cap-q1-2024.html
+        uri: r2://ledger-raw/raw/ofgem/ofgem-energy-price-cap-q1-2024/2024/07eb8e53a5023e70878828dd3cdecf95863253e30ce0d3c2255017be26fe0db7/ofgem-price-cap-q1-2024.html

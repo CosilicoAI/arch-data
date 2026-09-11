@@ -1,0 +1,3546 @@
+# The Scotland workbook has property, tenure and income tables but no
+# sub-national region table. The all-dwellings record sets below preserve the
+# workbook's explicit Scotland totals; no internal-region values are imputed.
+schema_version: ledger.source_package.v1
+package_id: desnz-need-scotland-2023
+label: DESNZ NEED 2023 domestic gas and electricity consumption by household characteristics, Scotland
+artifact:
+  source_name: desnz
+  source_table: NEED consumption headline tables, Scotland, 2023
+  resource_package: db
+  resource_directory: data/desnz/need_scotland_2023
+  manifest: manifest.yaml
+  vintage: need_2023
+  extracted_at: '2026-09-09'
+  extraction_method: XLSX whole-workbook used-range cell parse
+  parser: xlsx_used_range
+  artifact_year: 2023
+record_sets:
+- record_set_id: desnz.need_2023.table_3.property_type.detached
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_3.property_type.detached.v1
+  source_record_id_prefix: desnz.need_2023.table_3.property_type.detached
+  sheet_name: Table_3
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: detached
+    label: Detached
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: detached
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: detached
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: K
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: T
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_3.property_type.semi_detached
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_3.property_type.semi_detached.v1
+  source_record_id_prefix: desnz.need_2023.table_3.property_type.semi_detached
+  sheet_name: Table_3
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: semi_detached
+    label: Semi detached
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: semi_detached
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: semi_detached
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: L
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: U
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_3.property_type.terraced
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_3.property_type.terraced.v1
+  source_record_id_prefix: desnz.need_2023.table_3.property_type.terraced
+  sheet_name: Table_3
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: terraced
+    label: Terraced
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: terraced
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: terraced
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: M
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: V
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_3.property_type.all_houses
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_3.property_type.all_houses.v1
+  source_record_id_prefix: desnz.need_2023.table_3.property_type.all_houses
+  sheet_name: Table_3
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: all_houses
+    label: All Houses
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: all_houses
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: all_houses
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: N
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: W
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_3.property_type.all_flats
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_3.property_type.all_flats.v1
+  source_record_id_prefix: desnz.need_2023.table_3.property_type.all_flats
+  sheet_name: Table_3
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: all_flats
+    label: All Flats
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: all_flats
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: all_flats
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: O
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: X
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_3.property_type.all_dwellings
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_3.property_type.all_dwellings.v1
+  source_record_id_prefix: desnz.need_2023.table_3.property_type.all_dwellings
+  sheet_name: Table_3
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: all_dwellings
+    label: All dwellings
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: all_dwellings
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: all_dwellings
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: Q
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: Z
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_4.property_type.detached
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_4.property_type.detached.v1
+  source_record_id_prefix: desnz.need_2023.table_4.property_type.detached
+  sheet_name: Table_4
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: detached
+    label: Detached
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: detached
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: detached
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: K
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: T
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_4.property_type.semi_detached
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_4.property_type.semi_detached.v1
+  source_record_id_prefix: desnz.need_2023.table_4.property_type.semi_detached
+  sheet_name: Table_4
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: semi_detached
+    label: Semi detached
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: semi_detached
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: semi_detached
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: L
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: U
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_4.property_type.terraced
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_4.property_type.terraced.v1
+  source_record_id_prefix: desnz.need_2023.table_4.property_type.terraced
+  sheet_name: Table_4
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: terraced
+    label: Terraced
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: terraced
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: terraced
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: M
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: V
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_4.property_type.all_houses
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_4.property_type.all_houses.v1
+  source_record_id_prefix: desnz.need_2023.table_4.property_type.all_houses
+  sheet_name: Table_4
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: all_houses
+    label: All houses
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: all_houses
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: all_houses
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: N
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: W
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_4.property_type.all_flats
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_4.property_type.all_flats.v1
+  source_record_id_prefix: desnz.need_2023.table_4.property_type.all_flats
+  sheet_name: Table_4
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: all_flats
+    label: All flats
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: all_flats
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: all_flats
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: O
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: X
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_4.property_type.all_dwellings
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_4.property_type.all_dwellings.v1
+  source_record_id_prefix: desnz.need_2023.table_4.property_type.all_dwellings
+  sheet_name: Table_4
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.property_type
+  rows:
+  - value_id: all_dwellings
+    label: All dwellings
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: J
+    expected_row_header: 2023
+    filters:
+      property_type: all_dwellings
+    constraints:
+    - variable: property_type
+      operator: ==
+      value: all_dwellings
+      label: Property Type
+    guard_cells:
+    - column: S
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: Q
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: Z
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_7.tenure.owner_occupied
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_7.tenure.owner_occupied.v1
+  source_record_id_prefix: desnz.need_2023.table_7.tenure.owner_occupied
+  sheet_name: Table_7
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.tenure
+  rows:
+  - value_id: owner_occupied
+    label: Owner-occupied
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: H
+    expected_row_header: 2023
+    filters:
+      tenure: owner_occupied
+    constraints:
+    - variable: tenure
+      operator: ==
+      value: owner_occupied
+      label: Tenure
+    guard_cells:
+    - column: O
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: I
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: P
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_7.tenure.privately_rented
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_7.tenure.privately_rented.v1
+  source_record_id_prefix: desnz.need_2023.table_7.tenure.privately_rented
+  sheet_name: Table_7
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.tenure
+  rows:
+  - value_id: privately_rented
+    label: Privately rented
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: H
+    expected_row_header: 2023
+    filters:
+      tenure: privately_rented
+    constraints:
+    - variable: tenure
+      operator: ==
+      value: privately_rented
+      label: Tenure
+    guard_cells:
+    - column: O
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: J
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: Q
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_7.tenure.council_or_housing_association
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_7.tenure.council_or_housing_association.v1
+  source_record_id_prefix: desnz.need_2023.table_7.tenure.council_or_housing_association
+  sheet_name: Table_7
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.tenure
+  rows:
+  - value_id: council_or_housing_association
+    label: Council or Housing Association
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: H
+    expected_row_header: 2023
+    filters:
+      tenure: council_or_housing_association
+    constraints:
+    - variable: tenure
+      operator: ==
+      value: council_or_housing_association
+      label: Tenure
+    guard_cells:
+    - column: O
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: K
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: R
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_7.tenure.all_dwellings
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_7.tenure.all_dwellings.v1
+  source_record_id_prefix: desnz.need_2023.table_7.tenure.all_dwellings
+  sheet_name: Table_7
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.tenure
+  rows:
+  - value_id: all_dwellings
+    label: All dwellings
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: H
+    expected_row_header: 2023
+    filters:
+      tenure: all_dwellings
+    constraints:
+    - variable: tenure
+      operator: ==
+      value: all_dwellings
+      label: Tenure
+    guard_cells:
+    - column: O
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: M
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: T
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_8.tenure.owner_occupied
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_8.tenure.owner_occupied.v1
+  source_record_id_prefix: desnz.need_2023.table_8.tenure.owner_occupied
+  sheet_name: Table_8
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.tenure
+  rows:
+  - value_id: owner_occupied
+    label: Owner-occupied
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: H
+    expected_row_header: 2023
+    filters:
+      tenure: owner_occupied
+    constraints:
+    - variable: tenure
+      operator: ==
+      value: owner_occupied
+      label: Tenure
+    guard_cells:
+    - column: O
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: I
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: P
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_8.tenure.privately_rented
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_8.tenure.privately_rented.v1
+  source_record_id_prefix: desnz.need_2023.table_8.tenure.privately_rented
+  sheet_name: Table_8
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.tenure
+  rows:
+  - value_id: privately_rented
+    label: Privately rented
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: H
+    expected_row_header: 2023
+    filters:
+      tenure: privately_rented
+    constraints:
+    - variable: tenure
+      operator: ==
+      value: privately_rented
+      label: Tenure
+    guard_cells:
+    - column: O
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: J
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: Q
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_8.tenure.council_or_housing_association
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_8.tenure.council_or_housing_association.v1
+  source_record_id_prefix: desnz.need_2023.table_8.tenure.council_or_housing_association
+  sheet_name: Table_8
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.tenure
+  rows:
+  - value_id: council_or_housing_association
+    label: Council or Housing Association
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: H
+    expected_row_header: 2023
+    filters:
+      tenure: council_or_housing_association
+    constraints:
+    - variable: tenure
+      operator: ==
+      value: council_or_housing_association
+      label: Tenure
+    guard_cells:
+    - column: O
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: K
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: R
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_8.tenure.all_dwellings
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_8.tenure.all_dwellings.v1
+  source_record_id_prefix: desnz.need_2023.table_8.tenure.all_dwellings
+  sheet_name: Table_8
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.tenure
+  rows:
+  - value_id: all_dwellings
+    label: All dwellings
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: H
+    expected_row_header: 2023
+    filters:
+      tenure: all_dwellings
+    constraints:
+    - variable: tenure
+      operator: ==
+      value: all_dwellings
+      label: Tenure
+    guard_cells:
+    - column: O
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: M
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: T
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.less_than_gbp15_000
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.less_than_gbp15_000.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.less_than_gbp15_000
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: less_than_gbp15_000
+    label: "Less than \xA315,000"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: less_than_gbp15_000
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: less_than_gbp15_000
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: P
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AD
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp15_000_gbp19_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp15_000_gbp19_999.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp15_000_gbp19_999
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp15_000_gbp19_999
+    label: "\xA315,000 - \xA319,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp15_000_gbp19_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp15_000_gbp19_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: Q
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AE
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp20_000_gbp29_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp20_000_gbp29_999.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp20_000_gbp29_999
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp20_000_gbp29_999
+    label: "\xA320,000 - \xA329,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp20_000_gbp29_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp20_000_gbp29_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: R
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AF
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp30_000_gbp39_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp30_000_gbp39_999.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp30_000_gbp39_999
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp30_000_gbp39_999
+    label: "\xA330,000 - \xA339,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp30_000_gbp39_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp30_000_gbp39_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: S
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AG
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp40_000_gbp49_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp40_000_gbp49_999.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp40_000_gbp49_999
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp40_000_gbp49_999
+    label: "\xA340,000 - \xA349,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp40_000_gbp49_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp40_000_gbp49_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: T
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AH
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp50_000_gbp59_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp50_000_gbp59_999.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp50_000_gbp59_999
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp50_000_gbp59_999
+    label: "\xA350,000 - \xA359,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp50_000_gbp59_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp50_000_gbp59_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: U
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AI
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp60_000_gbp69_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp60_000_gbp69_999.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp60_000_gbp69_999
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp60_000_gbp69_999
+    label: "\xA360,000 - \xA369,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp60_000_gbp69_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp60_000_gbp69_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: V
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AJ
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp70_000_gbp99_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp70_000_gbp99_999.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp70_000_gbp99_999
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp70_000_gbp99_999
+    label: "\xA370,000 - \xA399,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp70_000_gbp99_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp70_000_gbp99_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: W
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AK
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp100_000_gbp149_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp100_000_gbp149_999.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp100_000_gbp149_999
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp100_000_gbp149_999
+    label: "\xA3100,000 - \xA3149,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp100_000_gbp149_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp100_000_gbp149_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: X
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AL
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.gbp150_000_or_more
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.gbp150_000_or_more.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.gbp150_000_or_more
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp150_000_or_more
+    label: "\xA3150,000 or more"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp150_000_or_more
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp150_000_or_more
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: Y
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AM
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_9.household_income_band.all_dwellings
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_9.household_income_band.all_dwellings.v1
+  source_record_id_prefix: desnz.need_2023.table_9.household_income_band.all_dwellings
+  sheet_name: Table_9
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: all_dwellings
+    label: All dwellings
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: all_dwellings
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: all_dwellings
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean gas consumption
+    ordinal: 0
+    column: AA
+    source_column_id: mean_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean gas consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median gas consumption
+    ordinal: 1
+    column: AO
+    source_column_id: median_consumption
+    concept: desnz.need.household_gas_consumption
+    source_concept: desnz.need.household_gas_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median gas consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.less_than_gbp15_000
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.less_than_gbp15_000.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.less_than_gbp15_000
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: less_than_gbp15_000
+    label: "Less than \xA315,000"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: less_than_gbp15_000
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: less_than_gbp15_000
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: P
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AD
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp15_000_gbp19_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp15_000_gbp19_999.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp15_000_gbp19_999
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp15_000_gbp19_999
+    label: "\xA315,000 - \xA319,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp15_000_gbp19_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp15_000_gbp19_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: Q
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AE
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp20_000_gbp29_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp20_000_gbp29_999.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp20_000_gbp29_999
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp20_000_gbp29_999
+    label: "\xA320,000 - \xA329,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp20_000_gbp29_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp20_000_gbp29_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: R
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AF
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp30_000_gbp39_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp30_000_gbp39_999.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp30_000_gbp39_999
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp30_000_gbp39_999
+    label: "\xA330,000 - \xA339,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp30_000_gbp39_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp30_000_gbp39_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: S
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AG
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp40_000_gbp49_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp40_000_gbp49_999.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp40_000_gbp49_999
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp40_000_gbp49_999
+    label: "\xA340,000 - \xA349,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp40_000_gbp49_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp40_000_gbp49_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: T
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AH
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp50_000_gbp59_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp50_000_gbp59_999.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp50_000_gbp59_999
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp50_000_gbp59_999
+    label: "\xA350,000 - \xA359,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp50_000_gbp59_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp50_000_gbp59_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: U
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AI
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp60_000_gbp69_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp60_000_gbp69_999.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp60_000_gbp69_999
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp60_000_gbp69_999
+    label: "\xA360,000 - \xA369,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp60_000_gbp69_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp60_000_gbp69_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: V
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AJ
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp70_000_gbp99_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp70_000_gbp99_999.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp70_000_gbp99_999
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp70_000_gbp99_999
+    label: "\xA370,000 - \xA399,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp70_000_gbp99_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp70_000_gbp99_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: W
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AK
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp100_000_gbp149_999
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp100_000_gbp149_999.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp100_000_gbp149_999
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp100_000_gbp149_999
+    label: "\xA3100,000 - \xA3149,999"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp100_000_gbp149_999
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp100_000_gbp149_999
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: X
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AL
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.gbp150_000_or_more
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.gbp150_000_or_more.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.gbp150_000_or_more
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: gbp150_000_or_more
+    label: "\xA3150,000 or more"
+    ordinal: 0
+    row_number: 20
+    table_record_kind: detail
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: gbp150_000_or_more
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: gbp150_000_or_more
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: Y
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AM
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)
+- record_set_id: desnz.need_2023.table_10.household_income_band.all_dwellings
+  provenance_class: survey_aggregate
+  assertion: observation
+  record_set_spec_id: desnz.need_2023.table_10.household_income_band.all_dwellings.v1
+  source_record_id_prefix: desnz.need_2023.table_10.household_income_band.all_dwellings
+  sheet_name: Table_10
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: S92000003
+  geography_level: country
+  geography_name: Scotland
+  geography_vintage: current
+  entity: dwelling
+  entity_role: domestic_dwelling
+  domain: domestic_energy_consumption
+  groupby_dimension: desnz.need.household_income_band
+  rows:
+  - value_id: all_dwellings
+    label: All dwellings
+    ordinal: 0
+    row_number: 20
+    table_record_kind: total
+    expected_row_header_column: O
+    expected_row_header: 2023
+    filters:
+      household_income_band: all_dwellings
+    constraints:
+    - variable: household_income_band
+      operator: ==
+      value: all_dwellings
+      label: Household Income Band
+    guard_cells:
+    - column: AC
+      expected_value: 2023
+      label: median table year
+  measures:
+  - measure_id: mean_consumption
+    label: Mean electricity consumption
+    ordinal: 0
+    column: AA
+    source_column_id: mean_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Mean electricity consumption
+    unit: kwh
+    aggregation: mean
+    expected_cell_type: number
+    filters:
+      statistic: mean
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: mean
+      label: Statistic
+  - measure_id: median_consumption
+    label: Median electricity consumption
+    ordinal: 1
+    column: AO
+    source_column_id: median_consumption
+    concept: desnz.need.household_electricity_consumption
+    source_concept: desnz.need.household_electricity_consumption
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
+    concept_evidence_notes: Median electricity consumption
+    unit: kwh
+    aggregation: median
+    expected_cell_type: number
+    filters:
+      statistic: median
+    constraints:
+    - variable: statistic
+      operator: ==
+      value: median
+      label: Statistic
+  survey_instrument: National Energy Efficiency Data-Framework (NEED)

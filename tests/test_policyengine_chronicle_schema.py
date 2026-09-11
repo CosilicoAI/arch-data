@@ -29,7 +29,7 @@ _PACKAGED_SCHEMA_PATH = (
 )
 _SAMPLE_PATH = _REPO_ROOT / "chronicle" / "fixtures" / "consumer_facts.jsonl"
 _FROZEN_SCHEMA_SHA256 = (
-    "76ac268e626c86146cee51193e0cbecbb197ddbf3bf410156fe7da7c0edae3ad"
+    "72ad3149564f8aab3e9bb6de5ea25950c8e19a3e8402e2cdcfc52d250bc8ee82"
 )
 
 _TOP_LEVEL_KEY_DOMAINS = {

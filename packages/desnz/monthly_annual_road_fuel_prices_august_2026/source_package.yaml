@@ -1,0 +1,2741 @@
+schema_version: ledger.source_package.v1
+package_id: desnz-monthly-annual-road-fuel-prices-august-2026
+label: DESNZ monthly and annual road-fuel pump prices through August 2026
+artifact:
+  source_name: desnz
+  source_table: Digest of UK Energy Statistics tables 4.1.1 to 4.1.3 workbook; emitted sheets 4.1.1 and 4.1.2
+  resource_package: db
+  resource_directory: data/desnz/monthly_annual_road_fuel_prices_august_2026
+  manifest: manifest.yaml
+  vintage: august_2026
+  extracted_at: '2026-09-09'
+  extraction_method: XLSX whole-workbook used-range cell parse
+  parser: xlsx_used_range
+  artifact_year: 2026
+record_sets:
+- record_set_id: desnz.monthly_road_fuel_prices.2023_01
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_01.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_01
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-01
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-01-31'
+    basis: calendar
+    source_period_label: '2023-01'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 419
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-01-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_02
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_02.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_02
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-02
+  period_coverage:
+    start_date: '2023-02-01'
+    end_date: '2023-02-28'
+    basis: calendar
+    source_period_label: '2023-02'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 420
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-02-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_03
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_03.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_03
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-03
+  period_coverage:
+    start_date: '2023-03-01'
+    end_date: '2023-03-31'
+    basis: calendar
+    source_period_label: '2023-03'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 421
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-03-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_04
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_04.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_04
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-04
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2023-04-30'
+    basis: calendar
+    source_period_label: '2023-04'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 422
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-04-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_05
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_05.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_05
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-05
+  period_coverage:
+    start_date: '2023-05-01'
+    end_date: '2023-05-31'
+    basis: calendar
+    source_period_label: '2023-05'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 423
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-05-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_06
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_06.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_06
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-06
+  period_coverage:
+    start_date: '2023-06-01'
+    end_date: '2023-06-30'
+    basis: calendar
+    source_period_label: '2023-06'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 424
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-06-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_07
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_07.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_07
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-07
+  period_coverage:
+    start_date: '2023-07-01'
+    end_date: '2023-07-31'
+    basis: calendar
+    source_period_label: '2023-07'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 425
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-07-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_08
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_08.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_08
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-08
+  period_coverage:
+    start_date: '2023-08-01'
+    end_date: '2023-08-31'
+    basis: calendar
+    source_period_label: '2023-08'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 426
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-08-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_09
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_09.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_09
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-09
+  period_coverage:
+    start_date: '2023-09-01'
+    end_date: '2023-09-30'
+    basis: calendar
+    source_period_label: '2023-09'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 427
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-09-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_10
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_10.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_10
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-10
+  period_coverage:
+    start_date: '2023-10-01'
+    end_date: '2023-10-31'
+    basis: calendar
+    source_period_label: '2023-10'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 428
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-10-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_11
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_11.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_11
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-11
+  period_coverage:
+    start_date: '2023-11-01'
+    end_date: '2023-11-30'
+    basis: calendar
+    source_period_label: '2023-11'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 429
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-11-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2023_12
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2023_12.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2023_12
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2023-12
+  period_coverage:
+    start_date: '2023-12-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023-12'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 430
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2023-12-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_01
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_01.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_01
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-01
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-01-31'
+    basis: calendar
+    source_period_label: '2024-01'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 431
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-01-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_02
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_02.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_02
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-02
+  period_coverage:
+    start_date: '2024-02-01'
+    end_date: '2024-02-29'
+    basis: calendar
+    source_period_label: '2024-02'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 432
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-02-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_03
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_03.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_03
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-03
+  period_coverage:
+    start_date: '2024-03-01'
+    end_date: '2024-03-31'
+    basis: calendar
+    source_period_label: '2024-03'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 433
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-03-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_04
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_04.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_04
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-04
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2024-04-30'
+    basis: calendar
+    source_period_label: '2024-04'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 434
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-04-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_05
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_05.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_05
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-05
+  period_coverage:
+    start_date: '2024-05-01'
+    end_date: '2024-05-31'
+    basis: calendar
+    source_period_label: '2024-05'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 435
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-05-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_06
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_06.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_06
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-06
+  period_coverage:
+    start_date: '2024-06-01'
+    end_date: '2024-06-30'
+    basis: calendar
+    source_period_label: '2024-06'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 436
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-06-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_07
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_07.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_07
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-07
+  period_coverage:
+    start_date: '2024-07-01'
+    end_date: '2024-07-31'
+    basis: calendar
+    source_period_label: '2024-07'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 437
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-07-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_08
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_08.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_08
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-08
+  period_coverage:
+    start_date: '2024-08-01'
+    end_date: '2024-08-31'
+    basis: calendar
+    source_period_label: '2024-08'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 438
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-08-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_09
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_09.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_09
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-09
+  period_coverage:
+    start_date: '2024-09-01'
+    end_date: '2024-09-30'
+    basis: calendar
+    source_period_label: '2024-09'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 439
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-09-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_10
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_10.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_10
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-10
+  period_coverage:
+    start_date: '2024-10-01'
+    end_date: '2024-10-31'
+    basis: calendar
+    source_period_label: '2024-10'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 440
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-10-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_11
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_11.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_11
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-11
+  period_coverage:
+    start_date: '2024-11-01'
+    end_date: '2024-11-30'
+    basis: calendar
+    source_period_label: '2024-11'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 441
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-11-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2024_12
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2024_12.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2024_12
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2024-12
+  period_coverage:
+    start_date: '2024-12-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024-12'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 442
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2024-12-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_01
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_01.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_01
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-01
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-01-31'
+    basis: calendar
+    source_period_label: '2025-01'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 443
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-01-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_02
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_02.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_02
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-02
+  period_coverage:
+    start_date: '2025-02-01'
+    end_date: '2025-02-28'
+    basis: calendar
+    source_period_label: '2025-02'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 444
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-02-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_03
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_03.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_03
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-03
+  period_coverage:
+    start_date: '2025-03-01'
+    end_date: '2025-03-31'
+    basis: calendar
+    source_period_label: '2025-03'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 445
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-03-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_04
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_04.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_04
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-04
+  period_coverage:
+    start_date: '2025-04-01'
+    end_date: '2025-04-30'
+    basis: calendar
+    source_period_label: '2025-04'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 446
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-04-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_05
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_05.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_05
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-05
+  period_coverage:
+    start_date: '2025-05-01'
+    end_date: '2025-05-31'
+    basis: calendar
+    source_period_label: '2025-05'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 447
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-05-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_06
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_06.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_06
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-06
+  period_coverage:
+    start_date: '2025-06-01'
+    end_date: '2025-06-30'
+    basis: calendar
+    source_period_label: '2025-06'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 448
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-06-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_07
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_07.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_07
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-07
+  period_coverage:
+    start_date: '2025-07-01'
+    end_date: '2025-07-31'
+    basis: calendar
+    source_period_label: '2025-07'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 449
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-07-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_08
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_08.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_08
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-08
+  period_coverage:
+    start_date: '2025-08-01'
+    end_date: '2025-08-31'
+    basis: calendar
+    source_period_label: '2025-08'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 450
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-08-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_09
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_09.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_09
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-09
+  period_coverage:
+    start_date: '2025-09-01'
+    end_date: '2025-09-30'
+    basis: calendar
+    source_period_label: '2025-09'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 451
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-09-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_10
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_10.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_10
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-10
+  period_coverage:
+    start_date: '2025-10-01'
+    end_date: '2025-10-31'
+    basis: calendar
+    source_period_label: '2025-10'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 452
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-10-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_11
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_11.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_11
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-11
+  period_coverage:
+    start_date: '2025-11-01'
+    end_date: '2025-11-30'
+    basis: calendar
+    source_period_label: '2025-11'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 453
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-11-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2025_12
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2025_12.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2025_12
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2025-12
+  period_coverage:
+    start_date: '2025-12-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025-12'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 454
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2025-12-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2026_01
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2026_01.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2026_01
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2026-01
+  period_coverage:
+    start_date: '2026-01-01'
+    end_date: '2026-01-31'
+    basis: calendar
+    source_period_label: '2026-01'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 455
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2026-01-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2026_02
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2026_02.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2026_02
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2026-02
+  period_coverage:
+    start_date: '2026-02-01'
+    end_date: '2026-02-28'
+    basis: calendar
+    source_period_label: '2026-02'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 456
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2026-02-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2026_03
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2026_03.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2026_03
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2026-03
+  period_coverage:
+    start_date: '2026-03-01'
+    end_date: '2026-03-31'
+    basis: calendar
+    source_period_label: '2026-03'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 457
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2026-03-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2026_04
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2026_04.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2026_04
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2026-04
+  period_coverage:
+    start_date: '2026-04-01'
+    end_date: '2026-04-30'
+    basis: calendar
+    source_period_label: '2026-04'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 458
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2026-04-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2026_05
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2026_05.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2026_05
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2026-05
+  period_coverage:
+    start_date: '2026-05-01'
+    end_date: '2026-05-31'
+    basis: calendar
+    source_period_label: '2026-05'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 459
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2026-05-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2026_06
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2026_06.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2026_06
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2026-06
+  period_coverage:
+    start_date: '2026-06-01'
+    end_date: '2026-06-30'
+    basis: calendar
+    source_period_label: '2026-06'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 460
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2026-06-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2026_07
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2026_07.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2026_07
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2026-07
+  period_coverage:
+    start_date: '2026-07-01'
+    end_date: '2026-07-31'
+    basis: calendar
+    source_period_label: '2026-07'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 461
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2026-07-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.monthly_road_fuel_prices.2026_08
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.monthly_road_fuel_prices.2026_08.v1
+  source_record_id_prefix: desnz.monthly_road_fuel_prices.2026_08
+  sheet_name: 4.1.1
+  period_type: month
+  period: 2026-08
+  period_coverage:
+    start_date: '2026-08-01'
+    end_date: '2026-08-31'
+    basis: calendar
+    source_period_label: '2026-08'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 462
+    table_record_kind: total
+    expected_row_header_column: B
+    expected_row_header: '2026-08-01T00:00:00'
+  measures:
+  - measure_id: ulsp_price
+    label: Monthly ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: E
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.monthly_ulsp_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Monthly ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: F
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.monthly_ulsd_pump_price
+    source_concept: desnz.road_fuel.monthly_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Monthly ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.annual_road_fuel_prices.cy2023
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.annual_road_fuel_prices.cy2023.v1
+  source_record_id_prefix: desnz.annual_road_fuel_prices.cy2023
+  sheet_name: 4.1.2
+  period_type: calendar_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-01-01'
+    end_date: '2023-12-31'
+    basis: calendar
+    source_period_label: '2023'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 60
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: 2023
+  measures:
+  - measure_id: ulsp_price
+    label: Annual ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: D
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.annual_ulsp_pump_price
+    source_concept: desnz.road_fuel.annual_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Annual ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Annual ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: E
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.annual_ulsd_pump_price
+    source_concept: desnz.road_fuel.annual_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Annual ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.annual_road_fuel_prices.cy2024
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.annual_road_fuel_prices.cy2024.v1
+  source_record_id_prefix: desnz.annual_road_fuel_prices.cy2024
+  sheet_name: 4.1.2
+  period_type: calendar_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-01-01'
+    end_date: '2024-12-31'
+    basis: calendar
+    source_period_label: '2024'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 61
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: 2024
+  measures:
+  - measure_id: ulsp_price
+    label: Annual ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: D
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.annual_ulsp_pump_price
+    source_concept: desnz.road_fuel.annual_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Annual ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Annual ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: E
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.annual_ulsd_pump_price
+    source_concept: desnz.road_fuel.annual_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Annual ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+- record_set_id: desnz.annual_road_fuel_prices.cy2025
+  provenance_class: administrative
+  assertion: observation
+  record_set_spec_id: desnz.annual_road_fuel_prices.cy2025.v1
+  source_record_id_prefix: desnz.annual_road_fuel_prices.cy2025
+  sheet_name: 4.1.2
+  period_type: calendar_year
+  period: 2025
+  period_coverage:
+    start_date: '2025-01-01'
+    end_date: '2025-12-31'
+    basis: calendar
+    source_period_label: '2025'
+  geography_id: K02000001
+  geography_level: country
+  geography_name: United Kingdom
+  geography_vintage: current
+  entity: institutional_sector
+  entity_role: road_fuel_market
+  domain: road_fuel_prices
+  groupby_dimension: desnz.road_fuel_scope
+  rows:
+  - value_id: united_kingdom
+    label: United Kingdom
+    ordinal: 0
+    row_number: 62
+    table_record_kind: total
+    expected_row_header_column: A
+    expected_row_header: 2025
+  measures:
+  - measure_id: ulsp_price
+    label: Annual ultra-low sulphur petrol pump price
+    ordinal: 0
+    column: D
+    source_column_id: ulsp_price
+    concept: desnz.road_fuel.annual_ulsp_pump_price
+    source_concept: desnz.road_fuel.annual_ulsp_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Annual ultra-low sulphur petrol pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number
+  - measure_id: ulsd_price
+    label: Annual ultra-low sulphur diesel pump price
+    ordinal: 1
+    column: E
+    source_column_id: ulsd_price
+    concept: desnz.road_fuel.annual_ulsd_pump_price
+    source_concept: desnz.road_fuel.annual_ulsd_pump_price
+    concept_relation: source_label
+    concept_authority: desnz
+    concept_evidence_url: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics
+    concept_evidence_notes: Annual ultra-low sulphur diesel pump price
+    unit: pence_per_litre
+    aggregation: mean
+    expected_cell_type: number

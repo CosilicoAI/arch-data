@@ -170,15 +170,39 @@ SOURCE_PACKAGE_ALIASES = {
     ),
     "dft-bus0415-fares-index-2026": Path("dft/bus0415_fares_index_2026"),
     "dft-bus05i-revenue-support-2025": Path("dft/bus05i_revenue_support_2025"),
+    "dft-veh1103-cars-fuel-type-2025": Path("dft/veh1103_cars_fuel_type_2025"),
+    "dft-nts0313-mode-use-frequency-2025": Path(
+        "dft/nts0313_mode_use_frequency_2025"
+    ),
+    "dft-nts0621-local-bus-use-frequency-2025": Path(
+        "dft/nts0621_local_bus_use_frequency_2025"
+    ),
     "dft-nts0705-local-bus-trips-2024": Path("dft/nts0705_local_bus_trips_2024"),
     "dft-nts-vehicle-ownership-2024": Path("dft/nts_vehicle_ownership_2024"),
     "dfc-ni-uc-statistics-may-2026": Path("dfc_ni/uc_statistics_may_2026"),
+    "dfi-ni-public-transport-statistics-2024-25": Path(
+        "dfi_ni/public_transport_statistics_2024_25"
+    ),
+    "desnz-monthly-annual-road-fuel-prices-august-2026": Path(
+        "desnz/monthly_annual_road_fuel_prices_august_2026"
+    ),
+    "desnz-need-england-wales-2023": Path("desnz/need_england_wales_2023"),
+    "desnz-need-scotland-2023": Path("desnz/need_scotland_2023"),
+    "desnz-weekly-road-fuel-prices-september-2026": Path(
+        "desnz/weekly_road_fuel_prices_september_2026"
+    ),
     "dwp-benefit-cap-november-2025": Path("dwp/benefit_cap_november_2025"),
     "dwp-benefit-statistics-february-2026": Path(
         "dwp/benefit_statistics_february_2026"
     ),
-    "dwp-uc-childcare-element-march-2021-august-2025": Path(
-        "dwp/uc_childcare_element_march_2021_august_2025"
+    "dwp-hb-claimants-client-type-tenure-january-2023-february-2026": Path(
+        "dwp/hb_claimants_client_type_tenure_january_2023_february_2026"
+    ),
+    "dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026": Path(
+        "dwp/hb_claimants_client_type_tenure_accommodation_type_september_2025_february_2026"
+    ),
+    "dwp-uc-childcare-element-march-2021-may-2026": Path(
+        "dwp/uc_childcare_element_march_2021_may_2026"
     ),
     "dwp-uc-deductions-march-2025-february-2026": Path(
         "dwp/uc_deductions_march_2025_february_2026"
@@ -193,20 +217,11 @@ SOURCE_PACKAGE_ALIASES = {
     "dwp-uc-households-by-local-authority-may-2025": Path(
         "dwp/uc_households_by_local_authority_may_2025"
     ),
-    "dwp-uc-households-carer-entitlement-april-december-2025": Path(
-        "dwp/uc_households_carer_entitlement_april_december_2025"
-    ),
     "dwp-uc-households-children-april-december-2025": Path(
         "dwp/uc_households_children_april_december_2025"
     ),
     "dwp-uc-households-family-type-april-december-2025": Path(
         "dwp/uc_households_family_type_april_december_2025"
-    ),
-    "dwp-uc-households-housing-entitlement-april-december-2025": Path(
-        "dwp/uc_households_housing_entitlement_april_december_2025"
-    ),
-    "dwp-uc-households-lcwra-entitlement-april-december-2025": Path(
-        "dwp/uc_households_lcwra_entitlement_april_december_2025"
     ),
     "dwp-uc-households-family-type-child-entitlement-april-december-2025": Path(
         "dwp/uc_households_family_type_child_entitlement_april_december_2025"
@@ -216,6 +231,30 @@ SOURCE_PACKAGE_ALIASES = {
     ),
     "dwp-uc-households-family-type-payment-indicator-april-december-2025": Path(
         "dwp/uc_households_family_type_payment_indicator_april_december_2025"
+    ),
+    "dwp-uc-households-family-type-payment-indicator-child-entitlement-april-2023-may-2026": Path(
+        "dwp/uc_households_family_type_payment_indicator_child_entitlement_april_2023_may_2026"
+    ),
+    "dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026": Path(
+        "dwp/uc_households_children_payment_indicator_child_entitlement_april_2023_may_2026"
+    ),
+    "dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_housing_tenure_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_housing_entitlement_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_lcw_entitlement_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_lcw_entitlement_group_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_carer_entitlement_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-people-employment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_people_employment_indicator_january_2023_may_2026"
     ),
     "dwp-uc-payment-distribution-april-december-2025": Path(
         "dwp/uc_payment_distribution_april_december_2025"
@@ -330,6 +369,9 @@ SOURCE_PACKAGE_ALIASES = {
     "hmrc-vat-firm-sector-targets-2024-25": Path(
         "hmrc/vat_firm_sector_targets_2024_25"
     ),
+    "hmrc-hydrocarbon-oils-quantities-june-2026": Path(
+        "hmrc/hydrocarbon_oils_quantities_june_2026"
+    ),
     "eurostat-gov-10a-taxag": Path("eurostat/gov_10a_taxag"),
     "eurostat-gov-10a-taxag-2025": Path("eurostat/gov_10a_taxag_2025"),
     "eurostat-spr-exp-func": Path("eurostat/spr_exp_func"),
@@ -358,6 +400,9 @@ SOURCE_PACKAGE_ALIASES = {
         "ons/subnational_dwellings_by_tenure_2024"
     ),
     "ons-pipr-rents-by-area-june-2026": Path("ons/pipr_rents_by_area_june_2026"),
+    "ons-consumer-trends-current-price-2026": Path(
+        "ons/consumer_trends_current_price_2026"
+    ),
     "nrs-census2022-households-ukpc24": Path("nrs/census2022_households_ukpc24"),
     "nrs-pcon24-population-by-age-2024": Path("nrs/pcon24_population_by_age_2024"),
     "nrs-census2022-uv113-household-composition-country": Path(
@@ -372,6 +417,9 @@ SOURCE_PACKAGE_ALIASES = {
     "nisra-census2021-tenure-lgd": Path("nisra/census2021_tenure_lgd"),
     "nisra-census2021-household-composition-country": Path(
         "nisra/census2021_household_composition_country"
+    ),
+    "nithc-annual-report-accounts-2024-25": Path(
+        "nithc/annual_report_accounts_2024_25"
     ),
     "ons-uk-population-projections-2024": Path("ons/npp_2024_uk"),
     "scotgov-band-d-council-tax-rates-2026-27": Path(
@@ -389,7 +437,16 @@ SOURCE_PACKAGE_ALIASES = {
     "scotgov-scottish-budget-social-security-assistance-2026": Path(
         "scotgov/scottish_budget_social_security_assistance_2026"
     ),
+    "scotgov-bus-coach-statistics-2023-24": Path(
+        "scotgov/bus_coach_statistics_2023_24"
+    ),
+    "scotgov-bus-coach-statistics-2024-25": Path(
+        "scotgov/bus_coach_statistics_2024_25"
+    ),
     "welshgov-council-tax-levels-2026-27": Path("welshgov/council_tax_levels_2026_27"),
+    "welshgov-transport-revenue-outturn-2024-25": Path(
+        "welshgov/transport_revenue_outturn_2024_25"
+    ),
     "welshgov-council-tax-collection-2024-25": Path(
         "welshgov/council_tax_collection_2024_25"
     ),
@@ -398,12 +455,24 @@ SOURCE_PACKAGE_ALIASES = {
     ),
     "welshgov-ctrs-annual-report-2024-25": Path("welshgov/ctrs_annual_report_2024_25"),
     "welshgov-ctrs-annual-report-2025-26": Path("welshgov/ctrs_annual_report_2025_26"),
+    "welshgov-bus-statistics-2024-25": Path("welshgov/bus_statistics_2024_25"),
     "voa-council-tax-bands-2025": Path("voa/council_tax_bands_2025"),
     "voa-council-tax-stock-by-lad-2025": Path("voa/council_tax_stock_by_lad_2025"),
     "obr-efo-receipts-march-2026": Path("obr/efo_receipts_march_2026"),
     "obr-efo-expenditure-march-2026": Path("obr/efo_expenditure_march_2026"),
     "obr-efo-economy-march-2026": Path("obr/efo_economy_march_2026"),
     "obr-efo-aggregates-march-2026": Path("obr/efo_aggregates_march_2026"),
+    "obr-fuel-duty-receipts-by-vehicle-april-2024": Path(
+        "obr/fuel_duty_receipts_by_vehicle_april_2024"
+    ),
+    "ofgem-energy-price-cap-q1-2024": Path("ofgem/energy_price_cap_q1_2024"),
+    "ofgem-energy-price-cap-levels-2024-2026": Path(
+        "ofgem/energy_price_cap_levels_2024_2026"
+    ),
+    "orr-government-support-7270-2024-25": Path("orr/government_support_7270_2024_25"),
+    "orr-government-support-7271-2024-25": Path("orr/government_support_7271_2024_25"),
+    "orr-rail-fares-7180-2026": Path("orr/rail_fares_7180_2026"),
+    "orr-rail-finance-7223-2024-25": Path("orr/rail_finance_7223_2024_25"),
     "ons-national-balance-sheet-land-2025": Path(
         "ons/national_balance_sheet_land_2025"
     ),
@@ -2213,6 +2282,10 @@ def _row_from_mapping(payload: dict[str, Any], *, year: int) -> SourceRecordSetR
             _constraint_from_mapping(constraint, year=year)
             for constraint in payload.get("constraints", ())
         ),
+        source_row_dimensions={
+            str(key): _render_value(value, year=year)
+            for key, value in payload.get("source_row_dimensions", {}).items()
+        },
         value_scale=_render_value(payload.get("value_scale", 1), year=year),
         source_row_id=payload.get("source_row_id"),
         table_record_kind=payload.get("table_record_kind", "detail"),

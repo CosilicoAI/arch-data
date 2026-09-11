@@ -1,0 +1,18 @@
+source_id: dwp
+package_id: dwp-uc-childcare-element-march-2021-may-2026
+dataset: dwp_dwp-uc-childcare-element-march-2021-may-2026
+source_page: https://www.gov.uk/government/statistics/universal-credit-quarterly-statistics-29-april-2013-to-14-may-2026
+table: Universal Credit childcare element statistics to May 2026, Tables 1 and 3
+files:
+  2025:
+    filename: universal-credit-childcare-element-statistics-may-2026-tables.ods
+    source_url: https://assets.publishing.service.gov.uk/media/6a7d95409cba0097fdd83268/universal-credit-childcare-element-statistics-may-2026-tables.ods
+    sha256: 79ba430bbc3c53899745ef838b37f91b659d2c2c700465145acdff0578ccf675
+    size_bytes: 76309
+    fetched_at: '2026-09-11T12:10:50+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-uc-childcare-element-march-2021-may-2026/2025/79ba430bbc3c53899745ef838b37f91b659d2c2c700465145acdff0578ccf675/universal-credit-childcare-element-statistics-may-2026-tables.ods
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-uc-childcare-element-march-2021-may-2026/2025/79ba430bbc3c53899745ef838b37f91b659d2c2c700465145acdff0578ccf675/universal-credit-childcare-element-statistics-may-2026-tables.ods

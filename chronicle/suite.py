@@ -403,6 +403,9 @@ def build_source_suite(
         source_column_dimensions_by_record_id=(
             _source_column_dimensions_by_record_id(source_record_set_specs)
         ),
+        source_row_dimensions_by_record_id=(
+            _source_row_dimensions_by_record_id(source_record_set_specs)
+        ),
         selected_only_source_parse=(
             bool(source_package)
             and source_package.artifact.parser == "delimited_text_selected_rows"
@@ -589,6 +592,7 @@ def build_agent_acceptance_report(
     concept_alignments: ConceptAlignmentReport,
     require_axiom_validation: bool = False,
     source_column_dimensions_by_record_id: dict[str, dict[str, Any]] | None = None,
+    source_row_dimensions_by_record_id: dict[str, dict[str, Any]] | None = None,
     selected_only_source_parse: bool = False,
 ) -> AgentAcceptanceReport:
     """Build the stricter report agents should satisfy before review."""
@@ -607,6 +611,7 @@ def build_agent_acceptance_report(
         for cell in cells
     }
     source_column_dimensions_by_record_id = source_column_dimensions_by_record_id or {}
+    source_row_dimensions_by_record_id = source_row_dimensions_by_record_id or {}
     raw_r2_link_count = 0
 
     if not cells and not rows:
@@ -718,6 +723,12 @@ def build_agent_acceptance_report(
                 ],
                 source_column_dimensions=(
                     source_column_dimensions_by_record_id.get(
+                        fact.source_record_id or "",
+                        {},
+                    )
+                ),
+                source_row_dimensions=(
+                    source_row_dimensions_by_record_id.get(
                         fact.source_record_id or "",
                         {},
                     )
@@ -979,9 +990,11 @@ def _row_semantic_evidence_issues(
     cells: list[SourceCell],
     *,
     source_column_dimensions: dict[str, Any] | None = None,
+    source_row_dimensions: dict[str, Any] | None = None,
 ) -> list[AgentAcceptanceIssue]:
     issues: list[AgentAcceptanceIssue] = []
     source_column_dimensions = source_column_dimensions or {}
+    source_row_dimensions = source_row_dimensions or {}
     fact_key = build_fact_key(fact)
     period_values = _source_row_values(rows, "period")
     for value in period_values:
@@ -1001,7 +1014,7 @@ def _row_semantic_evidence_issues(
     for variable, value in fact.filters.items():
         if value is None:
             continue
-        if value == "all" and not source_column_dimensions:
+        if value == "all" and not (source_column_dimensions or source_row_dimensions):
             continue
         matched_values = _source_row_values(rows, variable)
         if not matched_values:
@@ -1009,6 +1022,12 @@ def _row_semantic_evidence_issues(
                 continue
             if _wide_table_filter_evidenced_by_source_column(
                 source_column_dimensions,
+                variable,
+                value,
+            ):
+                continue
+            if _declared_dimension_evidences(
+                source_row_dimensions,
                 variable,
                 value,
             ):
@@ -1050,6 +1069,11 @@ def _row_semantic_evidence_issues(
             constraint,
         ):
             continue
+        if _declared_constraint_evidenced(
+            source_row_dimensions,
+            constraint,
+        ):
+            continue
         matched_values = _source_row_values(rows, constraint.variable)
         if not matched_values:
             issues.append(
@@ -1087,9 +1111,22 @@ def _wide_table_filter_evidenced_by_source_column(
     expected: Any,
 ) -> bool:
     """Accept an explicitly declared dimension of a guarded source column."""
-    if variable not in source_column_dimensions:
+    return _declared_dimension_evidences(
+        source_column_dimensions,
+        variable,
+        expected,
+    )
+
+
+def _declared_dimension_evidences(
+    dimensions: dict[str, Any],
+    variable: str,
+    expected: Any,
+) -> bool:
+    """Accept an explicitly declared semantic dimension of a source axis."""
+    if variable not in dimensions:
         return False
-    declared = source_column_dimensions[variable]
+    declared = dimensions[variable]
     return type(declared) is type(expected) and declared == expected
 
 
@@ -1097,10 +1134,20 @@ def _wide_table_constraint_evidenced_by_source_column(
     source_column_dimensions: dict[str, Any],
     constraint: Any,
 ) -> bool:
+    return _declared_constraint_evidenced(
+        source_column_dimensions,
+        constraint,
+    )
+
+
+def _declared_constraint_evidenced(
+    dimensions: dict[str, Any],
+    constraint: Any,
+) -> bool:
     if constraint.operator != "==":
         return False
-    return _wide_table_filter_evidenced_by_source_column(
-        source_column_dimensions,
+    return _declared_dimension_evidences(
+        dimensions,
         str(constraint.variable),
         constraint.value,
     )
@@ -1118,6 +1165,21 @@ def _source_column_dimensions_by_record_id(
         for row in record_set.rows
         for measure in record_set.measures
         if measure.source_column_dimensions
+    }
+
+
+def _source_row_dimensions_by_record_id(
+    record_sets: list[SourceRecordSetSpec],
+) -> dict[str, dict[str, Any]]:
+    """Index explicit row dimensions for row-header tables."""
+    return {
+        f"{record_set.source_record_id_prefix}.{row.value_id}.{measure.measure_id}": (
+            dict(row.source_row_dimensions)
+        )
+        for record_set in record_sets
+        for row in record_set.rows
+        for measure in record_set.measures
+        if row.source_row_dimensions
     }
 
 
