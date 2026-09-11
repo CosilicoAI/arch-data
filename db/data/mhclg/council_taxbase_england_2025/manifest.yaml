@@ -1,0 +1,18 @@
+source_id: mhclg
+package_id: mhclg-council-taxbase-england-2025
+dataset: mhclg_mhclg-council-taxbase-england-2025
+source_page: https://www.gov.uk/government/statistics/council-taxbase-2025-in-england
+table: 'Council Taxbase: Local authority level data for 2025 (revised)'
+files:
+  2025:
+    filename: 2025_Local_Authority_Drop_Down.xlsx
+    source_url: https://assets.publishing.service.gov.uk/media/696f605ff6aa424b452e3359/2025_Local_Authority_Drop_Down.xlsx
+    sha256: 9fd74444f25278b53f7666dc23ff060d1996adcfe27e74caf63aef2b5b19af06
+    size_bytes: 1800242
+    fetched_at: '2026-09-11T19:20:21+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/mhclg/mhclg-council-taxbase-england-2025/2025/9fd74444f25278b53f7666dc23ff060d1996adcfe27e74caf63aef2b5b19af06/2025_Local_Authority_Drop_Down.xlsx
+        uri: r2://ledger-raw/raw/uk/mhclg/mhclg-council-taxbase-england-2025/2025/9fd74444f25278b53f7666dc23ff060d1996adcfe27e74caf63aef2b5b19af06/2025_Local_Authority_Drop_Down.xlsx

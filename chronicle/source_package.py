@@ -112,6 +112,9 @@ SOURCE_PACKAGE_ALIASES = {
     "mhclg-council-tax-collection-england-2025-26": Path(
         "mhclg/council_tax_collection_england_2025_26"
     ),
+    "mhclg-council-taxbase-england-2023": Path("mhclg/council_taxbase_england_2023"),
+    "mhclg-council-taxbase-england-2024": Path("mhclg/council_taxbase_england_2024"),
+    "mhclg-council-taxbase-england-2025": Path("mhclg/council_taxbase_england_2025"),
     "mhclg-ehs-weekly-housing-costs-2023-24": Path(
         "mhclg/ehs_weekly_housing_costs_2023_24"
     ),
@@ -397,6 +400,8 @@ SOURCE_PACKAGE_ALIASES = {
         "scotgov/band_d_council_tax_rates_2026_27"
     ),
     "scotgov-band-d-equivalents-2025": Path("scotgov/band_d_equivalents_2025"),
+    "scotgov-council-tax-bands-2023": Path("scotgov/council_tax_bands_2023"),
+    "scotgov-council-tax-bands-2024": Path("scotgov/council_tax_bands_2024"),
     "scotgov-council-tax-bands-2025": Path("scotgov/council_tax_bands_2025"),
     "scotgov-council-tax-collection-2024-25": Path(
         "scotgov/council_tax_collection_2024_25"
@@ -415,6 +420,9 @@ SOURCE_PACKAGE_ALIASES = {
         "scotgov/bus_coach_statistics_2024_25"
     ),
     "welshgov-council-tax-levels-2026-27": Path("welshgov/council_tax_levels_2026_27"),
+    "welshgov-council-tax-dwellings-2023-24-to-2026-27": Path(
+        "welshgov/council_tax_dwellings_2023_24_to_2026_27"
+    ),
     "welshgov-transport-revenue-outturn-2024-25": Path(
         "welshgov/transport_revenue_outturn_2024_25"
     ),

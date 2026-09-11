@@ -1,39 +1,34 @@
-# Scottish Government CTAXBASE 2025: number of chargeable dwellings at
-# September 2025, Scotland row by council tax band A-H plus total. The
-# Scotland row is publisher-emitted as in-workbook SUM formulas over the 32
-# local-authority rows; the parser reads the publisher's cached computed
-# values (total 2,623,149). The 32 council-area rows are ported too, in their
-# own record set with the same concepts, measure ids and period (chronicle#262),
-# so each council leg parents under the Scotland row; codes and canonical names
-# come from scotgov-band-d-equivalents-2025.
-# policyengine-uk-data downloads this workbook at runtime and falls back to
-# hardcoded 2024-25 band shares x a hardcoded total when gov.scot blocks the
-# fetch - that fallback is uk-data-computed and excluded per the facts-only
-# ADR; this package pins the September-2025 publisher bytes (the fallback
-# total matches this workbook's Scotland total exactly).
+# Scottish Government CTAXBASE 2024: number of chargeable dwellings on the valuation
+# list at 2 September 2024, as reported by councils in the 'Council Tax Base'
+# statistical return, by council tax band A-H plus total, for Scotland and the 32
+# council areas (chronicle#262). Same concepts, measure ids and record-set shape as
+# scotgov-council-tax-bands-2025; the Scotland row is the publisher's in-workbook sum
+# of the council rows (checked cell for cell). Council codes and canonical names come
+# from scotgov-band-d-equivalents-2025; guards carry the publisher's '&' spellings.
+# Period: the count month, 2024-09. Excluded: the valuation band ranges and the
+# ratio-to-Band-D rows, and the source and re-ordering notes below the councils.
 schema_version: ledger.source_package.v1
-package_id: scotgov-council-tax-bands-2025
-label: 'Scottish Government chargeable dwellings September 2025: Scotland by council tax band
-  (CTAXBASE 2025)'
+package_id: scotgov-council-tax-bands-2024
+label: 'Scottish Government chargeable dwellings September 2024: Scotland and council areas by council tax band (CTAXBASE 2024)'
 artifact:
   source_name: scotgov
-  source_table: Number of chargeable dwellings, September 2025 (CTAXBASE 2025)
+  source_table: Number of chargeable dwellings, September 2024 (CTAXBASE 2024)
   resource_package: db
-  resource_directory: data/scotgov/council_tax_bands_2025
+  resource_directory: data/scotgov/council_tax_bands_2024
   manifest: manifest.yaml
-  vintage: ctaxbase_2025
-  extracted_at: '2026-08-07'
+  vintage: ctaxbase_2024
+  extracted_at: '2026-09-11'
   extraction_method: xlsx whole-workbook used-range cell parse
   parser: xlsx_used_range
-  artifact_year: 2025
+  artifact_year: 2024
 record_sets:
-- record_set_id: scotgov.ctaxbase2025.chargeable_dwellings.scotland
+- record_set_id: scotgov.ctaxbase2024.chargeable_dwellings.scotland
   provenance_class: administrative
-  record_set_spec_id: scotgov.ctaxbase2025.chargeable_dwellings.scotland.v1
-  source_record_id_prefix: scotgov.ctaxbase2025.chargeable_dwellings.scotland
-  sheet_name: Chargeable Dwellings 2025
+  record_set_spec_id: scotgov.ctaxbase2024.chargeable_dwellings.scotland.v1
+  source_record_id_prefix: scotgov.ctaxbase2024.chargeable_dwellings.scotland
+  sheet_name: Chargeable Dwellings 2024
   period_type: month
-  period: 2025-09
+  period: 2024-09
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -68,9 +63,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Band A.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Band A.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -86,9 +79,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Band B.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Band B.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -104,9 +95,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Band C.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Band C.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -122,9 +111,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Band D.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Band D.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -140,9 +127,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Band E.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Band E.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -158,9 +143,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Band F.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Band F.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -176,9 +159,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Band G.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Band G.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -194,9 +175,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Band H.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Band H.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -212,19 +191,17 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable
-      dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', Scotland
-      row, column: Total.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', Scotland row, column: Total.'
     unit: count
     aggregation: sum
     expected_cell_type: number
-- record_set_id: scotgov.ctaxbase2025.chargeable_dwellings.council_area
+- record_set_id: scotgov.ctaxbase2024.chargeable_dwellings.council_area
   provenance_class: administrative
   record_set_spec_id: uk.local_geography.council_tax_stock.scotland_ctaxbase_chargeable_dwellings.by_council_area.v1
-  source_record_id_prefix: scotgov.ctaxbase2025.chargeable_dwellings.council_area
-  sheet_name: Chargeable Dwellings 2025
+  source_record_id_prefix: scotgov.ctaxbase2024.chargeable_dwellings.council_area
+  sheet_name: Chargeable Dwellings 2024
   period_type: month
-  period: 2025-09
+  period: 2024-09
   geography_id: S92000003
   geography_level: country
   geography_name: Scotland
@@ -599,7 +576,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Band A.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Band A.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -615,7 +592,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Band B.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Band B.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -631,7 +608,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Band C.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Band C.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -647,7 +624,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Band D.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Band D.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -663,7 +640,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Band E.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Band E.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -679,7 +656,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Band F.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Band F.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -695,7 +672,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Band G.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Band G.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -711,7 +688,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Band H.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Band H.'
     unit: count
     aggregation: sum
     expected_cell_type: number
@@ -727,7 +704,7 @@ record_sets:
     concept_relation: source_label
     concept_authority: scotgov
     concept_evidence_url: https://www.gov.scot/publications/council-tax-datasets/
-    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2025'' (CTAXBASE 2025), sheet ''Chargeable Dwellings 2025'', council-area rows, column: Total.'
+    concept_evidence_notes: 'Scottish Government council tax datasets, ''Number of chargeable dwellings September 2024'' (CTAXBASE 2024), sheet ''Chargeable Dwellings 2024'', council-area rows, column: Total.'
     unit: count
     aggregation: sum
     expected_cell_type: number
