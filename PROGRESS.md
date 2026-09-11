@@ -46,9 +46,35 @@
 - Confirmed the frozen list needs five removals: four keys whose manifests main
   deleted and the one main modified.
 
+## Done (baseline)
+
+- Full suite on the merged tree, clean tree, nothing edited during the run:
+  **82 failed, 1848 passed, 1 skipped, 42 warnings, 25 errors in 1301.92s
+  (21:41)**, direct exit **1** -- exactly the pull_request-event CI counts the
+  brief reports (82 failed, 25 errors). Log:
+  `evidence/merge-baseline-pytest.log`.
+- All 107 FAILED/ERROR lines, by module: `test_issue_254_transport_energy_sources`
+  37F, `test_issue_257_transport_energy_followups` 26F,
+  `test_issue_259_uc_elements_housing_benefit` 9F+18E,
+  `test_dwp_uc_composition_source_packages` 2F+7E,
+  `test_chronicle_manifest_kind` 3F, `test_chronicle_source_package` 2F,
+  `test_chronicle_artifacts` 1F, `test_chronicle_bundle` 1F,
+  `test_chronicle_microdata_registration` 1F.
+- Every one is classification (a), one rule: the explicit-kind rule
+  (`chronicle/registration.py:manifest_kind` /
+  `ManifestKindError` / `manifest_kind_missing`). 303 `ManifestKindError`
+  mentions in the log; the twelve `AssertionError`s are the reporting commands'
+  `assert report.valid` / frozen-list assertions over the same 34 manifests.
+  No classification (b) and no classification (c) failure exists: nothing on
+  main asserts a behaviour #227 changed, and the merge itself broke nothing.
+- Non-pytest CI steps already pass on the merged tree, pre-fix:
+  `chronicle init` + `load all` exit 0, `uv build` exit 0, wheel install +
+  import/CLI smoke exit 0, `uv run ruff check .` exit 0.
+
 ## Next
 
-- Wait for the baseline, classify every failure, then fix.
+- Declare `kind: publisher_table` on the 34 manifests, drop the five frozen-list
+  entries, then re-verify.
 
 # PR #227 — round 4 fix lane (publish-raw / inventory microdata-identity residual)
 
