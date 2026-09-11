@@ -1,3 +1,55 @@
+# PR #227 — main-merge lane (24 commits incl. #258/#260; PR-event CI reconciliation)
+
+## State
+
+- In progress. Merge commit `97eb36d` ("Merge remote-tracking branch
+  'origin/main' into HEAD") is on the detached head that extends the pushed
+  PR head `7a694be`; nothing is pushed. `git merge origin/main` produced **no
+  conflicts**.
+- A full-suite baseline of the merged tree is running to enumerate every
+  failure before any fix lands.
+
+## Done
+
+- Read `AGENTS.md` and the four prior lane journals below.
+- Merged `origin/main` (24 commits past the PR base `6fb700e2`: #249 append
+  workflow, #250/#251 UC family-type and composition crosses, #255 UK
+  transport/energy facts, #258 transport/energy follow-ups, #260 the issue-259
+  UC element / employment / Housing Benefit / childcare packages).
+- Audited the auto-merge on all four files both sides touched
+  (`chronicle/source_package.py`, `chronicle/suite.py`,
+  `docs/agent-source-package-harness.md`,
+  `tests/test_chronicle_source_package.py`): each file's merge-vs-branch diff
+  is exactly main's additions and its merge-vs-main diff exactly the branch's,
+  and the overlapping regions are orthogonal (main adds package aliases,
+  `source_row_dimensions` plumbing and a longer command list; #227 adds the
+  kind/identity rules, `CHRONICLE_DB_FILENAME` and the parseability preflight).
+  Nothing from either side was dropped.
+- Root-caused the PR-event failures by direct execution, not inference:
+  `inventory_source_artifacts(db/data)` on the merged tree reports **34 errors,
+  all `manifest_kind_missing`** and no other code. 33 are manifests main created
+  after #227's explicit-kind rule; 1 is a frozen kindless manifest
+  (`db/data/dwp/uc_households_family_type_april_december_2025/manifest.yaml`)
+  whose bytes main replaced, so it left the freeze.
+- Confirmed all 34 are `publisher_table` and not `microdata_release`: each
+  package directory holds exactly one committed data file beside its manifest,
+  each manifest has one vintage with a mapping (never a list) spec, and each has
+  a `packages/<source>/<package>/source_package.yaml` that parses it — the
+  definition `docs/agent-source-package-harness.md` gives for
+  `publisher_table`. A release package holds only `manifest.yaml`.
+- Confirmed nothing else in main's data violates #227: for all 34 entries the
+  recorded R2 route is one of the exact keys `_raw_r2_route_keys` allows
+  (main's new `raw/uk/<source>/...` keys are the current country-aware
+  canonical shape; the older `raw/<source>/...` spelling is the accepted
+  pre-country legacy) and every declared `sha256` matches the committed bytes.
+  No filename or digest collides with the two `microdata_release` manifests.
+- Confirmed the frozen list needs five removals: four keys whose manifests main
+  deleted and the one main modified.
+
+## Next
+
+- Wait for the baseline, classify every failure, then fix.
+
 # PR #227 — round 4 fix lane (publish-raw / inventory microdata-identity residual)
 
 ## State
