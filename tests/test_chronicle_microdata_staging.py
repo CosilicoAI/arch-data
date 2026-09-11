@@ -280,12 +280,22 @@ def _table_fetch_beside_public_microdata(package, *, alias, identity):
         "verified_at": "2026-09-05",
     }
     history = []
+    table_history = []
     if alias.startswith("archived-"):
         entry.update(filename="new-microdata.csv", sha256="a" * 64)
         history.append(
             locator("table.csv", "b" * 64)
             if alias == "archived-filename"
             else locator("old-microdata.csv", digest)
+        )
+    elif alias.startswith("table-archived-"):
+        # The release's current identity is distinct from these bytes; the
+        # table is the side that archived an object carrying it.
+        entry.update(sha256="a" * 64)
+        table_history.append(
+            locator("microdata.csv", "c" * 64)
+            if alias == "table-archived-filename"
+            else locator("old-table.csv", "a" * 64)
         )
     entry["storage"] = {
         "r2": locator(entry["filename"], entry["sha256"]),
@@ -310,8 +320,13 @@ def _table_fetch_beside_public_microdata(package, *, alias, identity):
     }
     if identity == "declared":
         selected["sha256"] = digest
-    elif identity == "r2-only":
-        selected["storage"] = {"r2": locator("table.csv", digest)}
+    storage = {}
+    if identity == "r2-only":
+        storage["r2"] = locator("table.csv", digest)
+    if table_history:
+        storage["previous_r2"] = table_history
+    if storage:
+        selected["storage"] = storage
     package.mkdir()
     for name, kind, spec in (
         ("manifest_tables.yaml", "publisher_table", selected),
@@ -342,7 +357,15 @@ def _table_fetch_beside_public_microdata(package, *, alias, identity):
 
 
 @pytest.mark.parametrize(
-    "alias", ["filename", "sha256", "archived-filename", "archived-sha256"]
+    "alias",
+    [
+        "filename",
+        "sha256",
+        "archived-filename",
+        "archived-sha256",
+        "table-archived-filename",
+        "table-archived-sha256",
+    ],
 )
 @pytest.mark.parametrize("identity", ["declared", "r2-only", "expected", "observed"])
 @pytest.mark.parametrize("upload", [False, True])
@@ -363,7 +386,11 @@ def test_table_fetch_refuses_public_microdata_alias_without_package_writes(
     )
     # The only permitted operation for an unknown checksum is the in-memory
     # publisher stub; known identities must be refused before even the lock.
-    known = identity != "observed" or alias.endswith("filename")
+    known = (
+        identity != "observed"
+        or alias.endswith("filename")
+        or alias.startswith("table-archived-")
+    )
     try:
         with pytest.raises(ManifestAccessError, match="microdata"):
             fetch_source_artifact(
