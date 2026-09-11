@@ -13,6 +13,9 @@ schema_version: ledger.source_package.v1
 package_id: dwp-uc-two-child-limit-2025
 label: 'DWP Universal Credit two-child limit statistics, April 2025: households and children
   by status, family size and disability'
+dimension_labels:
+  'dwp.two_child_limit_status': 'Two-child limit status'
+  'two_child_limit_status': 'Two-child limit status'
 artifact:
   source_name: dwp
   source_table: 'Universal Credit claimants: statistics on the two-child limit policy, April

@@ -4,6 +4,8 @@
 schema_version: ledger.source_package.v1
 package_id: ons-census2021-ts041-households-pcon24
 label: 'Census 2021 TS041: households by Westminster parliamentary constituency 2024, England and Wales'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: ons
   source_table: 'Census 2021 TS041 number of households, Westminster Parliamentary Constituencies (July 2024), England and Wales'

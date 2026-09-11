@@ -29,6 +29,21 @@ schema_version: ledger.source_package.v1
 package_id: dft-nts0621-local-bus-use-frequency-2025
 label: DfT National Travel Survey frequency of local bus use, people aged 60 and over, England, 2003 to
   2025
+dimension_labels:
+  'dft.survey_year': 'Survey year'
+dimension_value_labels:
+  'age_band':
+    '60 and over': '60 and over'
+  'transport_mode':
+    'Local bus': 'Local bus'
+  'use_frequency_band':
+    '3 or more times a week (%)': '3 or more times a week'
+    'Less than once a month, more than twice a year (%)': 'Less than once a month, more than twice a year'
+    'Less than once a year or never (%)': 'Less than once a year or never'
+    'Less than once per week, more than twice a month (%)': 'Less than once per week, more than twice a month'
+    'Once or twice a month (%)': 'Once or twice a month'
+    'Once or twice a week (%)': 'Once or twice a week'
+    'Once or twice a year (%)': 'Once or twice a year'
 artifact:
   source_name: dft
   source_table: 'NTS0621: Frequency of local bus use for those aged 60 years and over: England, 2003 onwards'

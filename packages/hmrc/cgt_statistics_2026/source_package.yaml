@@ -2,6 +2,8 @@ schema_version: ledger.source_package.v1
 package_id: hmrc-cgt-statistics-2026
 label: 'HMRC Capital Gains Tax statistics 2026, Table 1: taxpayers, gains and liabilities by year of disposal,
   1987-88 to 2024-25'
+dimension_labels:
+  'hmrc.cgt_table1_line': 'Year of disposal'
 artifact:
   source_name: hmrc
   source_table: 'Capital Gains Tax statistics Table 1: taxpayer numbers, gains and tax liabilities by

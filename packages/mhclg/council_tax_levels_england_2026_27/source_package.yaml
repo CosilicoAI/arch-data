@@ -25,6 +25,8 @@ schema_version: ledger.source_package.v1
 package_id: mhclg-council-tax-levels-england-2026-27
 label: 'MHCLG council tax levels, England 2026-27: council tax base and average Band
   D by billing authority'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: mhclg
   source_table: Council Tax levels set by local authorities in England 2026 to 2027,

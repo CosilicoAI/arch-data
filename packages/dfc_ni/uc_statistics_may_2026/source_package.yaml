@@ -7,6 +7,8 @@
 schema_version: ledger.source_package.v1
 package_id: dfc-ni-uc-statistics-may-2026
 label: DfC Northern Ireland Universal Credit claimants by local area, January 2023 to May 2026
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: dfc_ni
   source_table: Universal Credit Statistics supplementary tables, May 2026

@@ -53,6 +53,19 @@ package_id: scotgov-slgfs-council-tax-2024-25
 label: 'Scottish Local Government Finance Statistics 2024-25: council tax income after CTR
   (2020-21 to 2024-25), CTR funding and reduction in liability, potential yield by band, and
   average bill before and after CTR, Scotland'
+dimension_labels:
+  'scotgov.geography_row': 'Geography'
+  'scotgov.potential_yield_component': 'Council tax potential yield component'
+dimension_value_labels:
+  'council_tax_band':
+    'A': 'Band A'
+    'B': 'Band B'
+    'C': 'Band C'
+    'D': 'Band D'
+    'E': 'Band E'
+    'F': 'Band F'
+    'G': 'Band G'
+    'H': 'Band H'
 artifact:
   source_name: scotgov
   source_table: 'Scottish Local Government Finance Statistics (SLGFS) 2024-25: publication

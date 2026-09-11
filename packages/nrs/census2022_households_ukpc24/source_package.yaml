@@ -7,6 +7,8 @@
 schema_version: ledger.source_package.v1
 package_id: nrs-census2022-households-ukpc24
 label: 'Scotland Census 2022 UV404: occupied households by UK parliamentary constituency 2024'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: nrs
   source_table: 'Scotland Census 2022 UV404 tenure of household, UK Parliamentary Constituencies 2024'

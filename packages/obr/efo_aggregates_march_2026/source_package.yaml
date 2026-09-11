@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: obr-efo-aggregates-march-2026
 label: 'OBR EFO March 2026 fiscal supplementary tables: aggregates'
+dimension_labels:
+  'obr.efo_line': 'EFO table line'
 artifact:
   source_name: obr
   source_table: 'EFO March 2026 fiscal supplementary tables: aggregates'

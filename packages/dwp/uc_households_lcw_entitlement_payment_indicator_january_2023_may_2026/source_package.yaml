@@ -26,6 +26,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026
 label: 'DWP Stat-Xplore: Universal Credit benefit units by limited capability for work entitlement and payment indicator, Great Britain, January 2023 to May 2026'
+dimension_labels:
+  'dwp.limited_capability_for_work_entitlement': 'Limited Capability for Work Entitlement'
 artifact:
   source_name: dwp
   source_table: 'Households on Universal Credit by limited capability for work entitlement and payment indicator, January 2023 to May 2026'

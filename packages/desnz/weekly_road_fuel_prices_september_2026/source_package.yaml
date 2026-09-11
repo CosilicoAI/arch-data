@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: desnz-weekly-road-fuel-prices-september-2026
 label: DESNZ weekly road-fuel pump prices through 7 September 2026
+dimension_labels:
+  'desnz.observation_date': 'Observation date'
 artifact:
   source_name: desnz
   source_table: Weekly road fuel prices

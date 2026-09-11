@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: orr-rail-finance-7223-2024-25
 label: ORR franchised passenger train operator fare income, 2024-25
+dimension_labels:
+  'orr.finance_line': 'Rail finance line'
 artifact:
   source_name: orr
   source_table: Table 7223 franchised passenger train operator finances

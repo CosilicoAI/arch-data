@@ -5,6 +5,8 @@
 schema_version: ledger.source_package.v1
 package_id: obr-fuel-duty-receipts-by-vehicle-april-2024
 label: OBR fuel duty receipts by vehicle type, 2022-23 to 2028-29
+dimension_labels:
+  'obr.vehicle_category': 'Vehicle category'
 artifact:
   source_name: obr
   source_table: 'Fuel duty supplementary release: receipts by vehicle type'

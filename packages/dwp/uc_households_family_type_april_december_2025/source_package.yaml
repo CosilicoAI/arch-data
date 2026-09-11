@@ -5,6 +5,17 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-family-type-april-december-2025
 label: 'DWP Stat-Xplore: Universal Credit benefit units by family type and published total, Great Britain, April to December 2023 through 2025'
+dimension_labels:
+  'dwp.uc_family_type': 'Family Type'
+  'family_type': 'Family Type'
+dimension_value_labels:
+  'family_type':
+    'Couple, no children': 'Couple, no children'
+    'Couple, with children': 'Couple, with children'
+    'Single, no children': 'Single, no children'
+    'Single, with children': 'Single, with children'
+    'Unknown or missing family type': 'Unknown or missing family type'
+    'all': 'Total'
 artifact:
   source_name: dwp
   source_table: Households on Universal Credit by family type, April to December 2023 through 2025

@@ -33,6 +33,21 @@ schema_version: ledger.source_package.v1
 package_id: mhclg-ehs-weekly-housing-costs-2023-24
 label: 'English Housing Survey 2023-24 rented sectors: mean and median weekly housing costs,
   England (Annex Table 1.7)'
+dimension_labels:
+  'mhclg.dependent_children': 'Dependent children'
+  'mhclg.household_characteristic': 'Household characteristic'
+  'mhclg.housing_support': 'Housing support'
+  'mhclg.hrp_age_band': 'HRP age band'
+  'mhclg.hrp_economic_status': 'HRP economic status'
+  'mhclg.region_row': 'Region'
+  'mhclg.weekly_household_income_quintile': 'Weekly household income quintile'
+dimension_value_labels:
+  'dependent_children':
+    'at_least_one': 'At least one dependent child'
+    'none': 'No dependent children'
+  'housing_support':
+    'received': 'Receives housing support'
+    'not_received': 'Does not receive housing support'
 artifact:
   source_name: mhclg
   source_table: English Housing Survey 2023-24 rented sectors, Chapter 1 annex tables

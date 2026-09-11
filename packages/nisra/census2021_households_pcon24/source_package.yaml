@@ -4,6 +4,8 @@
 schema_version: ledger.source_package.v1
 package_id: nisra-census2021-households-pcon24
 label: 'NISRA Census 2021: households by parliamentary constituency 2024'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: nisra
   source_table: 'NISRA Census 2021 flexible table: number of households by PARLCON24'

@@ -23,6 +23,8 @@ schema_version: ledger.source_package.v1
 package_id: mhclg-council-tax-collection-england-2025-26
 label: 'MHCLG collection rates, England 2025-26: council tax net collectable debit and amount
   collected in year, England 2021-22 to 2025-26'
+dimension_labels:
+  'mhclg.collection_line': 'Council tax collection line'
 artifact:
   source_name: mhclg
   source_table: Collection rates for council tax and non-domestic rates in England 2025 to

@@ -9,6 +9,8 @@ schema_version: ledger.source_package.v1
 package_id: dwp-benefit-cap-november-2025
 label: 'DWP benefit cap: UC households capped at November 2025, GB total and amount-capped
   bands (Table 4)'
+dimension_labels:
+  'dwp.cap_amount_band': 'Amount capped (band)'
 artifact:
   source_name: dwp
   source_table: 'Benefit cap: number of households capped to November 2025'

@@ -4,6 +4,17 @@
 schema_version: ledger.source_package.v1
 package_id: desnz-need-scotland-2023
 label: DESNZ NEED 2023 domestic gas and electricity consumption by household characteristics, Scotland
+dimension_labels:
+  'desnz.need.household_income_band': 'Household income band'
+  'desnz.need.property_type': 'Property type'
+  'desnz.need.tenure': 'Tenure'
+dimension_value_labels:
+  'property_type':
+    'all_houses': 'All houses'
+    'all_flats': 'All flats'
+  'statistic':
+    'mean': 'Mean'
+    'median': 'Median'
 artifact:
   source_name: desnz
   source_table: NEED consumption headline tables, Scotland, 2023
@@ -291,7 +302,7 @@ record_sets:
   groupby_dimension: desnz.need.property_type
   rows:
   - value_id: all_houses
-    label: All Houses
+    label: 'All houses'
     ordinal: 0
     row_number: 20
     table_record_kind: total
@@ -375,7 +386,7 @@ record_sets:
   groupby_dimension: desnz.need.property_type
   rows:
   - value_id: all_flats
-    label: All Flats
+    label: 'All flats'
     ordinal: 0
     row_number: 20
     table_record_kind: total
@@ -795,7 +806,7 @@ record_sets:
   groupby_dimension: desnz.need.property_type
   rows:
   - value_id: all_houses
-    label: All houses
+    label: 'All houses'
     ordinal: 0
     row_number: 20
     table_record_kind: total
@@ -879,7 +890,7 @@ record_sets:
   groupby_dimension: desnz.need.property_type
   rows:
   - value_id: all_flats
-    label: All flats
+    label: 'All flats'
     ordinal: 0
     row_number: 20
     table_record_kind: total

@@ -33,6 +33,8 @@ schema_version: ledger.source_package.v1
 package_id: welshgov-ctrs-annual-report-2024-25
 label: 'Welsh Government Council Tax Reduction Scheme annual report 2024-25: total value of
   CTRS awards, Wales, 2023-24 and 2024-25'
+dimension_labels:
+  'welshgov.geography_row': 'Geography'
 artifact:
   source_name: welshgov
   source_table: 'Council Tax Reduction Scheme: annual report 2024 to 2025, Table 2 total value

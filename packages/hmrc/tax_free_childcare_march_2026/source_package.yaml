@@ -2,6 +2,22 @@ schema_version: ledger.source_package.v1
 package_id: hmrc-tax-free-childcare-march-2026
 label: HMRC Tax-Free Childcare annual and monthly child account activity and government top-up, April
   2017 to March 2026
+dimension_labels:
+  'hmrc.tfc.account_activity': 'Tax-Free Childcare account activity'
+  'hmrc.tfc.government_top_up': 'Tax-Free Childcare government top-up'
+dimension_value_labels:
+  'account_status':
+    'used': 'Used'
+  'count_basis':
+    'annual_unique_children': 'Annual unique children'
+    'monthly_children': 'Children in the month'
+  'definition_regime':
+    'payment_and_open_at_reference_date': 'Payment made and account open at the reference date'
+    'used_account_in_period': 'Account used in the period'
+  'flow_basis':
+    'sum_of_12_monthly_spending_flows': 'Sum of 12 monthly spending flows'
+  'flow_type':
+    'government_top_up': 'Government top-up'
 artifact:
   source_name: hmrc
   source_table: 'Tax-Free Childcare Statistics March 2026, Table 2: Numbers of Children with Open and
@@ -38,7 +54,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2017-18
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 4
     expected_row_header_column: A
@@ -107,7 +123,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2017-18
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 4
     expected_row_header_column: A
@@ -171,7 +187,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2018-19
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 5
     expected_row_header_column: A
@@ -240,7 +256,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2018-19
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 5
     expected_row_header_column: A
@@ -304,7 +320,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2019-20
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 6
     expected_row_header_column: A
@@ -373,7 +389,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2019-20
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 6
     expected_row_header_column: A
@@ -437,7 +453,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2020-21
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -506,7 +522,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2020-21
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -570,7 +586,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2021-22
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -639,7 +655,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2021-22
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -703,7 +719,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2022-23
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -772,7 +788,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2022-23
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -836,7 +852,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2023-24
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -905,7 +921,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2023-24
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -969,7 +985,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2024-25
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -1038,7 +1054,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2024-25
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -1102,7 +1118,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: 2025-26
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -1171,7 +1187,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.government_top_up
   rows:
   - value_id: source_row
-    label: 2025-26
+    label: 'Government top-up paid'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -1230,7 +1246,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-04-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 13
     expected_row_header_column: A
@@ -1294,7 +1310,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-05-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 14
     expected_row_header_column: A
@@ -1358,7 +1374,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-06-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 15
     expected_row_header_column: A
@@ -1422,7 +1438,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-07-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 16
     expected_row_header_column: A
@@ -1486,7 +1502,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-08-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 17
     expected_row_header_column: A
@@ -1550,7 +1566,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-09-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 18
     expected_row_header_column: A
@@ -1614,7 +1630,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-10-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 19
     expected_row_header_column: A
@@ -1678,7 +1694,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-11-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 20
     expected_row_header_column: A
@@ -1742,7 +1758,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2017-12-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 21
     expected_row_header_column: A
@@ -1806,7 +1822,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-01-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 22
     expected_row_header_column: A
@@ -1870,7 +1886,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-02-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 23
     expected_row_header_column: A
@@ -1934,7 +1950,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-03-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 24
     expected_row_header_column: A
@@ -1998,7 +2014,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-04-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 25
     expected_row_header_column: A
@@ -2062,7 +2078,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-05-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 26
     expected_row_header_column: A
@@ -2126,7 +2142,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-06-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 27
     expected_row_header_column: A
@@ -2190,7 +2206,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-07-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 28
     expected_row_header_column: A
@@ -2254,7 +2270,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-08-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 29
     expected_row_header_column: A
@@ -2318,7 +2334,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-09-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 30
     expected_row_header_column: A
@@ -2382,7 +2398,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-10-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 31
     expected_row_header_column: A
@@ -2446,7 +2462,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-11-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 32
     expected_row_header_column: A
@@ -2510,7 +2526,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2018-12-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 33
     expected_row_header_column: A
@@ -2574,7 +2590,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-01-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 34
     expected_row_header_column: A
@@ -2638,7 +2654,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-02-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 35
     expected_row_header_column: A
@@ -2702,7 +2718,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-03-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 36
     expected_row_header_column: A
@@ -2766,7 +2782,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-04-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 37
     expected_row_header_column: A
@@ -2830,7 +2846,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-05-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 38
     expected_row_header_column: A
@@ -2894,7 +2910,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-06-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 39
     expected_row_header_column: A
@@ -2958,7 +2974,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-07-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 40
     expected_row_header_column: A
@@ -3022,7 +3038,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-08-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 41
     expected_row_header_column: A
@@ -3086,7 +3102,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-09-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 42
     expected_row_header_column: A
@@ -3150,7 +3166,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-10-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 43
     expected_row_header_column: A
@@ -3214,7 +3230,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-11-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 44
     expected_row_header_column: A
@@ -3278,7 +3294,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2019-12-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 45
     expected_row_header_column: A
@@ -3342,7 +3358,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-01-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 46
     expected_row_header_column: A
@@ -3406,7 +3422,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-02-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 47
     expected_row_header_column: A
@@ -3470,7 +3486,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-03-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 48
     expected_row_header_column: A
@@ -3534,7 +3550,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-04-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 49
     expected_row_header_column: A
@@ -3598,7 +3614,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-05-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 50
     expected_row_header_column: A
@@ -3662,7 +3678,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-06-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 51
     expected_row_header_column: A
@@ -3726,7 +3742,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-07-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 52
     expected_row_header_column: A
@@ -3790,7 +3806,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-08-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 53
     expected_row_header_column: A
@@ -3854,7 +3870,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-09-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 54
     expected_row_header_column: A
@@ -3918,7 +3934,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-10-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 55
     expected_row_header_column: A
@@ -3982,7 +3998,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-11-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 56
     expected_row_header_column: A
@@ -4046,7 +4062,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2020-12-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 57
     expected_row_header_column: A
@@ -4110,7 +4126,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-01-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 58
     expected_row_header_column: A
@@ -4174,7 +4190,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-02-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 59
     expected_row_header_column: A
@@ -4238,7 +4254,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-03-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 60
     expected_row_header_column: A
@@ -4302,7 +4318,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-04-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 61
     expected_row_header_column: A
@@ -4366,7 +4382,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-05-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 62
     expected_row_header_column: A
@@ -4430,7 +4446,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-06-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 63
     expected_row_header_column: A
@@ -4494,7 +4510,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-07-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 64
     expected_row_header_column: A
@@ -4558,7 +4574,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-08-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 65
     expected_row_header_column: A
@@ -4622,7 +4638,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-09-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 66
     expected_row_header_column: A
@@ -4686,7 +4702,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-10-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 67
     expected_row_header_column: A
@@ -4750,7 +4766,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-11-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 68
     expected_row_header_column: A
@@ -4814,7 +4830,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2021-12-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 69
     expected_row_header_column: A
@@ -4878,7 +4894,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-01-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 70
     expected_row_header_column: A
@@ -4942,7 +4958,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-02-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 71
     expected_row_header_column: A
@@ -5006,7 +5022,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-03-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 72
     expected_row_header_column: A
@@ -5070,7 +5086,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-04-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 73
     expected_row_header_column: A
@@ -5134,7 +5150,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-05-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 74
     expected_row_header_column: A
@@ -5198,7 +5214,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-06-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 75
     expected_row_header_column: A
@@ -5262,7 +5278,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-07-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 76
     expected_row_header_column: A
@@ -5326,7 +5342,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-08-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 77
     expected_row_header_column: A
@@ -5390,7 +5406,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-09-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 78
     expected_row_header_column: A
@@ -5454,7 +5470,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-10-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 79
     expected_row_header_column: A
@@ -5518,7 +5534,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-11-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 80
     expected_row_header_column: A
@@ -5582,7 +5598,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2022-12-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 81
     expected_row_header_column: A
@@ -5646,7 +5662,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-01-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 82
     expected_row_header_column: A
@@ -5710,7 +5726,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-02-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 83
     expected_row_header_column: A
@@ -5774,7 +5790,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-03-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 84
     expected_row_header_column: A
@@ -5838,7 +5854,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-04-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 85
     expected_row_header_column: A
@@ -5902,7 +5918,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-05-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 86
     expected_row_header_column: A
@@ -5966,7 +5982,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-06-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 87
     expected_row_header_column: A
@@ -6030,7 +6046,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-07-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 88
     expected_row_header_column: A
@@ -6094,7 +6110,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-08-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 89
     expected_row_header_column: A
@@ -6158,7 +6174,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-09-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 90
     expected_row_header_column: A
@@ -6222,7 +6238,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-10-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 91
     expected_row_header_column: A
@@ -6286,7 +6302,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-11-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 92
     expected_row_header_column: A
@@ -6350,7 +6366,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2023-12-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 93
     expected_row_header_column: A
@@ -6414,7 +6430,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-01-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 94
     expected_row_header_column: A
@@ -6478,7 +6494,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-02-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 95
     expected_row_header_column: A
@@ -6542,7 +6558,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-03-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 96
     expected_row_header_column: A
@@ -6606,7 +6622,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-04-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 97
     expected_row_header_column: A
@@ -6670,7 +6686,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-05-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 98
     expected_row_header_column: A
@@ -6734,7 +6750,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-06-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 99
     expected_row_header_column: A
@@ -6798,7 +6814,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-07-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 100
     expected_row_header_column: A
@@ -6862,7 +6878,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-08-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 101
     expected_row_header_column: A
@@ -6926,7 +6942,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-09-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 102
     expected_row_header_column: A
@@ -6990,7 +7006,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-10-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 103
     expected_row_header_column: A
@@ -7054,7 +7070,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-11-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 104
     expected_row_header_column: A
@@ -7118,7 +7134,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2024-12-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 105
     expected_row_header_column: A
@@ -7182,7 +7198,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-01-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 106
     expected_row_header_column: A
@@ -7246,7 +7262,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-02-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 107
     expected_row_header_column: A
@@ -7310,7 +7326,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-03-03T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 108
     expected_row_header_column: A
@@ -7374,7 +7390,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-04-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 109
     expected_row_header_column: A
@@ -7438,7 +7454,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-05-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 110
     expected_row_header_column: A
@@ -7502,7 +7518,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-06-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 111
     expected_row_header_column: A
@@ -7566,7 +7582,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-07-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 112
     expected_row_header_column: A
@@ -7630,7 +7646,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-08-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 113
     expected_row_header_column: A
@@ -7694,7 +7710,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-09-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 114
     expected_row_header_column: A
@@ -7758,7 +7774,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-10-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 115
     expected_row_header_column: A
@@ -7822,7 +7838,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-11-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 116
     expected_row_header_column: A
@@ -7886,7 +7902,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2025-12-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 117
     expected_row_header_column: A
@@ -7950,7 +7966,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2026-01-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 118
     expected_row_header_column: A
@@ -8014,7 +8030,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2026-02-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 119
     expected_row_header_column: A
@@ -8078,7 +8094,7 @@ record_sets:
   groupby_dimension: hmrc.tfc.account_activity
   rows:
   - value_id: source_row
-    label: '2026-03-01T00:00:00'
+    label: 'Children with used Tax-Free Childcare accounts'
     ordinal: 0
     row_number: 120
     expected_row_header_column: A

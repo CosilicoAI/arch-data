@@ -13,6 +13,22 @@ schema_version: ledger.source_package.v1
 package_id: ons-consumer-trends-current-price-2026
 label: ONS Consumer Trends household expenditure on domestic energy, road fuels and road transport, 2020
   to 2026 Q1
+dimension_labels:
+  'ons.coicop': 'COICOP category'
+  'coicop': 'COICOP'
+dimension_value_labels:
+  'coicop':
+    '04.5': '04.5 Electricity, gas and other fuels'
+    '07.2.2': '07.2.2 Fuels and lubricants for personal transport equipment'
+    '07.3.2': '07.3.2 Passenger transport by road'
+  'frequency':
+    'annual': 'Annual'
+    'quarterly': 'Quarterly'
+  'quarter':
+    'Q1': 'Q1'
+    'Q2': 'Q2'
+    'Q3': 'Q3'
+    'Q4': 'Q4'
 artifact:
   source_name: ons
   source_table: Consumer Trends current price, not seasonally adjusted, sheets 04CN and 07CN

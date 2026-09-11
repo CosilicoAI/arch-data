@@ -19,6 +19,8 @@
 schema_version: ledger.source_package.v1
 package_id: ons-pipr-rents-by-area-june-2026
 label: 'ONS Price Index of Private Rents: monthly average rent by area, January 2023 to June 2026'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: ons
   source_table: 'Price Index of Private Rents, UK: monthly price statistics, July 2026 edition (data to

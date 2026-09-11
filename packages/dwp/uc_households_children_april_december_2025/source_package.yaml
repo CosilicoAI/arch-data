@@ -5,6 +5,8 @@ schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-children-april-december-2025
 label: 'DWP Stat-Xplore: Universal Credit benefit units by number of children, Great Britain, April to
   December 2025'
+dimension_labels:
+  'dwp.uc_number_of_children': 'Number of Children'
 artifact:
   source_name: dwp
   source_table: Households on Universal Credit by number of children, April to December 2025

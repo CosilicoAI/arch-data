@@ -17,6 +17,21 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-pip-daily-living-foi-2025
 label: 'DWP FOI2025/24990: PIP daily living component claimants by award rate, January 2025'
+dimension_labels:
+  'dwp.pip_daily_living_award_rate': 'PIP daily living award rate'
+  'pip_claim_rules': 'PIP claim rules'
+  'pip_claimant_age_group': 'Claimant age group'
+  'pip_policy_ownership': 'PIP policy ownership'
+dimension_value_labels:
+  'pip_claim_rules':
+    'normal_rules': 'Normal rules (special rules for end of life excluded)'
+  'pip_claimant_age_group':
+    'working_age': 'Working age'
+  'pip_daily_living_award_rate':
+    'enhanced': 'Enhanced'
+    'standard': 'Standard'
+  'pip_policy_ownership':
+    'dwp': 'DWP (England, Wales and abroad)'
 artifact:
   source_name: dwp
   source_table: 'DWP FOI2025/24990: PIP daily living component claimants by award rate, January

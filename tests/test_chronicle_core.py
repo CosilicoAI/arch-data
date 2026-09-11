@@ -462,7 +462,7 @@ def test_frozen_fixture_bytes_are_unchanged():
             "b0dd06765db7932c16a678b1ab321a7d908af26e2f2014d7da99c0eb5127e401"
         ),
         fixture_root / "consumer_facts.jsonl": (
-            "6123f1cca28ccc72c053b105b8d50b5c25a72a5f5b92e73e7219f32de152a96a"
+            "cc18841e726e7d93dfc6958de8c9c457f0a41cd7dd2161b34dbad55549b440c6"
         ),
         fixture_root / "source_cells" / "soi_table_1_1_2023_cells.jsonl": (
             "615639f21ee63e54595c677e24c3eddff484c00a795a2f91b45a8575f021c7e2"

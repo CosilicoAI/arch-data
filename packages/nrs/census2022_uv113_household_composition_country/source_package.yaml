@@ -16,6 +16,8 @@
 schema_version: ledger.source_package.v1
 package_id: nrs-census2022-uv113-household-composition-country
 label: 'Scotland''s Census 2022 UV113: households by household composition, Scotland'
+dimension_labels:
+  'nrs.census2022_household_composition': 'Household composition'
 artifact:
   source_name: nrs
   source_table: 'Scotland''s Census 2022 UV113 household composition, households, country'

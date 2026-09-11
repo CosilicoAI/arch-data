@@ -19,6 +19,8 @@ schema_version: ledger.source_package.v1
 package_id: ons-census2021-ts054-tenure-lad
 label: 'Census 2021 TS054: households by tenure, local authority districts of England
   and Wales'
+dimension_labels:
+  'tenure': 'Tenure'
 artifact:
   source_name: ons
   source_table: Census 2021 TS054 tenure of household, local authority districts (April

@@ -15,6 +15,8 @@ schema_version: ledger.source_package.v1
 package_id: scotgov-band-d-council-tax-rates-2026-27
 label: 'ScotGov CTAS 2026: average Band D council tax by council area, 1996-97 to
   2026-27'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: scotgov
   source_table: 'CTAS 2026 Council Tax Assumptions: Band D council tax rates by year,

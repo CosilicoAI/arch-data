@@ -161,6 +161,14 @@ SCHEMA_IDS: Mapping[str, EpochPair] = MappingProxyType(
 )
 
 
+# The consumer-fact row contract Chronicle emits. consumer_fact v2 (chronicle#261)
+# is v1 plus optional dimension and value labels, so a v1 row restamped with the
+# v2 id is a valid v2 row; its id is the pair's Chronicle-era name. The row
+# contract and the hash-key domains move independently: EMIT_EPOCH still keeps
+# every key Ledger-named.
+CONSUMER_FACT_EMIT_SCHEMA_VERSION = SCHEMA_IDS["consumer_fact"].chronicle
+
+
 def hash_domain(name: str, epoch: Epoch = EMIT_EPOCH) -> str:
     """Return the hash domain registered for *name* and *epoch*."""
 

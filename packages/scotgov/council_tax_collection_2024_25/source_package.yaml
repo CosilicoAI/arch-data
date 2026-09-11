@@ -42,6 +42,8 @@ schema_version: ledger.source_package.v1
 package_id: scotgov-council-tax-collection-2024-25
 label: 'Scottish Government council tax collection statistics 2024-25: net amount billed,
   amount received, amount uncollected and percentage received by year billed, Scotland (CTRR)'
+dimension_labels:
+  'scotgov.geography_row': 'Geography'
 artifact:
   source_name: scotgov
   source_table: 'Council Tax Collection Statistics, 2024-25: publication tables (CTRR), Figure

@@ -100,6 +100,29 @@ schema_version: ledger.source_package.v1
 package_id: ofgem-energy-price-cap-levels-2024-2026
 label: Ofgem default tariff cap levels by charge restriction region, payment method, fuel and consumption
   level, 2024-Q1 to 2026-Q4
+dimension_labels:
+  'ofgem.charge_restriction_region': 'Charge restriction region'
+  'ofgem.fuel_metering_arrangement': 'Fuel and metering arrangement'
+  'ofgem.vat_treatment': 'VAT treatment'
+dimension_value_labels:
+  'consumption_level':
+    'benchmark_consumption': 'Benchmark annual consumption'
+    'nil_consumption': 'Nil consumption (standing charge)'
+  'fuel':
+    'dual_fuel': 'Dual fuel'
+    'electricity_multi_register': 'Electricity, multi-register metering arrangement'
+    'electricity_single_rate': 'Electricity, single-rate metering arrangement'
+    'gas': 'Gas'
+  'metering_arrangement':
+    'multi_register': 'Multi-register'
+    'single_rate': 'Single-rate'
+    'not_applicable': 'Not applicable'
+  'payment_method':
+    'direct_debit': 'Direct debit'
+    'prepayment': 'Prepayment'
+    'standard_credit': 'Standard credit'
+  'vat_treatment':
+    'excluding_vat': 'Excluding VAT'
 artifact:
   source_name: ofgem
   source_table: 'Final levelised cap rates model (Annex 9): 1 October to 31 December 2026'

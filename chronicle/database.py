@@ -1055,6 +1055,13 @@ def _build_id(
 def _canonical_fact_mapping(fact: AggregateFact) -> dict[str, Any]:
     """Return a build-hash payload independent of accepted key epochs."""
     mapping = asdict(fact)
+    # Labels (chronicle#261) enter the hash only when present, so a fact
+    # without them keeps the build hash it had before they existed.
+    for label_field in ("dimension_labels", "dimension_value_labels"):
+        if not mapping[label_field]:
+            mapping.pop(label_field)
+    if mapping["layout"] and mapping["layout"]["groupby_dimension_label"] is None:
+        mapping["layout"].pop("groupby_dimension_label")
     mapping["source_cell_keys"] = _lineage_keys_for_epoch(
         "source_cell",
         fact.source_cell_keys,

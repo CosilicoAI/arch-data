@@ -28,6 +28,8 @@ schema_version: ledger.source_package.v1
 package_id: welshgov-council-tax-collection-2025-26
 label: 'Welsh Government council tax collection rates 2025-26: net collectable debit, amounts
   collected and written off, and arrears, Wales'
+dimension_labels:
+  'welshgov.geography_row': 'Geography'
 artifact:
   source_name: welshgov
   source_table: Council tax collection rates in Wales, April 2025 to March 2026, Table 2 amounts

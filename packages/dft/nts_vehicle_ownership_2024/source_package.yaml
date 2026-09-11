@@ -17,6 +17,8 @@
 schema_version: ledger.source_package.v1
 package_id: dft-nts-vehicle-ownership-2024
 label: 'DfT National Travel Survey 2024, NTS0205a: household car availability shares, England'
+dimension_labels:
+  'dft.car_availability_band': 'Survey year'
 artifact:
   source_name: dft
   source_table: National Travel Survey 2024, table NTS0205 household car availability

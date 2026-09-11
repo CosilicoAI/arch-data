@@ -1,6 +1,9 @@
 schema_version: ledger.source_package.v1
 package_id: ons-uk-business-firm-targets-2025
 label: ONS UK Business 2025 national firm calibration targets
+dimension_labels:
+  'uk.firm.annual_turnover': 'Annual turnover band'
+  'uk.firm.employees': 'Employment band'
 artifact:
   source_name: ons
   source_table: UK Business, Activity, Size and Location 2025 enterprise turnover and employment size bands

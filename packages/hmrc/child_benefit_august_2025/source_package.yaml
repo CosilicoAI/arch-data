@@ -16,6 +16,44 @@
 schema_version: ledger.source_package.v1
 package_id: hmrc-child-benefit-august-2025
 label: 'HMRC Child Benefit statistics, annual release August 2025: families and children registered, in payment and opted out, take-up by age, HICBC, United Kingdom'
+dimension_labels:
+  'geography': 'Geography'
+  'hmrc.child_benefit_child_age': 'Child age'
+  'hmrc.child_benefit_child_age_band': 'Child Benefit children by age band'
+  'hmrc.child_benefit_claimant_sex': 'Child Benefit families by claimant sex'
+  'hmrc.child_benefit_number_of_children': 'Child Benefit families by number of children'
+  'hmrc.child_benefit_status': 'Child Benefit registrations and payments'
+  'hmrc.hicbc_status': 'High Income Child Benefit Charge'
+  'number_of_children': 'Number of Children'
+dimension_value_labels:
+  'child_age':
+    'All ages': 'All ages'
+  'child_age_band':
+    'all': 'All ages'
+    'under_5': 'Under 5'
+    '5_to_10': '5 to 10'
+    '11_to_15': '11 to 15'
+    '16_and_over': '16 and over'
+  'claimant_sex':
+    'all': 'All'
+    'men': 'Men'
+    'women': 'Women'
+    'unknown': 'Unknown'
+  'hicbc_liability':
+    'liable': 'Liable'
+  'number_of_children':
+    'all': 'All families'
+    'one': 'One child'
+    'two': 'Two children'
+    'three': 'Three children'
+    'four': 'Four children'
+    'five_or_more': 'Five or more children'
+    'five_to_nine': 'Five to nine children'
+    'ten_or_more': 'Ten or more children'
+  'payment_status':
+    'registered': 'Registered'
+    'in_payment': 'In payment'
+    'opted_out': 'Opted out'
 artifact:
   source_name: hmrc
   source_table: 'Child Benefit Statistics: Annual Release, data at August 2025, main tables'
@@ -46,7 +84,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2003'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 6
     expected_row_header_column: A
@@ -91,7 +129,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2004'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -120,7 +158,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2005'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -149,7 +187,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2006'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -178,7 +216,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2007'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -207,7 +245,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2008'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -236,7 +274,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2009'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -265,7 +303,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2010'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 13
     expected_row_header_column: A
@@ -294,7 +332,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2011'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 14
     expected_row_header_column: A
@@ -323,7 +361,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2012'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 15
     expected_row_header_column: A
@@ -352,7 +390,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2013'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 16
     expected_row_header_column: A
@@ -381,7 +419,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2014'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 17
     expected_row_header_column: A
@@ -410,7 +448,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2015'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 18
     expected_row_header_column: A
@@ -439,7 +477,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2016'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 19
     expected_row_header_column: A
@@ -468,7 +506,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2017'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 20
     expected_row_header_column: A
@@ -497,7 +535,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2018'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 21
     expected_row_header_column: A
@@ -526,7 +564,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2019'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 22
     expected_row_header_column: A
@@ -555,7 +593,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2020'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 23
     expected_row_header_column: A
@@ -584,7 +622,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2021'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 24
     expected_row_header_column: A
@@ -613,7 +651,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2022'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 25
     expected_row_header_column: A
@@ -642,7 +680,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2023'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 26
     expected_row_header_column: A
@@ -671,7 +709,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2024'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 27
     expected_row_header_column: A
@@ -700,7 +738,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2025'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 28
     expected_row_header_column: A
@@ -729,7 +767,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2003'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 31
     expected_row_header_column: A
@@ -774,7 +812,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2004'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 32
     expected_row_header_column: A
@@ -803,7 +841,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2005'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 33
     expected_row_header_column: A
@@ -832,7 +870,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2006'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 34
     expected_row_header_column: A
@@ -861,7 +899,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2007'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 35
     expected_row_header_column: A
@@ -890,7 +928,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2008'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 36
     expected_row_header_column: A
@@ -919,7 +957,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2009'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 37
     expected_row_header_column: A
@@ -948,7 +986,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2010'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 38
     expected_row_header_column: A
@@ -977,7 +1015,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2011'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 39
     expected_row_header_column: A
@@ -1006,7 +1044,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2012'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 40
     expected_row_header_column: A
@@ -1035,7 +1073,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2013'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 41
     expected_row_header_column: A
@@ -1064,7 +1102,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2014'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 42
     expected_row_header_column: A
@@ -1093,7 +1131,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2015'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 43
     expected_row_header_column: A
@@ -1122,7 +1160,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2016'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 44
     expected_row_header_column: A
@@ -1151,7 +1189,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2017'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 45
     expected_row_header_column: A
@@ -1180,7 +1218,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2018'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 46
     expected_row_header_column: A
@@ -1209,7 +1247,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2019'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 47
     expected_row_header_column: A
@@ -1238,7 +1276,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2020'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 48
     expected_row_header_column: A
@@ -1267,7 +1305,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2021'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 49
     expected_row_header_column: A
@@ -1296,7 +1334,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2022'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 50
     expected_row_header_column: A
@@ -1325,7 +1363,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2023'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 51
     expected_row_header_column: A
@@ -1354,7 +1392,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2024'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 52
     expected_row_header_column: A
@@ -1383,7 +1421,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2025'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 53
     expected_row_header_column: A
@@ -1412,7 +1450,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2003'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 6
     expected_row_header_column: A
@@ -1457,7 +1495,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2004'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -1486,7 +1524,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2005'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -1515,7 +1553,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2006'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -1544,7 +1582,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2007'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -1573,7 +1611,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2008'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -1602,7 +1640,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2009'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -1631,7 +1669,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2010'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 13
     expected_row_header_column: A
@@ -1660,7 +1698,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2011'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 14
     expected_row_header_column: A
@@ -1689,7 +1727,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2012'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 15
     expected_row_header_column: A
@@ -1718,7 +1756,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2013'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 16
     expected_row_header_column: A
@@ -1747,7 +1785,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2014'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 17
     expected_row_header_column: A
@@ -1776,7 +1814,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2015'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 18
     expected_row_header_column: A
@@ -1805,7 +1843,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2016'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 19
     expected_row_header_column: A
@@ -1834,7 +1872,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2017'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 20
     expected_row_header_column: A
@@ -1863,7 +1901,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2018'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 21
     expected_row_header_column: A
@@ -1892,7 +1930,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2019'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 22
     expected_row_header_column: A
@@ -1921,7 +1959,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2020'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 23
     expected_row_header_column: A
@@ -1950,7 +1988,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2021'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 24
     expected_row_header_column: A
@@ -1979,7 +2017,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2022'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 25
     expected_row_header_column: A
@@ -2008,7 +2046,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2023'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 26
     expected_row_header_column: A
@@ -2037,7 +2075,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2024'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 27
     expected_row_header_column: A
@@ -2066,7 +2104,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2025'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 28
     expected_row_header_column: A
@@ -2095,7 +2133,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2003'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 31
     expected_row_header_column: A
@@ -2140,7 +2178,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2004'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 32
     expected_row_header_column: A
@@ -2169,7 +2207,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2005'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 33
     expected_row_header_column: A
@@ -2198,7 +2236,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2006'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 34
     expected_row_header_column: A
@@ -2227,7 +2265,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2007'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 35
     expected_row_header_column: A
@@ -2256,7 +2294,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2008'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 36
     expected_row_header_column: A
@@ -2285,7 +2323,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2009'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 37
     expected_row_header_column: A
@@ -2314,7 +2352,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2010'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 38
     expected_row_header_column: A
@@ -2343,7 +2381,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2011'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 39
     expected_row_header_column: A
@@ -2372,7 +2410,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2012'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 40
     expected_row_header_column: A
@@ -2401,7 +2439,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2013'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 41
     expected_row_header_column: A
@@ -2430,7 +2468,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2014'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 42
     expected_row_header_column: A
@@ -2459,7 +2497,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2015'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 43
     expected_row_header_column: A
@@ -2488,7 +2526,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2016'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 44
     expected_row_header_column: A
@@ -2517,7 +2555,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2017'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 45
     expected_row_header_column: A
@@ -2546,7 +2584,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2018'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 46
     expected_row_header_column: A
@@ -2575,7 +2613,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2019'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 47
     expected_row_header_column: A
@@ -2604,7 +2642,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2020'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 48
     expected_row_header_column: A
@@ -2633,7 +2671,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2021'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 49
     expected_row_header_column: A
@@ -2662,7 +2700,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2022'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 50
     expected_row_header_column: A
@@ -2691,7 +2729,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2023'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 51
     expected_row_header_column: A
@@ -2720,7 +2758,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2024'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 52
     expected_row_header_column: A
@@ -2749,7 +2787,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2025'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 53
     expected_row_header_column: A
@@ -2778,7 +2816,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2003'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 56
     expected_row_header_column: A
@@ -2873,7 +2911,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2004'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 57
     expected_row_header_column: A
@@ -2902,7 +2940,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2005'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 58
     expected_row_header_column: A
@@ -2931,7 +2969,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2006'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 59
     expected_row_header_column: A
@@ -2960,7 +2998,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2007'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 60
     expected_row_header_column: A
@@ -2989,7 +3027,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2008'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 61
     expected_row_header_column: A
@@ -3018,7 +3056,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2009'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 62
     expected_row_header_column: A
@@ -3047,7 +3085,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2010'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 63
     expected_row_header_column: A
@@ -3076,7 +3114,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2011'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 64
     expected_row_header_column: A
@@ -3105,7 +3143,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2012'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 65
     expected_row_header_column: A
@@ -3134,7 +3172,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2013'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 66
     expected_row_header_column: A
@@ -3163,7 +3201,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2014'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 67
     expected_row_header_column: A
@@ -3192,7 +3230,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2015'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 68
     expected_row_header_column: A
@@ -3221,7 +3259,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2016'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 69
     expected_row_header_column: A
@@ -3250,7 +3288,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2017'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 70
     expected_row_header_column: A
@@ -3279,7 +3317,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2018'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 71
     expected_row_header_column: A
@@ -3308,7 +3346,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2019'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 72
     expected_row_header_column: A
@@ -3337,7 +3375,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2020'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 73
     expected_row_header_column: A
@@ -3366,7 +3404,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2021'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 74
     expected_row_header_column: A
@@ -3395,7 +3433,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2022'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 75
     expected_row_header_column: A
@@ -3424,7 +3462,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2023'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 76
     expected_row_header_column: A
@@ -3453,7 +3491,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2024'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 77
     expected_row_header_column: A
@@ -3482,7 +3520,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2025'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 78
     expected_row_header_column: A
@@ -3511,7 +3549,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2011'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -3672,7 +3710,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2011'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -3811,7 +3849,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2012'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -3840,7 +3878,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2012'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -3869,7 +3907,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2013'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -3898,7 +3936,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2013'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -3927,7 +3965,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2014'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -3956,7 +3994,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2014'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -3985,7 +4023,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2015'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -4014,7 +4052,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2015'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -4043,7 +4081,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2016'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -4072,7 +4110,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2016'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -4101,7 +4139,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2017'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 13
     expected_row_header_column: A
@@ -4130,7 +4168,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2017'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 13
     expected_row_header_column: A
@@ -4159,7 +4197,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2018'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 14
     expected_row_header_column: A
@@ -4188,7 +4226,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2018'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 14
     expected_row_header_column: A
@@ -4217,7 +4255,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2019'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 15
     expected_row_header_column: A
@@ -4400,7 +4438,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2019'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 15
     expected_row_header_column: A
@@ -4429,7 +4467,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2020'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 16
     expected_row_header_column: A
@@ -4458,7 +4496,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2020'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 16
     expected_row_header_column: A
@@ -4487,7 +4525,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2021'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 17
     expected_row_header_column: A
@@ -4516,7 +4554,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2021'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 17
     expected_row_header_column: A
@@ -4545,7 +4583,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2022'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 18
     expected_row_header_column: A
@@ -4574,7 +4612,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2022'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 18
     expected_row_header_column: A
@@ -4603,7 +4641,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2023'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 19
     expected_row_header_column: A
@@ -4632,7 +4670,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2023'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 19
     expected_row_header_column: A
@@ -4661,7 +4699,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2024'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 20
     expected_row_header_column: A
@@ -4690,7 +4728,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2024'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 20
     expected_row_header_column: A
@@ -4719,7 +4757,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2025'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 21
     expected_row_header_column: A
@@ -4748,7 +4786,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2025'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 21
     expected_row_header_column: A
@@ -6741,7 +6779,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2013'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 6
     expected_row_header_column: A
@@ -6858,7 +6896,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2014'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -6887,7 +6925,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2015'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -6916,7 +6954,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2016'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -6945,7 +6983,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2017'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -6974,7 +7012,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2018'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -7003,7 +7041,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2019'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -7032,7 +7070,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2020'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 13
     expected_row_header_column: A
@@ -7061,7 +7099,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2021'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 14
     expected_row_header_column: A
@@ -7090,7 +7128,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2022'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 15
     expected_row_header_column: A
@@ -7119,7 +7157,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2023'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 16
     expected_row_header_column: A
@@ -7148,7 +7186,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2024'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 17
     expected_row_header_column: A
@@ -7177,7 +7215,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: 'August 2025'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 18
     expected_row_header_column: A
@@ -11196,7 +11234,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2012-13 [note 5]'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 5
     expected_row_header_column: A
@@ -11241,7 +11279,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2012-13 [note 5]'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 5
     expected_row_header_column: A
@@ -11286,7 +11324,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2013-14'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 6
     expected_row_header_column: A
@@ -11331,7 +11369,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2013-14'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 6
     expected_row_header_column: A
@@ -11376,7 +11414,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2014-15'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -11421,7 +11459,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2014-15'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 7
     expected_row_header_column: A
@@ -11466,7 +11504,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2015-16'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -11511,7 +11549,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2015-16'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 8
     expected_row_header_column: A
@@ -11556,7 +11594,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2016-17'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -11601,7 +11639,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2016-17'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 9
     expected_row_header_column: A
@@ -11646,7 +11684,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2018-19'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -11691,7 +11729,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2018-19'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 10
     expected_row_header_column: A
@@ -11736,7 +11774,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2019-20'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -11781,7 +11819,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2019-20'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 11
     expected_row_header_column: A
@@ -11826,7 +11864,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2020-21'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -11871,7 +11909,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2020-21'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 12
     expected_row_header_column: A
@@ -11916,7 +11954,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2021-22'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 13
     expected_row_header_column: A
@@ -11961,7 +11999,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2021-22'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 13
     expected_row_header_column: A
@@ -12006,7 +12044,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2022-23'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 14
     expected_row_header_column: A
@@ -12051,7 +12089,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2022-23'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 14
     expected_row_header_column: A
@@ -12096,7 +12134,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2023-24'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 15
     expected_row_header_column: A
@@ -12141,7 +12179,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2023-24'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 15
     expected_row_header_column: A
@@ -12186,7 +12224,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2024-25 (note 6]'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 16
     expected_row_header_column: A
@@ -12231,7 +12269,7 @@ record_sets:
   assertion: observation
   rows:
   - value_id: united_kingdom
-    label: '2024-25 (note 6]'
+    label: 'United Kingdom'
     ordinal: 0
     row_number: 16
     expected_row_header_column: A

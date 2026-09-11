@@ -12,6 +12,15 @@ package_id: ons-mye-2023-uk-countries
 label: >-
   ONS mid-2023 population estimates: UK and constituent countries, by single year of age (MYE2
   persons)
+dimension_labels:
+  'age': 'Age'
+  'sex': 'Sex'
+dimension_value_labels:
+  'age':
+    '90_plus': '90 and over'
+  'sex':
+    'female': 'Female'
+    'male': 'Male'
 artifact:
   source_name: ons
   source_table: >-

@@ -16,6 +16,8 @@ schema_version: ledger.source_package.v1
 package_id: ons-subnational-dwellings-by-tenure-2024
 label: 'ONS subnational dwelling stock by tenure (SPREE), England: local authority
   districts, 2022 to 2024'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: ons
   source_table: Subnational dwelling stock by tenure estimates, England, 2024 edition

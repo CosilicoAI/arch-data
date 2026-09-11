@@ -32,6 +32,7 @@ from chronicle.core import (
     AggregateFact,
     build_label,
 )
+from chronicle.dimension_labels import label_facts, unused_label_declarations
 from chronicle.epoch import SCHEMA_IDS, schema_id
 from chronicle.sources.cells import (
     SourceArtifactMetadata,
@@ -58,6 +59,7 @@ from chronicle.sources.rows import (
     source_rows_from_ons_timeseries_json,
     source_rows_from_delimited_text,
     source_rows_from_xlsx_table,
+    statxplore_field_labels,
 )
 from chronicle.sources.specs import (
     SourceRecord,
@@ -583,6 +585,17 @@ class SourceArtifactSpec:
                 sheet_name=self.sheet_name or "indicator",
             )
         return []
+
+    def source_column_labels(self, year: int) -> dict[str, str]:
+        """Return the publisher's labels for parsed source-row columns.
+
+        Only Stat-Xplore responses carry them: each field's label, keyed by the
+        column the parser names after it.
+        """
+        if self.parser != "statxplore_table_json_rows":
+            return {}
+        content, _filename, _source_url, _raw_r2 = self._artifact_content(year)
+        return statxplore_field_labels(content)
 
     def build_source_cells(
         self,
@@ -1155,6 +1168,10 @@ class SourcePackage:
     artifact: SourceArtifactSpec
     record_sets: tuple[DeclarativeRecordSet, ...]
     package_path: Path
+    # Declared labels for dimensions and values the parser cannot recover
+    # (chronicle#261); see chronicle.dimension_labels for the other sources.
+    dimension_labels: dict[str, str] | None = None
+    dimension_value_labels: dict[str, dict[str, str]] | None = None
 
     def build_source_rows(self, year: int) -> list[SourceRow]:
         """Build full source rows for row-oriented artifacts."""
@@ -1217,7 +1234,9 @@ class SourcePackage:
         cells: list[SourceCell] | None = None,
         source_rows: list[SourceRow] | None = None,
     ) -> list[AggregateFact]:
-        """Build source-lineaged Chronicle aggregate facts."""
+        """Build source-lineaged Chronicle aggregate facts and their labels."""
+        if source_rows is None:
+            source_rows = self.build_source_rows(year)
         if cells is None:
             cells = self.build_source_cells(year, source_rows=source_rows)
         source = _source_provenance_from_cells(cells)
@@ -1229,7 +1248,23 @@ class SourcePackage:
         ):
             fact = _fact_from_source_record(record, source)
             facts.append(replace(fact, label=build_label(fact)))
-        return facts
+        unused = unused_label_declarations(
+            facts,
+            dimension_labels=self.dimension_labels,
+            dimension_value_labels=self.dimension_value_labels,
+        )
+        if unused:
+            raise ValueError(
+                f"Source package {self.package_id!r} declares labels no fact "
+                f"uses: {unused}."
+            )
+        return label_facts(
+            facts,
+            dimension_labels=self.dimension_labels,
+            dimension_value_labels=self.dimension_value_labels,
+            field_labels=self.artifact.source_column_labels(year),
+            source_rows=source_rows,
+        )
 
 
 def load_source_package(source: str | Path) -> SourcePackage:
@@ -1254,7 +1289,61 @@ def load_source_package(source: str | Path) -> SourcePackage:
         ),
         record_sets=_record_sets_from_mapping(payload, path),
         package_path=package_dir,
+        dimension_labels=_dimension_labels_from_mapping(
+            payload.get("dimension_labels"),
+            context=f"{path}: dimension_labels",
+        ),
+        dimension_value_labels=_dimension_value_labels_from_mapping(
+            payload.get("dimension_value_labels"),
+            context=f"{path}: dimension_value_labels",
+        ),
     )
+
+
+def _dimension_labels_from_mapping(payload: Any, *, context: str) -> dict[str, str]:
+    """Load one ``id: label`` block with string ids and non-empty labels.
+
+    Ids must be strings in YAML: an unquoted ``No`` or ``Yes`` loads as a
+    boolean and would label a value that does not exist.
+    """
+    if payload is None:
+        return {}
+    if not isinstance(payload, dict):
+        raise TypeError(f"{context} must be a mapping.")
+    labels = {}
+    for key, label in payload.items():
+        if not isinstance(key, str) or not key:
+            raise TypeError(
+                f"{context}: id {key!r} must be a quoted, non-empty string."
+            )
+        if not isinstance(label, str) or not label.strip():
+            raise TypeError(f"{context}.{key}: label must be a non-empty string.")
+        labels[key] = label.strip()
+    return labels
+
+
+def _dimension_value_labels_from_mapping(
+    payload: Any,
+    *,
+    context: str,
+) -> dict[str, dict[str, str]]:
+    """Load the ``dimension id: {value id: label}`` block of a package."""
+    if payload is None:
+        return {}
+    if not isinstance(payload, dict):
+        raise TypeError(f"{context} must be a mapping.")
+    value_labels = {}
+    for dimension_id, labels in payload.items():
+        if not isinstance(dimension_id, str) or not dimension_id:
+            raise TypeError(
+                f"{context}: dimension id {dimension_id!r} must be a quoted, "
+                "non-empty string."
+            )
+        value_labels[dimension_id] = _dimension_labels_from_mapping(
+            labels,
+            context=f"{context}.{dimension_id}",
+        )
+    return value_labels
 
 
 def try_load_source_package(source: str | Path) -> SourcePackage | None:

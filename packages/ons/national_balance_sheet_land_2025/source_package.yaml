@@ -16,6 +16,8 @@
 schema_version: ledger.source_package.v1
 package_id: ons-national-balance-sheet-land-2025
 label: 'ONS national balance sheet 2025: land (AN.211) by institutional sector, 1995-2024'
+dimension_labels:
+  'ons.nbs_asset_category': 'Balance sheet year'
 artifact:
   source_name: ons
   source_table: The UK national balance sheet estimates, 2025 edition (reference tables)

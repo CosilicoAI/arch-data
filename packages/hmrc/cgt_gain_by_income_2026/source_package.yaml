@@ -2,6 +2,14 @@ schema_version: ledger.source_package.v1
 package_id: hmrc-cgt-gain-by-income-2026
 label: 'HMRC Capital Gains Tax statistics 2026, Table 3: individual taxpayers and gains by size of gain
   and taxable income, 2023-24 and 2024-25'
+dimension_value_labels:
+  'cgt_taxable_income_band':
+    'income_0_to_37699': 'GBP 0 to GBP 37,699'
+    'income_37700_to_49999': 'GBP 37,700 to GBP 49,999'
+    'income_50000_to_99999': 'GBP 50,000 to GBP 99,999'
+    'income_100000_to_125139': 'GBP 100,000 to GBP 125,139'
+    'income_125140_to_199999': 'GBP 125,140 to GBP 199,999'
+    'income_200000_plus': 'GBP 200,000 or greater'
 artifact:
   source_name: hmrc
   source_table: 'Capital Gains Tax statistics Table 3: individual taxpayers and gains by size of gain

@@ -33,6 +33,26 @@
 schema_version: ledger.source_package.v1
 package_id: dft-nts0313-mode-use-frequency-2025
 label: DfT National Travel Survey frequency of use of different transport modes, England, 2003 to 2025
+dimension_labels:
+  'dft.transport_mode': 'Transport mode'
+dimension_value_labels:
+  'transport_mode':
+    'Domestic air': 'Domestic air'
+    'E-scooter [note 7]': 'E-scooter'
+    'Local bus [note 5]': 'Local bus'
+    'Non-local Coach (express Coach or coach)': 'Non-local coach (express coach or coach)'
+    'Pedal cycle [notes 3, 4]': 'Pedal cycle'
+    'Private car [note 6]': 'Private car'
+    'Surface rail': 'Surface rail'
+    'Taxi or minicab': 'Taxi or minicab'
+  'use_frequency_band':
+    '3 or more times a week (%)': '3 or more times a week'
+    'Less than once a month, more than once or twice a year (%)': 'Less than once a month, more than once or twice a year'
+    'Less than once a week, more than once or twice a month (%)': 'Less than once a week, more than once or twice a month'
+    'Less than once a year or never (%)': 'Less than once a year or never'
+    'Once or twice a month (%)': 'Once or twice a month'
+    'Once or twice a week (%)': 'Once or twice a week'
+    'Once or twice a year (%)': 'Once or twice a year'
 artifact:
   source_name: dft
   source_table: 'NTS0313: Frequency of use of different transport modes: England, 2003 onwards'

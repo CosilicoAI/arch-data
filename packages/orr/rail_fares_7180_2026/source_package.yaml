@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: orr-rail-fares-7180-2026
 label: ORR regulated and unregulated rail fare indices, 2020 to 2026
+dimension_labels:
+  'orr.fare_category': 'Fare category'
 artifact:
   source_name: orr
   source_table: Table 7180 average change in fares by regulated and unregulated tickets

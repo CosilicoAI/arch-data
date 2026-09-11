@@ -39,6 +39,8 @@ schema_version: ledger.source_package.v1
 package_id: hmrc-spi-income-by-area-2023-24
 label: 'HMRC Survey of Personal Incomes 2023-24: income and tax by parliamentary
   constituency (Table 3.15) and local authority (Table 3.14)'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: hmrc
   source_table: Personal Incomes Statistics tables 3.12 to 3.15a, tax year 2023 to

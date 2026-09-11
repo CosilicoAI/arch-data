@@ -40,6 +40,9 @@
 schema_version: ledger.source_package.v1
 package_id: nrs-census2022-uv404-tenure-council-area
 label: 'Scotland''s Census 2022 UV404: households by tenure, council areas'
+dimension_labels:
+  'geography': 'Geography'
+  'tenure': 'Tenure'
 artifact:
   source_name: nrs
   source_table: Scotland's Census 2022 UV404 tenure of household, council areas

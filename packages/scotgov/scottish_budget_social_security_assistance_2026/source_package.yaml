@@ -21,6 +21,8 @@ schema_version: ledger.source_package.v1
 package_id: scotgov-scottish-budget-social-security-assistance-2026
 label: 'Scottish Budget 2026-27 Table 5.08: social security assistance spending by line, FY2024-25
   to FY2026-27'
+dimension_labels:
+  'scotgov.social_security_line': 'Social security assistance line'
 artifact:
   source_name: scotgov
   source_table: Scottish Budget 2026-27, Chapter 5 Social Justice, Table 5.08 Social Security

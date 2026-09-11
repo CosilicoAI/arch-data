@@ -6,6 +6,8 @@
 schema_version: ledger.source_package.v1
 package_id: voa-council-tax-stock-by-lad-2025
 label: 'VOA Council Tax stock of properties 2025: local authority districts by band'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: voa
   source_table: 'VOA Council Tax stock of properties 2025, table CTSOP1.1: properties by council tax band and area'

@@ -9,6 +9,17 @@ schema_version: ledger.source_package.v1
 package_id: ons-uk-population-projections-2024
 label: ONS 2024-based national population projections (principal), UK, by single year of age
   and sex
+dimension_labels:
+  'age': 'Age'
+  'ons.npp_age_sex': 'Sex and age'
+  'sex': 'Sex'
+dimension_value_labels:
+  'age':
+    '105_109': '105 to 109'
+    '110_plus': '110 and over'
+  'sex':
+    'female': 'Female'
+    'male': 'Male'
 artifact:
   source_name: ons
   source_table: 2024-based national population projections, UK principal (uk_ppp), population

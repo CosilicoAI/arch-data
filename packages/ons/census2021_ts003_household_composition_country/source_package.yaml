@@ -15,6 +15,8 @@
 schema_version: ledger.source_package.v1
 package_id: ons-census2021-ts003-household-composition-country
 label: 'Census 2021 TS003: households by household composition, England and Wales and constituent countries'
+dimension_labels:
+  'ons.census2021_household_composition': 'Household composition'
 artifact:
   source_name: ons
   source_table: 'Census 2021 TS003 household composition, countries (England and Wales, England, Wales)'
