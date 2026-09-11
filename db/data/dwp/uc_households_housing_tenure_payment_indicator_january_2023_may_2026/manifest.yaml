@@ -1,0 +1,19 @@
+source_id: dwp
+package_id: dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026
+dataset: dwp_dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026
+source_page: https://stat-xplore.dwp.gov.uk/
+table: Households on Universal Credit by housing entitlement tenure and payment indicator,
+  January 2023 to May 2026
+files:
+  2025:
+    filename: uc_households_by_housing_entitlement_tenure_and_payment_indicator_january_2023_may_2026.json
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
+    sha256: 8b62f225a1ae6a40794d6c4aed05a6828cd12edb31660a68cd626335c8f2aaa9
+    size_bytes: 19950
+    fetched_at: '2026-09-11T12:01:08Z'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026/2025/8b62f225a1ae6a40794d6c4aed05a6828cd12edb31660a68cd626335c8f2aaa9/uc_households_by_housing_entitlement_tenure_and_payment_indicator_january_2023_may_2026.json
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026/2025/8b62f225a1ae6a40794d6c4aed05a6828cd12edb31660a68cd626335c8f2aaa9/uc_households_by_housing_entitlement_tenure_and_payment_indicator_january_2023_may_2026.json

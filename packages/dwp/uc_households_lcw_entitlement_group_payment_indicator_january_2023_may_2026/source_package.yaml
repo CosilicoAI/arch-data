@@ -1,0 +1,834 @@
+# DWP's 'household' is the Universal Credit unit of assessment (benefit unit), not an ONS
+# household. Each monthly cube cell is preserved as published; DWP applies cell-level
+# adjustment at source, so independently queried cubes and their margins need not
+# reconcile exactly. No Chronicle-side summation or reconciliation is emitted.
+# Stat-Xplore Open Data API extract for chronicle#259: January 2023 through the latest
+# published month, May 2026 (41 months; 202606 is rejected as an invalid value), from
+# DWP's 18 August 2026 release. DWP marks June 2024 through February 2026 as revised
+# ('r', 21 months), March through May 2026 as provisional ('p', 3 months), and January
+# 2023 through May 2024 unmarked.
+# DWP's Payment Indicator records whether a household with a calculated award received
+# a payment in the month ('Yes') or had a nil award ('No'). The recode requests
+# total: true on Payment Indicator only, so DWP emits the all-claims count itself as a
+# Total item. Those rows sit in separate .total record sets with payment_indicator: all,
+# measure total_benefit_units, and no payment-indicator constraint.
+# Value set C_UC_LCW_ENTITLEMENT_GROUP of DWP's Limited Capability for Work Entitlement
+# field (chronicle#259 item 1b). Only the 'LCWRA' group value is ported: DWP's own count
+# across both LCWRA rates ('LCWRA - Higher' and, from April 2026, 'LCWRA - Lower'), equal to
+# 'LCWRA - Higher' in every month before April 2026. 'None' and 'LCW' are the same publisher
+# codes as in the detail value set and are emitted once, by
+# dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026; 'LCW or LCWRA'
+# is zero in every cell.
+schema_version: ledger.source_package.v1
+package_id: dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026
+label: 'DWP Stat-Xplore: Universal Credit benefit units by limited capability for work entitlement group and payment indicator, Great Britain, January 2023 to May 2026'
+artifact:
+  source_name: dwp
+  source_table: 'Households on Universal Credit by limited capability for work entitlement group and payment indicator, January 2023 to May 2026'
+  resource_package: db
+  resource_directory: data/dwp/uc_households_lcw_entitlement_group_payment_indicator_january_2023_may_2026
+  manifest: manifest.yaml
+  vintage: stat_xplore_2026_09_11
+  extracted_at: '2026-09-11'
+  extraction_method: >-
+    Stat-Xplore Open Data API table response parsed and unpivoted to one row per cube cell;
+    database str:database:UC_Households; measure str:count:UC_Households:V_F_UC_HOUSEHOLDS;
+    fields in response order:
+    str:field:UC_Households:F_UC_HH_DATE:DATE_NAME;
+    str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT;
+    str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT;
+    value sets: C_UC_HH_DATE, C_UC_LCW_ENTITLEMENT_GROUP, C_UC_PAYMENT;
+    months January 2023 through May 2026 (202301 through 202605), inclusive;
+    recode total: true on HCPAYMENT only, all other recodes total: false.
+  parser: statxplore_table_json_rows
+  sheet_name: api_response
+  artifact_year: 2025
+record_sets:
+- &monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_01.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_01
+  sheet_name: api_response
+  period_type: month
+  period: 2023-01
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: benefit_unit
+  entity_role: universal_credit_unit_of_assessment
+  domain: universal_credit
+  groupby_dimension: dwp.limited_capability_for_work_entitlement
+  assertion: observation
+  rows:
+  - &group_lcwra__payment_indicator_no
+    value_id: group_lcwra__payment_indicator_no
+    label: 'LCWRA, No'
+    ordinal: 0
+    row_number: 11
+    expected_row_header_column: F
+    expected_row_header: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT_GROUP:3'
+    table_record_kind: detail
+    filters: {limited_capability_for_work_entitlement: 'LCWRA', payment_indicator: 'No'}
+    constraints:
+    - {variable: limited_capability_for_work_entitlement, operator: '==', value: 'LCWRA', label: limited capability for work entitlement}
+    - {variable: payment_indicator, operator: '==', value: 'No', label: payment indicator}
+    guard_cells: [{column: C, row: 11, expected_value: 'January 2023', label: month}, {column: H, row: 11, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]
+  - &group_lcwra__payment_indicator_yes
+    value_id: group_lcwra__payment_indicator_yes
+    label: 'LCWRA, Yes'
+    ordinal: 1
+    row_number: 12
+    expected_row_header_column: F
+    expected_row_header: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT_GROUP:3'
+    table_record_kind: detail
+    filters: {limited_capability_for_work_entitlement: 'LCWRA', payment_indicator: 'Yes'}
+    constraints:
+    - {variable: limited_capability_for_work_entitlement, operator: '==', value: 'LCWRA', label: limited capability for work entitlement}
+    - {variable: payment_indicator, operator: '==', value: 'Yes', label: payment indicator}
+    guard_cells: [{column: C, row: 12, expected_value: 'January 2023', label: month}, {column: H, row: 12, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]
+  measures:
+  - measure_id: benefit_units
+    label: 'Universal Credit benefit units'
+    ordinal: 0
+    column: B
+    source_column_id: value
+    expected_column_header_row: 1
+    expected_column_header: value
+    concept: dwp.uc_benefit_units
+    source_concept: dwp.uc_households
+    concept_relation: source_label
+    concept_authority: dwp
+    concept_evidence_url: https://stat-xplore.dwp.gov.uk/webapi/metadata/UC_Households/Limited%20Capability%20for%20Work%20Entitlement.html
+    concept_evidence_notes: 'DWP UC_Households cube cells for January 2023 to May 2026, by limited capability for work entitlement group and payment indicator, preserve the publisher labels and value URIs. DWP defines a Universal Credit household as the UC unit of assessment; Chronicle normalizes that entity to benefit_unit.'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+- &monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_01.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_01.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_01.total
+  sheet_name: api_response
+  period_type: month
+  period: 2023-01
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: benefit_unit
+  entity_role: universal_credit_unit_of_assessment
+  domain: universal_credit
+  groupby_dimension: dwp.limited_capability_for_work_entitlement
+  assertion: observation
+  rows:
+  - &group_lcwra__payment_indicator_all
+    value_id: group_lcwra__payment_indicator_all
+    label: 'LCWRA, Total'
+    ordinal: 0
+    row_number: 13
+    expected_row_header_column: F
+    expected_row_header: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT_GROUP:3'
+    table_record_kind: total
+    filters: {limited_capability_for_work_entitlement: 'LCWRA', payment_indicator: 'all'}
+    constraints:
+    - {variable: limited_capability_for_work_entitlement, operator: '==', value: 'LCWRA', label: limited capability for work entitlement}
+    guard_cells: [{column: C, row: 13, expected_value: 'January 2023', label: month}, {column: G, row: 13, expected_value: Total, label: payment indicator publisher Total}]
+  measures:
+  - measure_id: total_benefit_units
+    label: 'Universal Credit benefit units, published total over payment indicator'
+    ordinal: 0
+    column: B
+    source_column_id: value
+    expected_column_header_row: 1
+    expected_column_header: value
+    concept: dwp.uc_benefit_units
+    source_concept: dwp.uc_households
+    concept_relation: source_label
+    concept_authority: dwp
+    concept_evidence_url: https://stat-xplore.dwp.gov.uk/webapi/metadata/UC_Households/Limited%20Capability%20for%20Work%20Entitlement.html
+    concept_evidence_notes: 'DWP emits this Total item itself (recode total: true on HCPAYMENT); Chronicle does not sum the categories.'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_02.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_02
+  period: 2023-02
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 23, guard_cells: [{column: C, row: 23, expected_value: 'February 2023', label: month}, {column: H, row: 23, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 24, guard_cells: [{column: C, row: 24, expected_value: 'February 2023', label: month}, {column: H, row: 24, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_02.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_02.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_02.total
+  period: 2023-02
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 25, guard_cells: [{column: C, row: 25, expected_value: 'February 2023', label: month}, {column: G, row: 25, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_03.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_03
+  period: 2023-03
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 35, guard_cells: [{column: C, row: 35, expected_value: 'March 2023', label: month}, {column: H, row: 35, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 36, guard_cells: [{column: C, row: 36, expected_value: 'March 2023', label: month}, {column: H, row: 36, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_03.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_03.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_03.total
+  period: 2023-03
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 37, guard_cells: [{column: C, row: 37, expected_value: 'March 2023', label: month}, {column: G, row: 37, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_04.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_04
+  period: 2023-04
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 47, guard_cells: [{column: C, row: 47, expected_value: 'April 2023', label: month}, {column: H, row: 47, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 48, guard_cells: [{column: C, row: 48, expected_value: 'April 2023', label: month}, {column: H, row: 48, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_04.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_04.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_04.total
+  period: 2023-04
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 49, guard_cells: [{column: C, row: 49, expected_value: 'April 2023', label: month}, {column: G, row: 49, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_05.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_05
+  period: 2023-05
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 59, guard_cells: [{column: C, row: 59, expected_value: 'May 2023', label: month}, {column: H, row: 59, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 60, guard_cells: [{column: C, row: 60, expected_value: 'May 2023', label: month}, {column: H, row: 60, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_05.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_05.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_05.total
+  period: 2023-05
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 61, guard_cells: [{column: C, row: 61, expected_value: 'May 2023', label: month}, {column: G, row: 61, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_06.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_06
+  period: 2023-06
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 71, guard_cells: [{column: C, row: 71, expected_value: 'June 2023', label: month}, {column: H, row: 71, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 72, guard_cells: [{column: C, row: 72, expected_value: 'June 2023', label: month}, {column: H, row: 72, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_06.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_06.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_06.total
+  period: 2023-06
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 73, guard_cells: [{column: C, row: 73, expected_value: 'June 2023', label: month}, {column: G, row: 73, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_07.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_07
+  period: 2023-07
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 83, guard_cells: [{column: C, row: 83, expected_value: 'July 2023', label: month}, {column: H, row: 83, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 84, guard_cells: [{column: C, row: 84, expected_value: 'July 2023', label: month}, {column: H, row: 84, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_07.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_07.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_07.total
+  period: 2023-07
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 85, guard_cells: [{column: C, row: 85, expected_value: 'July 2023', label: month}, {column: G, row: 85, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_08.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_08
+  period: 2023-08
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 95, guard_cells: [{column: C, row: 95, expected_value: 'August 2023', label: month}, {column: H, row: 95, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 96, guard_cells: [{column: C, row: 96, expected_value: 'August 2023', label: month}, {column: H, row: 96, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_08.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_08.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_08.total
+  period: 2023-08
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 97, guard_cells: [{column: C, row: 97, expected_value: 'August 2023', label: month}, {column: G, row: 97, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_09.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_09
+  period: 2023-09
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 107, guard_cells: [{column: C, row: 107, expected_value: 'September 2023', label: month}, {column: H, row: 107, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 108, guard_cells: [{column: C, row: 108, expected_value: 'September 2023', label: month}, {column: H, row: 108, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_09.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_09.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_09.total
+  period: 2023-09
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 109, guard_cells: [{column: C, row: 109, expected_value: 'September 2023', label: month}, {column: G, row: 109, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_10.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_10
+  period: 2023-10
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 119, guard_cells: [{column: C, row: 119, expected_value: 'October 2023', label: month}, {column: H, row: 119, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 120, guard_cells: [{column: C, row: 120, expected_value: 'October 2023', label: month}, {column: H, row: 120, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_10.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_10.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_10.total
+  period: 2023-10
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 121, guard_cells: [{column: C, row: 121, expected_value: 'October 2023', label: month}, {column: G, row: 121, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_11.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_11
+  period: 2023-11
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 131, guard_cells: [{column: C, row: 131, expected_value: 'November 2023', label: month}, {column: H, row: 131, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 132, guard_cells: [{column: C, row: 132, expected_value: 'November 2023', label: month}, {column: H, row: 132, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_11.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_11.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_11.total
+  period: 2023-11
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 133, guard_cells: [{column: C, row: 133, expected_value: 'November 2023', label: month}, {column: G, row: 133, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_12.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_12
+  period: 2023-12
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 143, guard_cells: [{column: C, row: 143, expected_value: 'December 2023', label: month}, {column: H, row: 143, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 144, guard_cells: [{column: C, row: 144, expected_value: 'December 2023', label: month}, {column: H, row: 144, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_12.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_12.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2023_12.total
+  period: 2023-12
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 145, guard_cells: [{column: C, row: 145, expected_value: 'December 2023', label: month}, {column: G, row: 145, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_01.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_01
+  period: 2024-01
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 155, guard_cells: [{column: C, row: 155, expected_value: 'January 2024', label: month}, {column: H, row: 155, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 156, guard_cells: [{column: C, row: 156, expected_value: 'January 2024', label: month}, {column: H, row: 156, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_01.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_01.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_01.total
+  period: 2024-01
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 157, guard_cells: [{column: C, row: 157, expected_value: 'January 2024', label: month}, {column: G, row: 157, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_02.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_02
+  period: 2024-02
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 167, guard_cells: [{column: C, row: 167, expected_value: 'February 2024', label: month}, {column: H, row: 167, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 168, guard_cells: [{column: C, row: 168, expected_value: 'February 2024', label: month}, {column: H, row: 168, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_02.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_02.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_02.total
+  period: 2024-02
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 169, guard_cells: [{column: C, row: 169, expected_value: 'February 2024', label: month}, {column: G, row: 169, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_03.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_03
+  period: 2024-03
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 179, guard_cells: [{column: C, row: 179, expected_value: 'March 2024', label: month}, {column: H, row: 179, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 180, guard_cells: [{column: C, row: 180, expected_value: 'March 2024', label: month}, {column: H, row: 180, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_03.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_03.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_03.total
+  period: 2024-03
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 181, guard_cells: [{column: C, row: 181, expected_value: 'March 2024', label: month}, {column: G, row: 181, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_04.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_04
+  period: 2024-04
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 191, guard_cells: [{column: C, row: 191, expected_value: 'April 2024', label: month}, {column: H, row: 191, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 192, guard_cells: [{column: C, row: 192, expected_value: 'April 2024', label: month}, {column: H, row: 192, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_04.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_04.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_04.total
+  period: 2024-04
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 193, guard_cells: [{column: C, row: 193, expected_value: 'April 2024', label: month}, {column: G, row: 193, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_05.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_05
+  period: 2024-05
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 203, guard_cells: [{column: C, row: 203, expected_value: 'May 2024', label: month}, {column: H, row: 203, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 204, guard_cells: [{column: C, row: 204, expected_value: 'May 2024', label: month}, {column: H, row: 204, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_05.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_05.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_05.total
+  period: 2024-05
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 205, guard_cells: [{column: C, row: 205, expected_value: 'May 2024', label: month}, {column: G, row: 205, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_06.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_06
+  period: 2024-06
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 215, guard_cells: [{column: C, row: 215, expected_value: 'June 2024', label: month}, {column: H, row: 215, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 216, guard_cells: [{column: C, row: 216, expected_value: 'June 2024', label: month}, {column: H, row: 216, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_06.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_06.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_06.total
+  period: 2024-06
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 217, guard_cells: [{column: C, row: 217, expected_value: 'June 2024', label: month}, {column: G, row: 217, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_07.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_07
+  period: 2024-07
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 227, guard_cells: [{column: C, row: 227, expected_value: 'July 2024', label: month}, {column: H, row: 227, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 228, guard_cells: [{column: C, row: 228, expected_value: 'July 2024', label: month}, {column: H, row: 228, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_07.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_07.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_07.total
+  period: 2024-07
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 229, guard_cells: [{column: C, row: 229, expected_value: 'July 2024', label: month}, {column: G, row: 229, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_08.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_08
+  period: 2024-08
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 239, guard_cells: [{column: C, row: 239, expected_value: 'August 2024', label: month}, {column: H, row: 239, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 240, guard_cells: [{column: C, row: 240, expected_value: 'August 2024', label: month}, {column: H, row: 240, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_08.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_08.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_08.total
+  period: 2024-08
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 241, guard_cells: [{column: C, row: 241, expected_value: 'August 2024', label: month}, {column: G, row: 241, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_09.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_09
+  period: 2024-09
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 251, guard_cells: [{column: C, row: 251, expected_value: 'September 2024', label: month}, {column: H, row: 251, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 252, guard_cells: [{column: C, row: 252, expected_value: 'September 2024', label: month}, {column: H, row: 252, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_09.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_09.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_09.total
+  period: 2024-09
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 253, guard_cells: [{column: C, row: 253, expected_value: 'September 2024', label: month}, {column: G, row: 253, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_10.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_10
+  period: 2024-10
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 263, guard_cells: [{column: C, row: 263, expected_value: 'October 2024', label: month}, {column: H, row: 263, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 264, guard_cells: [{column: C, row: 264, expected_value: 'October 2024', label: month}, {column: H, row: 264, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_10.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_10.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_10.total
+  period: 2024-10
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 265, guard_cells: [{column: C, row: 265, expected_value: 'October 2024', label: month}, {column: G, row: 265, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_11.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_11
+  period: 2024-11
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 275, guard_cells: [{column: C, row: 275, expected_value: 'November 2024', label: month}, {column: H, row: 275, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 276, guard_cells: [{column: C, row: 276, expected_value: 'November 2024', label: month}, {column: H, row: 276, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_11.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_11.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_11.total
+  period: 2024-11
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 277, guard_cells: [{column: C, row: 277, expected_value: 'November 2024', label: month}, {column: G, row: 277, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_12.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_12
+  period: 2024-12
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 287, guard_cells: [{column: C, row: 287, expected_value: 'December 2024', label: month}, {column: H, row: 287, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 288, guard_cells: [{column: C, row: 288, expected_value: 'December 2024', label: month}, {column: H, row: 288, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_12.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_12.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2024_12.total
+  period: 2024-12
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 289, guard_cells: [{column: C, row: 289, expected_value: 'December 2024', label: month}, {column: G, row: 289, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_01.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_01
+  period: 2025-01
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 299, guard_cells: [{column: C, row: 299, expected_value: 'January 2025', label: month}, {column: H, row: 299, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 300, guard_cells: [{column: C, row: 300, expected_value: 'January 2025', label: month}, {column: H, row: 300, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_01.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_01.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_01.total
+  period: 2025-01
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 301, guard_cells: [{column: C, row: 301, expected_value: 'January 2025', label: month}, {column: G, row: 301, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_02.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_02
+  period: 2025-02
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 311, guard_cells: [{column: C, row: 311, expected_value: 'February 2025', label: month}, {column: H, row: 311, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 312, guard_cells: [{column: C, row: 312, expected_value: 'February 2025', label: month}, {column: H, row: 312, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_02.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_02.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_02.total
+  period: 2025-02
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 313, guard_cells: [{column: C, row: 313, expected_value: 'February 2025', label: month}, {column: G, row: 313, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_03.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_03
+  period: 2025-03
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 323, guard_cells: [{column: C, row: 323, expected_value: 'March 2025', label: month}, {column: H, row: 323, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 324, guard_cells: [{column: C, row: 324, expected_value: 'March 2025', label: month}, {column: H, row: 324, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_03.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_03.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_03.total
+  period: 2025-03
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 325, guard_cells: [{column: C, row: 325, expected_value: 'March 2025', label: month}, {column: G, row: 325, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_04.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_04
+  period: 2025-04
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 335, guard_cells: [{column: C, row: 335, expected_value: 'April 2025', label: month}, {column: H, row: 335, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 336, guard_cells: [{column: C, row: 336, expected_value: 'April 2025', label: month}, {column: H, row: 336, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_04.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_04.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_04.total
+  period: 2025-04
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 337, guard_cells: [{column: C, row: 337, expected_value: 'April 2025', label: month}, {column: G, row: 337, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_05.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_05
+  period: 2025-05
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 347, guard_cells: [{column: C, row: 347, expected_value: 'May 2025', label: month}, {column: H, row: 347, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 348, guard_cells: [{column: C, row: 348, expected_value: 'May 2025', label: month}, {column: H, row: 348, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_05.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_05.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_05.total
+  period: 2025-05
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 349, guard_cells: [{column: C, row: 349, expected_value: 'May 2025', label: month}, {column: G, row: 349, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_06.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_06
+  period: 2025-06
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 359, guard_cells: [{column: C, row: 359, expected_value: 'June 2025', label: month}, {column: H, row: 359, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 360, guard_cells: [{column: C, row: 360, expected_value: 'June 2025', label: month}, {column: H, row: 360, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_06.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_06.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_06.total
+  period: 2025-06
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 361, guard_cells: [{column: C, row: 361, expected_value: 'June 2025', label: month}, {column: G, row: 361, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_07.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_07
+  period: 2025-07
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 371, guard_cells: [{column: C, row: 371, expected_value: 'July 2025', label: month}, {column: H, row: 371, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 372, guard_cells: [{column: C, row: 372, expected_value: 'July 2025', label: month}, {column: H, row: 372, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_07.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_07.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_07.total
+  period: 2025-07
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 373, guard_cells: [{column: C, row: 373, expected_value: 'July 2025', label: month}, {column: G, row: 373, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_08.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_08
+  period: 2025-08
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 383, guard_cells: [{column: C, row: 383, expected_value: 'August 2025', label: month}, {column: H, row: 383, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 384, guard_cells: [{column: C, row: 384, expected_value: 'August 2025', label: month}, {column: H, row: 384, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_08.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_08.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_08.total
+  period: 2025-08
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 385, guard_cells: [{column: C, row: 385, expected_value: 'August 2025', label: month}, {column: G, row: 385, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_09.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_09
+  period: 2025-09
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 395, guard_cells: [{column: C, row: 395, expected_value: 'September 2025', label: month}, {column: H, row: 395, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 396, guard_cells: [{column: C, row: 396, expected_value: 'September 2025', label: month}, {column: H, row: 396, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_09.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_09.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_09.total
+  period: 2025-09
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 397, guard_cells: [{column: C, row: 397, expected_value: 'September 2025', label: month}, {column: G, row: 397, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_10.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_10
+  period: 2025-10
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 407, guard_cells: [{column: C, row: 407, expected_value: 'October 2025', label: month}, {column: H, row: 407, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 408, guard_cells: [{column: C, row: 408, expected_value: 'October 2025', label: month}, {column: H, row: 408, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_10.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_10.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_10.total
+  period: 2025-10
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 409, guard_cells: [{column: C, row: 409, expected_value: 'October 2025', label: month}, {column: G, row: 409, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_11.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_11
+  period: 2025-11
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 419, guard_cells: [{column: C, row: 419, expected_value: 'November 2025', label: month}, {column: H, row: 419, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 420, guard_cells: [{column: C, row: 420, expected_value: 'November 2025', label: month}, {column: H, row: 420, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_11.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_11.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_11.total
+  period: 2025-11
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 421, guard_cells: [{column: C, row: 421, expected_value: 'November 2025', label: month}, {column: G, row: 421, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_12.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_12
+  period: 2025-12
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 431, guard_cells: [{column: C, row: 431, expected_value: 'December 2025', label: month}, {column: H, row: 431, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 432, guard_cells: [{column: C, row: 432, expected_value: 'December 2025', label: month}, {column: H, row: 432, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_12.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_12.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2025_12.total
+  period: 2025-12
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 433, guard_cells: [{column: C, row: 433, expected_value: 'December 2025', label: month}, {column: G, row: 433, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_01.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_01
+  period: 2026-01
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 443, guard_cells: [{column: C, row: 443, expected_value: 'January 2026', label: month}, {column: H, row: 443, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 444, guard_cells: [{column: C, row: 444, expected_value: 'January 2026', label: month}, {column: H, row: 444, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_01.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_01.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_01.total
+  period: 2026-01
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 445, guard_cells: [{column: C, row: 445, expected_value: 'January 2026', label: month}, {column: G, row: 445, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_02.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_02
+  period: 2026-02
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 455, guard_cells: [{column: C, row: 455, expected_value: 'February 2026', label: month}, {column: H, row: 455, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 456, guard_cells: [{column: C, row: 456, expected_value: 'February 2026', label: month}, {column: H, row: 456, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_02.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_02.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_02.total
+  period: 2026-02
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 457, guard_cells: [{column: C, row: 457, expected_value: 'February 2026', label: month}, {column: G, row: 457, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_03.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_03
+  period: 2026-03
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 467, guard_cells: [{column: C, row: 467, expected_value: 'March 2026', label: month}, {column: H, row: 467, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 468, guard_cells: [{column: C, row: 468, expected_value: 'March 2026', label: month}, {column: H, row: 468, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_03.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_03.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_03.total
+  period: 2026-03
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 469, guard_cells: [{column: C, row: 469, expected_value: 'March 2026', label: month}, {column: G, row: 469, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_04.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_04
+  period: 2026-04
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 479, guard_cells: [{column: C, row: 479, expected_value: 'April 2026', label: month}, {column: H, row: 479, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 480, guard_cells: [{column: C, row: 480, expected_value: 'April 2026', label: month}, {column: H, row: 480, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_04.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_04.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_04.total
+  period: 2026-04
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 481, guard_cells: [{column: C, row: 481, expected_value: 'April 2026', label: month}, {column: G, row: 481, expected_value: Total, label: payment indicator publisher Total}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_05.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_05
+  period: 2026-05
+  rows:
+  - {<<: *group_lcwra__payment_indicator_no, ordinal: 0, row_number: 491, guard_cells: [{column: C, row: 491, expected_value: 'May 2026', label: month}, {column: H, row: 491, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0', label: payment indicator value URI}]}
+  - {<<: *group_lcwra__payment_indicator_yes, ordinal: 1, row_number: 492, guard_cells: [{column: C, row: 492, expected_value: 'May 2026', label: month}, {column: H, row: 492, expected_value: 'str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1', label: payment indicator value URI}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_05.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_05.total.v1
+  source_record_id_prefix: dwp.statx.uc_benefit_units.lcw_entitlement_group_payment_indicator.month2026_05.total
+  period: 2026-05
+  rows:
+  - {<<: *group_lcwra__payment_indicator_all, ordinal: 0, row_number: 493, guard_cells: [{column: C, row: 493, expected_value: 'May 2026', label: month}, {column: G, row: 493, expected_value: Total, label: payment indicator publisher Total}]}

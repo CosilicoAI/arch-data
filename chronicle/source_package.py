@@ -166,8 +166,14 @@ SOURCE_PACKAGE_ALIASES = {
     "dwp-benefit-statistics-february-2026": Path(
         "dwp/benefit_statistics_february_2026"
     ),
-    "dwp-uc-childcare-element-march-2021-august-2025": Path(
-        "dwp/uc_childcare_element_march_2021_august_2025"
+    "dwp-hb-claimants-client-type-tenure-january-2023-february-2026": Path(
+        "dwp/hb_claimants_client_type_tenure_january_2023_february_2026"
+    ),
+    "dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026": Path(
+        "dwp/hb_claimants_client_type_tenure_accommodation_type_september_2025_february_2026"
+    ),
+    "dwp-uc-childcare-element-march-2021-may-2026": Path(
+        "dwp/uc_childcare_element_march_2021_may_2026"
     ),
     "dwp-uc-deductions-march-2025-february-2026": Path(
         "dwp/uc_deductions_march_2025_february_2026"
@@ -182,20 +188,11 @@ SOURCE_PACKAGE_ALIASES = {
     "dwp-uc-households-by-local-authority-may-2025": Path(
         "dwp/uc_households_by_local_authority_may_2025"
     ),
-    "dwp-uc-households-carer-entitlement-april-december-2025": Path(
-        "dwp/uc_households_carer_entitlement_april_december_2025"
-    ),
     "dwp-uc-households-children-april-december-2025": Path(
         "dwp/uc_households_children_april_december_2025"
     ),
     "dwp-uc-households-family-type-april-december-2025": Path(
         "dwp/uc_households_family_type_april_december_2025"
-    ),
-    "dwp-uc-households-housing-entitlement-april-december-2025": Path(
-        "dwp/uc_households_housing_entitlement_april_december_2025"
-    ),
-    "dwp-uc-households-lcwra-entitlement-april-december-2025": Path(
-        "dwp/uc_households_lcwra_entitlement_april_december_2025"
     ),
     "dwp-uc-households-family-type-child-entitlement-april-december-2025": Path(
         "dwp/uc_households_family_type_child_entitlement_april_december_2025"
@@ -211,6 +208,24 @@ SOURCE_PACKAGE_ALIASES = {
     ),
     "dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026": Path(
         "dwp/uc_households_children_payment_indicator_child_entitlement_april_2023_may_2026"
+    ),
+    "dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_housing_tenure_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_housing_entitlement_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_lcw_entitlement_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_lcw_entitlement_group_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_households_carer_entitlement_payment_indicator_january_2023_may_2026"
+    ),
+    "dwp-uc-people-employment-indicator-january-2023-may-2026": Path(
+        "dwp/uc_people_employment_indicator_january_2023_may_2026"
     ),
     "dwp-uc-payment-distribution-april-december-2025": Path(
         "dwp/uc_payment_distribution_april_december_2025"

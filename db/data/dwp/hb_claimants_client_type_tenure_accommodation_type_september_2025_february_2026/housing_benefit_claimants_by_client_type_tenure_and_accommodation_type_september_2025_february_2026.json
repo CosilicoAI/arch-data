@@ -1,0 +1,132 @@
+{
+  "query" : {
+    "database" : "str:database:hb_new",
+    "measures" : [ "str:count:hb_new:V_F_HB_NEW" ],
+    "recodes" : {
+      "str:field:hb_new:V_F_HB_NEW:PENWORK" : {
+        "map" : [ [ "str:value:hb_new:V_F_HB_NEW:PENWORK:C_PENWORK:1" ], [ "str:value:hb_new:V_F_HB_NEW:PENWORK:C_PENWORK:2" ] ],
+        "total" : true
+      },
+      "str:field:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME" : {
+        "map" : [ [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202509" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202510" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202511" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202512" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202601" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202602" ] ],
+        "total" : false
+      },
+      "str:field:hb_new:V_F_HB_NEW:TENURE_PUB" : {
+        "map" : [ [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:1" ], [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:2" ], [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:99" ] ],
+        "total" : true
+      },
+      "str:field:hb_new:V_F_HB_NEW:SATA" : {
+        "map" : [ [ "str:value:hb_new:V_F_HB_NEW:SATA:C_SATA:1" ], [ "str:value:hb_new:V_F_HB_NEW:SATA:C_SATA:2" ], [ "str:value:hb_new:V_F_HB_NEW:SATA:C_SATA:9" ], [ "str:value:hb_new:V_F_HB_NEW:SATA:C_SATA:99" ] ],
+        "total" : false
+      }
+    },
+    "dimensions" : [ [ "str:field:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME" ], [ "str:field:hb_new:V_F_HB_NEW:PENWORK" ], [ "str:field:hb_new:V_F_HB_NEW:TENURE_PUB" ], [ "str:field:hb_new:V_F_HB_NEW:SATA" ] ]
+  },
+  "database" : {
+    "id" : "hb_new",
+    "uri" : "str:database:hb_new",
+    "label" : "Housing Benefit - Data from April 2018",
+    "annotationKeys" : [ "XXI" ]
+  },
+  "measures" : [ {
+    "uri" : "str:count:hb_new:V_F_HB_NEW",
+    "label" : "Housing Benefit Claimants",
+    "measure" : "str:count:hb_new:V_F_HB_NEW",
+    "function" : "COUNT"
+  } ],
+  "fields" : [ {
+    "uri" : "str:field:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME",
+    "label" : "Month",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202509" ],
+      "labels" : [ "202509 (Sep-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202510" ],
+      "labels" : [ "202510 (Oct-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202511" ],
+      "labels" : [ "202511 (Nov-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202512" ],
+      "labels" : [ "202512 (Dec-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202601" ],
+      "labels" : [ "202601 (Jan-26)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202602" ],
+      "labels" : [ "202602 (Feb-26)" ]
+    } ]
+  }, {
+    "uri" : "str:field:hb_new:V_F_HB_NEW:PENWORK",
+    "label" : "Client Type",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:PENWORK:C_PENWORK:1" ],
+      "labels" : [ "Working age" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:PENWORK:C_PENWORK:2" ],
+      "labels" : [ "Pension age" ]
+    }, {
+      "type" : "Total",
+      "labels" : [ "Total" ]
+    } ]
+  }, {
+    "uri" : "str:field:hb_new:V_F_HB_NEW:TENURE_PUB",
+    "label" : "Private or Social Rented",
+    "annotationKeys" : [ "XXV", "XXVI" ],
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:1" ],
+      "labels" : [ "Social Rented Sector" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:2" ],
+      "labels" : [ "Private Rented Sector" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:99" ],
+      "labels" : [ "Unknown or missing housing sector" ]
+    }, {
+      "type" : "Total",
+      "labels" : [ "Total" ]
+    } ]
+  }, {
+    "uri" : "str:field:hb_new:V_F_HB_NEW:SATA",
+    "label" : "Accommodation Type",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:SATA:C_SATA:1" ],
+      "labels" : [ "Specified Accommodation" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:SATA:C_SATA:2" ],
+      "labels" : [ "Temporary Accommodation" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:SATA:C_SATA:9" ],
+      "labels" : [ "Other" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:SATA:C_SATA:99" ],
+      "labels" : [ "Unknown / Missing" ]
+    } ]
+  } ],
+  "cubes" : {
+    "str:count:hb_new:V_F_HB_NEW" : {
+      "values" : [ [ [ [ 150195, 123388, 116196, 11 ], [ 39805, 44, 24405, 0 ], [ 0, 0, 123, 34 ], [ 190000, 123438, 140728, 48 ] ], [ [ 49140, 4037, 838151, 15 ], [ 5080, 492, 211847, 0 ], [ 0, 0, 7, 6 ], [ 54221, 4527, 1050003, 21 ] ], [ [ 199334, 127426, 954352, 24 ], [ 44882, 535, 236247, 0 ], [ 0, 0, 137, 44 ], [ 244218, 127968, 1190731, 69 ] ] ], [ [ [ 150815, 126315, 79053, 13 ], [ 40067, 21, 16533, 0 ], [ 0, 14, 123, 27 ], [ 190890, 126345, 95704, 38 ] ], [ [ 49102, 4135, 838408, 35 ], [ 5107, 26, 212647, 11 ], [ 0, 0, 12, 5 ], [ 54203, 4161, 1051070, 49 ] ], [ [ 199916, 130455, 917465, 45 ], [ 45174, 40, 229177, 11 ], [ 0, 14, 131, 30 ], [ 245094, 130505, 1146775, 85 ] ] ], [ [ [ 150664, 124987, 45759, 15 ], [ 39726, 13, 9124, 0 ], [ 0, 7, 64, 15 ], [ 190389, 125005, 54952, 26 ] ], [ [ 49017, 4104, 836035, 39 ], [ 5102, 46, 212298, 10 ], [ 0, 0, 15, 6 ], [ 54122, 4154, 1048338, 55 ] ], [ [ 199679, 129093, 881795, 47 ], [ 44829, 61, 221417, 10 ], [ 0, 7, 80, 20 ], [ 244506, 129157, 1103295, 79 ] ] ], [ [ [ 152852, 125657, 29278, 5 ], [ 40198, 16, 5644, 0 ], [ 0, 0, 66, 38 ], [ 193049, 125678, 34984, 47 ] ], [ [ 49424, 4196, 835033, 6 ], [ 5115, 45, 212910, 0 ], [ 0, 0, 14, 7 ], [ 54541, 4247, 1047962, 10 ] ], [ [ 202274, 129852, 864312, 13 ], [ 45321, 63, 218553, 0 ], [ 0, 0, 78, 44 ], [ 247593, 129920, 1082944, 51 ] ] ], [ [ [ 155493, 127899, 23603, 5 ], [ 41029, 48, 4460, 0 ], [ 5, 7, 105, 30 ], [ 196528, 127954, 28167, 33 ] ], [ [ 49546, 4340, 836511, 6 ], [ 5175, 49, 213950, 0 ], [ 0, 0, 11, 6 ], [ 54721, 4392, 1050476, 19 ] ], [ [ 205040, 132242, 860112, 13 ], [ 46205, 96, 218408, 0 ], [ 5, 9, 116, 38 ], [ 251246, 132348, 1078644, 51 ] ] ], [ [ [ 155251, 127474, 18184, 6 ], [ 40769, 23, 3364, 0 ], [ 0, 10, 49, 26 ], [ 196021, 127506, 21606, 31 ] ], [ [ 49274, 4339, 834275, 0 ], [ 5144, 45, 213719, 0 ], [ 0, 0, 17, 6 ], [ 54417, 4384, 1048010, 8 ] ], [ [ 204521, 131815, 852464, 5 ], [ 45913, 69, 217086, 0 ], [ 0, 10, 64, 32 ], [ 250434, 131892, 1069608, 38 ] ] ] ],
+      "precision" : 0
+    }
+  },
+  "annotationMap" : {
+    "XXI" : "\"..\" denotes a nil or negligible number of claimants or award amount based on a nil or negligible number of claimants.",
+    "XXV" : "For Glasgow City, there has been a misclassification of tenure causing a notable underreporting of the number of Private Rented sector properties between February 2024 and October 2024. Due to this, Detailed Housing Type breakdowns from February 2024 for Glasgow City should be used with caution.",
+    "XXVI" : "For Calderdale since January 2024 there has been a misclassification of the HB claims where Local Housing Allowance is applied. This means a notable underreporting of Private deregulated tenants (LHA) (PRS) and numbers of Entitled Bedrooms (LHA) and thus over-reporting of Private deregulated tenants (non-LHA) (PRS) and Non-LHA claimants respectively."
+  }
+}

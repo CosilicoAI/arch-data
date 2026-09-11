@@ -130,16 +130,16 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "aggregate_duplicate_key_count": 0,
         "entity_count": 12,
         "error_count": 0,
-        "fact_count": 202590,
+        "fact_count": 205143,
         "geography_count": 12553,
         "period_count": 492,
         "semantic_duplicate_key_count": 177,
         "skipped_source_count": 10,
         "source_count": 50,
-        "source_package_count": 191,
+        "source_package_count": 196,
         "warning_count": 1,
     }
-    assert len(rows) == 202590
+    assert len(rows) == 205143
     assert {row["provenance_class"] for row in rows} <= {
         "administrative",
         "census",
@@ -157,7 +157,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert rows[0]["aggregate_fact_key"].startswith("ledger.aggregate_fact.v2:")
     assert rows[0]["semantic_fact_key"].startswith("ledger.semantic_fact.v2:")
-    assert source_packages["source_package_count"] == 191
+    assert source_packages["source_package_count"] == 196
     assert source_packages["skipped_source_count"] == 10
     assert sorted(item["source"] for item in source_packages["skipped_sources"]) == [
         "census-acs-s0101-congressional-district-age-2024",
@@ -171,7 +171,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "jct-obbba-revenue-estimates-2025",
         "jct-tax-expenditures-2024",
     ]
-    assert coverage["fact_count"] == 202590
+    assert coverage["fact_count"] == 205143
     assert coverage["counts"]["by_source"] == {
         "bea": 445,
         "bfp_economic_outlook": 5,
@@ -188,7 +188,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "dfc_ni": 1189,
         "dfi_ni": 24,
         "dft": 1799,
-        "dwp": 10831,
+        "dwp": 13384,
         "eurostat": 207,
         "federal_reserve": 1,
         "fpb_economic_outlook": 1000,
@@ -225,7 +225,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "welshgov": 1047,
     }
     table_counts = coverage["counts"]["by_source_table"]
-    assert len(table_counts) == 186
+    assert len(table_counts) == 191
     assert (
         table_counts[
             "dwp:Households on Universal Credit by family type, "
@@ -306,16 +306,9 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert (
         table_counts[
-            "dwp:Universal Credit childcare element statistics to August 2025, Table 1"
+            "dwp:Universal Credit childcare element statistics to May 2026, Tables 1 and 3"
         ]
-        == 54
-    )
-    assert (
-        table_counts[
-            "dwp:Households on Universal Credit with carer entitlement, "
-            "April to December 2025"
-        ]
-        == 9
+        == 252
     )
     assert (
         table_counts[
@@ -333,17 +326,59 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert (
         table_counts[
-            "dwp:Households on Universal Credit with housing entitlement, "
-            "April to December 2025"
+            "dwp:Households on Universal Credit by housing entitlement tenure and payment indicator, "
+            "January 2023 to May 2026"
         ]
-        == 9
+        == 492
     )
     assert (
         table_counts[
-            "dwp:Households on Universal Credit with LCWRA entitlement, "
-            "April to December 2025"
+            "dwp:Households on Universal Credit by housing entitlement and payment indicator, "
+            "January 2023 to May 2026"
         ]
-        == 9
+        == 123
+    )
+    assert (
+        table_counts[
+            "dwp:Households on Universal Credit by limited capability for work entitlement "
+            "and payment indicator, January 2023 to May 2026"
+        ]
+        == 492
+    )
+    assert (
+        table_counts[
+            "dwp:Households on Universal Credit by limited capability for work entitlement "
+            "group and payment indicator, January 2023 to May 2026"
+        ]
+        == 123
+    )
+    assert (
+        table_counts[
+            "dwp:Households on Universal Credit by carer entitlement and payment indicator, "
+            "January 2023 to May 2026"
+        ]
+        == 246
+    )
+    assert (
+        table_counts[
+            "dwp:People on Universal Credit by employment indicator, "
+            "January 2023 to May 2026"
+        ]
+        == 162
+    )
+    assert (
+        table_counts[
+            "dwp:Housing Benefit claimants by client type and tenure, "
+            "January 2023 to February 2026"
+        ]
+        == 456
+    )
+    assert (
+        table_counts[
+            "dwp:Housing Benefit claimants by client type, tenure and accommodation type, "
+            "September 2025 to February 2026"
+        ]
+        == 288
     )
     assert table_counts["usda_snap:SNAP FY2025 Monthly State Participation"] == 636
     assert (
@@ -752,69 +787,69 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "month:2019-08": 23,
         "month:2020-05": 21,
         "month:2020-08": 23,
-        "month:2021-03": 1,
-        "month:2021-04": 1,
-        "month:2021-05": 22,
-        "month:2021-06": 1,
-        "month:2021-07": 1,
-        "month:2021-08": 24,
-        "month:2021-09": 1,
-        "month:2021-10": 1,
-        "month:2021-11": 1,
-        "month:2021-12": 1,
-        "month:2022-01": 1,
-        "month:2022-02": 1,
-        "month:2022-03": 1,
-        "month:2022-04": 1,
-        "month:2022-05": 22,
-        "month:2022-06": 1,
-        "month:2022-07": 1,
-        "month:2022-08": 24,
-        "month:2022-09": 1,
-        "month:2022-10": 1,
-        "month:2022-11": 1,
-        "month:2022-12": 1,
-        "month:2023-01": 380,
-        "month:2023-02": 379,
-        "month:2023-03": 387,
-        "month:2023-04": 453,
-        "month:2023-05": 474,
-        "month:2023-06": 461,
-        "month:2023-07": 453,
-        "month:2023-08": 476,
-        "month:2023-09": 461,
-        "month:2023-10": 453,
-        "month:2023-11": 453,
-        "month:2023-12": 467,
-        "month:2024-01": 448,
-        "month:2024-02": 447,
-        "month:2024-03": 455,
-        "month:2024-04": 453,
-        "month:2024-05": 474,
-        "month:2024-06": 461,
-        "month:2024-07": 453,
-        "month:2024-08": 476,
-        "month:2024-09": 461,
-        "month:2024-10": 559,
-        "month:2024-11": 559,
-        "month:2024-12": 837,
-        "month:2025-01": 555,
-        "month:2025-02": 553,
-        "month:2025-03": 683,
-        "month:2025-04": 753,
-        "month:2025-05": 6720,
-        "month:2025-06": 669,
-        "month:2025-07": 661,
-        "month:2025-08": 1098,
-        "month:2025-09": 677,
-        "month:2025-10": 660,
-        "month:2025-11": 675,
-        "month:2025-12": 924,
-        "month:2026-01": 449,
-        "month:2026-02": 453,
-        "month:2026-03": 454,
-        "month:2026-04": 446,
-        "month:2026-05": 445,
+        "month:2021-03": 4,
+        "month:2021-04": 4,
+        "month:2021-05": 25,
+        "month:2021-06": 4,
+        "month:2021-07": 4,
+        "month:2021-08": 27,
+        "month:2021-09": 4,
+        "month:2021-10": 4,
+        "month:2021-11": 4,
+        "month:2021-12": 4,
+        "month:2022-01": 4,
+        "month:2022-02": 4,
+        "month:2022-03": 4,
+        "month:2022-04": 4,
+        "month:2022-05": 25,
+        "month:2022-06": 4,
+        "month:2022-07": 4,
+        "month:2022-08": 27,
+        "month:2022-09": 4,
+        "month:2022-10": 4,
+        "month:2022-11": 4,
+        "month:2022-12": 4,
+        "month:2023-01": 435,
+        "month:2023-02": 434,
+        "month:2023-03": 442,
+        "month:2023-04": 508,
+        "month:2023-05": 529,
+        "month:2023-06": 516,
+        "month:2023-07": 508,
+        "month:2023-08": 531,
+        "month:2023-09": 516,
+        "month:2023-10": 508,
+        "month:2023-11": 508,
+        "month:2023-12": 522,
+        "month:2024-01": 503,
+        "month:2024-02": 502,
+        "month:2024-03": 510,
+        "month:2024-04": 508,
+        "month:2024-05": 529,
+        "month:2024-06": 516,
+        "month:2024-07": 508,
+        "month:2024-08": 531,
+        "month:2024-09": 516,
+        "month:2024-10": 614,
+        "month:2024-11": 614,
+        "month:2024-12": 892,
+        "month:2025-01": 610,
+        "month:2025-02": 608,
+        "month:2025-03": 738,
+        "month:2025-04": 805,
+        "month:2025-05": 6772,
+        "month:2025-06": 721,
+        "month:2025-07": 713,
+        "month:2025-08": 1150,
+        "month:2025-09": 778,
+        "month:2025-10": 761,
+        "month:2025-11": 776,
+        "month:2025-12": 1025,
+        "month:2026-01": 553,
+        "month:2026-02": 557,
+        "month:2026-03": 498,
+        "month:2026-04": 490,
+        "month:2026-05": 487,
         "month:2026-06": 348,
         "tax_year:1987": 9,
         "tax_year:1988": 9,
@@ -990,11 +1025,11 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
     )
     assert coverage["counts"]["by_geography"]["country:K02000001"] == 7356
     assert coverage["counts"]["by_geography"]["country:E92000001"] == 2967
-    assert coverage["counts"]["by_geography"]["country:K03000001"] == 5427
+    assert coverage["counts"]["by_geography"]["country:K03000001"] == 7980
     assert coverage["counts"]["by_geography"]["statistical_scope:ofgem:london"] == 216
     assert len(coverage["counts"]["by_geography"]) == 12553
     assert coverage["counts"]["by_entity"] == {
-        "benefit_unit": 4680,
+        "benefit_unit": 7071,
         "dwelling": 27269,
         "family": 1299,
         "firm": 1439,
@@ -1002,7 +1037,7 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "household": 44441,
         "institutional_sector": 1185,
         "pension_plan": 2,
-        "person": 64831,
+        "person": 64993,
         "return": 14600,
         "social_protection_scheme": 36,
         "tax_unit": 40495,
@@ -1023,12 +1058,17 @@ def test_build_bundle_writes_merged_consumer_contract(tmp_path):
         "dft-bus0415-fares-index-2026",
         "dft-bus05i-revenue-support-2025",
         "dft-nts0705-local-bus-trips-2024",
-        "dwp-uc-childcare-element-march-2021-august-2025",
-        "dwp-uc-households-carer-entitlement-april-december-2025",
+        "dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026",
+        "dwp-hb-claimants-client-type-tenure-january-2023-february-2026",
+        "dwp-uc-childcare-element-march-2021-may-2026",
+        "dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026",
         "dwp-uc-households-children-april-december-2025",
         "dwp-uc-households-family-type-april-december-2025",
-        "dwp-uc-households-housing-entitlement-april-december-2025",
-        "dwp-uc-households-lcwra-entitlement-april-december-2025",
+        "dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026",
+        "dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026",
+        "dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026",
+        "dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026",
+        "dwp-uc-people-employment-indicator-january-2023-may-2026",
         "hmrc-tax-free-childcare-march-2026",
         "dfc-ni-uc-statistics-may-2026",
         "hmrc-cgt-age-2026",

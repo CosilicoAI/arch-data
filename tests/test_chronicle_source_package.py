@@ -712,14 +712,19 @@ def test_dwp_uc_deductions_package_preserves_rows_and_derives_uc_units():
 
 
 def test_dwp_uc_childcare_element_package_preserves_monthly_publisher_series():
-    package = load_source_package("dwp-uc-childcare-element-march-2021-august-2025")
-    facts = package.build_facts(2025)
+    package = load_source_package("dwp-uc-childcare-element-march-2021-may-2026")
+    facts = [
+        fact
+        for fact in package.build_facts(2025)
+        if fact.layout.measure_id == "benefit_units"
+    ]
     values = {fact.period.value: fact.value for fact in facts}
 
-    assert len(facts) == 54
+    assert len(facts) == 63
     assert values["2021-03"] == 88_000
-    assert values["2024-08"] == 171_000
-    assert values["2025-08"] == 160_000
+    # The May 2026 tables revised August 2025 from 160,000 (August 2025 vintage).
+    assert values["2025-08"] == 165_000
+    assert values["2026-05"] == 164_000
     assert all(
         fact.measure.concept == "dwp.uc_benefit_units_with_childcare_element"
         for fact in facts
@@ -822,60 +827,6 @@ def test_ons_pipr_area_package_emits_2023_to_june_2026_months():
     assert all(
         fact.measure.concept == "ons.pipr_average_monthly_rent" for fact in facts
     )
-    assert validate_consumer_fact_contract(facts).valid
-
-
-@pytest.mark.parametrize(
-    ("alias", "concept", "april_value", "december_value"),
-    [
-        (
-            "dwp-uc-households-housing-entitlement-april-december-2025",
-            "dwp.uc_benefit_units_with_housing_element",
-            4_097_119,
-            4_464_277,
-        ),
-        (
-            "dwp-uc-households-lcwra-entitlement-april-december-2025",
-            "dwp.uc_benefit_units_with_lcwra_element",
-            2_071_127,
-            2_706_904,
-        ),
-        (
-            "dwp-uc-households-carer-entitlement-april-december-2025",
-            "dwp.uc_benefit_units_with_carer_element",
-            1_081_717,
-            1_181_358,
-        ),
-    ],
-)
-def test_dwp_uc_element_packages_emit_one_benefit_unit_fact_per_month(
-    alias,
-    concept,
-    april_value,
-    december_value,
-):
-    facts = load_source_package(alias).build_facts(2025)
-
-    assert [fact.period.value for fact in facts] == [
-        "2025-04",
-        "2025-05",
-        "2025-06",
-        "2025-07",
-        "2025-08",
-        "2025-09",
-        "2025-10",
-        "2025-11",
-        "2025-12",
-    ]
-    assert all(fact.measure.concept == concept for fact in facts)
-    assert all(fact.period.type == "month" for fact in facts)
-    assert all(fact.entity.name == "benefit_unit" for fact in facts)
-    assert all(fact.geography.id == "K03000001" for fact in facts)
-    assert all(fact.assertion == "observation" for fact in facts)
-    assert all(fact.provenance_class == "administrative" for fact in facts)
-    assert all(fact.source_row_keys for fact in facts)
-    assert facts[0].value == april_value
-    assert facts[-1].value == december_value
     assert validate_consumer_fact_contract(facts).valid
 
 

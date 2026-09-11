@@ -1,0 +1,276 @@
+{
+  "query" : {
+    "database" : "str:database:UC_Households",
+    "measures" : [ "str:count:UC_Households:V_F_UC_HOUSEHOLDS" ],
+    "recodes" : {
+      "str:field:UC_Households:F_UC_HH_DATE:DATE_NAME" : {
+        "map" : [ [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202301" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202302" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202303" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202304" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202305" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202306" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202307" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202308" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202309" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202310" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202311" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202312" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202401" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202402" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202403" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202404" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202405" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202406" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202407" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202408" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202409" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202410" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202411" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202412" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202501" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202502" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202503" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202504" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202505" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202506" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202507" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202508" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202509" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202510" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202511" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202512" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202601" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202602" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202603" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202604" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202605" ] ],
+        "total" : false
+      },
+      "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT" : {
+        "map" : [ [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1" ] ],
+        "total" : true
+      },
+      "str:field:UC_Households:V_F_UC_HOUSEHOLDS:TENURE" : {
+        "map" : [ [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:TENURE:C_UC_HOUSING_TENURE:0" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:TENURE:C_UC_HOUSING_TENURE:1" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:TENURE:C_UC_HOUSING_TENURE:2" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:TENURE:C_UC_HOUSING_TENURE:3" ] ],
+        "total" : false
+      }
+    },
+    "dimensions" : [ [ "str:field:UC_Households:F_UC_HH_DATE:DATE_NAME" ], [ "str:field:UC_Households:V_F_UC_HOUSEHOLDS:TENURE" ], [ "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT" ] ]
+  },
+  "database" : {
+    "id" : "UC_Households",
+    "uri" : "str:database:UC_Households",
+    "label" : "Households on Universal Credit",
+    "annotationKeys" : [ "I", "II", "III", "IV", "z" ]
+  },
+  "measures" : [ {
+    "uri" : "str:count:UC_Households:V_F_UC_HOUSEHOLDS",
+    "label" : "Households on Universal Credit",
+    "measure" : "str:count:UC_Households:V_F_UC_HOUSEHOLDS",
+    "function" : "COUNT"
+  } ],
+  "fields" : [ {
+    "uri" : "str:field:UC_Households:F_UC_HH_DATE:DATE_NAME",
+    "label" : "Month",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202301" ],
+      "labels" : [ "January 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202302" ],
+      "labels" : [ "February 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202303" ],
+      "labels" : [ "March 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202304" ],
+      "labels" : [ "April 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202305" ],
+      "labels" : [ "May 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202306" ],
+      "labels" : [ "June 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202307" ],
+      "labels" : [ "July 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202308" ],
+      "labels" : [ "August 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202309" ],
+      "labels" : [ "September 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202310" ],
+      "labels" : [ "October 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202311" ],
+      "labels" : [ "November 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202312" ],
+      "labels" : [ "December 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202401" ],
+      "labels" : [ "January 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202402" ],
+      "labels" : [ "February 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202403" ],
+      "labels" : [ "March 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202404" ],
+      "labels" : [ "April 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202405" ],
+      "labels" : [ "May 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202406" ],
+      "labels" : [ "June 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202407" ],
+      "labels" : [ "July 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202408" ],
+      "labels" : [ "August 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202409" ],
+      "labels" : [ "September 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202410" ],
+      "labels" : [ "October 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202411" ],
+      "labels" : [ "November 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202412" ],
+      "labels" : [ "December 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202501" ],
+      "labels" : [ "January 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202502" ],
+      "labels" : [ "February 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202503" ],
+      "labels" : [ "March 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202504" ],
+      "labels" : [ "April 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202505" ],
+      "labels" : [ "May 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202506" ],
+      "labels" : [ "June 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202507" ],
+      "labels" : [ "July 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202508" ],
+      "labels" : [ "August 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202509" ],
+      "labels" : [ "September 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202510" ],
+      "labels" : [ "October 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202511" ],
+      "labels" : [ "November 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202512" ],
+      "labels" : [ "December 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202601" ],
+      "labels" : [ "January 2026" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202602" ],
+      "labels" : [ "February 2026" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202603" ],
+      "labels" : [ "March 2026" ],
+      "annotationKeys" : [ "p" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202604" ],
+      "labels" : [ "April 2026" ],
+      "annotationKeys" : [ "p" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202605" ],
+      "labels" : [ "May 2026" ],
+      "annotationKeys" : [ "p" ]
+    } ]
+  }, {
+    "uri" : "str:field:UC_Households:V_F_UC_HOUSEHOLDS:TENURE",
+    "label" : "Housing Entitlement - Tenure",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:TENURE:C_UC_HOUSING_TENURE:0" ],
+      "labels" : [ "No Housing Entitlement" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:TENURE:C_UC_HOUSING_TENURE:1" ],
+      "labels" : [ "Social Rented Sector" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:TENURE:C_UC_HOUSING_TENURE:2" ],
+      "labels" : [ "Private Rented Sector" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:TENURE:C_UC_HOUSING_TENURE:3" ],
+      "labels" : [ "Other or unknown" ]
+    } ]
+  }, {
+    "uri" : "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT",
+    "label" : "Payment Indicator",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0" ],
+      "labels" : [ "No" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1" ],
+      "labels" : [ "Yes" ]
+    }, {
+      "type" : "Total",
+      "labels" : [ "Total" ]
+    } ]
+  } ],
+  "cubes" : {
+    "str:count:UC_Households:V_F_UC_HOUSEHOLDS" : {
+      "values" : [ [ [ 379428, 1425541, 1804970 ], [ 93300, 1549425, 1642728 ], [ 114264, 1330408, 1444674 ], [ 7565, 71355, 78921 ] ], [ [ 346295, 1475275, 1821574 ], [ 88027, 1568433, 1656460 ], [ 109129, 1342553, 1451679 ], [ 7316, 72915, 80234 ] ], [ [ 330544, 1495646, 1826190 ], [ 84911, 1584162, 1669073 ], [ 108154, 1344387, 1452542 ], [ 7527, 73892, 81419 ] ], [ [ 348857, 1488275, 1837139 ], [ 85134, 1604655, 1689788 ], [ 114016, 1343543, 1457560 ], [ 7880, 73012, 80889 ] ], [ [ 317393, 1524450, 1841839 ], [ 77130, 1625640, 1702771 ], [ 103502, 1357668, 1461172 ], [ 6827, 75008, 81839 ] ], [ [ 344680, 1509496, 1854174 ], [ 82585, 1632764, 1715350 ], [ 109348, 1353990, 1463337 ], [ 7252, 75924, 83174 ] ], [ [ 336401, 1538442, 1874842 ], [ 84918, 1648437, 1733357 ], [ 112274, 1354896, 1467170 ], [ 7437, 77316, 84751 ] ], [ [ 365007, 1530265, 1895270 ], [ 85012, 1661673, 1746682 ], [ 109573, 1359766, 1469338 ], [ 7239, 78839, 86076 ] ], [ [ 347032, 1584298, 1931325 ], [ 88736, 1675643, 1764380 ], [ 110328, 1359259, 1469586 ], [ 7372, 80175, 87549 ] ], [ [ 344671, 1619612, 1964285 ], [ 88594, 1695583, 1784173 ], [ 109543, 1365526, 1475072 ], [ 7354, 81471, 88827 ] ], [ [ 367046, 1631244, 1998288 ], [ 90471, 1711483, 1801956 ], [ 110896, 1369932, 1480832 ], [ 7509, 82636, 90142 ] ], [ [ 368393, 1668284, 2036679 ], [ 97921, 1722787, 1820706 ], [ 115637, 1370621, 1486260 ], [ 8144, 83955, 92093 ] ], [ [ 376768, 1683894, 2060663 ], [ 90179, 1743213, 1833391 ], [ 106184, 1383188, 1489376 ], [ 7400, 85869, 93268 ] ], [ [ 349318, 1766294, 2115614 ], [ 85293, 1768371, 1853667 ], [ 102505, 1395562, 1498067 ], [ 7168, 87939, 95108 ] ], [ [ 351087, 1810524, 2161606 ], [ 84029, 1794070, 1878097 ], [ 105365, 1396110, 1501477 ], [ 7653, 87822, 95479 ] ], [ [ 360508, 1826232, 2186741 ], [ 83064, 1816017, 1899084 ], [ 105691, 1399811, 1505506 ], [ 7766, 86906, 94670 ] ], [ [ 334864, 1880532, 2215391 ], [ 78976, 1844197, 1923171 ], [ 91813, 1420823, 1512638 ], [ 7104, 89421, 96528 ] ], [ [ 355642, 1874521, 2230160 ], [ 83128, 1868091, 1951223 ], [ 96027, 1423380, 1519399 ], [ 7490, 91476, 98970 ] ], [ [ 346216, 1896538, 2242754 ], [ 81689, 1907025, 1988709 ], [ 94028, 1438756, 1532782 ], [ 7540, 93108, 100650 ] ], [ [ 376180, 1881374, 2257557 ], [ 84643, 1946169, 2030810 ], [ 94787, 1454877, 1549663 ], [ 7763, 94800, 102560 ] ], [ [ 366999, 1914287, 2281291 ], [ 89929, 1989545, 2079472 ], [ 97672, 1469093, 1566766 ], [ 8118, 96597, 104718 ] ], [ [ 359133, 1934385, 2293520 ], [ 90574, 2020698, 2111271 ], [ 98713, 1477865, 1576580 ], [ 8498, 98088, 106588 ] ], [ [ 376519, 1932973, 2309489 ], [ 95824, 2060567, 2156390 ], [ 103266, 1488387, 1591653 ], [ 8926, 99951, 108869 ] ], [ [ 374515, 1956048, 2330561 ], [ 96930, 2087586, 2184519 ], [ 104677, 1498633, 1603311 ], [ 9131, 101373, 110508 ] ], [ [ 378203, 1965906, 2344106 ], [ 86900, 2122775, 2209669 ], [ 93744, 1518385, 1612131 ], [ 8298, 104001, 112298 ] ], [ [ 333650, 2055461, 2389112 ], [ 78744, 2175396, 2254136 ], [ 87421, 1542323, 1629743 ], [ 7744, 107359, 115103 ] ], [ [ 335570, 2064511, 2400081 ], [ 80614, 2211155, 2291767 ], [ 92554, 1546298, 1638857 ], [ 8231, 108121, 116345 ] ], [ [ 348900, 2073173, 2422078 ], [ 81071, 2253181, 2334247 ], [ 96396, 1551868, 1648265 ], [ 8358, 106247, 114606 ] ], [ [ 325684, 2108768, 2434453 ], [ 77833, 2299049, 2376880 ], [ 92895, 1563597, 1656487 ], [ 8078, 108537, 116616 ] ], [ [ 342638, 2122038, 2464678 ], [ 80475, 2352265, 2432737 ], [ 95352, 1572497, 1667847 ], [ 8454, 110893, 119353 ] ], [ [ 338228, 2164197, 2502427 ], [ 80503, 2392215, 2472716 ], [ 95242, 1579459, 1674702 ], [ 8646, 112678, 121327 ] ], [ [ 377155, 2175665, 2552820 ], [ 87415, 2428814, 2516227 ], [ 98582, 1582828, 1681408 ], [ 9319, 114648, 123965 ] ], [ [ 364135, 2242116, 2606246 ], [ 89213, 2461953, 2551166 ], [ 99014, 1587856, 1686873 ], [ 9471, 116557, 126027 ] ], [ [ 347269, 2296470, 2643738 ], [ 86810, 2496869, 2583678 ], [ 97627, 1595110, 1692740 ], [ 9349, 118721, 128073 ] ], [ [ 361984, 2313790, 2675774 ], [ 87942, 2523943, 2611883 ], [ 99511, 1600894, 1700404 ], [ 9607, 120488, 130091 ] ], [ [ 355939, 2333828, 2689767 ], [ 89190, 2537436, 2626631 ], [ 100507, 1605430, 1705935 ], [ 9745, 121971, 131717 ] ], [ [ 359342, 2321484, 2680825 ], [ 82132, 2545257, 2627388 ], [ 91938, 1613272, 1705214 ], [ 9146, 123576, 132720 ] ], [ [ 309854, 2378243, 2688092 ], [ 74314, 2559049, 2633363 ], [ 85122, 1623450, 1708571 ], [ 8489, 125645, 134130 ] ], [ [ 301534, 2374772, 2676312 ], [ 73892, 2563163, 2637057 ], [ 86629, 1620586, 1707219 ], [ 8665, 125238, 133897 ] ], [ [ 312168, 2362616, 2674781 ], [ 73536, 2570708, 2644246 ], [ 89150, 1616981, 1706123 ], [ 8570, 122676, 131242 ] ], [ [ 289027, 2383483, 2672509 ], [ 68737, 2580761, 2649503 ], [ 84330, 1619930, 1704264 ], [ 7727, 123224, 130950 ] ] ],
+      "precision" : 0
+    }
+  },
+  "annotationMap" : {
+    "I" : "A limited test of the full Universal Credit service was launched in Sutton, South London on 26th November 2014, and has expanded to other areas since. This publication now includes statistics covering both the live and full Universal Credit service. Please see https://www.gov.uk/government/publications/universal-credit-transition-to-full-service for details of the areas in which the full Universal Credit service is operating.",
+    "II" : "Data for more recent months will be subject to a higher degree of revision. Universal Credit award amounts may be retrospectively revised.",
+    "III" : "Monthly award amounts include any awards due to entitlement such as the standard allowance or housing entitlement plus any advance payments. Advance payments will normally be recovered during subsequent assessment periods.",
+    "IV" : "Award, entitlement and payment information may be missing for a very small number of households on Universal Credit, where more limited information is entered onto IT systems.",
+    "z" : "\"..\" denotes a nil or negligible number of claimants or award amount based on a nil or negligible number of claimants.",
+    "r" : "Figures marked \"r\" have been revised since the previous release.",
+    "p" : "Figures marked \"p\" are provisional. These figures will be subject to revision in subsequent releases. It is expected that overall provisional figures will be within two per cent of their revised figure in future releases."
+  }
+}

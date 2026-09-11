@@ -1,0 +1,875 @@
+# DWP People on Universal Credit (Stat-Xplore UC_Monthly), person grain: both partners of a
+# joint claim are counted, so these counts are not benefit-unit shares and do not
+# reconcile with the UC_Households cubes. UC_Households carries no earnings or employment
+# field (checked against the Stat-Xplore schema on 11 September 2026), which is why
+# chronicle#259 item 4 lands on this dataset. January 2023 through May 2026 (41 months;
+# 202606 is rejected), 18 August 2026 release. No Chronicle-side summation is emitted.
+# Employment Indicator, banded value set C_UC_EMPLOYMENT_2023_BAND: 'In employment (PAYE) or
+# self-employment' (HMRC Real Time Information PAYE earnings in the assessment period
+# spanning the count date, or self-employed earnings reported to DWP), 'Not in employment
+# (PAYE) or self-employment', and 'Not available'. The detailed value set (PAYE only,
+# self-employment only, both) is not ported. The recode requests total: true, so DWP emits
+# the all-people Total itself (.total record sets, employment_indicator: all).
+# DWP holds the indicator for the latest month back until the next release (annotation V):
+# in May 2026 every person is 'Not available', so the two employment categories are not
+# ported for May 2026 (zeros by unavailability); that month's 'Not available' row and Total
+# are. DWP marks April and May 2025 'rev': revised, and not previously on Stat-Xplore
+# because the data was suspended.
+schema_version: ledger.source_package.v1
+package_id: dwp-uc-people-employment-indicator-january-2023-may-2026
+label: 'DWP Stat-Xplore: People on Universal Credit by employment indicator, Great Britain, January 2023 to May 2026'
+artifact:
+  source_name: dwp
+  source_table: 'People on Universal Credit by employment indicator, January 2023 to May 2026'
+  resource_package: db
+  resource_directory: data/dwp/uc_people_employment_indicator_january_2023_may_2026
+  manifest: manifest.yaml
+  vintage: stat_xplore_2026_09_11
+  extracted_at: '2026-09-11'
+  extraction_method: >-
+    Stat-Xplore Open Data API table response parsed and unpivoted to one row per cube cell;
+    database str:database:UC_Monthly; measure str:count:UC_Monthly:V_F_UC_CASELOAD_FULL;
+    fields in response order:
+    str:field:UC_Monthly:F_UC_DATE:DATE_NAME;
+    str:field:UC_Monthly:V_F_UC_CASELOAD_FULL:EMPLOYMENT_CODE;
+    value sets: C_UC_DATE, C_UC_EMPLOYMENT_2023_BAND;
+    months January 2023 through May 2026 (202301 through 202605), inclusive;
+    recode total: true on EMPLOYMENT_CODE only, all other recodes total: false.
+  parser: statxplore_table_json_rows
+  sheet_name: api_response
+  artifact_year: 2025
+record_sets:
+- &monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_01.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_01
+  sheet_name: api_response
+  period_type: month
+  period: 2023-01
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: person
+  entity_role: universal_credit_claimant
+  domain: universal_credit
+  groupby_dimension: dwp.uc_employment_indicator
+  assertion: observation
+  rows:
+  - &employment_not_in_employment_paye_or_self_employment
+    value_id: employment_not_in_employment_paye_or_self_employment
+    label: 'Not in employment (PAYE) or self-employment'
+    ordinal: 0
+    row_number: 2
+    expected_row_header_column: F
+    expected_row_header: 'str:value:UC_Monthly:V_F_UC_CASELOAD_FULL:EMPLOYMENT_CODE:C_UC_EMPLOYMENT_2023_BAND:0'
+    table_record_kind: detail
+    filters: {employment_indicator: 'Not in employment (PAYE) or self-employment'}
+    constraints:
+    - {variable: employment_indicator, operator: '==', value: 'Not in employment (PAYE) or self-employment', label: employment indicator}
+    guard_cells: [{column: C, row: 2, expected_value: 'January 2023', label: month}]
+  - &employment_in_employment_paye_or_self_employment
+    value_id: employment_in_employment_paye_or_self_employment
+    label: 'In employment (PAYE) or self-employment'
+    ordinal: 1
+    row_number: 3
+    expected_row_header_column: F
+    expected_row_header: 'str:value:UC_Monthly:V_F_UC_CASELOAD_FULL:EMPLOYMENT_CODE:C_UC_EMPLOYMENT_2023_BAND:1'
+    table_record_kind: detail
+    filters: {employment_indicator: 'In employment (PAYE) or self-employment'}
+    constraints:
+    - {variable: employment_indicator, operator: '==', value: 'In employment (PAYE) or self-employment', label: employment indicator}
+    guard_cells: [{column: C, row: 3, expected_value: 'January 2023', label: month}]
+  - &employment_not_available
+    value_id: employment_not_available
+    label: 'Not available'
+    ordinal: 2
+    row_number: 4
+    expected_row_header_column: F
+    expected_row_header: 'str:value:UC_Monthly:V_F_UC_CASELOAD_FULL:EMPLOYMENT_CODE:C_UC_EMPLOYMENT_2023_BAND:99'
+    table_record_kind: detail
+    filters: {employment_indicator: 'Not available'}
+    constraints:
+    - {variable: employment_indicator, operator: '==', value: 'Not available', label: employment indicator}
+    guard_cells: [{column: C, row: 4, expected_value: 'January 2023', label: month}]
+  measures:
+  - measure_id: people
+    label: 'People on Universal Credit'
+    ordinal: 0
+    column: B
+    source_column_id: value
+    expected_column_header_row: 1
+    expected_column_header: value
+    concept: dwp.uc_people
+    source_concept: dwp.people_on_universal_credit
+    concept_relation: source_label
+    concept_authority: dwp
+    concept_evidence_url: https://stat-xplore.dwp.gov.uk/webapi/metadata/UC_Monthly/Employment%20Indicator.html
+    concept_evidence_notes: 'DWP People on Universal Credit (UC_Monthly) cube cells for January 2023 to May 2026 by the banded employment indicator preserve the publisher labels and value URIs. People are individual claimants; both partners of a joint claim are counted.'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+- &monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_01.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_01.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_01.total
+  sheet_name: api_response
+  period_type: month
+  period: 2023-01
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: person
+  entity_role: universal_credit_claimant
+  domain: universal_credit
+  groupby_dimension: dwp.uc_employment_indicator
+  assertion: observation
+  rows:
+  - &employment_all
+    value_id: employment_all
+    label: 'Total'
+    ordinal: 0
+    row_number: 5
+    expected_row_header_column: E
+    expected_row_header: Total
+    table_record_kind: total
+    filters: {employment_indicator: 'all'}
+    guard_cells: [{column: C, row: 5, expected_value: 'January 2023', label: month}]
+  measures:
+  - measure_id: total_people
+    label: 'People on Universal Credit, published total over employment indicator'
+    ordinal: 0
+    column: B
+    source_column_id: value
+    expected_column_header_row: 1
+    expected_column_header: value
+    concept: dwp.uc_people
+    source_concept: dwp.people_on_universal_credit
+    concept_relation: source_label
+    concept_authority: dwp
+    concept_evidence_url: https://stat-xplore.dwp.gov.uk/webapi/metadata/UC_Monthly/Employment%20Indicator.html
+    concept_evidence_notes: 'DWP emits this Total item itself (recode total: true on EMPLOYMENT_CODE); Chronicle does not sum the categories.'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_02.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_02
+  period: 2023-02
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 6, guard_cells: [{column: C, row: 6, expected_value: 'February 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 7, guard_cells: [{column: C, row: 7, expected_value: 'February 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 8, guard_cells: [{column: C, row: 8, expected_value: 'February 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_02.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_02.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_02.total
+  period: 2023-02
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 9, guard_cells: [{column: C, row: 9, expected_value: 'February 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_03.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_03
+  period: 2023-03
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 10, guard_cells: [{column: C, row: 10, expected_value: 'March 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 11, guard_cells: [{column: C, row: 11, expected_value: 'March 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 12, guard_cells: [{column: C, row: 12, expected_value: 'March 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_03.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_03.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_03.total
+  period: 2023-03
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 13, guard_cells: [{column: C, row: 13, expected_value: 'March 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_04.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_04
+  period: 2023-04
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 14, guard_cells: [{column: C, row: 14, expected_value: 'April 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 15, guard_cells: [{column: C, row: 15, expected_value: 'April 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 16, guard_cells: [{column: C, row: 16, expected_value: 'April 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_04.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_04.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_04.total
+  period: 2023-04
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 17, guard_cells: [{column: C, row: 17, expected_value: 'April 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_05.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_05
+  period: 2023-05
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 18, guard_cells: [{column: C, row: 18, expected_value: 'May 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 19, guard_cells: [{column: C, row: 19, expected_value: 'May 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 20, guard_cells: [{column: C, row: 20, expected_value: 'May 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_05.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_05.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_05.total
+  period: 2023-05
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 21, guard_cells: [{column: C, row: 21, expected_value: 'May 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_06.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_06
+  period: 2023-06
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 22, guard_cells: [{column: C, row: 22, expected_value: 'June 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 23, guard_cells: [{column: C, row: 23, expected_value: 'June 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 24, guard_cells: [{column: C, row: 24, expected_value: 'June 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_06.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_06.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_06.total
+  period: 2023-06
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 25, guard_cells: [{column: C, row: 25, expected_value: 'June 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_07.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_07
+  period: 2023-07
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 26, guard_cells: [{column: C, row: 26, expected_value: 'July 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 27, guard_cells: [{column: C, row: 27, expected_value: 'July 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 28, guard_cells: [{column: C, row: 28, expected_value: 'July 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_07.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_07.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_07.total
+  period: 2023-07
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 29, guard_cells: [{column: C, row: 29, expected_value: 'July 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_08.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_08
+  period: 2023-08
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 30, guard_cells: [{column: C, row: 30, expected_value: 'August 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 31, guard_cells: [{column: C, row: 31, expected_value: 'August 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 32, guard_cells: [{column: C, row: 32, expected_value: 'August 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_08.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_08.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_08.total
+  period: 2023-08
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 33, guard_cells: [{column: C, row: 33, expected_value: 'August 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_09.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_09
+  period: 2023-09
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 34, guard_cells: [{column: C, row: 34, expected_value: 'September 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 35, guard_cells: [{column: C, row: 35, expected_value: 'September 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 36, guard_cells: [{column: C, row: 36, expected_value: 'September 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_09.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_09.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_09.total
+  period: 2023-09
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 37, guard_cells: [{column: C, row: 37, expected_value: 'September 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_10.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_10
+  period: 2023-10
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 38, guard_cells: [{column: C, row: 38, expected_value: 'October 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 39, guard_cells: [{column: C, row: 39, expected_value: 'October 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 40, guard_cells: [{column: C, row: 40, expected_value: 'October 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_10.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_10.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_10.total
+  period: 2023-10
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 41, guard_cells: [{column: C, row: 41, expected_value: 'October 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_11.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_11
+  period: 2023-11
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 42, guard_cells: [{column: C, row: 42, expected_value: 'November 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 43, guard_cells: [{column: C, row: 43, expected_value: 'November 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 44, guard_cells: [{column: C, row: 44, expected_value: 'November 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_11.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_11.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_11.total
+  period: 2023-11
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 45, guard_cells: [{column: C, row: 45, expected_value: 'November 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_12.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_12
+  period: 2023-12
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 46, guard_cells: [{column: C, row: 46, expected_value: 'December 2023', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 47, guard_cells: [{column: C, row: 47, expected_value: 'December 2023', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 48, guard_cells: [{column: C, row: 48, expected_value: 'December 2023', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2023_12.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2023_12.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2023_12.total
+  period: 2023-12
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 49, guard_cells: [{column: C, row: 49, expected_value: 'December 2023', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_01.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_01
+  period: 2024-01
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 50, guard_cells: [{column: C, row: 50, expected_value: 'January 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 51, guard_cells: [{column: C, row: 51, expected_value: 'January 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 52, guard_cells: [{column: C, row: 52, expected_value: 'January 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_01.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_01.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_01.total
+  period: 2024-01
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 53, guard_cells: [{column: C, row: 53, expected_value: 'January 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_02.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_02
+  period: 2024-02
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 54, guard_cells: [{column: C, row: 54, expected_value: 'February 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 55, guard_cells: [{column: C, row: 55, expected_value: 'February 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 56, guard_cells: [{column: C, row: 56, expected_value: 'February 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_02.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_02.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_02.total
+  period: 2024-02
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 57, guard_cells: [{column: C, row: 57, expected_value: 'February 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_03.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_03
+  period: 2024-03
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 58, guard_cells: [{column: C, row: 58, expected_value: 'March 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 59, guard_cells: [{column: C, row: 59, expected_value: 'March 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 60, guard_cells: [{column: C, row: 60, expected_value: 'March 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_03.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_03.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_03.total
+  period: 2024-03
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 61, guard_cells: [{column: C, row: 61, expected_value: 'March 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_04.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_04
+  period: 2024-04
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 62, guard_cells: [{column: C, row: 62, expected_value: 'April 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 63, guard_cells: [{column: C, row: 63, expected_value: 'April 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 64, guard_cells: [{column: C, row: 64, expected_value: 'April 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_04.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_04.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_04.total
+  period: 2024-04
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 65, guard_cells: [{column: C, row: 65, expected_value: 'April 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_05.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_05
+  period: 2024-05
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 66, guard_cells: [{column: C, row: 66, expected_value: 'May 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 67, guard_cells: [{column: C, row: 67, expected_value: 'May 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 68, guard_cells: [{column: C, row: 68, expected_value: 'May 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_05.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_05.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_05.total
+  period: 2024-05
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 69, guard_cells: [{column: C, row: 69, expected_value: 'May 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_06.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_06
+  period: 2024-06
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 70, guard_cells: [{column: C, row: 70, expected_value: 'June 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 71, guard_cells: [{column: C, row: 71, expected_value: 'June 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 72, guard_cells: [{column: C, row: 72, expected_value: 'June 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_06.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_06.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_06.total
+  period: 2024-06
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 73, guard_cells: [{column: C, row: 73, expected_value: 'June 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_07.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_07
+  period: 2024-07
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 74, guard_cells: [{column: C, row: 74, expected_value: 'July 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 75, guard_cells: [{column: C, row: 75, expected_value: 'July 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 76, guard_cells: [{column: C, row: 76, expected_value: 'July 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_07.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_07.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_07.total
+  period: 2024-07
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 77, guard_cells: [{column: C, row: 77, expected_value: 'July 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_08.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_08
+  period: 2024-08
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 78, guard_cells: [{column: C, row: 78, expected_value: 'August 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 79, guard_cells: [{column: C, row: 79, expected_value: 'August 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 80, guard_cells: [{column: C, row: 80, expected_value: 'August 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_08.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_08.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_08.total
+  period: 2024-08
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 81, guard_cells: [{column: C, row: 81, expected_value: 'August 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_09.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_09
+  period: 2024-09
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 82, guard_cells: [{column: C, row: 82, expected_value: 'September 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 83, guard_cells: [{column: C, row: 83, expected_value: 'September 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 84, guard_cells: [{column: C, row: 84, expected_value: 'September 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_09.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_09.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_09.total
+  period: 2024-09
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 85, guard_cells: [{column: C, row: 85, expected_value: 'September 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_10.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_10
+  period: 2024-10
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 86, guard_cells: [{column: C, row: 86, expected_value: 'October 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 87, guard_cells: [{column: C, row: 87, expected_value: 'October 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 88, guard_cells: [{column: C, row: 88, expected_value: 'October 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_10.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_10.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_10.total
+  period: 2024-10
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 89, guard_cells: [{column: C, row: 89, expected_value: 'October 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_11.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_11
+  period: 2024-11
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 90, guard_cells: [{column: C, row: 90, expected_value: 'November 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 91, guard_cells: [{column: C, row: 91, expected_value: 'November 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 92, guard_cells: [{column: C, row: 92, expected_value: 'November 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_11.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_11.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_11.total
+  period: 2024-11
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 93, guard_cells: [{column: C, row: 93, expected_value: 'November 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_12.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_12
+  period: 2024-12
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 94, guard_cells: [{column: C, row: 94, expected_value: 'December 2024', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 95, guard_cells: [{column: C, row: 95, expected_value: 'December 2024', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 96, guard_cells: [{column: C, row: 96, expected_value: 'December 2024', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2024_12.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2024_12.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2024_12.total
+  period: 2024-12
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 97, guard_cells: [{column: C, row: 97, expected_value: 'December 2024', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_01.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_01
+  period: 2025-01
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 98, guard_cells: [{column: C, row: 98, expected_value: 'January 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 99, guard_cells: [{column: C, row: 99, expected_value: 'January 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 100, guard_cells: [{column: C, row: 100, expected_value: 'January 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_01.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_01.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_01.total
+  period: 2025-01
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 101, guard_cells: [{column: C, row: 101, expected_value: 'January 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_02.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_02
+  period: 2025-02
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 102, guard_cells: [{column: C, row: 102, expected_value: 'February 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 103, guard_cells: [{column: C, row: 103, expected_value: 'February 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 104, guard_cells: [{column: C, row: 104, expected_value: 'February 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_02.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_02.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_02.total
+  period: 2025-02
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 105, guard_cells: [{column: C, row: 105, expected_value: 'February 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_03.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_03
+  period: 2025-03
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 106, guard_cells: [{column: C, row: 106, expected_value: 'March 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 107, guard_cells: [{column: C, row: 107, expected_value: 'March 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 108, guard_cells: [{column: C, row: 108, expected_value: 'March 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_03.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_03.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_03.total
+  period: 2025-03
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 109, guard_cells: [{column: C, row: 109, expected_value: 'March 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_04.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_04
+  period: 2025-04
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 110, guard_cells: [{column: C, row: 110, expected_value: 'April 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 111, guard_cells: [{column: C, row: 111, expected_value: 'April 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 112, guard_cells: [{column: C, row: 112, expected_value: 'April 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_04.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_04.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_04.total
+  period: 2025-04
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 113, guard_cells: [{column: C, row: 113, expected_value: 'April 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_05.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_05
+  period: 2025-05
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 114, guard_cells: [{column: C, row: 114, expected_value: 'May 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 115, guard_cells: [{column: C, row: 115, expected_value: 'May 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 116, guard_cells: [{column: C, row: 116, expected_value: 'May 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_05.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_05.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_05.total
+  period: 2025-05
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 117, guard_cells: [{column: C, row: 117, expected_value: 'May 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_06.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_06
+  period: 2025-06
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 118, guard_cells: [{column: C, row: 118, expected_value: 'June 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 119, guard_cells: [{column: C, row: 119, expected_value: 'June 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 120, guard_cells: [{column: C, row: 120, expected_value: 'June 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_06.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_06.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_06.total
+  period: 2025-06
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 121, guard_cells: [{column: C, row: 121, expected_value: 'June 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_07.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_07
+  period: 2025-07
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 122, guard_cells: [{column: C, row: 122, expected_value: 'July 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 123, guard_cells: [{column: C, row: 123, expected_value: 'July 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 124, guard_cells: [{column: C, row: 124, expected_value: 'July 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_07.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_07.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_07.total
+  period: 2025-07
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 125, guard_cells: [{column: C, row: 125, expected_value: 'July 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_08.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_08
+  period: 2025-08
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 126, guard_cells: [{column: C, row: 126, expected_value: 'August 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 127, guard_cells: [{column: C, row: 127, expected_value: 'August 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 128, guard_cells: [{column: C, row: 128, expected_value: 'August 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_08.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_08.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_08.total
+  period: 2025-08
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 129, guard_cells: [{column: C, row: 129, expected_value: 'August 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_09.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_09
+  period: 2025-09
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 130, guard_cells: [{column: C, row: 130, expected_value: 'September 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 131, guard_cells: [{column: C, row: 131, expected_value: 'September 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 132, guard_cells: [{column: C, row: 132, expected_value: 'September 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_09.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_09.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_09.total
+  period: 2025-09
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 133, guard_cells: [{column: C, row: 133, expected_value: 'September 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_10.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_10
+  period: 2025-10
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 134, guard_cells: [{column: C, row: 134, expected_value: 'October 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 135, guard_cells: [{column: C, row: 135, expected_value: 'October 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 136, guard_cells: [{column: C, row: 136, expected_value: 'October 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_10.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_10.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_10.total
+  period: 2025-10
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 137, guard_cells: [{column: C, row: 137, expected_value: 'October 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_11.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_11
+  period: 2025-11
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 138, guard_cells: [{column: C, row: 138, expected_value: 'November 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 139, guard_cells: [{column: C, row: 139, expected_value: 'November 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 140, guard_cells: [{column: C, row: 140, expected_value: 'November 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_11.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_11.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_11.total
+  period: 2025-11
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 141, guard_cells: [{column: C, row: 141, expected_value: 'November 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_12.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_12
+  period: 2025-12
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 142, guard_cells: [{column: C, row: 142, expected_value: 'December 2025', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 143, guard_cells: [{column: C, row: 143, expected_value: 'December 2025', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 144, guard_cells: [{column: C, row: 144, expected_value: 'December 2025', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2025_12.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2025_12.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2025_12.total
+  period: 2025-12
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 145, guard_cells: [{column: C, row: 145, expected_value: 'December 2025', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_01.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_01
+  period: 2026-01
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 146, guard_cells: [{column: C, row: 146, expected_value: 'January 2026', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 147, guard_cells: [{column: C, row: 147, expected_value: 'January 2026', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 148, guard_cells: [{column: C, row: 148, expected_value: 'January 2026', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_01.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_01.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_01.total
+  period: 2026-01
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 149, guard_cells: [{column: C, row: 149, expected_value: 'January 2026', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_02.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_02
+  period: 2026-02
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 150, guard_cells: [{column: C, row: 150, expected_value: 'February 2026', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 151, guard_cells: [{column: C, row: 151, expected_value: 'February 2026', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 152, guard_cells: [{column: C, row: 152, expected_value: 'February 2026', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_02.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_02.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_02.total
+  period: 2026-02
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 153, guard_cells: [{column: C, row: 153, expected_value: 'February 2026', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_03.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_03
+  period: 2026-03
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 154, guard_cells: [{column: C, row: 154, expected_value: 'March 2026', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 155, guard_cells: [{column: C, row: 155, expected_value: 'March 2026', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 156, guard_cells: [{column: C, row: 156, expected_value: 'March 2026', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_03.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_03.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_03.total
+  period: 2026-03
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 157, guard_cells: [{column: C, row: 157, expected_value: 'March 2026', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_04.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_04
+  period: 2026-04
+  rows:
+  - {<<: *employment_not_in_employment_paye_or_self_employment, ordinal: 0, row_number: 158, guard_cells: [{column: C, row: 158, expected_value: 'April 2026', label: month}]}
+  - {<<: *employment_in_employment_paye_or_self_employment, ordinal: 1, row_number: 159, guard_cells: [{column: C, row: 159, expected_value: 'April 2026', label: month}]}
+  - {<<: *employment_not_available, ordinal: 2, row_number: 160, guard_cells: [{column: C, row: 160, expected_value: 'April 2026', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_04.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_04.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_04.total
+  period: 2026-04
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 161, guard_cells: [{column: C, row: 161, expected_value: 'April 2026', label: month}]}
+- <<: *monthly
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_05.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_05
+  period: 2026-05
+  rows:
+  - {<<: *employment_not_available, ordinal: 0, row_number: 164, guard_cells: [{column: C, row: 164, expected_value: 'May 2026', label: month}]}
+- <<: *monthly_total
+  record_set_id: dwp.statx.uc_people.employment_indicator.month2026_05.total
+  provenance_class: administrative
+  record_set_spec_id: dwp.statx.uc_people.employment_indicator.month2026_05.total.v1
+  source_record_id_prefix: dwp.statx.uc_people.employment_indicator.month2026_05.total
+  period: 2026-05
+  rows:
+  - {<<: *employment_all, ordinal: 0, row_number: 165, guard_cells: [{column: C, row: 165, expected_value: 'May 2026', label: month}]}

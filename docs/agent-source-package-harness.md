@@ -340,16 +340,10 @@ uv run chronicle build-suite dwp-uc-payment-distribution-april-december-2025 \
   --out /tmp/chronicle-dwp-uc-payment-distribution-april-december-2025 \
   --replace
 
-uv run chronicle validate-package dwp-uc-childcare-element-march-2021-august-2025 --year 2025
-uv run chronicle build-suite dwp-uc-childcare-element-march-2021-august-2025 \
+uv run chronicle validate-package dwp-uc-childcare-element-march-2021-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-childcare-element-march-2021-may-2026 \
   --year 2025 \
-  --out /tmp/chronicle-dwp-uc-childcare-element-2025 \
-  --replace
-
-uv run chronicle validate-package dwp-uc-households-carer-entitlement-april-december-2025 --year 2025
-uv run chronicle build-suite dwp-uc-households-carer-entitlement-april-december-2025 \
-  --year 2025 \
-  --out /tmp/chronicle-dwp-uc-carer-entitlement-2025 \
+  --out /tmp/chronicle-dwp-uc-childcare-element-2021-2026 \
   --replace
 
 uv run chronicle validate-package dwp-uc-households-children-april-december-2025 --year 2025
@@ -362,18 +356,6 @@ uv run chronicle validate-package dwp-uc-households-family-type-april-december-2
 uv run chronicle build-suite dwp-uc-households-family-type-april-december-2025 \
   --year 2025 \
   --out /tmp/chronicle-dwp-uc-households-family-type-april-december-2025 \
-  --replace
-
-uv run chronicle validate-package dwp-uc-households-housing-entitlement-april-december-2025 --year 2025
-uv run chronicle build-suite dwp-uc-households-housing-entitlement-april-december-2025 \
-  --year 2025 \
-  --out /tmp/chronicle-dwp-uc-housing-entitlement-2025 \
-  --replace
-
-uv run chronicle validate-package dwp-uc-households-lcwra-entitlement-april-december-2025 --year 2025
-uv run chronicle build-suite dwp-uc-households-lcwra-entitlement-april-december-2025 \
-  --year 2025 \
-  --out /tmp/chronicle-dwp-uc-lcwra-entitlement-2025 \
   --replace
 
 uv run chronicle validate-package dwp-uc-scotland-youngest-child-april-december-2025 --year 2025
@@ -410,6 +392,54 @@ uv run chronicle validate-package dwp-uc-households-children-payment-indicator-c
 uv run chronicle build-suite dwp-uc-households-children-payment-indicator-child-entitlement-april-2023-may-2026 \
   --year 2025 \
   --out /tmp/chronicle-dwp-uc-children-payment-indicator-child-entitlement-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-uc-housing-tenure-payment-indicator-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-households-housing-entitlement-payment-indicator-january-2023-may-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-uc-housing-entitlement-payment-indicator-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-households-lcw-entitlement-payment-indicator-january-2023-may-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-uc-lcw-entitlement-payment-indicator-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-uc-lcw-entitlement-group-payment-indicator-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-uc-carer-entitlement-payment-indicator-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-uc-people-employment-indicator-january-2023-may-2026 --year 2025
+uv run chronicle build-suite dwp-uc-people-employment-indicator-january-2023-may-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-uc-people-employment-indicator-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-hb-claimants-client-type-tenure-january-2023-february-2026 --year 2025
+uv run chronicle build-suite dwp-hb-claimants-client-type-tenure-january-2023-february-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-hb-claimants-client-type-tenure-2023-2026 \
+  --replace
+
+uv run chronicle validate-package dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026 --year 2025
+uv run chronicle build-suite dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026 \
+  --year 2025 \
+  --out /tmp/chronicle-dwp-hb-claimants-accommodation-type-2025-2026 \
   --replace
 
 uv run chronicle validate-package hmrc-child-benefit-august-2025 --year 2025
