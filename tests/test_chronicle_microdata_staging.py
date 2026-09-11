@@ -454,6 +454,14 @@ TABLE_SHA = hashlib.sha256(TABLE_BYTES).hexdigest()
 RELEASE_BYTES = b"public household pums beside a publisher table"
 RELEASE_SHA = hashlib.sha256(RELEASE_BYTES).hexdigest()
 
+#: The aliases a package's metadata states outright, whatever the table entry
+#: declares: a shared name, or an identity the table itself archived. The
+#: remaining aliases are a release digest, current or archived, that only the
+#: undeclared bytes reveal.
+METADATA_KNOWN_ALIASES = frozenset(
+    {"archived-filename", "table-archived-filename", "table-archived-sha256"}
+)
+
 
 def _table_beside_public_microdata(package, staging, *, alias, identity):
     """Stage a package whose table bytes carry a public release's identity.
@@ -480,6 +488,13 @@ def _table_beside_public_microdata(package, staging, *, alias, identity):
         history.append(locator("table.csv", "b" * 64))
     elif alias == "archived-sha256":
         history.append(locator("old-microdata.csv", TABLE_SHA))
+    # The alias is as much an alias when the table, rather than the release,
+    # is the side that archived the identity.
+    table_history = []
+    if alias == "table-archived-filename":
+        table_history.append(locator(release_name, "c" * 64))
+    elif alias == "table-archived-sha256":
+        table_history.append(locator("old-table.csv", release_sha))
     release_bytes = TABLE_BYTES if release_sha == TABLE_SHA else RELEASE_BYTES
     entry = {
         "filename": release_name,
@@ -516,8 +531,13 @@ def _table_beside_public_microdata(package, staging, *, alias, identity):
     if identity == "declared":
         selected["sha256"] = TABLE_SHA
         selected["size_bytes"] = len(TABLE_BYTES)
-    elif identity == "r2-only":
-        selected["storage"] = {"r2": locator("table.csv", TABLE_SHA)}
+    storage = {}
+    if identity == "r2-only":
+        storage["r2"] = locator("table.csv", TABLE_SHA)
+    if table_history:
+        storage["previous_r2"] = table_history
+    if storage:
+        selected["storage"] = storage
     package.mkdir(parents=True)
     for name, kind, spec in (
         ("manifest_tables.yaml", "publisher_table", selected),
@@ -555,7 +575,16 @@ def _report_error_codes(report):
     ]
 
 
-@pytest.mark.parametrize("alias", ["sha256", "archived-filename", "archived-sha256"])
+@pytest.mark.parametrize(
+    "alias",
+    [
+        "sha256",
+        "archived-filename",
+        "archived-sha256",
+        "table-archived-filename",
+        "table-archived-sha256",
+    ],
+)
 @pytest.mark.parametrize("identity", ["declared", "observed", "r2-only"])
 def test_publish_raw_refuses_public_microdata_alias_without_upload_or_rewrite(
     tmp_path, monkeypatch, alias, identity
@@ -599,7 +628,7 @@ def test_publish_raw_refuses_public_microdata_alias_without_upload_or_rewrite(
     # Read the log before the snapshot assertions below read the tree again.
     # Only an undeclared, unrecorded table digest needs the local bytes to be
     # classified; every other alias is known from metadata alone.
-    known = identity != "observed" or alias == "archived-filename"
+    known = identity != "observed" or alias in METADATA_KNOWN_ALIASES
     assert reads == ([] if known else [package / "table.csv"])
     assert {
         path.name: original_read_bytes(path) for path in package.iterdir()
@@ -607,7 +636,16 @@ def test_publish_raw_refuses_public_microdata_alias_without_upload_or_rewrite(
     assert original_read_bytes(staged) == staged_before
 
 
-@pytest.mark.parametrize("alias", ["sha256", "archived-filename", "archived-sha256"])
+@pytest.mark.parametrize(
+    "alias",
+    [
+        "sha256",
+        "archived-filename",
+        "archived-sha256",
+        "table-archived-filename",
+        "table-archived-sha256",
+    ],
+)
 @pytest.mark.parametrize("identity", ["declared", "observed", "r2-only"])
 def test_inventory_reports_public_microdata_alias_for_table_entry(
     tmp_path, alias, identity
@@ -624,7 +662,7 @@ def test_inventory_reports_public_microdata_alias_for_table_entry(
     assert any("manifest_release.yaml" in code for code in codes), codes
     # A metadata alias is a package defect, reported with the registration that
     # carries it as well as the release that already identifies those bytes.
-    if identity != "observed" or alias == "archived-filename":
+    if identity != "observed" or alias in METADATA_KNOWN_ALIASES:
         assert any(
             "manifest_tables.yaml" in code and "manifest_release.yaml" in code
             for code in codes
