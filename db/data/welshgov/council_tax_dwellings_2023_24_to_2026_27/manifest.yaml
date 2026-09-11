@@ -1,0 +1,18 @@
+source_id: welshgov
+package_id: welshgov-council-tax-dwellings-2023-24-to-2026-27
+dataset: welshgov_welshgov-council-tax-dwellings-2023-24-to-2026-27
+source_page: https://stats.gov.wales/en-GB/062488e2-3fd6-4755-9b0b-a64547fc570f/start
+table: Council tax dwellings by authority and band (StatsWales, CT1 returns)
+files:
+  2026:
+    filename: statswales_council_tax_dwellings_by_authority_and_band.csv
+    source_url: https://api.stats.gov.wales/v1/062488e2-3fd6-4755-9b0b-a64547fc570f/download/csv
+    sha256: fbef9c20c243b0cffe55f1c110bfc8433f71b6fc3599166060a2c4382ad9f081
+    size_bytes: 13341368
+    fetched_at: '2026-09-11T19:39:54+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/welshgov/welshgov-council-tax-dwellings-2023-24-to-2026-27/2026/fbef9c20c243b0cffe55f1c110bfc8433f71b6fc3599166060a2c4382ad9f081/statswales_council_tax_dwellings_by_authority_and_band.csv
+        uri: r2://ledger-raw/raw/uk/welshgov/welshgov-council-tax-dwellings-2023-24-to-2026-27/2026/fbef9c20c243b0cffe55f1c110bfc8433f71b6fc3599166060a2c4382ad9f081/statswales_council_tax_dwellings_by_authority_and_band.csv

@@ -1,0 +1,18 @@
+source_id: mhclg
+package_id: mhclg-council-taxbase-england-2024
+dataset: mhclg_mhclg-council-taxbase-england-2024
+source_page: https://www.gov.uk/government/statistics/council-taxbase-2024-in-england
+table: 'Council Taxbase: Local authority level data for 2024 (revised)'
+files:
+  2024:
+    filename: Council_Taxbase_Local_Authority_Level_Data_2024.ods
+    source_url: https://assets.publishing.service.gov.uk/media/67cab2ba8247839c255ae419/Council_Taxbase_Local_Authority_Level_Data_2024.ods
+    sha256: 53cabc3b5d2973002e24348808286d49d76bd46447a4a59458fd44c458d74a04
+    size_bytes: 1710744
+    fetched_at: '2026-09-11T19:20:21+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/mhclg/mhclg-council-taxbase-england-2024/2024/53cabc3b5d2973002e24348808286d49d76bd46447a4a59458fd44c458d74a04/Council_Taxbase_Local_Authority_Level_Data_2024.ods
+        uri: r2://ledger-raw/raw/uk/mhclg/mhclg-council-taxbase-england-2024/2024/53cabc3b5d2973002e24348808286d49d76bd46447a4a59458fd44c458d74a04/Council_Taxbase_Local_Authority_Level_Data_2024.ods

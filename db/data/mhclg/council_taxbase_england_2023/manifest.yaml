@@ -1,0 +1,18 @@
+source_id: mhclg
+package_id: mhclg-council-taxbase-england-2023
+dataset: mhclg_mhclg-council-taxbase-england-2023
+source_page: https://www.gov.uk/government/statistics/council-taxbase-2023-in-england
+table: 'Council Taxbase: Local authority level data for 2023 (revised)'
+files:
+  2023:
+    filename: Council_Taxbase_Local_Authority_Level_Data_2023__revised_.ods
+    source_url: https://assets.publishing.service.gov.uk/media/65df0a7dcf7eb1e5f4f57f66/Council_Taxbase_Local_Authority_Level_Data_2023__revised_.ods
+    sha256: 7e30fe39bbd6292f471eba2fa0d5f368b5c79922112f41ba91c7864417056440
+    size_bytes: 1570735
+    fetched_at: '2026-09-11T19:39:53+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/mhclg/mhclg-council-taxbase-england-2023/2023/7e30fe39bbd6292f471eba2fa0d5f368b5c79922112f41ba91c7864417056440/Council_Taxbase_Local_Authority_Level_Data_2023__revised_.ods
+        uri: r2://ledger-raw/raw/uk/mhclg/mhclg-council-taxbase-england-2023/2023/7e30fe39bbd6292f471eba2fa0d5f368b5c79922112f41ba91c7864417056440/Council_Taxbase_Local_Authority_Level_Data_2023__revised_.ods

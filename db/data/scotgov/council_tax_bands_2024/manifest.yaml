@@ -1,0 +1,18 @@
+source_id: scotgov
+package_id: scotgov-council-tax-bands-2024
+dataset: scotgov_scotgov-council-tax-bands-2024
+source_page: https://www.gov.scot/publications/council-tax-datasets/
+table: Number of chargeable dwellings, September 2024 (CTAXBASE 2024)
+files:
+  2024:
+    filename: CTAXBASE_2024_Tables_Chargeable_Dwellings.xlsx
+    source_url: https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/04/council-tax-datasets/documents/number-of-chargeable-dwellings/chargeable-dwellings---september-2024-data/chargeable-dwellings---september-2024-data/govscot%3Adocument/CTAXBASE%2B2024%2B-%2BTables%2B-%2BChargeable%2BDwellings.xlsx
+    sha256: 81d694136c08bb67c7cddeba73b8e2deb786679dd0ea9e2d3fa2ad60e45eb4a4
+    size_bytes: 18674
+    fetched_at: '2026-09-11T19:39:54+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/scotgov/scotgov-council-tax-bands-2024/2024/81d694136c08bb67c7cddeba73b8e2deb786679dd0ea9e2d3fa2ad60e45eb4a4/CTAXBASE_2024_Tables_Chargeable_Dwellings.xlsx
+        uri: r2://ledger-raw/raw/uk/scotgov/scotgov-council-tax-bands-2024/2024/81d694136c08bb67c7cddeba73b8e2deb786679dd0ea9e2d3fa2ad60e45eb4a4/CTAXBASE_2024_Tables_Chargeable_Dwellings.xlsx
