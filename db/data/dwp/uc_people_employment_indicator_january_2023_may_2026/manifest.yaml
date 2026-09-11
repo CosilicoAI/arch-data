@@ -1,0 +1,18 @@
+source_id: dwp
+package_id: dwp-uc-people-employment-indicator-january-2023-may-2026
+dataset: dwp_dwp-uc-people-employment-indicator-january-2023-may-2026
+source_page: https://stat-xplore.dwp.gov.uk/
+table: People on Universal Credit by employment indicator, January 2023 to May 2026
+files:
+  2025:
+    filename: people_on_uc_by_employment_indicator_january_2023_may_2026.json
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
+    sha256: 014a92f285f49383dcbd8e2927052a7fe7dc9233716fddecfb39982f8a5918d8
+    size_bytes: 13977
+    fetched_at: '2026-09-11T12:08:30Z'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-uc-people-employment-indicator-january-2023-may-2026/2025/014a92f285f49383dcbd8e2927052a7fe7dc9233716fddecfb39982f8a5918d8/people_on_uc_by_employment_indicator_january_2023_may_2026.json
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-uc-people-employment-indicator-january-2023-may-2026/2025/014a92f285f49383dcbd8e2927052a7fe7dc9233716fddecfb39982f8a5918d8/people_on_uc_by_employment_indicator_january_2023_may_2026.json

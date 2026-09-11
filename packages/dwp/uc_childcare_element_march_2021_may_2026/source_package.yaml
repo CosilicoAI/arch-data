@@ -1,0 +1,1541 @@
+# DWP 'Universal Credit childcare element statistics to May 2026', supplementary data tables,
+# published 18 August 2026 with the Universal Credit quarterly statistics to 14 May 2026
+# (chronicle#259 item 3). This package supersedes the retired
+# dwp-uc-childcare-element-march-2021-august-2025: the same Table 1 three releases later, in
+# which DWP revised 30 of the 54 overlapping months (by at most 5,000) and
+# 9 Table 3 means (by at most GBP 10).
+# Table 1: UC households receiving the childcare element (total, single, couple), rounded
+# by DWP to the nearest 1,000. Table 3: mean monthly amount of the childcare element per
+# household receiving it, rounded to the nearest GBP 10. DWP marks the most recent months
+# provisional. DWP's UC household is the benefit unit of assessment, not an ONS household.
+# No table publishes the total amount paid, so there is no childcare element amount fact:
+# Chronicle does not multiply the count by the mean. Table 1 column F (children in
+# childcare paid for by the element) and Tables 2 and 4 to 15 are not ported.
+# Stat-Xplore's UC_Households dataset has no childcare field (checked against its schema on
+# 11 September 2026), so this count cannot be split by payment indicator (chronicle#259
+# item 1d): it covers all claims, including nil-payment ones.
+# DWP's guidance: the claimant, or both claimants in a couple, must usually be in paid work
+# and pay for childcare, and UC reimburses up to 85% of eligible costs up to a monthly
+# maximum (GBP 1,071.09 for one child and GBP 1,836.16 for two or more in May 2026).
+schema_version: ledger.source_package.v1
+package_id: dwp-uc-childcare-element-march-2021-may-2026
+label: 'DWP Universal Credit childcare element: households receiving and mean amount, March 2021 to May 2026'
+artifact:
+  source_name: dwp
+  source_table: 'Universal Credit childcare element statistics to May 2026, Tables 1 and 3'
+  resource_package: db
+  resource_directory: data/dwp/uc_childcare_element_march_2021_may_2026
+  manifest: manifest.yaml
+  vintage: uc_childcare_element_2026_08_18
+  extracted_at: '2026-09-11'
+  extraction_method: ODS Table 1 (columns C, D and E) and Table 3 (column C) cell parse
+  parser: ods_used_range
+  sheet_name: Table_1
+  artifact_year: 2025
+record_sets:
+- &households
+  record_set_id: dwp.uc_childcare_element.households.month2021_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_03
+  sheet_name: Table_1
+  period_type: month
+  period: 2021-03
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: benefit_unit
+  entity_role: universal_credit_unit_of_assessment
+  domain: universal_credit
+  groupby_dimension: dwp.uc_element
+  assertion: observation
+  rows:
+  - &households_row
+    value_id: childcare_element
+    label: March 2021
+    ordinal: 0
+    row_number: 5
+    expected_row_header_column: B
+    expected_row_header: March 2021
+    table_record_kind: total
+    filters:
+      uc_element: childcare
+    constraints:
+    - variable: uc_element
+      operator: ==
+      value: childcare
+      label: Universal Credit element
+  measures:
+  - measure_id: benefit_units
+    label: 'UC benefit units receiving childcare element'
+    ordinal: 0
+    column: C
+    expected_column_header_row: 4
+    expected_column_header: 'Total households receiving childcare element'
+    concept: dwp.uc_benefit_units_with_childcare_element
+    source_concept: dwp.uc_households_receiving_childcare_element
+    concept_relation: source_label
+    concept_authority: dwp
+    concept_evidence_url: https://www.gov.uk/government/statistics/universal-credit-quarterly-statistics-29-april-2013-to-14-may-2026/universal-credit-childcare-element-statistics-to-may-2026
+    concept_evidence_notes: 'DWP defines a Universal Credit household as the UC unit of assessment, also called a benefit unit in other statistics. Table 1 counts are rounded to the nearest 1,000.'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+  - measure_id: single_benefit_units
+    label: 'Single UC benefit units receiving childcare element'
+    ordinal: 1
+    column: D
+    source_column_id: single_households
+    source_column_dimensions:
+      family_type: Single
+    filters:
+      family_type: Single
+    constraints:
+    - {variable: family_type, operator: '==', value: Single, label: family type}
+    expected_column_header_row: 4
+    expected_column_header: 'Single households receiving childcare element'
+    concept: dwp.uc_benefit_units_with_childcare_element
+    source_concept: dwp.uc_households_receiving_childcare_element
+    concept_relation: source_label
+    concept_authority: dwp
+    concept_evidence_url: https://www.gov.uk/government/statistics/universal-credit-quarterly-statistics-29-april-2013-to-14-may-2026/universal-credit-childcare-element-statistics-to-may-2026
+    concept_evidence_notes: 'DWP defines a Universal Credit household as the UC unit of assessment, also called a benefit unit in other statistics. Table 1 counts are rounded to the nearest 1,000.'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+  - measure_id: couple_benefit_units
+    label: 'Couple UC benefit units receiving childcare element'
+    ordinal: 2
+    column: E
+    source_column_id: couple_households
+    source_column_dimensions:
+      family_type: Couple
+    filters:
+      family_type: Couple
+    constraints:
+    - {variable: family_type, operator: '==', value: Couple, label: family type}
+    expected_column_header_row: 4
+    expected_column_header: 'Couple households receiving childcare element'
+    concept: dwp.uc_benefit_units_with_childcare_element
+    source_concept: dwp.uc_households_receiving_childcare_element
+    concept_relation: source_label
+    concept_authority: dwp
+    concept_evidence_url: https://www.gov.uk/government/statistics/universal-credit-quarterly-statistics-29-april-2013-to-14-may-2026/universal-credit-childcare-element-statistics-to-may-2026
+    concept_evidence_notes: 'DWP defines a Universal Credit household as the UC unit of assessment, also called a benefit unit in other statistics. Table 1 counts are rounded to the nearest 1,000.'
+    unit: count
+    aggregation: sum
+    expected_cell_type: number
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_04
+  period: 2021-04
+  rows:
+  - <<: *households_row
+    label: April 2021
+    row_number: 6
+    expected_row_header: April 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_05
+  period: 2021-05
+  rows:
+  - <<: *households_row
+    label: May 2021
+    row_number: 7
+    expected_row_header: May 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_06
+  period: 2021-06
+  rows:
+  - <<: *households_row
+    label: June 2021
+    row_number: 8
+    expected_row_header: June 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_07
+  period: 2021-07
+  rows:
+  - <<: *households_row
+    label: July 2021
+    row_number: 9
+    expected_row_header: July 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_08
+  period: 2021-08
+  rows:
+  - <<: *households_row
+    label: August 2021
+    row_number: 10
+    expected_row_header: August 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_09
+  period: 2021-09
+  rows:
+  - <<: *households_row
+    label: September 2021
+    row_number: 11
+    expected_row_header: September 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_10
+  period: 2021-10
+  rows:
+  - <<: *households_row
+    label: October 2021
+    row_number: 12
+    expected_row_header: October 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_11
+  period: 2021-11
+  rows:
+  - <<: *households_row
+    label: November 2021
+    row_number: 13
+    expected_row_header: November 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2021_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2021_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2021_12
+  period: 2021-12
+  rows:
+  - <<: *households_row
+    label: December 2021
+    row_number: 14
+    expected_row_header: December 2021
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_01
+  period: 2022-01
+  rows:
+  - <<: *households_row
+    label: January 2022
+    row_number: 15
+    expected_row_header: January 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_02
+  period: 2022-02
+  rows:
+  - <<: *households_row
+    label: February 2022
+    row_number: 16
+    expected_row_header: February 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_03
+  period: 2022-03
+  rows:
+  - <<: *households_row
+    label: March 2022
+    row_number: 17
+    expected_row_header: March 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_04
+  period: 2022-04
+  rows:
+  - <<: *households_row
+    label: April 2022
+    row_number: 18
+    expected_row_header: April 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_05
+  period: 2022-05
+  rows:
+  - <<: *households_row
+    label: May 2022
+    row_number: 19
+    expected_row_header: May 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_06
+  period: 2022-06
+  rows:
+  - <<: *households_row
+    label: June 2022
+    row_number: 20
+    expected_row_header: June 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_07
+  period: 2022-07
+  rows:
+  - <<: *households_row
+    label: July 2022
+    row_number: 21
+    expected_row_header: July 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_08
+  period: 2022-08
+  rows:
+  - <<: *households_row
+    label: August 2022
+    row_number: 22
+    expected_row_header: August 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_09
+  period: 2022-09
+  rows:
+  - <<: *households_row
+    label: September 2022
+    row_number: 23
+    expected_row_header: September 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_10
+  period: 2022-10
+  rows:
+  - <<: *households_row
+    label: October 2022
+    row_number: 24
+    expected_row_header: October 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_11
+  period: 2022-11
+  rows:
+  - <<: *households_row
+    label: November 2022
+    row_number: 25
+    expected_row_header: November 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2022_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2022_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2022_12
+  period: 2022-12
+  rows:
+  - <<: *households_row
+    label: December 2022
+    row_number: 26
+    expected_row_header: December 2022
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_01
+  period: 2023-01
+  rows:
+  - <<: *households_row
+    label: January 2023
+    row_number: 27
+    expected_row_header: January 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_02
+  period: 2023-02
+  rows:
+  - <<: *households_row
+    label: February 2023
+    row_number: 28
+    expected_row_header: February 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_03
+  period: 2023-03
+  rows:
+  - <<: *households_row
+    label: March 2023
+    row_number: 29
+    expected_row_header: March 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_04
+  period: 2023-04
+  rows:
+  - <<: *households_row
+    label: April 2023
+    row_number: 30
+    expected_row_header: April 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_05
+  period: 2023-05
+  rows:
+  - <<: *households_row
+    label: May 2023
+    row_number: 31
+    expected_row_header: May 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_06
+  period: 2023-06
+  rows:
+  - <<: *households_row
+    label: June 2023
+    row_number: 32
+    expected_row_header: June 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_07
+  period: 2023-07
+  rows:
+  - <<: *households_row
+    label: July 2023
+    row_number: 33
+    expected_row_header: July 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_08
+  period: 2023-08
+  rows:
+  - <<: *households_row
+    label: August 2023
+    row_number: 34
+    expected_row_header: August 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_09
+  period: 2023-09
+  rows:
+  - <<: *households_row
+    label: September 2023
+    row_number: 35
+    expected_row_header: September 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_10
+  period: 2023-10
+  rows:
+  - <<: *households_row
+    label: October 2023
+    row_number: 36
+    expected_row_header: October 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_11
+  period: 2023-11
+  rows:
+  - <<: *households_row
+    label: November 2023
+    row_number: 37
+    expected_row_header: November 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2023_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2023_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2023_12
+  period: 2023-12
+  rows:
+  - <<: *households_row
+    label: December 2023
+    row_number: 38
+    expected_row_header: December 2023
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_01
+  period: 2024-01
+  rows:
+  - <<: *households_row
+    label: January 2024
+    row_number: 39
+    expected_row_header: January 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_02
+  period: 2024-02
+  rows:
+  - <<: *households_row
+    label: February 2024
+    row_number: 40
+    expected_row_header: February 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_03
+  period: 2024-03
+  rows:
+  - <<: *households_row
+    label: March 2024
+    row_number: 41
+    expected_row_header: March 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_04
+  period: 2024-04
+  rows:
+  - <<: *households_row
+    label: April 2024
+    row_number: 42
+    expected_row_header: April 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_05
+  period: 2024-05
+  rows:
+  - <<: *households_row
+    label: May 2024
+    row_number: 43
+    expected_row_header: May 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_06
+  period: 2024-06
+  rows:
+  - <<: *households_row
+    label: June 2024
+    row_number: 44
+    expected_row_header: June 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_07
+  period: 2024-07
+  rows:
+  - <<: *households_row
+    label: July 2024
+    row_number: 45
+    expected_row_header: July 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_08
+  period: 2024-08
+  rows:
+  - <<: *households_row
+    label: August 2024
+    row_number: 46
+    expected_row_header: August 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_09
+  period: 2024-09
+  rows:
+  - <<: *households_row
+    label: September 2024
+    row_number: 47
+    expected_row_header: September 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_10
+  period: 2024-10
+  rows:
+  - <<: *households_row
+    label: October 2024
+    row_number: 48
+    expected_row_header: October 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_11
+  period: 2024-11
+  rows:
+  - <<: *households_row
+    label: November 2024
+    row_number: 49
+    expected_row_header: November 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2024_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2024_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2024_12
+  period: 2024-12
+  rows:
+  - <<: *households_row
+    label: December 2024
+    row_number: 50
+    expected_row_header: December 2024
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_01
+  period: 2025-01
+  rows:
+  - <<: *households_row
+    label: January 2025
+    row_number: 51
+    expected_row_header: January 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_02
+  period: 2025-02
+  rows:
+  - <<: *households_row
+    label: February 2025
+    row_number: 52
+    expected_row_header: February 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_03
+  period: 2025-03
+  rows:
+  - <<: *households_row
+    label: March 2025
+    row_number: 53
+    expected_row_header: March 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_04
+  period: 2025-04
+  rows:
+  - <<: *households_row
+    label: April 2025
+    row_number: 54
+    expected_row_header: April 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_05
+  period: 2025-05
+  rows:
+  - <<: *households_row
+    label: May 2025
+    row_number: 55
+    expected_row_header: May 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_06
+  period: 2025-06
+  rows:
+  - <<: *households_row
+    label: June 2025
+    row_number: 56
+    expected_row_header: June 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_07
+  period: 2025-07
+  rows:
+  - <<: *households_row
+    label: July 2025
+    row_number: 57
+    expected_row_header: July 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_08
+  period: 2025-08
+  rows:
+  - <<: *households_row
+    label: August 2025
+    row_number: 58
+    expected_row_header: August 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_09
+  period: 2025-09
+  rows:
+  - <<: *households_row
+    label: September 2025
+    row_number: 59
+    expected_row_header: September 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_10
+  period: 2025-10
+  rows:
+  - <<: *households_row
+    label: October 2025
+    row_number: 60
+    expected_row_header: October 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_11
+  period: 2025-11
+  rows:
+  - <<: *households_row
+    label: November 2025
+    row_number: 61
+    expected_row_header: November 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2025_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2025_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2025_12
+  period: 2025-12
+  rows:
+  - <<: *households_row
+    label: December 2025
+    row_number: 62
+    expected_row_header: December 2025
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2026_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2026_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2026_01
+  period: 2026-01
+  rows:
+  - <<: *households_row
+    label: January 2026
+    row_number: 63
+    expected_row_header: January 2026
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2026_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2026_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2026_02
+  period: 2026-02
+  rows:
+  - <<: *households_row
+    label: February 2026
+    row_number: 64
+    expected_row_header: February 2026
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2026_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2026_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2026_03
+  period: 2026-03
+  rows:
+  - <<: *households_row
+    label: March 2026
+    row_number: 65
+    expected_row_header: March 2026
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2026_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2026_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2026_04
+  period: 2026-04
+  rows:
+  - <<: *households_row
+    label: April 2026
+    row_number: 66
+    expected_row_header: April 2026
+- <<: *households
+  record_set_id: dwp.uc_childcare_element.households.month2026_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.households.month2026_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.households.month2026_05
+  period: 2026-05
+  rows:
+  - <<: *households_row
+    label: May 2026
+    row_number: 67
+    expected_row_header: May 2026
+- &mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_03
+  sheet_name: Table_3
+  period_type: month
+  period: 2021-03
+  geography_id: K03000001
+  geography_level: country
+  geography_name: Great Britain
+  geography_vintage: current
+  entity: benefit_unit
+  entity_role: universal_credit_unit_of_assessment
+  domain: universal_credit
+  groupby_dimension: dwp.uc_element
+  assertion: observation
+  rows:
+  - &mean_amount_row
+    value_id: childcare_element_mean_amount
+    label: March 2021
+    ordinal: 0
+    row_number: 5
+    expected_row_header_column: B
+    expected_row_header: March 2021
+    table_record_kind: total
+    filters:
+      uc_element: childcare
+    constraints:
+    - variable: uc_element
+      operator: ==
+      value: childcare
+      label: Universal Credit element
+  measures:
+  - measure_id: mean_amount
+    label: Mean monthly UC childcare element amount per benefit unit receiving it
+    ordinal: 0
+    column: C
+    expected_column_header_row: 4
+    expected_column_header: 'Mean amount of childcare element (£)'
+    concept: dwp.uc_childcare_element_average_award
+    source_concept: dwp.uc_mean_amount_of_childcare_element
+    concept_relation: source_label
+    concept_authority: dwp
+    concept_evidence_url: https://www.gov.uk/government/statistics/universal-credit-quarterly-statistics-29-april-2013-to-14-may-2026/universal-credit-childcare-element-statistics-to-may-2026
+    concept_evidence_notes: 'DWP Table 3 mean amount of the Universal Credit childcare element in the month, in pounds, over UC households (benefit units) receiving the element; rounded to the nearest GBP 10.'
+    unit: gbp
+    aggregation: mean
+    expected_cell_type: number
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_04
+  period: 2021-04
+  rows:
+  - <<: *mean_amount_row
+    label: April 2021
+    row_number: 6
+    expected_row_header: April 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_05
+  period: 2021-05
+  rows:
+  - <<: *mean_amount_row
+    label: May 2021
+    row_number: 7
+    expected_row_header: May 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_06
+  period: 2021-06
+  rows:
+  - <<: *mean_amount_row
+    label: June 2021
+    row_number: 8
+    expected_row_header: June 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_07
+  period: 2021-07
+  rows:
+  - <<: *mean_amount_row
+    label: July 2021
+    row_number: 9
+    expected_row_header: July 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_08
+  period: 2021-08
+  rows:
+  - <<: *mean_amount_row
+    label: August 2021
+    row_number: 10
+    expected_row_header: August 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_09
+  period: 2021-09
+  rows:
+  - <<: *mean_amount_row
+    label: September 2021
+    row_number: 11
+    expected_row_header: September 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_10
+  period: 2021-10
+  rows:
+  - <<: *mean_amount_row
+    label: October 2021
+    row_number: 12
+    expected_row_header: October 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_11
+  period: 2021-11
+  rows:
+  - <<: *mean_amount_row
+    label: November 2021
+    row_number: 13
+    expected_row_header: November 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2021_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2021_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2021_12
+  period: 2021-12
+  rows:
+  - <<: *mean_amount_row
+    label: December 2021
+    row_number: 14
+    expected_row_header: December 2021
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_01
+  period: 2022-01
+  rows:
+  - <<: *mean_amount_row
+    label: January 2022
+    row_number: 15
+    expected_row_header: January 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_02
+  period: 2022-02
+  rows:
+  - <<: *mean_amount_row
+    label: February 2022
+    row_number: 16
+    expected_row_header: February 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_03
+  period: 2022-03
+  rows:
+  - <<: *mean_amount_row
+    label: March 2022
+    row_number: 17
+    expected_row_header: March 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_04
+  period: 2022-04
+  rows:
+  - <<: *mean_amount_row
+    label: April 2022
+    row_number: 18
+    expected_row_header: April 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_05
+  period: 2022-05
+  rows:
+  - <<: *mean_amount_row
+    label: May 2022
+    row_number: 19
+    expected_row_header: May 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_06
+  period: 2022-06
+  rows:
+  - <<: *mean_amount_row
+    label: June 2022
+    row_number: 20
+    expected_row_header: June 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_07
+  period: 2022-07
+  rows:
+  - <<: *mean_amount_row
+    label: July 2022
+    row_number: 21
+    expected_row_header: July 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_08
+  period: 2022-08
+  rows:
+  - <<: *mean_amount_row
+    label: August 2022
+    row_number: 22
+    expected_row_header: August 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_09
+  period: 2022-09
+  rows:
+  - <<: *mean_amount_row
+    label: September 2022
+    row_number: 23
+    expected_row_header: September 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_10
+  period: 2022-10
+  rows:
+  - <<: *mean_amount_row
+    label: October 2022
+    row_number: 24
+    expected_row_header: October 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_11
+  period: 2022-11
+  rows:
+  - <<: *mean_amount_row
+    label: November 2022
+    row_number: 25
+    expected_row_header: November 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2022_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2022_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2022_12
+  period: 2022-12
+  rows:
+  - <<: *mean_amount_row
+    label: December 2022
+    row_number: 26
+    expected_row_header: December 2022
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_01
+  period: 2023-01
+  rows:
+  - <<: *mean_amount_row
+    label: January 2023
+    row_number: 27
+    expected_row_header: January 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_02
+  period: 2023-02
+  rows:
+  - <<: *mean_amount_row
+    label: February 2023
+    row_number: 28
+    expected_row_header: February 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_03
+  period: 2023-03
+  rows:
+  - <<: *mean_amount_row
+    label: March 2023
+    row_number: 29
+    expected_row_header: March 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_04
+  period: 2023-04
+  rows:
+  - <<: *mean_amount_row
+    label: April 2023
+    row_number: 30
+    expected_row_header: April 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_05
+  period: 2023-05
+  rows:
+  - <<: *mean_amount_row
+    label: May 2023
+    row_number: 31
+    expected_row_header: May 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_06
+  period: 2023-06
+  rows:
+  - <<: *mean_amount_row
+    label: June 2023
+    row_number: 32
+    expected_row_header: June 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_07
+  period: 2023-07
+  rows:
+  - <<: *mean_amount_row
+    label: July 2023
+    row_number: 33
+    expected_row_header: July 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_08
+  period: 2023-08
+  rows:
+  - <<: *mean_amount_row
+    label: August 2023
+    row_number: 34
+    expected_row_header: August 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_09
+  period: 2023-09
+  rows:
+  - <<: *mean_amount_row
+    label: September 2023
+    row_number: 35
+    expected_row_header: September 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_10
+  period: 2023-10
+  rows:
+  - <<: *mean_amount_row
+    label: October 2023
+    row_number: 36
+    expected_row_header: October 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_11
+  period: 2023-11
+  rows:
+  - <<: *mean_amount_row
+    label: November 2023
+    row_number: 37
+    expected_row_header: November 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2023_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2023_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2023_12
+  period: 2023-12
+  rows:
+  - <<: *mean_amount_row
+    label: December 2023
+    row_number: 38
+    expected_row_header: December 2023
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_01
+  period: 2024-01
+  rows:
+  - <<: *mean_amount_row
+    label: January 2024
+    row_number: 39
+    expected_row_header: January 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_02
+  period: 2024-02
+  rows:
+  - <<: *mean_amount_row
+    label: February 2024
+    row_number: 40
+    expected_row_header: February 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_03
+  period: 2024-03
+  rows:
+  - <<: *mean_amount_row
+    label: March 2024
+    row_number: 41
+    expected_row_header: March 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_04
+  period: 2024-04
+  rows:
+  - <<: *mean_amount_row
+    label: April 2024
+    row_number: 42
+    expected_row_header: April 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_05
+  period: 2024-05
+  rows:
+  - <<: *mean_amount_row
+    label: May 2024
+    row_number: 43
+    expected_row_header: May 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_06
+  period: 2024-06
+  rows:
+  - <<: *mean_amount_row
+    label: June 2024
+    row_number: 44
+    expected_row_header: June 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_07
+  period: 2024-07
+  rows:
+  - <<: *mean_amount_row
+    label: July 2024
+    row_number: 45
+    expected_row_header: July 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_08
+  period: 2024-08
+  rows:
+  - <<: *mean_amount_row
+    label: August 2024
+    row_number: 46
+    expected_row_header: August 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_09
+  period: 2024-09
+  rows:
+  - <<: *mean_amount_row
+    label: September 2024
+    row_number: 47
+    expected_row_header: September 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_10
+  period: 2024-10
+  rows:
+  - <<: *mean_amount_row
+    label: October 2024
+    row_number: 48
+    expected_row_header: October 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_11
+  period: 2024-11
+  rows:
+  - <<: *mean_amount_row
+    label: November 2024
+    row_number: 49
+    expected_row_header: November 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2024_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2024_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2024_12
+  period: 2024-12
+  rows:
+  - <<: *mean_amount_row
+    label: December 2024
+    row_number: 50
+    expected_row_header: December 2024
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_01
+  period: 2025-01
+  rows:
+  - <<: *mean_amount_row
+    label: January 2025
+    row_number: 51
+    expected_row_header: January 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_02
+  period: 2025-02
+  rows:
+  - <<: *mean_amount_row
+    label: February 2025
+    row_number: 52
+    expected_row_header: February 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_03
+  period: 2025-03
+  rows:
+  - <<: *mean_amount_row
+    label: March 2025
+    row_number: 53
+    expected_row_header: March 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_04
+  period: 2025-04
+  rows:
+  - <<: *mean_amount_row
+    label: April 2025
+    row_number: 54
+    expected_row_header: April 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_05
+  period: 2025-05
+  rows:
+  - <<: *mean_amount_row
+    label: May 2025
+    row_number: 55
+    expected_row_header: May 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_06
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_06.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_06
+  period: 2025-06
+  rows:
+  - <<: *mean_amount_row
+    label: June 2025
+    row_number: 56
+    expected_row_header: June 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_07
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_07.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_07
+  period: 2025-07
+  rows:
+  - <<: *mean_amount_row
+    label: July 2025
+    row_number: 57
+    expected_row_header: July 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_08
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_08.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_08
+  period: 2025-08
+  rows:
+  - <<: *mean_amount_row
+    label: August 2025
+    row_number: 58
+    expected_row_header: August 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_09
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_09.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_09
+  period: 2025-09
+  rows:
+  - <<: *mean_amount_row
+    label: September 2025
+    row_number: 59
+    expected_row_header: September 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_10
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_10.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_10
+  period: 2025-10
+  rows:
+  - <<: *mean_amount_row
+    label: October 2025
+    row_number: 60
+    expected_row_header: October 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_11
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_11.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_11
+  period: 2025-11
+  rows:
+  - <<: *mean_amount_row
+    label: November 2025
+    row_number: 61
+    expected_row_header: November 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2025_12
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2025_12.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2025_12
+  period: 2025-12
+  rows:
+  - <<: *mean_amount_row
+    label: December 2025
+    row_number: 62
+    expected_row_header: December 2025
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2026_01
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2026_01.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2026_01
+  period: 2026-01
+  rows:
+  - <<: *mean_amount_row
+    label: January 2026
+    row_number: 63
+    expected_row_header: January 2026
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2026_02
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2026_02.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2026_02
+  period: 2026-02
+  rows:
+  - <<: *mean_amount_row
+    label: February 2026
+    row_number: 64
+    expected_row_header: February 2026
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2026_03
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2026_03.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2026_03
+  period: 2026-03
+  rows:
+  - <<: *mean_amount_row
+    label: March 2026
+    row_number: 65
+    expected_row_header: March 2026
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2026_04
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2026_04.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2026_04
+  period: 2026-04
+  rows:
+  - <<: *mean_amount_row
+    label: April 2026
+    row_number: 66
+    expected_row_header: April 2026
+- <<: *mean_amount
+  record_set_id: dwp.uc_childcare_element.mean_amount.month2026_05
+  provenance_class: administrative
+  record_set_spec_id: dwp.uc_childcare_element.mean_amount.month2026_05.v1
+  source_record_id_prefix: dwp.uc_childcare_element.mean_amount.month2026_05
+  period: 2026-05
+  rows:
+  - <<: *mean_amount_row
+    label: May 2026
+    row_number: 67
+    expected_row_header: May 2026

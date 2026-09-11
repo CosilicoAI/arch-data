@@ -712,14 +712,19 @@ def test_dwp_uc_deductions_package_preserves_rows_and_derives_uc_units():
 
 
 def test_dwp_uc_childcare_element_package_preserves_monthly_publisher_series():
-    package = load_source_package("dwp-uc-childcare-element-march-2021-august-2025")
-    facts = package.build_facts(2025)
+    package = load_source_package("dwp-uc-childcare-element-march-2021-may-2026")
+    facts = [
+        fact
+        for fact in package.build_facts(2025)
+        if fact.layout.measure_id == "benefit_units"
+    ]
     values = {fact.period.value: fact.value for fact in facts}
 
-    assert len(facts) == 54
+    assert len(facts) == 63
     assert values["2021-03"] == 88_000
-    assert values["2024-08"] == 171_000
-    assert values["2025-08"] == 160_000
+    # The May 2026 tables revised August 2025 from 160,000 (August 2025 vintage).
+    assert values["2025-08"] == 165_000
+    assert values["2026-05"] == 164_000
     assert all(
         fact.measure.concept == "dwp.uc_benefit_units_with_childcare_element"
         for fact in facts
@@ -828,12 +833,6 @@ def test_ons_pipr_area_package_emits_2023_to_june_2026_months():
 @pytest.mark.parametrize(
     ("alias", "concept", "april_value", "december_value"),
     [
-        (
-            "dwp-uc-households-housing-entitlement-april-december-2025",
-            "dwp.uc_benefit_units_with_housing_element",
-            4_097_119,
-            4_464_277,
-        ),
         (
             "dwp-uc-households-lcwra-entitlement-april-december-2025",
             "dwp.uc_benefit_units_with_lcwra_element",

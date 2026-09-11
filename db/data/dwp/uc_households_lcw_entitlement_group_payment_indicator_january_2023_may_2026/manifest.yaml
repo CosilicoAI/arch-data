@@ -1,0 +1,19 @@
+source_id: dwp
+package_id: dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026
+dataset: dwp_dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026
+source_page: https://stat-xplore.dwp.gov.uk/
+table: Households on Universal Credit by limited capability for work entitlement group
+  and payment indicator, January 2023 to May 2026
+files:
+  2025:
+    filename: uc_households_by_lcw_entitlement_group_and_payment_indicator_january_2023_may_2026.json
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
+    sha256: 02b9b993ef3fdc67b06ab9923ee148819ca924f5abd7369ea234c74da03030f3
+    size_bytes: 19512
+    fetched_at: '2026-09-11T12:05:35Z'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026/2025/02b9b993ef3fdc67b06ab9923ee148819ca924f5abd7369ea234c74da03030f3/uc_households_by_lcw_entitlement_group_and_payment_indicator_january_2023_may_2026.json
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-uc-households-lcw-entitlement-group-payment-indicator-january-2023-may-2026/2025/02b9b993ef3fdc67b06ab9923ee148819ca924f5abd7369ea234c74da03030f3/uc_households_by_lcw_entitlement_group_and_payment_indicator_january_2023_may_2026.json

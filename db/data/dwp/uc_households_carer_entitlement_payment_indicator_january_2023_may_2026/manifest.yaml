@@ -1,0 +1,19 @@
+source_id: dwp
+package_id: dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026
+dataset: dwp_dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026
+source_page: https://stat-xplore.dwp.gov.uk/
+table: Households on Universal Credit by carer entitlement and payment indicator,
+  January 2023 to May 2026
+files:
+  2025:
+    filename: uc_households_by_carer_entitlement_and_payment_indicator_january_2023_may_2026.json
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
+    sha256: e7bd8f014c83d9434ca62c8953620c3f0e82bc954f433a63c144422a9d8ae805
+    size_bytes: 17222
+    fetched_at: '2026-09-11T12:07:00Z'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026/2025/e7bd8f014c83d9434ca62c8953620c3f0e82bc954f433a63c144422a9d8ae805/uc_households_by_carer_entitlement_and_payment_indicator_january_2023_may_2026.json
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026/2025/e7bd8f014c83d9434ca62c8953620c3f0e82bc954f433a63c144422a9d8ae805/uc_households_by_carer_entitlement_and_payment_indicator_january_2023_may_2026.json

@@ -1,0 +1,236 @@
+{
+  "query" : {
+    "database" : "str:database:hb_new",
+    "measures" : [ "str:count:hb_new:V_F_HB_NEW" ],
+    "recodes" : {
+      "str:field:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME" : {
+        "map" : [ [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202301" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202302" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202303" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202304" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202305" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202306" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202307" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202308" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202309" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202310" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202311" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202312" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202401" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202402" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202403" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202404" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202405" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202406" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202407" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202408" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202409" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202410" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202411" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202412" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202501" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202502" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202503" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202504" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202505" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202506" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202507" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202508" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202509" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202510" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202511" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202512" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202601" ], [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202602" ] ],
+        "total" : false
+      },
+      "str:field:hb_new:V_F_HB_NEW:TENURE_PUB" : {
+        "map" : [ [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:1" ], [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:2" ], [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:99" ] ],
+        "total" : true
+      },
+      "str:field:hb_new:V_F_HB_NEW:PENWORK" : {
+        "map" : [ [ "str:value:hb_new:V_F_HB_NEW:PENWORK:C_PENWORK:1" ], [ "str:value:hb_new:V_F_HB_NEW:PENWORK:C_PENWORK:2" ] ],
+        "total" : true
+      }
+    },
+    "dimensions" : [ [ "str:field:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME" ], [ "str:field:hb_new:V_F_HB_NEW:PENWORK" ], [ "str:field:hb_new:V_F_HB_NEW:TENURE_PUB" ] ]
+  },
+  "database" : {
+    "id" : "hb_new",
+    "uri" : "str:database:hb_new",
+    "label" : "Housing Benefit - Data from April 2018",
+    "annotationKeys" : [ "XXI" ]
+  },
+  "measures" : [ {
+    "uri" : "str:count:hb_new:V_F_HB_NEW",
+    "label" : "Housing Benefit Claimants",
+    "measure" : "str:count:hb_new:V_F_HB_NEW",
+    "function" : "COUNT"
+  } ],
+  "fields" : [ {
+    "uri" : "str:field:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME",
+    "label" : "Month",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202301" ],
+      "labels" : [ "202301 (Jan-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202302" ],
+      "labels" : [ "202302 (Feb-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202303" ],
+      "labels" : [ "202303 (Mar-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202304" ],
+      "labels" : [ "202304 (Apr-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202305" ],
+      "labels" : [ "202305 (May-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202306" ],
+      "labels" : [ "202306 (Jun-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202307" ],
+      "labels" : [ "202307 (Jul-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202308" ],
+      "labels" : [ "202308 (Aug-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202309" ],
+      "labels" : [ "202309 (Sep-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202310" ],
+      "labels" : [ "202310 (Oct-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202311" ],
+      "labels" : [ "202311 (Nov-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202312" ],
+      "labels" : [ "202312 (Dec-23)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202401" ],
+      "labels" : [ "202401 (Jan-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202402" ],
+      "labels" : [ "202402 (Feb-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202403" ],
+      "labels" : [ "202403 (Mar-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202404" ],
+      "labels" : [ "202404 (Apr-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202405" ],
+      "labels" : [ "202405 (May-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202406" ],
+      "labels" : [ "202406 (Jun-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202407" ],
+      "labels" : [ "202407 (Jul-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202408" ],
+      "labels" : [ "202408 (Aug-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202409" ],
+      "labels" : [ "202409 (Sep-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202410" ],
+      "labels" : [ "202410 (Oct-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202411" ],
+      "labels" : [ "202411 (Nov-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202412" ],
+      "labels" : [ "202412 (Dec-24)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202501" ],
+      "labels" : [ "202501 (Jan-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202502" ],
+      "labels" : [ "202502 (Feb-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202503" ],
+      "labels" : [ "202503 (Mar-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202504" ],
+      "labels" : [ "202504 (Apr-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202505" ],
+      "labels" : [ "202505 (May-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202506" ],
+      "labels" : [ "202506 (Jun-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202507" ],
+      "labels" : [ "202507 (Jul-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202508" ],
+      "labels" : [ "202508 (Aug-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202509" ],
+      "labels" : [ "202509 (Sep-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202510" ],
+      "labels" : [ "202510 (Oct-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202511" ],
+      "labels" : [ "202511 (Nov-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202512" ],
+      "labels" : [ "202512 (Dec-25)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202601" ],
+      "labels" : [ "202601 (Jan-26)" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:F_HB_NEW_DATE:NEW_DATE_NAME:C_HB_NEW_DATE:202602" ],
+      "labels" : [ "202602 (Feb-26)" ]
+    } ]
+  }, {
+    "uri" : "str:field:hb_new:V_F_HB_NEW:PENWORK",
+    "label" : "Client Type",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:PENWORK:C_PENWORK:1" ],
+      "labels" : [ "Working age" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:PENWORK:C_PENWORK:2" ],
+      "labels" : [ "Pension age" ]
+    }, {
+      "type" : "Total",
+      "labels" : [ "Total" ]
+    } ]
+  }, {
+    "uri" : "str:field:hb_new:V_F_HB_NEW:TENURE_PUB",
+    "label" : "Private or Social Rented",
+    "annotationKeys" : [ "XXV", "XXVI" ],
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:1" ],
+      "labels" : [ "Social Rented Sector" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:2" ],
+      "labels" : [ "Private Rented Sector" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:hb_new:V_F_HB_NEW:TENURE_PUB:C_HOUSING_SECTOR:99" ],
+      "labels" : [ "Unknown or missing housing sector" ]
+    }, {
+      "type" : "Total",
+      "labels" : [ "Total" ]
+    } ]
+  } ],
+  "cubes" : {
+    "str:count:hb_new:V_F_HB_NEW" : {
+      "values" : [ [ [ 1024911, 319623, 108, 1344641 ], [ 895371, 213779, 22, 1109174 ], [ 1920278, 533399, 132, 2453812 ] ], [ [ 1018444, 314812, 69, 1333321 ], [ 893320, 213640, 15, 1106979 ], [ 1911764, 528452, 87, 2440304 ] ], [ [ 1011339, 309802, 75, 1321213 ], [ 892276, 213685, 22, 1105983 ], [ 1903606, 523490, 98, 2427191 ] ], [ [ 1000207, 303863, 64, 1304137 ], [ 890484, 212989, 26, 1103503 ], [ 1890694, 516851, 91, 2407640 ] ], [ [ 996384, 299594, 72, 1296050 ], [ 891882, 213447, 18, 1105341 ], [ 1888265, 513035, 88, 2401389 ] ], [ [ 991999, 295803, 74, 1287879 ], [ 892661, 213813, 21, 1106497 ], [ 1884658, 509622, 99, 2394371 ] ], [ [ 982298, 290088, 71, 1272451 ], [ 891732, 213507, 14, 1105248 ], [ 1874025, 503595, 85, 2377704 ] ], [ [ 977554, 286650, 53, 1264252 ], [ 892090, 213549, 14, 1105650 ], [ 1869647, 500191, 61, 2369902 ] ], [ [ 966532, 280862, 124, 1247524 ], [ 890645, 213134, 10, 1103789 ], [ 1857179, 493996, 134, 2351313 ] ], [ [ 960042, 276001, 47, 1236091 ], [ 890914, 213410, 7, 1104336 ], [ 1850958, 489412, 56, 2340425 ] ], [ [ 953762, 271337, 60, 1225160 ], [ 891096, 213553, 13, 1104662 ], [ 1844861, 484893, 70, 2329817 ] ], [ [ 945277, 265969, 47, 1211288 ], [ 889585, 213386, 15, 1102991 ], [ 1834862, 479351, 64, 2314278 ] ], [ [ 943683, 263311, 58, 1207052 ], [ 890153, 213966, 8, 1104132 ], [ 1833836, 477276, 70, 2311184 ] ], [ [ 941932, 257335, 73, 1199343 ], [ 890600, 212948, 13, 1103560 ], [ 1832535, 470278, 87, 2302900 ] ], [ [ 928075, 250942, 95, 1179112 ], [ 887717, 212339, 25, 1100079 ], [ 1815794, 463278, 118, 2279192 ] ], [ [ 924698, 247818, 84, 1172603 ], [ 888738, 212674, 19, 1101430 ], [ 1813433, 460491, 105, 2274029 ] ], [ [ 921256, 243437, 127, 1164821 ], [ 891365, 213206, 17, 1104592 ], [ 1812624, 456645, 141, 2269410 ] ], [ [ 903056, 233821, 135, 1137011 ], [ 890379, 212972, 18, 1103374 ], [ 1793434, 446789, 159, 2240385 ] ], [ [ 879470, 220943, 181, 1100594 ], [ 890617, 213310, 19, 1103953 ], [ 1770087, 434256, 196, 2204546 ] ], [ [ 843533, 200350, 187, 1044068 ], [ 891241, 213968, 31, 1105234 ], [ 1734772, 414317, 216, 2149305 ] ], [ [ 800328, 177289, 251, 977876 ], [ 890972, 213957, 22, 1104952 ], [ 1691302, 391251, 274, 2082823 ] ], [ [ 770880, 164062, 211, 935147 ], [ 891591, 214251, 22, 1105863 ], [ 1662470, 378309, 229, 2041010 ] ], [ [ 729464, 150660, 218, 880344 ], [ 889504, 214629, 28, 1104163 ], [ 1618974, 365287, 249, 1984510 ] ], [ [ 706681, 142930, 179, 849791 ], [ 889908, 214926, 31, 1104864 ], [ 1596586, 357855, 214, 1954657 ] ], [ [ 694527, 138167, 242, 832936 ], [ 892018, 215977, 31, 1108028 ], [ 1586545, 354149, 275, 1940965 ] ], [ [ 654276, 125532, 156, 779967 ], [ 889557, 215418, 27, 1104998 ], [ 1543832, 340950, 182, 1884962 ] ], [ [ 626148, 117622, 188, 743953 ], [ 889802, 215710, 35, 1105547 ], [ 1515948, 333327, 216, 1849501 ] ], [ [ 590106, 109311, 248, 699668 ], [ 889759, 216026, 28, 1105816 ], [ 1479869, 325342, 274, 1805482 ] ], [ [ 558503, 102040, 238, 660775 ], [ 891771, 216811, 25, 1108604 ], [ 1450271, 318849, 260, 1769380 ] ], [ [ 503977, 90250, 155, 594390 ], [ 891390, 216685, 15, 1108091 ], [ 1395366, 306937, 172, 1702483 ] ], [ [ 464994, 81899, 154, 547047 ], [ 891911, 217061, 18, 1108985 ], [ 1356903, 298959, 169, 1656034 ] ], [ [ 417381, 71309, 119, 488807 ], [ 890881, 216914, 23, 1107821 ], [ 1308263, 288223, 139, 1596629 ] ], [ [ 389789, 64253, 168, 454213 ], [ 891342, 217418, 16, 1108778 ], [ 1281134, 281668, 182, 1562988 ] ], [ [ 356201, 56621, 155, 412976 ], [ 891682, 217790, 12, 1109480 ], [ 1247879, 274405, 169, 1522456 ] ], [ [ 321420, 48865, 83, 370372 ], [ 889188, 217456, 22, 1106666 ], [ 1210615, 266325, 104, 1477041 ] ], [ [ 307795, 45857, 107, 353756 ], [ 888662, 218078, 19, 1106756 ], [ 1196452, 263938, 123, 1460514 ] ], [ [ 307005, 45538, 138, 352684 ], [ 890405, 219174, 24, 1109600 ], [ 1197415, 264708, 164, 1462284 ] ], [ [ 300913, 44154, 85, 345159 ], [ 887890, 218908, 20, 1106819 ], [ 1188808, 263064, 104, 1451978 ] ] ],
+      "precision" : 0
+    }
+  },
+  "annotationMap" : {
+    "XXI" : "\"..\" denotes a nil or negligible number of claimants or award amount based on a nil or negligible number of claimants.",
+    "XXV" : "For Glasgow City, there has been a misclassification of tenure causing a notable underreporting of the number of Private Rented sector properties between February 2024 and October 2024. Due to this, Detailed Housing Type breakdowns from February 2024 for Glasgow City should be used with caution.",
+    "XXVI" : "For Calderdale since January 2024 there has been a misclassification of the HB claims where Local Housing Allowance is applied. This means a notable underreporting of Private deregulated tenants (LHA) (PRS) and numbers of Entitled Bedrooms (LHA) and thus over-reporting of Private deregulated tenants (non-LHA) (PRS) and Non-LHA claimants respectively."
+  }
+}

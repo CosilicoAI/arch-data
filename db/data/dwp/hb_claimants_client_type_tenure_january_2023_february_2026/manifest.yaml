@@ -1,0 +1,19 @@
+source_id: dwp
+package_id: dwp-hb-claimants-client-type-tenure-january-2023-february-2026
+dataset: dwp_dwp-hb-claimants-client-type-tenure-january-2023-february-2026
+source_page: https://stat-xplore.dwp.gov.uk/
+table: Housing Benefit claimants by client type and tenure, January 2023 to February
+  2026
+files:
+  2025:
+    filename: housing_benefit_claimants_by_client_type_and_tenure_january_2023_february_2026.json
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
+    sha256: fbbec9ae81325ec25117d269776d4c5b24f0bb40d2295d56836a067390bceb21
+    size_bytes: 16539
+    fetched_at: '2026-09-11T12:10:42Z'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-hb-claimants-client-type-tenure-january-2023-february-2026/2025/fbbec9ae81325ec25117d269776d4c5b24f0bb40d2295d56836a067390bceb21/housing_benefit_claimants_by_client_type_and_tenure_january_2023_february_2026.json
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-hb-claimants-client-type-tenure-january-2023-february-2026/2025/fbbec9ae81325ec25117d269776d4c5b24f0bb40d2295d56836a067390bceb21/housing_benefit_claimants_by_client_type_and_tenure_january_2023_february_2026.json

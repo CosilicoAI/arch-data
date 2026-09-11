@@ -1,0 +1,286 @@
+{
+  "query" : {
+    "database" : "str:database:UC_Households",
+    "measures" : [ "str:count:UC_Households:V_F_UC_HOUSEHOLDS" ],
+    "recodes" : {
+      "str:field:UC_Households:F_UC_HH_DATE:DATE_NAME" : {
+        "map" : [ [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202301" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202302" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202303" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202304" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202305" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202306" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202307" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202308" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202309" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202310" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202311" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202312" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202401" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202402" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202403" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202404" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202405" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202406" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202407" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202408" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202409" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202410" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202411" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202412" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202501" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202502" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202503" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202504" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202505" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202506" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202507" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202508" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202509" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202510" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202511" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202512" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202601" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202602" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202603" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202604" ], [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202605" ] ],
+        "total" : false
+      },
+      "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT" : {
+        "map" : [ [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:0" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:1" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:2" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:3" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:4" ] ],
+        "total" : false
+      },
+      "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT" : {
+        "map" : [ [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0" ], [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1" ] ],
+        "total" : true
+      }
+    },
+    "dimensions" : [ [ "str:field:UC_Households:F_UC_HH_DATE:DATE_NAME" ], [ "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT" ], [ "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT" ] ]
+  },
+  "database" : {
+    "id" : "UC_Households",
+    "uri" : "str:database:UC_Households",
+    "label" : "Households on Universal Credit",
+    "annotationKeys" : [ "I", "II", "III", "IV", "z" ]
+  },
+  "measures" : [ {
+    "uri" : "str:count:UC_Households:V_F_UC_HOUSEHOLDS",
+    "label" : "Households on Universal Credit",
+    "measure" : "str:count:UC_Households:V_F_UC_HOUSEHOLDS",
+    "function" : "COUNT"
+  } ],
+  "fields" : [ {
+    "uri" : "str:field:UC_Households:F_UC_HH_DATE:DATE_NAME",
+    "label" : "Month",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202301" ],
+      "labels" : [ "January 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202302" ],
+      "labels" : [ "February 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202303" ],
+      "labels" : [ "March 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202304" ],
+      "labels" : [ "April 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202305" ],
+      "labels" : [ "May 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202306" ],
+      "labels" : [ "June 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202307" ],
+      "labels" : [ "July 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202308" ],
+      "labels" : [ "August 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202309" ],
+      "labels" : [ "September 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202310" ],
+      "labels" : [ "October 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202311" ],
+      "labels" : [ "November 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202312" ],
+      "labels" : [ "December 2023" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202401" ],
+      "labels" : [ "January 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202402" ],
+      "labels" : [ "February 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202403" ],
+      "labels" : [ "March 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202404" ],
+      "labels" : [ "April 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202405" ],
+      "labels" : [ "May 2024" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202406" ],
+      "labels" : [ "June 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202407" ],
+      "labels" : [ "July 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202408" ],
+      "labels" : [ "August 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202409" ],
+      "labels" : [ "September 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202410" ],
+      "labels" : [ "October 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202411" ],
+      "labels" : [ "November 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202412" ],
+      "labels" : [ "December 2024" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202501" ],
+      "labels" : [ "January 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202502" ],
+      "labels" : [ "February 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202503" ],
+      "labels" : [ "March 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202504" ],
+      "labels" : [ "April 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202505" ],
+      "labels" : [ "May 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202506" ],
+      "labels" : [ "June 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202507" ],
+      "labels" : [ "July 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202508" ],
+      "labels" : [ "August 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202509" ],
+      "labels" : [ "September 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202510" ],
+      "labels" : [ "October 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202511" ],
+      "labels" : [ "November 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202512" ],
+      "labels" : [ "December 2025" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202601" ],
+      "labels" : [ "January 2026" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202602" ],
+      "labels" : [ "February 2026" ],
+      "annotationKeys" : [ "r" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202603" ],
+      "labels" : [ "March 2026" ],
+      "annotationKeys" : [ "p" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202604" ],
+      "labels" : [ "April 2026" ],
+      "annotationKeys" : [ "p" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:F_UC_HH_DATE:DATE_NAME:C_UC_HH_DATE:202605" ],
+      "labels" : [ "May 2026" ],
+      "annotationKeys" : [ "p" ]
+    } ]
+  }, {
+    "uri" : "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT",
+    "label" : "Limited Capability for Work Entitlement",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:0" ],
+      "labels" : [ "None" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:1" ],
+      "labels" : [ "LCW or LCWRA" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:2" ],
+      "labels" : [ "LCW" ],
+      "annotationKeys" : [ "VIII" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:3" ],
+      "labels" : [ "LCWRA - Higher" ],
+      "annotationKeys" : [ "XIII" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCLCW_ENTITLEMENT:C_UC_LCW_ENTITLEMENT:4" ],
+      "labels" : [ "LCWRA - Lower" ],
+      "annotationKeys" : [ "XIV" ]
+    } ]
+  }, {
+    "uri" : "str:field:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT",
+    "label" : "Payment Indicator",
+    "items" : [ {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:0" ],
+      "labels" : [ "No" ]
+    }, {
+      "type" : "RecodeItem",
+      "uris" : [ "str:value:UC_Households:V_F_UC_HOUSEHOLDS:HCPAYMENT:C_UC_PAYMENT:1" ],
+      "labels" : [ "Yes" ]
+    }, {
+      "type" : "Total",
+      "labels" : [ "Total" ]
+    } ]
+  } ],
+  "cubes" : {
+    "str:count:UC_Households:V_F_UC_HOUSEHOLDS" : {
+      "values" : [ [ [ 577877, 3249560, 3827434 ], [ 0, 0, 0 ], [ 407, 23658, 24060 ], [ 16280, 1103516, 1119796 ], [ 0, 0, 0 ] ], [ [ 534351, 3309908, 3844259 ], [ 0, 0, 0 ], [ 374, 23621, 23999 ], [ 16041, 1125645, 1141688 ], [ 0, 0, 0 ] ], [ [ 514460, 3325775, 3840237 ], [ 0, 0, 0 ], [ 377, 23535, 23909 ], [ 16302, 1148775, 1165077 ], [ 0, 0, 0 ] ], [ [ 538971, 3313899, 3852875 ], [ 0, 0, 0 ], [ 400, 23469, 23868 ], [ 16516, 1172119, 1188631 ], [ 0, 0, 0 ] ], [ [ 490248, 3363061, 3853309 ], [ 0, 0, 0 ], [ 323, 23446, 23768 ], [ 14283, 1196259, 1210547 ], [ 0, 0, 0 ] ], [ [ 527624, 3331870, 3859489 ], [ 0, 0, 0 ], [ 357, 23274, 23637 ], [ 15881, 1217026, 1232912 ], [ 0, 0, 0 ] ], [ [ 523733, 3352317, 3876053 ], [ 0, 0, 0 ], [ 389, 23066, 23459 ], [ 16902, 1243712, 1260613 ], [ 0, 0, 0 ] ], [ [ 549605, 3343764, 3893364 ], [ 0, 0, 0 ], [ 381, 22924, 23307 ], [ 16849, 1263855, 1280698 ], [ 0, 0, 0 ] ], [ [ 534707, 3387811, 3922518 ], [ 0, 0, 0 ], [ 413, 22633, 23049 ], [ 18346, 1288933, 1307279 ], [ 0, 0, 0 ] ], [ [ 531315, 3427440, 3958751 ], [ 0, 0, 0 ], [ 381, 22534, 22920 ], [ 18475, 1312210, 1330681 ], [ 0, 0, 0 ] ], [ [ 556461, 3438941, 3995402 ], [ 0, 0, 0 ], [ 359, 22447, 22805 ], [ 19105, 1333903, 1353010 ], [ 0, 0, 0 ] ], [ [ 568530, 3461710, 4030243 ], [ 0, 0, 0 ], [ 403, 22168, 22565 ], [ 21159, 1361770, 1382925 ], [ 0, 0, 0 ] ], [ [ 559905, 3489247, 4049156 ], [ 0, 0, 0 ], [ 373, 21946, 22321 ], [ 20249, 1384969, 1405219 ], [ 0, 0, 0 ] ], [ [ 524036, 3587134, 4111171 ], [ 0, 0, 0 ], [ 342, 21792, 22134 ], [ 19905, 1409244, 1429145 ], [ 0, 0, 0 ] ], [ [ 526956, 3627399, 4154356 ], [ 0, 0, 0 ], [ 344, 21325, 21673 ], [ 20833, 1439802, 1460636 ], [ 0, 0, 0 ] ], [ [ 536142, 3647834, 4183971 ], [ 0, 0, 0 ], [ 364, 21068, 21432 ], [ 20523, 1460064, 1480593 ], [ 0, 0, 0 ] ], [ [ 493931, 3727675, 4221601 ], [ 0, 0, 0 ], [ 305, 20839, 21149 ], [ 18526, 1486455, 1504985 ], [ 0, 0, 0 ] ], [ [ 522337, 3719018, 4241359 ], [ 0, 0, 0 ], [ 335, 20211, 20542 ], [ 19612, 1518234, 1537846 ], [ 0, 0, 0 ] ], [ [ 509448, 3769695, 4279142 ], [ 0, 0, 0 ], [ 303, 19853, 20156 ], [ 19719, 1545885, 1565603 ], [ 0, 0, 0 ] ], [ [ 542950, 3782814, 4325765 ], [ 0, 0, 0 ], [ 306, 19671, 19976 ], [ 20118, 1574731, 1594849 ], [ 0, 0, 0 ] ], [ [ 541600, 3834412, 4376013 ], [ 0, 0, 0 ], [ 329, 20138, 20469 ], [ 20790, 1614965, 1635762 ], [ 0, 0, 0 ] ], [ [ 535253, 3850315, 4385564 ], [ 0, 0, 0 ], [ 296, 21295, 21591 ], [ 21377, 1659428, 1680800 ], [ 0, 0, 0 ] ], [ [ 561818, 3834784, 4396600 ], [ 0, 0, 0 ], [ 318, 23289, 23603 ], [ 22402, 1723798, 1746202 ], [ 0, 0, 0 ] ], [ [ 561978, 3846844, 4408821 ], [ 0, 0, 0 ], [ 336, 24544, 24877 ], [ 22936, 1772263, 1795200 ], [ 0, 0, 0 ] ], [ [ 545715, 3859716, 4405433 ], [ 0, 0, 0 ], [ 314, 26288, 26602 ], [ 21118, 1825054, 1846170 ], [ 0, 0, 0 ] ], [ [ 487204, 3940765, 4427969 ], [ 0, 0, 0 ], [ 289, 30292, 30584 ], [ 20065, 1909477, 1929537 ], [ 0, 0, 0 ] ], [ [ 495634, 3914804, 4410439 ], [ 0, 0, 0 ], [ 302, 34138, 34438 ], [ 21036, 1981141, 2002174 ], [ 0, 0, 0 ] ], [ [ 513435, 3896244, 4409680 ], [ 0, 0, 0 ], [ 326, 38064, 38388 ], [ 20964, 2050162, 2071127 ], [ 0, 0, 0 ] ], [ [ 483890, 3909829, 4393715 ], [ 0, 0, 0 ], [ 323, 42265, 42585 ], [ 20272, 2127859, 2148135 ], [ 0, 0, 0 ] ], [ [ 505580, 3880243, 4385821 ], [ 0, 0, 0 ], [ 329, 47736, 48063 ], [ 21018, 2229719, 2250729 ], [ 0, 0, 0 ] ], [ [ 501305, 3884366, 4385670 ], [ 0, 0, 0 ], [ 338, 51738, 52070 ], [ 20983, 2312448, 2333430 ], [ 0, 0, 0 ] ], [ [ 549659, 3837075, 4386731 ], [ 0, 0, 0 ], [ 365, 55775, 56142 ], [ 22450, 2409102, 2431552 ], [ 0, 0, 0 ] ], [ [ 538764, 3846120, 4384888 ], [ 0, 0, 0 ], [ 353, 59298, 59654 ], [ 22717, 2503058, 2525780 ], [ 0, 0, 0 ] ], [ [ 518519, 3861772, 4380297 ], [ 0, 0, 0 ], [ 344, 61906, 62246 ], [ 22191, 2583494, 2605687 ], [ 0, 0, 0 ] ], [ [ 536258, 3841816, 4378073 ], [ 0, 0, 0 ], [ 368, 63751, 64119 ], [ 22422, 2653544, 2675966 ], [ 0, 0, 0 ] ], [ [ 532142, 3850312, 4382452 ], [ 0, 0, 0 ], [ 377, 64312, 64689 ], [ 22862, 2684044, 2706904 ], [ 0, 0, 0 ] ], [ [ 520841, 3842710, 4363551 ], [ 0, 0, 0 ], [ 358, 64022, 64375 ], [ 21361, 2696861, 2718224 ], [ 0, 0, 0 ] ], [ [ 457767, 3912411, 4370178 ], [ 0, 0, 0 ], [ 313, 63551, 63861 ], [ 19702, 2710421, 2730122 ], [ 0, 0, 0 ] ], [ [ 450830, 3905712, 4356547 ], [ 0, 0, 0 ], [ 287, 62985, 63271 ], [ 19603, 2715060, 2734660 ], [ 0, 0, 0 ] ], [ [ 463935, 3894630, 4358564 ], [ 0, 0, 0 ], [ 286, 62679, 62963 ], [ 19199, 2715585, 2734786 ], [ 7, 80, 88 ] ], [ [ 431391, 3929043, 4360434 ], [ 0, 0, 0 ], [ 267, 62250, 62518 ], [ 18096, 2715434, 2733533 ], [ 65, 672, 735 ] ] ],
+      "precision" : 0
+    }
+  },
+  "annotationMap" : {
+    "I" : "A limited test of the full Universal Credit service was launched in Sutton, South London on 26th November 2014, and has expanded to other areas since. This publication now includes statistics covering both the live and full Universal Credit service. Please see https://www.gov.uk/government/publications/universal-credit-transition-to-full-service for details of the areas in which the full Universal Credit service is operating.",
+    "II" : "Data for more recent months will be subject to a higher degree of revision. Universal Credit award amounts may be retrospectively revised.",
+    "III" : "Monthly award amounts include any awards due to entitlement such as the standard allowance or housing entitlement plus any advance payments. Advance payments will normally be recovered during subsequent assessment periods.",
+    "IV" : "Award, entitlement and payment information may be missing for a very small number of households on Universal Credit, where more limited information is entered onto IT systems.",
+    "z" : "\"..\" denotes a nil or negligible number of claimants or award amount based on a nil or negligible number of claimants.",
+    "r" : "Figures marked \"r\" have been revised since the previous release.",
+    "p" : "Figures marked \"p\" are provisional. These figures will be subject to revision in subsequent releases. It is expected that overall provisional figures will be within two per cent of their revised figure in future releases.",
+    "VIII" : "Limited Capability for Work.",
+    "XIII" : "Limited Capability for Work and Work Related Activity - Higher.",
+    "XIV" : "Limited Capability for Work and Work Related Activity - Lower."
+  }
+}

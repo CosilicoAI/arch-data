@@ -1,0 +1,19 @@
+source_id: dwp
+package_id: dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026
+dataset: dwp_dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026
+source_page: https://stat-xplore.dwp.gov.uk/
+table: Housing Benefit claimants by client type, tenure and accommodation type, September
+  2025 to February 2026
+files:
+  2025:
+    filename: housing_benefit_claimants_by_client_type_tenure_and_accommodation_type_september_2025_february_2026.json
+    source_url: https://stat-xplore.dwp.gov.uk/webapi/rest/v1/table
+    sha256: a2fd55457c9427cd16295489810e8f5fdff0a78e2fabe2aa6e9b835421030bca
+    size_bytes: 7955
+    fetched_at: '2026-09-11T12:11:17Z'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/dwp/dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026/2025/a2fd55457c9427cd16295489810e8f5fdff0a78e2fabe2aa6e9b835421030bca/housing_benefit_claimants_by_client_type_tenure_and_accommodation_type_september_2025_february_2026.json
+        uri: r2://ledger-raw/raw/uk/dwp/dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026/2025/a2fd55457c9427cd16295489810e8f5fdff0a78e2fabe2aa6e9b835421030bca/housing_benefit_claimants_by_client_type_tenure_and_accommodation_type_september_2025_february_2026.json
