@@ -185,6 +185,20 @@ No source package parses a microdata release. `validate-package` fails with
 microdata row, cell, or fact ever enters Chronicle. Registration is
 manifest-level identity; see `docs/adr-chronicle-raw-microdata-identity.md`.
 
+That identity is a property of the package directory, not of one manifest, so
+every command checks it across the directory's manifests. A publisher-table
+entry whose filename, declared checksum, or recorded R2 identity -- current or
+archived under `storage.previous_r2` -- matches a `microdata_release` sibling's
+is that release under a second record: `fetch-artifact` refuses it before
+reading the publisher, the source-package reader refuses it before any byte
+I/O, and `publish-raw` and `inventory-artifacts` report
+`bytes_identified_by_microdata_release` for the package and for the entry,
+before any upload or manifest rewrite. The reverse direction is refused too:
+registering a release for bytes a public table sibling already declares would
+create exactly that package. A hash-only registration colliding with a public
+release keeps its own `sha256_collision_across_manifests` and
+`archived_sha256_collision` codes instead.
+
 `scripts/register_microdata_releases.py` drives both halves from a read-only
 PolicyEngine/microcosm checkout: `emit` writes the hash-only manifests from
 Microcosm's reviewed pins as `consumer_pin` registrations (recording the
