@@ -13,7 +13,7 @@
 # corrected here. Accommodation type is the separate September 2025 onward package.
 schema_version: ledger.source_package.v1
 package_id: dwp-hb-claimants-client-type-tenure-january-2023-february-2026
-label: 'DWP Stat-Xplore: Housing Benefit claimants by client type and tenure by client type and tenure, Great Britain, January 2023 to February 2026'
+label: 'DWP Stat-Xplore: Housing Benefit claimants by client type and tenure, Great Britain, January 2023 to February 2026'
 artifact:
   source_name: dwp
   source_table: 'Housing Benefit claimants by client type and tenure, January 2023 to February 2026'

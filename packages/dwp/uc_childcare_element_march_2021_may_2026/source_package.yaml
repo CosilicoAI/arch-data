@@ -1,9 +1,14 @@
 # DWP 'Universal Credit childcare element statistics to May 2026', supplementary data tables,
 # published 18 August 2026 with the Universal Credit quarterly statistics to 14 May 2026
 # (chronicle#259 item 3). This package supersedes the retired
-# dwp-uc-childcare-element-march-2021-august-2025: the same Table 1 three releases later, in
-# which DWP revised 30 of the 54 overlapping months (by at most 5,000) and
-# 9 Table 3 means (by at most GBP 10).
+# dwp-uc-childcare-element-march-2021-august-2025, which carried the Table 1 total column
+# only: the same table three releases later. DWP revised the total in 25 of those
+# 54 months (by at most 5,000; 30 months move counting the single and couple
+# columns) and 9 Table 3 means (by at most GBP 10).
+# Key disclosure: the retired package's 54 semantic_fact_keys persist here, 25 of
+# them with a revised value; all 54 aggregate_fact_keys are re-minted, because the release
+# (table, vintage, digest) and the record-set ids changed. Anyone holding the old aggregate
+# keys must re-pin.
 # Table 1: UC households receiving the childcare element (total, single, couple), rounded
 # by DWP to the nearest 1,000. Table 3: mean monthly amount of the childcare element per
 # household receiving it, rounded to the nearest GBP 10. DWP marks the most recent months

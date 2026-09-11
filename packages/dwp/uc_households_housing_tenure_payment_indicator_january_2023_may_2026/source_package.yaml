@@ -20,7 +20,7 @@
 # tenure rows here reproduce it only within disclosure control.
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-housing-tenure-payment-indicator-january-2023-may-2026
-label: 'DWP Stat-Xplore: Universal Credit benefit units by housing entitlement tenure and payment indicator by housing entitlement tenure and payment indicator, Great Britain, January 2023 to May 2026'
+label: 'DWP Stat-Xplore: Universal Credit benefit units by housing entitlement tenure and payment indicator, Great Britain, January 2023 to May 2026'
 artifact:
   source_name: dwp
   source_table: 'Households on Universal Credit by housing entitlement tenure and payment indicator, January 2023 to May 2026'

@@ -155,6 +155,67 @@ def _assert_common_contract(facts, *, months, entity, role, concept, source_conc
     assert len(consumer_fact_rows(facts)) == len(facts)
 
 
+@pytest.mark.parametrize(
+    ("alias", "subject", "axes", "window"),
+    [
+        (
+            HOUSING_TENURE,
+            "Universal Credit benefit units",
+            "housing entitlement tenure and payment indicator",
+            "January 2023 to May 2026",
+        ),
+        (
+            HOUSING_ENTITLEMENT,
+            "Universal Credit benefit units",
+            "housing entitlement and payment indicator",
+            "January 2023 to May 2026",
+        ),
+        (
+            LCW,
+            "Universal Credit benefit units",
+            "limited capability for work entitlement and payment indicator",
+            "January 2023 to May 2026",
+        ),
+        (
+            LCW_GROUP,
+            "Universal Credit benefit units",
+            "limited capability for work entitlement group and payment indicator",
+            "January 2023 to May 2026",
+        ),
+        (
+            CARER,
+            "Universal Credit benefit units",
+            "carer entitlement and payment indicator",
+            "January 2023 to May 2026",
+        ),
+        (
+            EMPLOYMENT,
+            "People on Universal Credit",
+            "employment indicator",
+            "January 2023 to May 2026",
+        ),
+        (
+            HB,
+            "Housing Benefit claimants",
+            "client type and tenure",
+            "January 2023 to February 2026",
+        ),
+        (
+            HB_ACCOMMODATION,
+            "Housing Benefit claimants",
+            "client type, tenure and accommodation type",
+            "September 2025 to February 2026",
+        ),
+    ],
+)
+def test_issue_259_stat_xplore_labels_name_each_cross_once(
+    alias, subject, axes, window
+):
+    assert load_source_package(alias).label == (
+        f"DWP Stat-Xplore: {subject} by {axes}, Great Britain, {window}"
+    )
+
+
 def test_retired_packages_are_no_longer_registered():
     # #259 item 2: the grouped housing cell is replaced by DWP's Housing Entitlement
     # 'Yes' value; the May 2026 childcare tables supersede the August 2025 vintage.

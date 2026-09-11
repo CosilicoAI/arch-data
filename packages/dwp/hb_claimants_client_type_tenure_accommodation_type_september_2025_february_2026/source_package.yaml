@@ -14,7 +14,7 @@
 # Glasgow City and Calderdale tenure annotations of the client type x tenure package apply.
 schema_version: ledger.source_package.v1
 package_id: dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026
-label: 'DWP Stat-Xplore: Housing Benefit claimants by client type by client type, tenure and accommodation type, Great Britain, September 2025 to February 2026'
+label: 'DWP Stat-Xplore: Housing Benefit claimants by client type, tenure and accommodation type, Great Britain, September 2025 to February 2026'
 artifact:
   source_name: dwp
   source_table: 'Housing Benefit claimants by client type, tenure and accommodation type, September 2025 to February 2026'
