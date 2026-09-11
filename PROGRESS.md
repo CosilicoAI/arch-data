@@ -2,38 +2,61 @@
 
 ## State
 
-- Started at `8416660` on branch `microdata-registration` (PR #227, pushed head
-  `8416660`; nothing is pushed from this lane).
-- Scope: the peer finding that `publish-raw` (`_publish_raw_manifest_entry`)
-  and the inventory path still persist/upload/report success over
-  publisher-table bytes that a sibling `microdata_release` manifest identifies
-  by checksum or by an archived filename/sha256 alias.
-- Plan: red regressions first (mocked persistence, network refused, assert no
-  upload and no manifest rewrite), then apply the already-hoisted
-  `_assert_no_microdata_identity` classifier to publish-raw and to the
-  package-directory checks shared by publish and inventory.
+- Code complete at `9093db3`, on branch `microdata-registration` from pushed
+  head `8416660` (nothing pushed from this lane). Full-suite verification is
+  the remaining step.
+- Six code/doc commits, each preceded by its failing regressions. Changed
+  files: `chronicle/artifacts.py`, `tests/test_chronicle_microdata_staging.py`,
+  `docs/agent-source-package-harness.md`, this journal. No `db/data/**`
+  changes; no pin or pin-manifest changes.
 
 ## Done
 
 - Read `AGENTS.md`, the prior round-3 journal, and the cited implementation
   sites in `chronicle/artifacts.py` / `chronicle/registration.py`.
-- Journal opener committed in `97a4f91`.
 - Confirmed the residual by direct execution before writing tests: publish
-  uploads once, rewrites `manifest_tables.yaml` and reports valid, and
-  inventory reports valid, for alias in {sha256, archived-filename,
+  uploaded once, rewrote `manifest_tables.yaml` and reported valid, and
+  inventory reported valid, for alias in {sha256, archived-filename,
   archived-sha256} across declared/observed/r2-only table identities. The
-  current-filename alias is already refused by
+  current-filename alias was already refused by
   `bytes_present_for_microdata_release_entry`.
-- Red regressions committed in `de85517`
-  (`tests/test_chronicle_microdata_staging.py`): 18 failing cases across
-  publish-raw and inventory, plus three passing controls (distinct table bytes
-  beside a release; two non-release manifests sharing one public table).
+- `de85517` red: 18 publish/inventory cases, plus three controls that already
+  passed (distinct table bytes beside a release; two non-release manifests
+  sharing one public table). `20a2cef` fix: `MICRODATA_IDENTITY_CODE`
+  (`bytes_identified_by_microdata_release`), the reporting wrapper
+  `_microdata_identity_errors`, the package sweep
+  `_assert_no_package_microdata_identities` called from both directory-check
+  blocks, the declared/recorded refusal in `_publish_raw_manifest_entry`
+  before `read_bytes`, the observed-digest accumulation before the errors
+  gate, the recorded-object skip, the preflight return and the upload, and
+  `package_manifests` threaded into `_inventory_entry`.
+- `adef369`: report the package code as vintage/filename, code and the manifest
+  that carries the alias, matching the surrounding package-error shape.
+- `e28d332` (adjacent gap, red-first): a release fetch for bytes a public table
+  sibling already registers was still accepted, creating exactly the directory
+  publish and inventory now refuse. `_assert_no_table_claims_release_identity`
+  mirrors the classifier in both fetch passes.
+- `6edcd77`/`016ffe2` red, `9093db3` fix (adjacent gap): the table's own
+  archived `storage.previous_r2` identities were never compared, while the
+  release's were. One shared `_recorded_identity_aliases` reader now feeds the
+  package sweep and the table fetch. The source-package reader is left alone on
+  purpose: it passes `require_digest=True`, and folding archived digests into
+  its wanted set would satisfy the digest requirement it exists to enforce.
+- `7935f75` plus the `9093db3` revision document the package-wide rule per
+  command in `docs/agent-source-package-harness.md`.
+- Hash-only entries and release entries are skipped throughout, so
+  `validate_package_directory`'s `sha256_collision_across_manifests` and
+  `archived_sha256_collision` codes are preserved, never replaced. The
+  observed-digest publish check appends rather than returning, which is what
+  keeps `test_publish_refuses_an_unpinned_public_alias_of_hash_only_bytes`
+  reporting its existing code.
+- Affected-module runs green at `9093db3`: 1,054 tests across the eleven
+  manifest/artifact/fetch modules, direct exit 0.
 
 ## Next
 
-- Apply the shared `_assert_no_microdata_identity` classifier to publish-raw,
-  the package-directory checks, and `_inventory_entry`.
-- Run the full suite, Ruff check and format check.
+- Full suite, `uv run ruff check .`, `ruff format --check` on changed files,
+  then the lane report.
 
 # PR #227 Astra gate bbd833a9 — round 3 fix lane
 
