@@ -1,5 +1,6 @@
 source_id: ofgem
 package_id: ofgem-energy-price-cap-q1-2024
+kind: publisher_table
 dataset: ofgem_ofgem-energy-price-cap-q1-2024
 source_page: https://www.ofgem.gov.uk/news/new-energy-price-cap-level-january-march-2024-starts-today
 table: New energy price cap level for January to March 2024

@@ -1,5 +1,6 @@
 source_id: dwp
 package_id: dwp-uc-childcare-element-march-2021-may-2026
+kind: publisher_table
 dataset: dwp_dwp-uc-childcare-element-march-2021-may-2026
 source_page: https://www.gov.uk/government/statistics/universal-credit-quarterly-statistics-29-april-2013-to-14-may-2026
 table: Universal Credit childcare element statistics to May 2026, Tables 1 and 3

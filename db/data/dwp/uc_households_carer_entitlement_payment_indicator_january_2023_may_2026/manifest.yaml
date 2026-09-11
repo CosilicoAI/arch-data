@@ -1,5 +1,6 @@
 source_id: dwp
 package_id: dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026
+kind: publisher_table
 dataset: dwp_dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026
 source_page: https://stat-xplore.dwp.gov.uk/
 table: Households on Universal Credit by carer entitlement and payment indicator,

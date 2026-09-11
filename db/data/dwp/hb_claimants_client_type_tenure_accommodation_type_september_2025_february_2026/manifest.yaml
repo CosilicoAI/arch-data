@@ -1,5 +1,6 @@
 source_id: dwp
 package_id: dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026
+kind: publisher_table
 dataset: dwp_dwp-hb-claimants-client-type-tenure-accommodation-type-september-2025-february-2026
 source_page: https://stat-xplore.dwp.gov.uk/
 table: Housing Benefit claimants by client type, tenure and accommodation type, September

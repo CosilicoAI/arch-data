@@ -1,5 +1,6 @@
 source_id: welshgov
 package_id: welshgov-bus-statistics-2024-25
+kind: publisher_table
 dataset: welshgov_welshgov-bus-statistics-2024-25
 source_page: https://www.gov.wales/public-service-vehicles-buses-and-taxis-april-2024-march-2025-html
 table: Public service vehicles (buses and taxis), April 2024 to March 2025

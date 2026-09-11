@@ -12,10 +12,10 @@ is an error, never a publisher table by default.
 The pre-rule snapshot is the rebased parent ``ba8147a7``: its 168 kindless
 publisher manifests are frozen using their exact Git blob bytes. This includes
 upstream publisher packages inherited when the explicit-kind rule was rebased.
-After that snapshot, entries are removed once a manifest declares its kind,
-and never added. ``tests/test_chronicle_manifest_kind.py`` checks that every
-kindless manifest in the tree is listed here with its frozen digest, so a new
-kindless manifest cannot land.
+After that snapshot, entries are removed once a manifest declares its kind or
+leaves the tree, and never added. ``tests/test_chronicle_manifest_kind.py``
+checks that every kindless manifest in the tree is listed here with its frozen
+digest, so a new kindless manifest cannot land.
 """
 
 from __future__ import annotations
@@ -136,9 +136,6 @@ GRANDFATHERED_KINDLESS_MANIFESTS: Mapping[str, str] = MappingProxyType(
         "db/data/dwp/pip_daily_living_foi_2025/manifest.yaml": (
             "4ee8292dbc7c9d539c9f86e4c1926c7cc044b071006252622f8716f79418839a"
         ),
-        "db/data/dwp/uc_childcare_element_march_2021_august_2025/manifest.yaml": (
-            "eac3f1eeb946b68b9bcd2460fc621c4f60956808b332b04743c78071beed8132"
-        ),
         "db/data/dwp/uc_deductions_march_2025_february_2026/manifest.yaml": (
             "2c148e2981347334c537f12a8e6caea11ccae543678271f76308af70594b2081"
         ),
@@ -151,29 +148,17 @@ GRANDFATHERED_KINDLESS_MANIFESTS: Mapping[str, str] = MappingProxyType(
         "db/data/dwp/uc_households_by_local_authority_may_2025/manifest.yaml": (
             "ff95bda95cc1e56f4993b75c3f218373c41c77097f5e804da28f1e16d5cfbe81"
         ),
-        "db/data/dwp/uc_households_carer_entitlement_april_december_2025/manifest.yaml": (
-            "67729d45580419b84b85dc679e45869dbc2f3dafda46cec53d5a531543f0a4d3"
-        ),
         "db/data/dwp/uc_households_children_april_december_2025/manifest.yaml": (
             "9b44c346294f84fcfb5e199f8b555d052dae828cecb7de2a633a46c34d215b62"
         ),
         "db/data/dwp/uc_households_children_child_entitlement_april_december_2025/manifest.yaml": (
             "fbd89ef7a56dd1dad0a4084afd55577faa39bb42c6373c2241bb8b06d76feb39"
         ),
-        "db/data/dwp/uc_households_family_type_april_december_2025/manifest.yaml": (
-            "6a55f6c3219c1f8bbea56800bfa9a324f61bec446008bc412949c4f66f0ea812"
-        ),
         "db/data/dwp/uc_households_family_type_child_entitlement_april_december_2025/manifest.yaml": (
             "9434749696fc564e92f65544d524d99e661d61e3a63e9d0a893980cb2b45d075"
         ),
         "db/data/dwp/uc_households_family_type_payment_indicator_april_december_2025/manifest.yaml": (
             "35970ad9e77107eb65115a4b2e2c652297ed3b65bce3187e0e3279f0a0ff1ed5"
-        ),
-        "db/data/dwp/uc_households_housing_entitlement_april_december_2025/manifest.yaml": (
-            "867b596a4224ab1e73a03c6951106f49e0eb1d5821aa397a292e8bafaf9c3dba"
-        ),
-        "db/data/dwp/uc_households_lcwra_entitlement_april_december_2025/manifest.yaml": (
-            "6a0164ef778d320dbbe61e414a68066bc1b64fe42ebf5bbb6571a4d47fd7f1af"
         ),
         "db/data/dwp/uc_payment_distribution_april_december_2025/manifest.yaml": (
             "36cc979e797b7974e97b3aeb07a30076fafb64c520a06f5de4ac9224c1f21fb6"

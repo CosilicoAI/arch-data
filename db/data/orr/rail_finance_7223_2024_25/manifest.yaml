@@ -1,5 +1,6 @@
 source_id: orr
 package_id: orr-rail-finance-7223-2024-25
+kind: publisher_table
 dataset: orr_orr-rail-finance-7223-2024-25
 source_page: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
 table: Table 7223 franchised passenger train operator finances

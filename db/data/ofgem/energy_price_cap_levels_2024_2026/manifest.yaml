@@ -1,5 +1,6 @@
 source_id: ofgem
 package_id: ofgem-energy-price-cap-levels-2024-2026
+kind: publisher_table
 dataset: ofgem_ofgem-energy-price-cap-levels-2024-2026
 source_page: https://www.ofgem.gov.uk/energy-regulation/domestic-and-non-domestic/energy-pricing-rules/energy-price-cap/energy-price-cap-default-tariff-levels
 table: 'Final levelised cap rates model (Annex 9): 1 October to 31 December 2026'
