@@ -2,9 +2,9 @@
 
 ## State
 
-- Code complete at `9093db3`, on branch `microdata-registration` from pushed
-  head `8416660` (nothing pushed from this lane). Full-suite verification is
-  the remaining step.
+- Complete at `3f593f6` on branch `microdata-registration`, from pushed head
+  `8416660` (nothing pushed from this lane). The full suite, Ruff lint and
+  Ruff format checks all pass with direct exit 0.
 - Six code/doc commits, each preceded by its failing regressions. Changed
   files: `chronicle/artifacts.py`, `tests/test_chronicle_microdata_staging.py`,
   `docs/agent-source-package-harness.md`, this journal. No `db/data/**`
@@ -47,16 +47,29 @@
 - Hash-only entries and release entries are skipped throughout, so
   `validate_package_directory`'s `sha256_collision_across_manifests` and
   `archived_sha256_collision` codes are preserved, never replaced. The
-  observed-digest publish check appends rather than returning, which is what
-  keeps `test_publish_refuses_an_unpinned_public_alias_of_hash_only_bytes`
-  reporting its existing code.
+  observed-digest publish check appends to the accumulated `errors`, which
+  `refuse()` would also have preserved: that closure appends its reason to the
+  same list rather than replacing it.
+- Two entry-level codes are substituted on entries that stay refused either
+  way, and both are reported by the package sweep instead: a declared digest
+  aliasing a release with different local bytes reported `checksum_mismatch`
+  before, and a declared digest matching a hash-only entry inside a release
+  manifest reported the entry-level `sha256_collision_across_manifests` (the
+  package-level code is unchanged). Nothing that was refused is now accepted.
 - Affected-module runs green at `9093db3`: 1,054 tests across the eleven
   manifest/artifact/fetch modules, direct exit 0.
+- Full suite at `3f593f6`, clean tree, no edits during the run:
+  **1,833 passed, 1 skipped, 42 warnings in 1,460.12 seconds (24:20)**, direct
+  exit 0. `uv run ruff check .` exit 0, `All checks passed!`.
+  `uv run ruff format --check chronicle/artifacts.py
+  tests/test_chronicle_microdata_staging.py` exit 0, `2 files already
+  formatted`. `git diff --stat 8416660..HEAD`: four files, none under
+  `db/data/**`; no pin or pin-manifest change.
 
 ## Next
 
-- Full suite, `uv run ruff check .`, `ruff format --check` on changed files,
-  then the lane report.
+- None. Fixes, verification and the lane report are complete. Commits remain on
+  `microdata-registration`; nothing is pushed.
 
 # PR #227 Astra gate bbd833a9 — round 3 fix lane
 
