@@ -25,6 +25,8 @@ schema_version: ledger.source_package.v1
 package_id: ons-small-area-income-msoa-fye2023
 label: 'ONS income estimates for small areas FYE2023: mean household income for
   MSOAs in England and Wales, four measures'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: ons
   source_table: Income estimates for small areas, England and Wales, financial year

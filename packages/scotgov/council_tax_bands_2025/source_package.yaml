@@ -12,6 +12,8 @@ schema_version: ledger.source_package.v1
 package_id: scotgov-council-tax-bands-2025
 label: 'Scottish Government chargeable dwellings September 2025: Scotland by council tax band
   (CTAXBASE 2025)'
+dimension_labels:
+  'scotgov.geography_row': 'Geography'
 artifact:
   source_name: scotgov
   source_table: Number of chargeable dwellings, September 2025 (CTAXBASE 2025)

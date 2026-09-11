@@ -18,6 +18,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-by-constituency-children-may-2025
 label: 'DWP Stat-Xplore: households on Universal Credit by Westminster parliamentary constituency and number of children, Great Britain, May 2025'
+dimension_labels:
+  'dwp.uc_number_of_children': 'Number of Children'
 artifact:
   source_name: dwp
   source_table: Households on Universal Credit by Westminster parliamentary constituency and number of children, May 2025

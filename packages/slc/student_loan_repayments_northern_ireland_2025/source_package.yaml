@@ -11,6 +11,8 @@
 schema_version: ledger.source_package.v1
 package_id: slc-student-loan-repayments-northern-ireland-2025
 label: 'SLC student loans in Northern Ireland FY2024-25: higher education borrower repayments'
+dimension_labels:
+  'slc.repayment_line': 'Repayment line'
 artifact:
   source_name: slc
   source_table: Student loans for higher education in Northern Ireland, financial year 2024-25

@@ -13,6 +13,14 @@
 schema_version: ledger.source_package.v1
 package_id: ofgem-energy-price-cap-q1-2024
 label: Ofgem average direct-debit unit rates and standing charges, January to March 2024
+dimension_labels:
+  'ofgem.price_component': 'Price component'
+  'payment_method': 'Payment method'
+dimension_value_labels:
+  'payment_method':
+    'direct_debit': 'Direct debit'
+  'quarter':
+    'Q1': 'Q1'
 artifact:
   source_name: ofgem
   source_table: New energy price cap level for January to March 2024

@@ -18,6 +18,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-by-local-authority-may-2025
 label: 'DWP Stat-Xplore: households on Universal Credit by local authority, Great Britain, May 2025'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: dwp
   source_table: Households on Universal Credit by local authority, May 2025

@@ -4,6 +4,8 @@
 schema_version: ledger.source_package.v1
 package_id: ons-census2021-ts041-households-lad
 label: 'Census 2021 TS041: households by local authority district, England and Wales'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: ons
   source_table: 'Census 2021 TS041 number of households, local authority districts (April 2023), England and Wales'

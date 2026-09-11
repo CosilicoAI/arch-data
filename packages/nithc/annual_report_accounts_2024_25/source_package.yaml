@@ -28,6 +28,16 @@ schema_version: ledger.source_package.v1
 package_id: nithc-annual-report-accounts-2024-25
 label: Northern Ireland Transport Holding Company transactions with the Department for
   Infrastructure, 2023-24 and 2024-25
+dimension_labels:
+  'nithc.funding_component': 'Funding component'
+dimension_value_labels:
+  'funding_component':
+    'Capital grants': 'Capital grants'
+    'Concessionary fare compensation for a range of groups': 'Concessionary fare compensation for a range of groups'
+    'Other revenue funding': 'Other revenue funding'
+    'Public Service Obligation compensation': 'Public Service Obligation compensation'
+  'mode_scope':
+    'all_public_transport': 'All public transport'
 artifact:
   source_name: nithc
   source_table: Northern Ireland Transport Holding Company Annual Report and Accounts 2024/25,

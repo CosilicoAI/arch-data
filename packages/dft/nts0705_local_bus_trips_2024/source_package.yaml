@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: dft-nts0705-local-bus-trips-2024
 label: DfT NTS0705a local-bus trips per person by household income quintile, England, 2023 and 2024
+dimension_labels:
+  'dft.household_income_quintile': 'Household income quintile'
 artifact:
   source_name: dft
   source_table: NTS0705a average trips by household income quintile and main mode

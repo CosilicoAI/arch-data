@@ -32,6 +32,8 @@ schema_version: ledger.source_package.v1
 package_id: ons-pipr-private-rent-march-2026
 label: 'ONS Price Index of Private Rents, March 2026 bulletin: average monthly private rent,
   UK and countries'
+dimension_labels:
+  'ons.pipr_geography_row': 'Geography'
 artifact:
   source_name: ons
   source_table: 'Private rent and house prices, UK: March 2026'

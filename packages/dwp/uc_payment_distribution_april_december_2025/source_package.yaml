@@ -20,6 +20,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-payment-distribution-april-december-2025
 label: 'DWP Stat-Xplore: Universal Credit benefit units by monthly award amount band and family type, Great Britain, April to December 2025'
+dimension_labels:
+  'dwp.uc_monthly_award_band': 'Monthly Award Amount (bands)'
 artifact:
   source_name: dwp
   source_table: 'Households on Universal Credit by monthly award amount band and family type, April to December 2025'

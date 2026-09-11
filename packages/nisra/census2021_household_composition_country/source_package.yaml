@@ -15,6 +15,8 @@
 schema_version: ledger.source_package.v1
 package_id: nisra-census2021-household-composition-country
 label: 'NISRA Census 2021: households by household composition, Northern Ireland'
+dimension_labels:
+  'nisra.census2021_household_composition': 'Household composition'
 artifact:
   source_name: nisra
   source_table: 'NISRA Census 2021 flexible table: households by household composition (HH_FAMILY_COMPOSITION_AGG23), Northern Ireland'

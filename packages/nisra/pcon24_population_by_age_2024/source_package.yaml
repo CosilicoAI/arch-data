@@ -21,6 +21,8 @@ schema_version: ledger.source_package.v1
 package_id: nisra-pcon24-population-by-age-2024
 label: 'NISRA mid-2024 population estimates: UK parliamentary constituencies (2024
   boundaries) in Northern Ireland, by five year age band'
+dimension_labels:
+  'age': 'Age'
 artifact:
   source_name: nisra
   source_table: MYE01T013 Mid-year population estimates by Assembly Area (2024),

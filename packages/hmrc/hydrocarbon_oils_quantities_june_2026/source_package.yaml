@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: hmrc-hydrocarbon-oils-quantities-june-2026
 label: HMRC Hydrocarbon Oils Bulletin road-fuel quantities through June 2026
+dimension_labels:
+  'hmrc.road_fuel_scope': 'Road-fuel scope'
 artifact:
   source_name: hmrc
   source_table: Hydrocarbon Oils Bulletin tables 2a and 2c

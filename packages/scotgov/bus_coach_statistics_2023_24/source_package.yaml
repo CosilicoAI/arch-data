@@ -1,6 +1,14 @@
 schema_version: ledger.source_package.v1
 package_id: scotgov-bus-coach-statistics-2023-24
 label: Transport Scotland bus and coach statistics, 2023-24
+dimension_labels:
+  'scotgov.bus_scope': 'Bus statistics scope'
+  'scotgov.funding_component': 'Funding component'
+  'scotgov.journey_category': 'Journey category'
+  'funding_component': 'Funding component'
+dimension_value_labels:
+  'journey_category':
+    'concessionary': 'Concessionary passenger journeys'
 artifact:
   source_name: scotgov
   source_table: Scottish Transport Statistics bus and coach reference tables

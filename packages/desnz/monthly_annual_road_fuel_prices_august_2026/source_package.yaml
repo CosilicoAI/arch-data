@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: desnz-monthly-annual-road-fuel-prices-august-2026
 label: DESNZ monthly and annual road-fuel pump prices through August 2026
+dimension_labels:
+  'desnz.road_fuel_scope': 'Road-fuel price scope'
 artifact:
   source_name: desnz
   source_table: Digest of UK Energy Statistics tables 4.1.1 to 4.1.3 workbook; emitted sheets 4.1.1 and 4.1.2

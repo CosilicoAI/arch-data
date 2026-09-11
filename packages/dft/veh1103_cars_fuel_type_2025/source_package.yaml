@@ -1,6 +1,24 @@
 schema_version: ledger.source_package.v1
 package_id: dft-veh1103-cars-fuel-type-2025
 label: DfT licensed cars by fuel type, Great Britain, 2023 to 2025
+dimension_labels:
+  'dft.vehicle_body_type': 'Vehicle body type'
+dimension_value_labels:
+  'body_type':
+    'cars': 'Cars'
+  'fuel_type':
+    'all': 'All fuel types'
+    'battery_electric': 'Battery electric'
+    'diesel': 'Diesel'
+    'fuel_cell_electric': 'Fuel cell electric'
+    'gas': 'Gas'
+    'hybrid_electric_diesel': 'Hybrid electric (diesel)'
+    'hybrid_electric_petrol': 'Hybrid electric (petrol)'
+    'other': 'Other'
+    'petrol': 'Petrol'
+    'plug_in_hybrid_diesel': 'Plug-in hybrid electric (diesel)'
+    'plug_in_hybrid_petrol': 'Plug-in hybrid electric (petrol)'
+    'range_extended_electric': 'Range extended electric'
 artifact:
   source_name: dft
   source_table: VEH1103a licensed vehicles by body type and fuel type

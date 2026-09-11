@@ -2,6 +2,8 @@ schema_version: ledger.source_package.v1
 package_id: dft-bus05i-revenue-support-2025
 label: DfT BUS05i passenger fare receipts and net support for local bus services, years ending March 2023
   to 2025
+dimension_labels:
+  'dft.bus_area': 'Local bus statistics area'
 artifact:
   source_name: dft
   source_table: BUS05i estimated operating revenue and net support for local bus services

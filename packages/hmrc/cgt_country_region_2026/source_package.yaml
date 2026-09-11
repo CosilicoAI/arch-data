@@ -2,6 +2,8 @@ schema_version: ledger.source_package.v1
 package_id: hmrc-cgt-country-region-2026
 label: 'HMRC Capital Gains Tax statistics 2026, Table 5: taxpayers, gains and liabilities by UK country
   and region, 2023-24 and 2024-25'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: hmrc
   source_table: 'Capital Gains Tax statistics Table 5: taxpayers, gains and liabilities by UK country

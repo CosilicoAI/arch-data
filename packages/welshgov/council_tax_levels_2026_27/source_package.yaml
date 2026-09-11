@@ -23,6 +23,8 @@ schema_version: ledger.source_package.v1
 package_id: welshgov-council-tax-levels-2026-27
 label: 'Welsh Government council tax levels 2026-27: average Band D, precept elements
   and council tax income by unitary authority'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: welshgov
   source_table: Welsh Government council tax levels, April 2026 to March 2027

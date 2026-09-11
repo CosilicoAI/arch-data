@@ -22,6 +22,12 @@ schema_version: ledger.source_package.v1
 package_id: voa-council-tax-bands-2025
 label: 'VOA Council Tax stock of properties 2025: properties by band, national and regional
   (CTSOP2.0)'
+dimension_labels:
+  'voa.geography_row': 'Geography'
+  'geography_match': 'Geography match'
+dimension_value_labels:
+  'geography_match':
+    'unmatched': 'Not matched to a constituency'
 artifact:
   source_name: voa
   source_table: 'Council Tax: stock of properties 2025, summary tables (band by administrative

@@ -17,6 +17,38 @@
 schema_version: ledger.source_package.v1
 package_id: ons-families-households-2025
 label: 'ONS families and households 2025, Tables 1, 3, 5 and 7: UK families by type and by number of dependent children, household size and households by household type, 2018-2025'
+dimension_labels:
+  'ons.family_type': 'Family type'
+  'ons.household_size_summary': 'Household size summary'
+  'ons.household_type': 'Household type'
+  'children': 'Children'
+  'family_type': 'Family Type'
+  'household_type': 'Household type'
+  'statistic': 'Statistic'
+dimension_value_labels:
+  'children':
+    'all': 'All, with or without children'
+    'dependent_children': 'Dependent children'
+    'no_children': 'No children'
+    'no_children_or_non_dependent_children_only': 'No children or non-dependent children only'
+    'non_dependent_children_only': 'Non-dependent children only'
+  'family_type':
+    'all_families': 'All families'
+    'married_couple': 'Married couple family'
+    'civil_partner_couple': 'Civil partner couple family'
+    'opposite_sex_cohabiting_couple': 'Opposite-sex cohabiting couple family'
+    'same_sex_cohabiting_couple': 'Same-sex cohabiting couple family'
+    'lone_parent': 'Lone parent family'
+    'lone_mother': 'Lone mother family'
+    'lone_father': 'Lone father family'
+  'number_of_dependent_children':
+    'all': 'Any number of dependent children'
+    'one': 'One child'
+    'two': 'Two children'
+    'three_or_more': 'Three or more children'
+  'statistic':
+    'estimate': 'Estimate'
+    'ci_95_half_width': '95% confidence interval half-width'
 artifact:
   source_name: ons
   source_table: 'Families and households in the UK 2025, Tables 1, 3, 5 and 7: families by type and presence of children, families with dependent children by number, household size and households by type'

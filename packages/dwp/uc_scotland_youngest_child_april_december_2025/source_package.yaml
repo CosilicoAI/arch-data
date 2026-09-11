@@ -13,6 +13,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-scotland-youngest-child-april-december-2025
 label: 'DWP Stat-Xplore: Universal Credit benefit units in Scotland by single year of age of youngest child, April to December 2025'
+dimension_labels:
+  'dwp.uc_youngest_child_age': 'Age of Youngest Child (bands and single year)'
 artifact:
   source_name: dwp
   source_table: 'Households on Universal Credit in Scotland by single year of age of youngest child, April to December 2025'

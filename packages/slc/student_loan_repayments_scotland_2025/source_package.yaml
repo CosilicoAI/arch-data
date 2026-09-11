@@ -11,6 +11,8 @@
 schema_version: ledger.source_package.v1
 package_id: slc-student-loan-repayments-scotland-2025
 label: 'SLC student loans in Scotland FY2024-25: higher education borrower repayments'
+dimension_labels:
+  'slc.repayment_line': 'Repayment line'
 artifact:
   source_name: slc
   source_table: Student loans for higher education in Scotland, financial year 2024-25

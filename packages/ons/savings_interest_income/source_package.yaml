@@ -5,6 +5,8 @@
 schema_version: ledger.source_package.v1
 package_id: ons-savings-interest-income
 label: 'ONS UKEA HAXV: household interest resources (savings interest income), annual 2018-2025'
+dimension_labels:
+  'ons.ukea_series': 'UK Economic Accounts series'
 artifact:
   source_name: ons
   source_table: 'UKEA time series HAXV: Households (S.14) interest (D.41) resources, current
@@ -35,7 +37,7 @@ record_sets:
   groupby_dimension: ons.ukea_series
   rows:
   - value_id: haxv
-    label: Households interest resources (D.41), 2018
+    label: 'Households interest resources (D.41)'
     ordinal: 0
     row_number: 40
     expected_row_header_column: A
@@ -75,7 +77,7 @@ record_sets:
   groupby_dimension: ons.ukea_series
   rows:
   - value_id: haxv
-    label: Households interest resources (D.41), 2019
+    label: 'Households interest resources (D.41)'
     ordinal: 0
     row_number: 41
     expected_row_header_column: A
@@ -115,7 +117,7 @@ record_sets:
   groupby_dimension: ons.ukea_series
   rows:
   - value_id: haxv
-    label: Households interest resources (D.41), 2020
+    label: 'Households interest resources (D.41)'
     ordinal: 0
     row_number: 42
     expected_row_header_column: A
@@ -155,7 +157,7 @@ record_sets:
   groupby_dimension: ons.ukea_series
   rows:
   - value_id: haxv
-    label: Households interest resources (D.41), 2021
+    label: 'Households interest resources (D.41)'
     ordinal: 0
     row_number: 43
     expected_row_header_column: A
@@ -195,7 +197,7 @@ record_sets:
   groupby_dimension: ons.ukea_series
   rows:
   - value_id: haxv
-    label: Households interest resources (D.41), 2022
+    label: 'Households interest resources (D.41)'
     ordinal: 0
     row_number: 44
     expected_row_header_column: A
@@ -235,7 +237,7 @@ record_sets:
   groupby_dimension: ons.ukea_series
   rows:
   - value_id: haxv
-    label: Households interest resources (D.41), 2023
+    label: 'Households interest resources (D.41)'
     ordinal: 0
     row_number: 45
     expected_row_header_column: A
@@ -275,7 +277,7 @@ record_sets:
   groupby_dimension: ons.ukea_series
   rows:
   - value_id: haxv
-    label: Households interest resources (D.41), 2024
+    label: 'Households interest resources (D.41)'
     ordinal: 0
     row_number: 46
     expected_row_header_column: A
@@ -315,7 +317,7 @@ record_sets:
   groupby_dimension: ons.ukea_series
   rows:
   - value_id: haxv
-    label: Households interest resources (D.41), 2025
+    label: 'Households interest resources (D.41)'
     ordinal: 0
     row_number: 47
     expected_row_header_column: A

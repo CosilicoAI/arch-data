@@ -1,6 +1,12 @@
 schema_version: ledger.source_package.v1
 package_id: dfi-ni-public-transport-statistics-2024-25
 label: DfI Northern Ireland Translink bus journeys and passenger receipts, 2019-20 to 2024-25
+dimension_labels:
+  'dfi_ni.bus_service': 'Translink bus service'
+dimension_value_labels:
+  'service':
+    'metro_glider': 'Metro / Glider'
+    'ulsterbus': 'Ulsterbus'
 artifact:
   source_name: dfi_ni
   source_table: Public Transport Statistics Northern Ireland 2024-25 figures 3 and 4

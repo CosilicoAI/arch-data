@@ -5,6 +5,8 @@
 schema_version: ledger.source_package.v1
 package_id: welshgov-bus-statistics-2024-25
 label: Welsh Government local bus passenger journeys, 2022-23 to 2024-25
+dimension_labels:
+  'welshgov.bus_scope': 'Bus statistics scope'
 artifact:
   source_name: welshgov
   source_table: Public service vehicles (buses and taxis), April 2024 to March 2025

@@ -4,6 +4,8 @@
 schema_version: ledger.source_package.v1
 package_id: orr-government-support-7270-2024-25
 label: ORR total government support to the rail industry, 2015-16 to 2024-25
+dimension_labels:
+  'orr.rail_scope': 'Rail scope'
 artifact:
   source_name: orr
   source_table: Table 7270 government support to the rail industry

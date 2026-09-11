@@ -5,6 +5,9 @@
 schema_version: ledger.source_package.v1
 package_id: ons-households-by-type-country-2025
 label: 'ONS households by type of household and family, Scotland 2025: couple households with 3 or more dependent children'
+dimension_labels:
+  'ons.household_type': 'Household type'
+  'household_type': 'Household type'
 artifact:
   source_name: ons
   source_table: 'Households by type of household and family, regions of England and GB constituent countries: Scotland worksheet'

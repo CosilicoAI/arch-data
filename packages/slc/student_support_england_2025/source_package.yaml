@@ -16,6 +16,12 @@ schema_version: ledger.source_package.v1
 package_id: slc-student-support-england-2025
 label: 'SLC student support for higher education in England 2025: maintenance loans (Table
   3A) and targeted support (Table 4C i), AY2013/14-2024/25'
+dimension_labels:
+  'slc.student_support_line': 'Student support line'
+dimension_value_labels:
+  'student_support_product':
+    'adult_dependants_grant': 'Adult Dependants'' Grant'
+    'parents_learning_allowance': 'Parents'' Learning Allowance'
 artifact:
   source_name: slc
   source_table: Student support for higher education in England 2025, Tables 3A and 4C

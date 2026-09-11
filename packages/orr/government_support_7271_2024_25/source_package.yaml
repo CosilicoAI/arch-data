@@ -4,6 +4,8 @@
 schema_version: ledger.source_package.v1
 package_id: orr-government-support-7271-2024-25
 label: ORR government support to rail by source and recipient, 2015-16 to 2024-25
+dimension_labels:
+  'orr.funding_source': 'Funding source'
 artifact:
   source_name: orr
   source_table: Table 7271 government support to the rail industry by source and recipient

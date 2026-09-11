@@ -13,6 +13,8 @@
 schema_version: ledger.source_package.v1
 package_id: slc-student-loan-repayments-england-2025
 label: 'SLC student loans in England FY2024-25: net repayments by plan (Table 1A)'
+dimension_labels:
+  'slc.repayment_plan': 'Repayment plan'
 artifact:
   source_name: slc
   source_table: Student loans in England, financial year 2024-25 (corrected tables), Table

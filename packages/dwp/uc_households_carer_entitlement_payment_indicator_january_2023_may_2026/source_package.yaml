@@ -22,6 +22,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-carer-entitlement-payment-indicator-january-2023-may-2026
 label: 'DWP Stat-Xplore: Universal Credit benefit units by carer entitlement and payment indicator, Great Britain, January 2023 to May 2026'
+dimension_labels:
+  'dwp.carer_entitlement': 'Carer Entitlement'
 artifact:
   source_name: dwp
   source_table: 'Households on Universal Credit by carer entitlement and payment indicator, January 2023 to May 2026'

@@ -11,6 +11,15 @@ schema_version: ledger.source_package.v1
 package_id: ons-mye-2023-england-regions
 label: >-
   ONS mid-2023 population estimates: regions of England, by single year of age (MYE2 persons)
+dimension_labels:
+  'age': 'Age'
+  'sex': 'Sex'
+dimension_value_labels:
+  'age':
+    '90_plus': '90 and over'
+  'sex':
+    'female': 'Female'
+    'male': 'Male'
 artifact:
   source_name: ons
   source_table: >-

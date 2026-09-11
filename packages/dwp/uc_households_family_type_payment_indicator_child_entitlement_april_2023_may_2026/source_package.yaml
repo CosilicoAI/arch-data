@@ -21,6 +21,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-family-type-payment-indicator-child-entitlement-april-2023-may-2026
 label: 'DWP Stat-Xplore: Universal Credit benefit units by family type, payment indicator and child entitlement, Great Britain, April 2023 to May 2026'
+dimension_labels:
+  'dwp.uc_family_type': 'Family Type'
 artifact:
   source_name: dwp
   source_table: 'Households on Universal Credit by family type, payment indicator and child entitlement, April 2023 to May 2026'

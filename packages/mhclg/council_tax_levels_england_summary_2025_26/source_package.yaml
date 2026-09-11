@@ -32,6 +32,8 @@ schema_version: ledger.source_package.v1
 package_id: mhclg-council-tax-levels-england-summary-2025-26
 label: 'MHCLG council tax levels, England 2025-26 (revised tables): council tax requirement,
   parish precepts, taxbase and average Band D, England summary 2021-22 to 2025-26'
+dimension_labels:
+  'mhclg.ct_levels_line': 'Council tax levels line'
 artifact:
   source_name: mhclg
   source_table: Council Tax levels set by local authorities in England 2025 to 2026, Tables

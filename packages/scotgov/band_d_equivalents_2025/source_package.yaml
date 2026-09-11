@@ -18,6 +18,8 @@ schema_version: ledger.source_package.v1
 package_id: scotgov-band-d-equivalents-2025
 label: 'ScotGov CTAXBASE 2025: Band D equivalent dwellings by council area, before
   and after council tax reduction, 1996 to 2025'
+dimension_labels:
+  'geography': 'Geography'
 artifact:
   source_name: scotgov
   source_table: 'CTAXBASE 2025 Tables: Band D equivalents'

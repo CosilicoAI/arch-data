@@ -18,6 +18,17 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-benefit-statistics-february-2026
 label: 'DWP benefit statistics February 2026: ESA and JSA claimants at August 2025'
+dimension_labels:
+  'dwp.benefit_line': 'Benefit statistics line'
+  'dwp.esa_claim_type': 'ESA claim type'
+  'benefit_line': 'Benefit line'
+dimension_value_labels:
+  'benefit_line':
+    'jobseekers_allowance': 'Jobseeker''s Allowance'
+  'esa_claim_type':
+    'all': 'All ESA claimants'
+    'contributions_based': 'Contributions-based ESA'
+    'income_related': 'Income-related ESA'
 artifact:
   source_name: dwp
   source_table: 'DWP benefit statistics: February 2026'

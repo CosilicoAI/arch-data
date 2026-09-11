@@ -25,6 +25,15 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-childcare-element-march-2021-may-2026
 label: 'DWP Universal Credit childcare element: households receiving and mean amount, March 2021 to May 2026'
+dimension_labels:
+  'dwp.uc_element': 'Universal Credit element'
+  'family_type': 'Family Type'
+dimension_value_labels:
+  'family_type':
+    'Couple': 'Couple'
+    'Single': 'Single'
+  'uc_element':
+    'childcare': 'Childcare element'
 artifact:
   source_name: dwp
   source_table: 'Universal Credit childcare element statistics to May 2026, Tables 1 and 3'
@@ -58,7 +67,7 @@ record_sets:
   rows:
   - &households_row
     value_id: childcare_element
-    label: March 2021
+    label: 'Childcare element'
     ordinal: 0
     row_number: 5
     expected_row_header_column: B
@@ -139,7 +148,7 @@ record_sets:
   period: 2021-04
   rows:
   - <<: *households_row
-    label: April 2021
+    label: 'Childcare element'
     row_number: 6
     expected_row_header: April 2021
 - <<: *households
@@ -150,7 +159,7 @@ record_sets:
   period: 2021-05
   rows:
   - <<: *households_row
-    label: May 2021
+    label: 'Childcare element'
     row_number: 7
     expected_row_header: May 2021
 - <<: *households
@@ -161,7 +170,7 @@ record_sets:
   period: 2021-06
   rows:
   - <<: *households_row
-    label: June 2021
+    label: 'Childcare element'
     row_number: 8
     expected_row_header: June 2021
 - <<: *households
@@ -172,7 +181,7 @@ record_sets:
   period: 2021-07
   rows:
   - <<: *households_row
-    label: July 2021
+    label: 'Childcare element'
     row_number: 9
     expected_row_header: July 2021
 - <<: *households
@@ -183,7 +192,7 @@ record_sets:
   period: 2021-08
   rows:
   - <<: *households_row
-    label: August 2021
+    label: 'Childcare element'
     row_number: 10
     expected_row_header: August 2021
 - <<: *households
@@ -194,7 +203,7 @@ record_sets:
   period: 2021-09
   rows:
   - <<: *households_row
-    label: September 2021
+    label: 'Childcare element'
     row_number: 11
     expected_row_header: September 2021
 - <<: *households
@@ -205,7 +214,7 @@ record_sets:
   period: 2021-10
   rows:
   - <<: *households_row
-    label: October 2021
+    label: 'Childcare element'
     row_number: 12
     expected_row_header: October 2021
 - <<: *households
@@ -216,7 +225,7 @@ record_sets:
   period: 2021-11
   rows:
   - <<: *households_row
-    label: November 2021
+    label: 'Childcare element'
     row_number: 13
     expected_row_header: November 2021
 - <<: *households
@@ -227,7 +236,7 @@ record_sets:
   period: 2021-12
   rows:
   - <<: *households_row
-    label: December 2021
+    label: 'Childcare element'
     row_number: 14
     expected_row_header: December 2021
 - <<: *households
@@ -238,7 +247,7 @@ record_sets:
   period: 2022-01
   rows:
   - <<: *households_row
-    label: January 2022
+    label: 'Childcare element'
     row_number: 15
     expected_row_header: January 2022
 - <<: *households
@@ -249,7 +258,7 @@ record_sets:
   period: 2022-02
   rows:
   - <<: *households_row
-    label: February 2022
+    label: 'Childcare element'
     row_number: 16
     expected_row_header: February 2022
 - <<: *households
@@ -260,7 +269,7 @@ record_sets:
   period: 2022-03
   rows:
   - <<: *households_row
-    label: March 2022
+    label: 'Childcare element'
     row_number: 17
     expected_row_header: March 2022
 - <<: *households
@@ -271,7 +280,7 @@ record_sets:
   period: 2022-04
   rows:
   - <<: *households_row
-    label: April 2022
+    label: 'Childcare element'
     row_number: 18
     expected_row_header: April 2022
 - <<: *households
@@ -282,7 +291,7 @@ record_sets:
   period: 2022-05
   rows:
   - <<: *households_row
-    label: May 2022
+    label: 'Childcare element'
     row_number: 19
     expected_row_header: May 2022
 - <<: *households
@@ -293,7 +302,7 @@ record_sets:
   period: 2022-06
   rows:
   - <<: *households_row
-    label: June 2022
+    label: 'Childcare element'
     row_number: 20
     expected_row_header: June 2022
 - <<: *households
@@ -304,7 +313,7 @@ record_sets:
   period: 2022-07
   rows:
   - <<: *households_row
-    label: July 2022
+    label: 'Childcare element'
     row_number: 21
     expected_row_header: July 2022
 - <<: *households
@@ -315,7 +324,7 @@ record_sets:
   period: 2022-08
   rows:
   - <<: *households_row
-    label: August 2022
+    label: 'Childcare element'
     row_number: 22
     expected_row_header: August 2022
 - <<: *households
@@ -326,7 +335,7 @@ record_sets:
   period: 2022-09
   rows:
   - <<: *households_row
-    label: September 2022
+    label: 'Childcare element'
     row_number: 23
     expected_row_header: September 2022
 - <<: *households
@@ -337,7 +346,7 @@ record_sets:
   period: 2022-10
   rows:
   - <<: *households_row
-    label: October 2022
+    label: 'Childcare element'
     row_number: 24
     expected_row_header: October 2022
 - <<: *households
@@ -348,7 +357,7 @@ record_sets:
   period: 2022-11
   rows:
   - <<: *households_row
-    label: November 2022
+    label: 'Childcare element'
     row_number: 25
     expected_row_header: November 2022
 - <<: *households
@@ -359,7 +368,7 @@ record_sets:
   period: 2022-12
   rows:
   - <<: *households_row
-    label: December 2022
+    label: 'Childcare element'
     row_number: 26
     expected_row_header: December 2022
 - <<: *households
@@ -370,7 +379,7 @@ record_sets:
   period: 2023-01
   rows:
   - <<: *households_row
-    label: January 2023
+    label: 'Childcare element'
     row_number: 27
     expected_row_header: January 2023
 - <<: *households
@@ -381,7 +390,7 @@ record_sets:
   period: 2023-02
   rows:
   - <<: *households_row
-    label: February 2023
+    label: 'Childcare element'
     row_number: 28
     expected_row_header: February 2023
 - <<: *households
@@ -392,7 +401,7 @@ record_sets:
   period: 2023-03
   rows:
   - <<: *households_row
-    label: March 2023
+    label: 'Childcare element'
     row_number: 29
     expected_row_header: March 2023
 - <<: *households
@@ -403,7 +412,7 @@ record_sets:
   period: 2023-04
   rows:
   - <<: *households_row
-    label: April 2023
+    label: 'Childcare element'
     row_number: 30
     expected_row_header: April 2023
 - <<: *households
@@ -414,7 +423,7 @@ record_sets:
   period: 2023-05
   rows:
   - <<: *households_row
-    label: May 2023
+    label: 'Childcare element'
     row_number: 31
     expected_row_header: May 2023
 - <<: *households
@@ -425,7 +434,7 @@ record_sets:
   period: 2023-06
   rows:
   - <<: *households_row
-    label: June 2023
+    label: 'Childcare element'
     row_number: 32
     expected_row_header: June 2023
 - <<: *households
@@ -436,7 +445,7 @@ record_sets:
   period: 2023-07
   rows:
   - <<: *households_row
-    label: July 2023
+    label: 'Childcare element'
     row_number: 33
     expected_row_header: July 2023
 - <<: *households
@@ -447,7 +456,7 @@ record_sets:
   period: 2023-08
   rows:
   - <<: *households_row
-    label: August 2023
+    label: 'Childcare element'
     row_number: 34
     expected_row_header: August 2023
 - <<: *households
@@ -458,7 +467,7 @@ record_sets:
   period: 2023-09
   rows:
   - <<: *households_row
-    label: September 2023
+    label: 'Childcare element'
     row_number: 35
     expected_row_header: September 2023
 - <<: *households
@@ -469,7 +478,7 @@ record_sets:
   period: 2023-10
   rows:
   - <<: *households_row
-    label: October 2023
+    label: 'Childcare element'
     row_number: 36
     expected_row_header: October 2023
 - <<: *households
@@ -480,7 +489,7 @@ record_sets:
   period: 2023-11
   rows:
   - <<: *households_row
-    label: November 2023
+    label: 'Childcare element'
     row_number: 37
     expected_row_header: November 2023
 - <<: *households
@@ -491,7 +500,7 @@ record_sets:
   period: 2023-12
   rows:
   - <<: *households_row
-    label: December 2023
+    label: 'Childcare element'
     row_number: 38
     expected_row_header: December 2023
 - <<: *households
@@ -502,7 +511,7 @@ record_sets:
   period: 2024-01
   rows:
   - <<: *households_row
-    label: January 2024
+    label: 'Childcare element'
     row_number: 39
     expected_row_header: January 2024
 - <<: *households
@@ -513,7 +522,7 @@ record_sets:
   period: 2024-02
   rows:
   - <<: *households_row
-    label: February 2024
+    label: 'Childcare element'
     row_number: 40
     expected_row_header: February 2024
 - <<: *households
@@ -524,7 +533,7 @@ record_sets:
   period: 2024-03
   rows:
   - <<: *households_row
-    label: March 2024
+    label: 'Childcare element'
     row_number: 41
     expected_row_header: March 2024
 - <<: *households
@@ -535,7 +544,7 @@ record_sets:
   period: 2024-04
   rows:
   - <<: *households_row
-    label: April 2024
+    label: 'Childcare element'
     row_number: 42
     expected_row_header: April 2024
 - <<: *households
@@ -546,7 +555,7 @@ record_sets:
   period: 2024-05
   rows:
   - <<: *households_row
-    label: May 2024
+    label: 'Childcare element'
     row_number: 43
     expected_row_header: May 2024
 - <<: *households
@@ -557,7 +566,7 @@ record_sets:
   period: 2024-06
   rows:
   - <<: *households_row
-    label: June 2024
+    label: 'Childcare element'
     row_number: 44
     expected_row_header: June 2024
 - <<: *households
@@ -568,7 +577,7 @@ record_sets:
   period: 2024-07
   rows:
   - <<: *households_row
-    label: July 2024
+    label: 'Childcare element'
     row_number: 45
     expected_row_header: July 2024
 - <<: *households
@@ -579,7 +588,7 @@ record_sets:
   period: 2024-08
   rows:
   - <<: *households_row
-    label: August 2024
+    label: 'Childcare element'
     row_number: 46
     expected_row_header: August 2024
 - <<: *households
@@ -590,7 +599,7 @@ record_sets:
   period: 2024-09
   rows:
   - <<: *households_row
-    label: September 2024
+    label: 'Childcare element'
     row_number: 47
     expected_row_header: September 2024
 - <<: *households
@@ -601,7 +610,7 @@ record_sets:
   period: 2024-10
   rows:
   - <<: *households_row
-    label: October 2024
+    label: 'Childcare element'
     row_number: 48
     expected_row_header: October 2024
 - <<: *households
@@ -612,7 +621,7 @@ record_sets:
   period: 2024-11
   rows:
   - <<: *households_row
-    label: November 2024
+    label: 'Childcare element'
     row_number: 49
     expected_row_header: November 2024
 - <<: *households
@@ -623,7 +632,7 @@ record_sets:
   period: 2024-12
   rows:
   - <<: *households_row
-    label: December 2024
+    label: 'Childcare element'
     row_number: 50
     expected_row_header: December 2024
 - <<: *households
@@ -634,7 +643,7 @@ record_sets:
   period: 2025-01
   rows:
   - <<: *households_row
-    label: January 2025
+    label: 'Childcare element'
     row_number: 51
     expected_row_header: January 2025
 - <<: *households
@@ -645,7 +654,7 @@ record_sets:
   period: 2025-02
   rows:
   - <<: *households_row
-    label: February 2025
+    label: 'Childcare element'
     row_number: 52
     expected_row_header: February 2025
 - <<: *households
@@ -656,7 +665,7 @@ record_sets:
   period: 2025-03
   rows:
   - <<: *households_row
-    label: March 2025
+    label: 'Childcare element'
     row_number: 53
     expected_row_header: March 2025
 - <<: *households
@@ -667,7 +676,7 @@ record_sets:
   period: 2025-04
   rows:
   - <<: *households_row
-    label: April 2025
+    label: 'Childcare element'
     row_number: 54
     expected_row_header: April 2025
 - <<: *households
@@ -678,7 +687,7 @@ record_sets:
   period: 2025-05
   rows:
   - <<: *households_row
-    label: May 2025
+    label: 'Childcare element'
     row_number: 55
     expected_row_header: May 2025
 - <<: *households
@@ -689,7 +698,7 @@ record_sets:
   period: 2025-06
   rows:
   - <<: *households_row
-    label: June 2025
+    label: 'Childcare element'
     row_number: 56
     expected_row_header: June 2025
 - <<: *households
@@ -700,7 +709,7 @@ record_sets:
   period: 2025-07
   rows:
   - <<: *households_row
-    label: July 2025
+    label: 'Childcare element'
     row_number: 57
     expected_row_header: July 2025
 - <<: *households
@@ -711,7 +720,7 @@ record_sets:
   period: 2025-08
   rows:
   - <<: *households_row
-    label: August 2025
+    label: 'Childcare element'
     row_number: 58
     expected_row_header: August 2025
 - <<: *households
@@ -722,7 +731,7 @@ record_sets:
   period: 2025-09
   rows:
   - <<: *households_row
-    label: September 2025
+    label: 'Childcare element'
     row_number: 59
     expected_row_header: September 2025
 - <<: *households
@@ -733,7 +742,7 @@ record_sets:
   period: 2025-10
   rows:
   - <<: *households_row
-    label: October 2025
+    label: 'Childcare element'
     row_number: 60
     expected_row_header: October 2025
 - <<: *households
@@ -744,7 +753,7 @@ record_sets:
   period: 2025-11
   rows:
   - <<: *households_row
-    label: November 2025
+    label: 'Childcare element'
     row_number: 61
     expected_row_header: November 2025
 - <<: *households
@@ -755,7 +764,7 @@ record_sets:
   period: 2025-12
   rows:
   - <<: *households_row
-    label: December 2025
+    label: 'Childcare element'
     row_number: 62
     expected_row_header: December 2025
 - <<: *households
@@ -766,7 +775,7 @@ record_sets:
   period: 2026-01
   rows:
   - <<: *households_row
-    label: January 2026
+    label: 'Childcare element'
     row_number: 63
     expected_row_header: January 2026
 - <<: *households
@@ -777,7 +786,7 @@ record_sets:
   period: 2026-02
   rows:
   - <<: *households_row
-    label: February 2026
+    label: 'Childcare element'
     row_number: 64
     expected_row_header: February 2026
 - <<: *households
@@ -788,7 +797,7 @@ record_sets:
   period: 2026-03
   rows:
   - <<: *households_row
-    label: March 2026
+    label: 'Childcare element'
     row_number: 65
     expected_row_header: March 2026
 - <<: *households
@@ -799,7 +808,7 @@ record_sets:
   period: 2026-04
   rows:
   - <<: *households_row
-    label: April 2026
+    label: 'Childcare element'
     row_number: 66
     expected_row_header: April 2026
 - <<: *households
@@ -810,7 +819,7 @@ record_sets:
   period: 2026-05
   rows:
   - <<: *households_row
-    label: May 2026
+    label: 'Childcare element'
     row_number: 67
     expected_row_header: May 2026
 - &mean_amount
@@ -833,7 +842,7 @@ record_sets:
   rows:
   - &mean_amount_row
     value_id: childcare_element_mean_amount
-    label: March 2021
+    label: 'Childcare element, mean monthly amount'
     ordinal: 0
     row_number: 5
     expected_row_header_column: B
@@ -870,7 +879,7 @@ record_sets:
   period: 2021-04
   rows:
   - <<: *mean_amount_row
-    label: April 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 6
     expected_row_header: April 2021
 - <<: *mean_amount
@@ -881,7 +890,7 @@ record_sets:
   period: 2021-05
   rows:
   - <<: *mean_amount_row
-    label: May 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 7
     expected_row_header: May 2021
 - <<: *mean_amount
@@ -892,7 +901,7 @@ record_sets:
   period: 2021-06
   rows:
   - <<: *mean_amount_row
-    label: June 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 8
     expected_row_header: June 2021
 - <<: *mean_amount
@@ -903,7 +912,7 @@ record_sets:
   period: 2021-07
   rows:
   - <<: *mean_amount_row
-    label: July 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 9
     expected_row_header: July 2021
 - <<: *mean_amount
@@ -914,7 +923,7 @@ record_sets:
   period: 2021-08
   rows:
   - <<: *mean_amount_row
-    label: August 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 10
     expected_row_header: August 2021
 - <<: *mean_amount
@@ -925,7 +934,7 @@ record_sets:
   period: 2021-09
   rows:
   - <<: *mean_amount_row
-    label: September 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 11
     expected_row_header: September 2021
 - <<: *mean_amount
@@ -936,7 +945,7 @@ record_sets:
   period: 2021-10
   rows:
   - <<: *mean_amount_row
-    label: October 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 12
     expected_row_header: October 2021
 - <<: *mean_amount
@@ -947,7 +956,7 @@ record_sets:
   period: 2021-11
   rows:
   - <<: *mean_amount_row
-    label: November 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 13
     expected_row_header: November 2021
 - <<: *mean_amount
@@ -958,7 +967,7 @@ record_sets:
   period: 2021-12
   rows:
   - <<: *mean_amount_row
-    label: December 2021
+    label: 'Childcare element, mean monthly amount'
     row_number: 14
     expected_row_header: December 2021
 - <<: *mean_amount
@@ -969,7 +978,7 @@ record_sets:
   period: 2022-01
   rows:
   - <<: *mean_amount_row
-    label: January 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 15
     expected_row_header: January 2022
 - <<: *mean_amount
@@ -980,7 +989,7 @@ record_sets:
   period: 2022-02
   rows:
   - <<: *mean_amount_row
-    label: February 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 16
     expected_row_header: February 2022
 - <<: *mean_amount
@@ -991,7 +1000,7 @@ record_sets:
   period: 2022-03
   rows:
   - <<: *mean_amount_row
-    label: March 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 17
     expected_row_header: March 2022
 - <<: *mean_amount
@@ -1002,7 +1011,7 @@ record_sets:
   period: 2022-04
   rows:
   - <<: *mean_amount_row
-    label: April 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 18
     expected_row_header: April 2022
 - <<: *mean_amount
@@ -1013,7 +1022,7 @@ record_sets:
   period: 2022-05
   rows:
   - <<: *mean_amount_row
-    label: May 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 19
     expected_row_header: May 2022
 - <<: *mean_amount
@@ -1024,7 +1033,7 @@ record_sets:
   period: 2022-06
   rows:
   - <<: *mean_amount_row
-    label: June 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 20
     expected_row_header: June 2022
 - <<: *mean_amount
@@ -1035,7 +1044,7 @@ record_sets:
   period: 2022-07
   rows:
   - <<: *mean_amount_row
-    label: July 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 21
     expected_row_header: July 2022
 - <<: *mean_amount
@@ -1046,7 +1055,7 @@ record_sets:
   period: 2022-08
   rows:
   - <<: *mean_amount_row
-    label: August 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 22
     expected_row_header: August 2022
 - <<: *mean_amount
@@ -1057,7 +1066,7 @@ record_sets:
   period: 2022-09
   rows:
   - <<: *mean_amount_row
-    label: September 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 23
     expected_row_header: September 2022
 - <<: *mean_amount
@@ -1068,7 +1077,7 @@ record_sets:
   period: 2022-10
   rows:
   - <<: *mean_amount_row
-    label: October 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 24
     expected_row_header: October 2022
 - <<: *mean_amount
@@ -1079,7 +1088,7 @@ record_sets:
   period: 2022-11
   rows:
   - <<: *mean_amount_row
-    label: November 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 25
     expected_row_header: November 2022
 - <<: *mean_amount
@@ -1090,7 +1099,7 @@ record_sets:
   period: 2022-12
   rows:
   - <<: *mean_amount_row
-    label: December 2022
+    label: 'Childcare element, mean monthly amount'
     row_number: 26
     expected_row_header: December 2022
 - <<: *mean_amount
@@ -1101,7 +1110,7 @@ record_sets:
   period: 2023-01
   rows:
   - <<: *mean_amount_row
-    label: January 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 27
     expected_row_header: January 2023
 - <<: *mean_amount
@@ -1112,7 +1121,7 @@ record_sets:
   period: 2023-02
   rows:
   - <<: *mean_amount_row
-    label: February 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 28
     expected_row_header: February 2023
 - <<: *mean_amount
@@ -1123,7 +1132,7 @@ record_sets:
   period: 2023-03
   rows:
   - <<: *mean_amount_row
-    label: March 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 29
     expected_row_header: March 2023
 - <<: *mean_amount
@@ -1134,7 +1143,7 @@ record_sets:
   period: 2023-04
   rows:
   - <<: *mean_amount_row
-    label: April 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 30
     expected_row_header: April 2023
 - <<: *mean_amount
@@ -1145,7 +1154,7 @@ record_sets:
   period: 2023-05
   rows:
   - <<: *mean_amount_row
-    label: May 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 31
     expected_row_header: May 2023
 - <<: *mean_amount
@@ -1156,7 +1165,7 @@ record_sets:
   period: 2023-06
   rows:
   - <<: *mean_amount_row
-    label: June 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 32
     expected_row_header: June 2023
 - <<: *mean_amount
@@ -1167,7 +1176,7 @@ record_sets:
   period: 2023-07
   rows:
   - <<: *mean_amount_row
-    label: July 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 33
     expected_row_header: July 2023
 - <<: *mean_amount
@@ -1178,7 +1187,7 @@ record_sets:
   period: 2023-08
   rows:
   - <<: *mean_amount_row
-    label: August 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 34
     expected_row_header: August 2023
 - <<: *mean_amount
@@ -1189,7 +1198,7 @@ record_sets:
   period: 2023-09
   rows:
   - <<: *mean_amount_row
-    label: September 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 35
     expected_row_header: September 2023
 - <<: *mean_amount
@@ -1200,7 +1209,7 @@ record_sets:
   period: 2023-10
   rows:
   - <<: *mean_amount_row
-    label: October 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 36
     expected_row_header: October 2023
 - <<: *mean_amount
@@ -1211,7 +1220,7 @@ record_sets:
   period: 2023-11
   rows:
   - <<: *mean_amount_row
-    label: November 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 37
     expected_row_header: November 2023
 - <<: *mean_amount
@@ -1222,7 +1231,7 @@ record_sets:
   period: 2023-12
   rows:
   - <<: *mean_amount_row
-    label: December 2023
+    label: 'Childcare element, mean monthly amount'
     row_number: 38
     expected_row_header: December 2023
 - <<: *mean_amount
@@ -1233,7 +1242,7 @@ record_sets:
   period: 2024-01
   rows:
   - <<: *mean_amount_row
-    label: January 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 39
     expected_row_header: January 2024
 - <<: *mean_amount
@@ -1244,7 +1253,7 @@ record_sets:
   period: 2024-02
   rows:
   - <<: *mean_amount_row
-    label: February 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 40
     expected_row_header: February 2024
 - <<: *mean_amount
@@ -1255,7 +1264,7 @@ record_sets:
   period: 2024-03
   rows:
   - <<: *mean_amount_row
-    label: March 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 41
     expected_row_header: March 2024
 - <<: *mean_amount
@@ -1266,7 +1275,7 @@ record_sets:
   period: 2024-04
   rows:
   - <<: *mean_amount_row
-    label: April 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 42
     expected_row_header: April 2024
 - <<: *mean_amount
@@ -1277,7 +1286,7 @@ record_sets:
   period: 2024-05
   rows:
   - <<: *mean_amount_row
-    label: May 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 43
     expected_row_header: May 2024
 - <<: *mean_amount
@@ -1288,7 +1297,7 @@ record_sets:
   period: 2024-06
   rows:
   - <<: *mean_amount_row
-    label: June 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 44
     expected_row_header: June 2024
 - <<: *mean_amount
@@ -1299,7 +1308,7 @@ record_sets:
   period: 2024-07
   rows:
   - <<: *mean_amount_row
-    label: July 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 45
     expected_row_header: July 2024
 - <<: *mean_amount
@@ -1310,7 +1319,7 @@ record_sets:
   period: 2024-08
   rows:
   - <<: *mean_amount_row
-    label: August 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 46
     expected_row_header: August 2024
 - <<: *mean_amount
@@ -1321,7 +1330,7 @@ record_sets:
   period: 2024-09
   rows:
   - <<: *mean_amount_row
-    label: September 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 47
     expected_row_header: September 2024
 - <<: *mean_amount
@@ -1332,7 +1341,7 @@ record_sets:
   period: 2024-10
   rows:
   - <<: *mean_amount_row
-    label: October 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 48
     expected_row_header: October 2024
 - <<: *mean_amount
@@ -1343,7 +1352,7 @@ record_sets:
   period: 2024-11
   rows:
   - <<: *mean_amount_row
-    label: November 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 49
     expected_row_header: November 2024
 - <<: *mean_amount
@@ -1354,7 +1363,7 @@ record_sets:
   period: 2024-12
   rows:
   - <<: *mean_amount_row
-    label: December 2024
+    label: 'Childcare element, mean monthly amount'
     row_number: 50
     expected_row_header: December 2024
 - <<: *mean_amount
@@ -1365,7 +1374,7 @@ record_sets:
   period: 2025-01
   rows:
   - <<: *mean_amount_row
-    label: January 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 51
     expected_row_header: January 2025
 - <<: *mean_amount
@@ -1376,7 +1385,7 @@ record_sets:
   period: 2025-02
   rows:
   - <<: *mean_amount_row
-    label: February 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 52
     expected_row_header: February 2025
 - <<: *mean_amount
@@ -1387,7 +1396,7 @@ record_sets:
   period: 2025-03
   rows:
   - <<: *mean_amount_row
-    label: March 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 53
     expected_row_header: March 2025
 - <<: *mean_amount
@@ -1398,7 +1407,7 @@ record_sets:
   period: 2025-04
   rows:
   - <<: *mean_amount_row
-    label: April 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 54
     expected_row_header: April 2025
 - <<: *mean_amount
@@ -1409,7 +1418,7 @@ record_sets:
   period: 2025-05
   rows:
   - <<: *mean_amount_row
-    label: May 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 55
     expected_row_header: May 2025
 - <<: *mean_amount
@@ -1420,7 +1429,7 @@ record_sets:
   period: 2025-06
   rows:
   - <<: *mean_amount_row
-    label: June 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 56
     expected_row_header: June 2025
 - <<: *mean_amount
@@ -1431,7 +1440,7 @@ record_sets:
   period: 2025-07
   rows:
   - <<: *mean_amount_row
-    label: July 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 57
     expected_row_header: July 2025
 - <<: *mean_amount
@@ -1442,7 +1451,7 @@ record_sets:
   period: 2025-08
   rows:
   - <<: *mean_amount_row
-    label: August 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 58
     expected_row_header: August 2025
 - <<: *mean_amount
@@ -1453,7 +1462,7 @@ record_sets:
   period: 2025-09
   rows:
   - <<: *mean_amount_row
-    label: September 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 59
     expected_row_header: September 2025
 - <<: *mean_amount
@@ -1464,7 +1473,7 @@ record_sets:
   period: 2025-10
   rows:
   - <<: *mean_amount_row
-    label: October 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 60
     expected_row_header: October 2025
 - <<: *mean_amount
@@ -1475,7 +1484,7 @@ record_sets:
   period: 2025-11
   rows:
   - <<: *mean_amount_row
-    label: November 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 61
     expected_row_header: November 2025
 - <<: *mean_amount
@@ -1486,7 +1495,7 @@ record_sets:
   period: 2025-12
   rows:
   - <<: *mean_amount_row
-    label: December 2025
+    label: 'Childcare element, mean monthly amount'
     row_number: 62
     expected_row_header: December 2025
 - <<: *mean_amount
@@ -1497,7 +1506,7 @@ record_sets:
   period: 2026-01
   rows:
   - <<: *mean_amount_row
-    label: January 2026
+    label: 'Childcare element, mean monthly amount'
     row_number: 63
     expected_row_header: January 2026
 - <<: *mean_amount
@@ -1508,7 +1517,7 @@ record_sets:
   period: 2026-02
   rows:
   - <<: *mean_amount_row
-    label: February 2026
+    label: 'Childcare element, mean monthly amount'
     row_number: 64
     expected_row_header: February 2026
 - <<: *mean_amount
@@ -1519,7 +1528,7 @@ record_sets:
   period: 2026-03
   rows:
   - <<: *mean_amount_row
-    label: March 2026
+    label: 'Childcare element, mean monthly amount'
     row_number: 65
     expected_row_header: March 2026
 - <<: *mean_amount
@@ -1530,7 +1539,7 @@ record_sets:
   period: 2026-04
   rows:
   - <<: *mean_amount_row
-    label: April 2026
+    label: 'Childcare element, mean monthly amount'
     row_number: 66
     expected_row_header: April 2026
 - <<: *mean_amount
@@ -1541,6 +1550,6 @@ record_sets:
   period: 2026-05
   rows:
   - <<: *mean_amount_row
-    label: May 2026
+    label: 'Childcare element, mean monthly amount'
     row_number: 67
     expected_row_header: May 2026

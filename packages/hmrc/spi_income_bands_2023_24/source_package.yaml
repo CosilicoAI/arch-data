@@ -12,6 +12,9 @@ schema_version: ledger.source_package.v1
 package_id: hmrc-spi-income-bands-2023-24
 label: 'HMRC Survey of Personal Incomes 2023-24: income counts and amounts by range of total
   income (Tables 3.6 and 3.7)'
+dimension_labels:
+  'hmrc.total_income_band': 'Total income band'
+  'total_income_lower_bound': 'Total income lower bound (GBP)'
 artifact:
   source_name: hmrc
   source_table: 'SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total

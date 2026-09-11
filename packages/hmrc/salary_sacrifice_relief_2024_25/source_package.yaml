@@ -11,6 +11,8 @@ schema_version: ledger.source_package.v1
 package_id: hmrc-salary-sacrifice-relief-2024-25
 label: 'HMRC salary sacrifice pension contributions: income tax and NICs relief, tax year
   2024-25'
+dimension_labels:
+  'hmrc.ss_relief_line': 'Salary sacrifice relief line'
 artifact:
   source_name: hmrc
   source_table: 'Private pension statistics Tables 6.1 and 6.2: salary sacrifice pension contributions,

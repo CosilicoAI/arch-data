@@ -17,6 +17,8 @@ schema_version: ledger.source_package.v1
 package_id: slc-student-loan-borrower-forecasts-england-2025
 label: 'SLC/DfE student loan forecasts for England, Table 6a: borrowers liable to repay and
   earning above threshold, AY2024/25-2029/30'
+dimension_labels:
+  'slc.borrower_line': 'Borrower forecast line'
 artifact:
   source_name: slc
   source_table: 'Student loan forecasts for England, Table 6a: forecast borrowers liable to

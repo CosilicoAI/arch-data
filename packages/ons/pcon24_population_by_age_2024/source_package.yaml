@@ -24,6 +24,8 @@ schema_version: ledger.source_package.v1
 package_id: ons-pcon24-population-by-age-2024
 label: 'ONS mid-2024 population estimates: Westminster parliamentary constituencies
   (2024 boundaries), England and Wales, by quinary age band'
+dimension_labels:
+  'age': 'Age'
 artifact:
   source_name: ons
   source_table: Population estimates - small area (2021 based) by single year of age,

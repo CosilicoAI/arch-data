@@ -18,6 +18,12 @@ schema_version: ledger.source_package.v1
 package_id: hmrc-salary-sacrifice-reform-2029-headcounts
 label: 'HMRC salary sacrifice reform policy paper: employees using salary sacrifice for
   pension contributions, by GBP 2,000 threshold position'
+dimension_labels:
+  'hmrc.salary_sacrifice_threshold_position': 'Salary sacrifice GBP 2,000 threshold position'
+dimension_value_labels:
+  'salary_sacrifice_threshold_position':
+    'all': 'Employees using salary sacrifice to make pension contributions'
+    'within_2000': 'Employees fully protected by the GBP 2,000 threshold'
 artifact:
   source_name: hmrc
   source_table: Salary sacrifice reform for pension contributions (effective 6 April 2029),

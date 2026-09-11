@@ -32,6 +32,18 @@
 # axes "Row" and "Column" rather than naming the dimensions they carry.
 schema_version: ledger.source_package.v1
 package_id: welshgov-transport-revenue-outturn-2024-25
+dimension_labels:
+  'welshgov.authority': 'Local authority'
+dimension_value_labels:
+  'expenditure_component':
+    'Grants': 'Grants'
+    'Gross expenditure': 'Gross expenditure'
+    'Net current expenditure': 'Net current expenditure'
+    'Total income': 'Total income'
+  'service_line':
+    'Concessionary fares': 'Concessionary fares'
+    'Support to operators': 'Support to operators'
+    'Total public transport': 'Total public transport'
 artifact:
   source_name: welshgov
   source_table: Roads and transport revenue outturn expenditure by authority and service

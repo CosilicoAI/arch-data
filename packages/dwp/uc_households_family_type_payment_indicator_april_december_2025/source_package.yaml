@@ -10,6 +10,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-households-family-type-payment-indicator-april-december-2025
 label: 'DWP Stat-Xplore: Universal Credit benefit units by family type and payment indicator, Great Britain, April to December 2025'
+dimension_labels:
+  'dwp.uc_family_type': 'Family Type'
 artifact:
   source_name: dwp
   source_table: 'Households on Universal Credit by family type and payment indicator, April to December 2025'

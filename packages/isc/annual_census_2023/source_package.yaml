@@ -13,6 +13,12 @@
 schema_version: ledger.source_package.v1
 package_id: isc-annual-census-2023
 label: 'ISC annual Census 2023: pupils at ISC member schools'
+dimension_labels:
+  'isc.census_line': 'ISC census line'
+  'school_membership': 'School membership'
+dimension_value_labels:
+  'school_membership':
+    'isc': 'ISC member schools'
 artifact:
   source_name: isc
   source_table: ISC annual Census 2023

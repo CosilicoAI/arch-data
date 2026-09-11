@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: hmrc-vat-firm-targets-2024-25
 label: HMRC Annual UK VAT Statistics 2024-25 national VAT firm targets
+dimension_labels:
+  'uk.firm.annual_turnover': 'Annual turnover band'
 artifact:
   source_name: hmrc
   source_table: Annual UK VAT Statistics 2024 to 2025 VAT trader population and net VAT liability by turnover band

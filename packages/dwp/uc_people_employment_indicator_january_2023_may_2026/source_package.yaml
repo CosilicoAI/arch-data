@@ -18,6 +18,8 @@
 schema_version: ledger.source_package.v1
 package_id: dwp-uc-people-employment-indicator-january-2023-may-2026
 label: 'DWP Stat-Xplore: People on Universal Credit by employment indicator, Great Britain, January 2023 to May 2026'
+dimension_labels:
+  'dwp.uc_employment_indicator': 'Employment Indicator'
 artifact:
   source_name: dwp
   source_table: 'People on Universal Credit by employment indicator, January 2023 to May 2026'

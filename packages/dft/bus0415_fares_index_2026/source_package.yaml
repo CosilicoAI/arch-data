@@ -1,6 +1,8 @@
 schema_version: ledger.source_package.v1
 package_id: dft-bus0415-fares-index-2026
 label: DfT BUS0415a local bus fares index by area, quarter-end months from March 2023 through March 2026
+dimension_labels:
+  'dft.bus_fares_index_area': 'Fares index area'
 artifact:
   source_name: dft
   source_table: BUS0415a local bus fares index by metropolitan area status and country

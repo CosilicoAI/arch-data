@@ -25,6 +25,11 @@ schema_version: ledger.source_package.v1
 package_id: nrs-pcon24-population-by-age-2024
 label: 'NRS mid-2024 population estimates: UK parliamentary constituencies (2024
   boundaries) in Scotland, by single year of age'
+dimension_labels:
+  'age': 'Age'
+dimension_value_labels:
+  'age':
+    '90_plus': '90 and over'
 artifact:
   source_name: nrs
   source_table: Special area tables, mid-2022 to mid-2024 (2011 data zones) - UK
