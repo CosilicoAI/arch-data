@@ -186,14 +186,20 @@ microdata row, cell, or fact ever enters Chronicle. Registration is
 manifest-level identity; see `docs/adr-chronicle-raw-microdata-identity.md`.
 
 That identity is a property of the package directory, not of one manifest, so
-every command checks it across the directory's manifests. A publisher-table
-entry whose filename, declared checksum, or recorded R2 identity -- current or
-archived under `storage.previous_r2` -- matches a `microdata_release` sibling's
-is that release under a second record: `fetch-artifact` refuses it before
-reading the publisher, the source-package reader refuses it before any byte
-I/O, and `publish-raw` and `inventory-artifacts` report
+every command checks it across the directory's manifests. A `microdata_release`
+entry identifies its bytes by filename, by checksum, and by every R2 object it
+has recorded -- the current one and each archived under `storage.previous_r2`,
+because an immutable object keeps identifying the bytes it holds after the
+entry is renamed or revised. A publisher-table entry matching any of them is
+that release under a second record: `fetch-artifact` refuses it before reading
+the publisher, the source-package reader refuses it before any byte I/O, and
+`publish-raw` and `inventory-artifacts` report
 `bytes_identified_by_microdata_release` for the package and for the entry,
-before any upload or manifest rewrite. The reverse direction is refused too:
+before any upload or manifest rewrite. `fetch-artifact`, `publish-raw` and
+`inventory-artifacts` read the table's archived objects the same way, so an
+alias survives a rename on either side; the source-package reader compares the
+table's current identity and separately refuses a public entry that declares no
+checksum at all beside a release. The reverse direction is refused too:
 registering a release for bytes a public table sibling already declares would
 create exactly that package. A hash-only registration colliding with a public
 release keeps its own `sha256_collision_across_manifests` and

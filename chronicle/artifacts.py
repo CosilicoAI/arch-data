@@ -376,6 +376,25 @@ def _microdata_identity_errors(
     return []
 
 
+def _recorded_identity_aliases(spec: Any) -> tuple[set[str], set[str]]:
+    """Return the filename keys and digests an entry's R2 objects record.
+
+    The current object and every archived one: an immutable object keeps
+    identifying the bytes it holds after the entry that recorded it changes
+    filename or checksum, so a registration's identity is its whole history.
+    Callers that must refuse an unidentified entry keep their own digest
+    requirement: these aliases never stand in for a declared checksum.
+    """
+    names: set[str] = set()
+    digests: set[str] = set()
+    for recorded_name, digest, _locator in _recorded_object_identities(spec):
+        if recorded_name:
+            names.add(recorded_name)
+        if digest:
+            digests.add(digest)
+    return names, digests
+
+
 def _assert_no_table_claims_release_identity(
     manifests: Mapping[str, dict[str, Any]],
     *,
@@ -450,24 +469,33 @@ def _assert_no_package_microdata_identities(
         if is_hash_only(safe_entry_access(entry)):
             continue
         filename = entry.get("filename")
-        try:
-            _assert_no_microdata_identity(
-                manifests,
-                package_dir=manifest_path.parent,
-                filename=filename if is_bare_filename(filename) else "",
-                digests=(
-                    entry.get("sha256"),
-                    _effective_recorded_digest(name, vintage, entry),
-                ),
-            )
-        except ManifestAccessError as error:
-            # Name the registration as well as the release: publish and
-            # inventory report a package's codes as vintage/filename, code and
-            # manifest, and an operator reconciling the directory needs both.
-            raise SourceArtifactManifestError(
-                f"{vintage!r}/{filename}: {MICRODATA_IDENTITY_CODE}: "
-                f"{manifest_path}. {error}"
-            ) from error
+        # An immutable object stays archived after the entry that recorded it
+        # changes name or checksum, on the table's side as much as the
+        # release's. Compare every identity this registration has ever held.
+        archived_names, archived_digests = _recorded_identity_aliases(entry)
+        names = {filename if is_bare_filename(filename) else "", *archived_names}
+        digests = {
+            entry.get("sha256"),
+            _effective_recorded_digest(name, vintage, entry),
+            *archived_digests,
+        }
+        for candidate in sorted(names):
+            try:
+                _assert_no_microdata_identity(
+                    manifests,
+                    package_dir=manifest_path.parent,
+                    filename=candidate,
+                    digests=digests,
+                )
+            except ManifestAccessError as error:
+                # Name the registration as well as the release: publish and
+                # inventory report a package's codes as vintage/filename, code
+                # and manifest, and an operator reconciling the directory needs
+                # both.
+                raise SourceArtifactManifestError(
+                    f"{vintage!r}/{filename}: {MICRODATA_IDENTITY_CODE}: "
+                    f"{manifest_path}. {error}"
+                ) from error
 
 
 def _assert_siblings_record_these_bytes(
@@ -1298,12 +1326,17 @@ def fetch_source_artifact(
             digests=identity_digests,
         )
     else:
-        _assert_no_microdata_identity(
-            manifests,
-            package_dir=output,
-            filename=artifact_filename,
-            digests=identity_digests,
-        )
+        # The selected registration's archived objects identify these bytes as
+        # surely as its current one, so an alias survives a rename on either
+        # side of the package.
+        archived_names, archived_digests = _recorded_identity_aliases(selected_spec)
+        for candidate in sorted({artifact_filename, *archived_names}):
+            _assert_no_microdata_identity(
+                manifests,
+                package_dir=output,
+                filename=candidate,
+                digests=(*identity_digests, *archived_digests),
+            )
     _assert_table_vintage_is_revisable(
         existing_value,
         recorded_identity,
