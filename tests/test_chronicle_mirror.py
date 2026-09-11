@@ -3,7 +3,12 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
+import re
 
+import pytest
+
+from chronicle.env import ChronicleEnvDeprecationWarning, DEFAULT_CHRONICLE_SCHEMA
 from chronicle.harness import main as harness_main
 from chronicle.mirror import (
     LEDGER_MIRROR_TABLES,
@@ -18,7 +23,7 @@ from chronicle.jurisdictions.us.soi import (
 
 
 def test_export_chronicle_db_tables_writes_jsonl_and_manifest(tmp_path):
-    db_path = tmp_path / "ledger.db"
+    db_path = tmp_path / "chronicle.db"
     output_dir = tmp_path / "mirror"
     build_chronicle_db(
         build_soi_table_1_1_facts(2023),
@@ -53,7 +58,7 @@ def test_export_chronicle_db_tables_writes_jsonl_and_manifest(tmp_path):
 
 
 def test_export_chronicle_db_tables_orders_rows_deterministically(tmp_path):
-    db_path = tmp_path / "ledger.db"
+    db_path = tmp_path / "chronicle.db"
     first_output_dir = tmp_path / "mirror-first"
     second_output_dir = tmp_path / "mirror-second"
     build_chronicle_db(
@@ -72,7 +77,7 @@ def test_export_chronicle_db_tables_orders_rows_deterministically(tmp_path):
 
 
 def test_export_db_tables_cli_emits_manifest_summary(tmp_path, capsys):
-    db_path = tmp_path / "ledger.db"
+    db_path = tmp_path / "chronicle.db"
     output_dir = tmp_path / "mirror"
     build_chronicle_db(
         build_soi_table_1_1_facts(2023),
@@ -99,7 +104,7 @@ def test_export_db_tables_cli_emits_manifest_summary(tmp_path, capsys):
 
 
 def test_load_supabase_mirror_dry_run_counts_exported_rows(tmp_path):
-    db_path = tmp_path / "ledger.db"
+    db_path = tmp_path / "chronicle.db"
     output_dir = tmp_path / "mirror"
     build_chronicle_db(
         build_soi_table_1_1_facts(2023),
@@ -187,6 +192,155 @@ def test_load_supabase_mirror_cli_dry_run(tmp_path, capsys):
     assert payload["valid"]
     assert payload["dry_run"]
     assert payload["table_count"] == len(LEDGER_MIRROR_TABLES)
+
+
+# ---------------------------------------------------------------------------
+# Schema configuration
+#
+# The mirror loader is the primary writer into the hosted schema, so it is the
+# call site CHRONICLE_SCHEMA has to reach (PolicyEngine/chronicle#143,
+# mechanism 3). It defaulted to the literal "ledger" while only the read-side
+# client honored the renamed variable, which would have sent a rehearsal load
+# into production the moment an operator set it.
+# ---------------------------------------------------------------------------
+
+
+def _empty_mirror(tmp_path):
+    mirror_dir = tmp_path / "mirror"
+    mirror_dir.mkdir()
+    for table in LEDGER_MIRROR_TABLES:
+        (mirror_dir / f"{table}.jsonl").write_text("")
+    return mirror_dir
+
+
+def _one_build_artifact(tmp_path):
+    path = tmp_path / "build_artifacts.jsonl"
+    path.write_text(
+        json.dumps(
+            {
+                "build_artifact_key": "ledger.build_artifact.v1:test",
+                "build_id": "ledger.build.v1:test",
+                "artifact_kind": "json",
+                "artifact_name": "reports/build_summary.json",
+                "sha256": "abc",
+                "size_bytes": 3,
+                "r2_bucket": "ledger-derived",
+                "r2_key": "derived/test",
+                "r2_uri": "r2://ledger-derived/derived/test",
+            },
+            sort_keys=True,
+        )
+        + "\n"
+    )
+    return path
+
+
+def _load_into_fake_client(tmp_path, **kwargs):
+    client = _FakeSupabaseClient()
+    report = load_supabase_mirror(
+        _empty_mirror(tmp_path),
+        table_paths={"build_artifacts": _one_build_artifact(tmp_path)},
+        client=client,
+        **kwargs,
+    )
+    return report, client
+
+
+def test_load_supabase_mirror_defaults_to_the_ledger_schema(tmp_path):
+    report, client = _load_into_fake_client(tmp_path)
+
+    assert report.schema == "ledger"
+    assert [upsert[0] for upsert in client.upserts] == ["ledger"]
+
+
+def test_load_supabase_mirror_writes_to_the_chronicle_schema(tmp_path, monkeypatch):
+    """The renamed variable configures the writer, not just the reader."""
+    monkeypatch.setenv("CHRONICLE_SCHEMA", "chronicle_probe")
+
+    report, client = _load_into_fake_client(tmp_path)
+
+    assert report.schema == "chronicle_probe"
+    assert [upsert[0] for upsert in client.upserts] == ["chronicle_probe"]
+
+
+@pytest.mark.parametrize("name", ["POLICYENGINE_LEDGER_SCHEMA", "LEDGER_SCHEMA"])
+def test_load_supabase_mirror_honors_a_ledger_era_schema_name(
+    tmp_path, monkeypatch, name
+):
+    monkeypatch.setenv(name, "legacy_probe")
+
+    with pytest.warns(ChronicleEnvDeprecationWarning):
+        report, client = _load_into_fake_client(tmp_path)
+
+    assert report.schema == "legacy_probe"
+    assert [upsert[0] for upsert in client.upserts] == ["legacy_probe"]
+
+
+def test_an_explicit_schema_still_wins_over_the_environment(tmp_path, monkeypatch):
+    monkeypatch.setenv("CHRONICLE_SCHEMA", "chronicle_probe")
+
+    report, client = _load_into_fake_client(tmp_path, schema="explicit_probe")
+
+    assert report.schema == "explicit_probe"
+    assert [upsert[0] for upsert in client.upserts] == ["explicit_probe"]
+
+
+def test_load_supabase_mirror_cli_writes_to_the_configured_schema(
+    tmp_path, monkeypatch, capsys
+):
+    """The CLI resolves the same way when no --schema is supplied."""
+    client = _FakeSupabaseClient()
+    monkeypatch.setattr("chronicle.mirror._get_supabase_client", lambda: client)
+    monkeypatch.setenv("CHRONICLE_SCHEMA", "chronicle_probe")
+    argv = [
+        "load-supabase-mirror",
+        "--dir",
+        str(_empty_mirror(tmp_path)),
+        "--build-artifacts",
+        str(_one_build_artifact(tmp_path)),
+    ]
+
+    exit_code = harness_main(argv)
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert payload["schema"] == "chronicle_probe"
+    assert [upsert[0] for upsert in client.upserts] == ["chronicle_probe"]
+
+    assert harness_main([*argv, "--schema", "explicit_probe"]) == 0
+    assert json.loads(capsys.readouterr().out)["schema"] == "explicit_probe"
+    assert [upsert[0] for upsert in client.upserts] == [
+        "chronicle_probe",
+        "explicit_probe",
+    ]
+
+
+def _readme_supabase_cutover_section():
+    readme = (Path(__file__).parents[1] / "README.md").read_text()
+    return readme[
+        readme.index("To prepare the deterministic SQLite artifact") : readme.index(
+            "Chronicle settings are read"
+        )
+    ]
+
+
+def test_readme_supabase_cutover_documents_the_runtime_schema_default():
+    section = _readme_supabase_cutover_section()
+
+    assert f"writes to `{DEFAULT_CHRONICLE_SCHEMA}`" in section
+    assert "With no schema environment override and no `--schema`" in section
+    assert "`CHRONICLE_SCHEMA=chronicle`" in section
+    assert "`--schema chronicle`" in section
+
+
+def test_readme_supabase_cutover_only_names_checked_in_migrations():
+    section = _readme_supabase_cutover_section()
+    repository = Path(__file__).parents[1]
+    migration_paths = re.findall(r"`([^`\n]+[.]sql)`", section)
+    missing = [path for path in migration_paths if not (repository / path).is_file()]
+
+    assert "create and apply a Supabase/Postgres migration" in section
+    assert missing == []
 
 
 class _FakeSupabaseClient:

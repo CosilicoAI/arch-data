@@ -5,8 +5,9 @@ from __future__ import annotations
 from copy import deepcopy
 import hashlib
 from io import BytesIO
+import os
 from pathlib import Path
-from zipfile import ZipFile
+from zipfile import Path as ZipPath, ZipFile
 
 import openpyxl
 import pytest
@@ -244,9 +245,7 @@ def test_hmrc_cgt_reuses_one_publisher_series_across_definition_years():
     package = load_source_package("hmrc-cgt-statistics-2026")
     package_facts = package.build_facts(2026)
     facts = [
-        fact
-        for fact in package_facts
-        if fact.measure.concept == "hmrc.cgt_tax_total"
+        fact for fact in package_facts if fact.measure.concept == "hmrc.cgt_tax_total"
     ]
 
     assert {fact.entity.name for fact in package_facts} == {"tax_unit"}
@@ -1137,6 +1136,338 @@ def test_source_artifact_loader_fetches_missing_artifact_when_enabled(
 
     assert _read_source_artifact_content(_MissingArtifactPath(), spec) == content
     assert _source_artifact_cache_path(spec).read_bytes() == content
+
+
+@pytest.fixture
+def recorded_r2_artifact(tmp_path, monkeypatch):
+    resource_root = tmp_path / "resources"
+    resource_dir = resource_root / "data" / "publisher" / "package"
+    resource_dir.mkdir(parents=True)
+    content = b"publisher source artifact"
+    digest = hashlib.sha256(content).hexdigest()
+    key = f"raw/publisher/package/2024/{digest}/table.csv"
+    entry = {
+        "filename": "table.csv",
+        "source_url": "https://example.test/table.csv",
+        "sha256": digest,
+        "storage": {
+            "r2": {
+                "provider": "r2",
+                "bucket": "ledger-raw",
+                "key": key,
+                "uri": f"r2://ledger-raw/{key}",
+            }
+        },
+    }
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory="data/publisher/package",
+        manifest="manifest.yaml",
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+    return artifact, resource_dir, content, entry
+
+
+@pytest.mark.parametrize(
+    "invalid_locator",
+    [
+        "contradictory-key",
+        "contradictory-bucket",
+        "missing-provider",
+        "missing-uri",
+        "non-r2",
+        "null-block",
+        "checksum-identity",
+        "filename-identity",
+    ],
+)
+def test_source_artifact_spec_refuses_invalid_recorded_r2_before_read(
+    recorded_r2_artifact, monkeypatch, invalid_locator
+):
+    artifact, resource_dir, content, entry = recorded_r2_artifact
+    recorded = entry["storage"]["r2"]
+    if invalid_locator == "contradictory-key":
+        recorded["key"] = recorded["key"].replace("table.csv", "other.csv")
+    elif invalid_locator == "contradictory-bucket":
+        recorded["bucket"] = "other-raw"
+    elif invalid_locator == "missing-provider":
+        del recorded["provider"]
+    elif invalid_locator == "missing-uri":
+        del recorded["uri"]
+    elif invalid_locator == "non-r2":
+        recorded["provider"] = "s3"
+        recorded["uri"] = recorded["uri"].replace("r2://", "s3://")
+    elif invalid_locator == "null-block":
+        entry["storage"]["r2"] = None
+    elif invalid_locator == "checksum-identity":
+        entry["sha256"] = "0" * 64
+    else:
+        recorded["key"] = recorded["key"].replace("table.csv", "other.csv")
+        recorded["uri"] = recorded["uri"].replace("table.csv", "other.csv")
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump({"files": {2024: entry}})
+    )
+    (resource_dir / "table.csv").write_bytes(content)
+
+    def unexpected_read(_artifact_path, _spec):
+        raise AssertionError("invalid R2 provenance reached artifact I/O")
+
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content", unexpected_read
+    )
+    with pytest.raises(ValueError, match="storage.r2|recorded R2"):
+        artifact._artifact_content(2024)
+
+
+@pytest.mark.parametrize("location", ["local", "fetch"])
+def test_source_artifact_spec_checks_recorded_r2_digest_without_declared_checksum(
+    recorded_r2_artifact, tmp_path, monkeypatch, location
+):
+    artifact, resource_dir, _content, entry = recorded_r2_artifact
+    del entry["sha256"]
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump({"files": {2024: entry}})
+    )
+    changed_content = b"different publisher bytes"
+    cache = tmp_path / "cache"
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(cache))
+    if location == "local":
+        (resource_dir / "table.csv").write_bytes(changed_content)
+    else:
+        monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+        monkeypatch.setattr(
+            "chronicle.source_package._fetch_source_artifact_content",
+            lambda _url: changed_content,
+        )
+
+    with pytest.raises(ValueError, match="checksum mismatch"):
+        artifact._artifact_content(2024)
+    assert not cache.exists()
+
+
+def test_source_artifact_spec_accepts_consistent_recorded_r2(recorded_r2_artifact):
+    artifact, resource_dir, content, entry = recorded_r2_artifact
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump({"files": {2024: entry}})
+    )
+    (resource_dir / "table.csv").write_bytes(content)
+
+    assert artifact._artifact_content(2024) == (
+        content,
+        "table.csv",
+        entry["source_url"],
+        entry["storage"]["r2"],
+    )
+
+
+@pytest.mark.parametrize("entry_kind", ["directory", "fifo"])
+@pytest.mark.parametrize("resource_kind", ["manifest", "artifact"])
+def test_source_artifact_spec_refuses_non_regular_resource_before_open(
+    recorded_r2_artifact, monkeypatch, entry_kind, resource_kind
+):
+    artifact, resource_dir, _content, entry = recorded_r2_artifact
+    name = "manifest.yaml" if resource_kind == "manifest" else "table.csv"
+    resource = resource_dir / name
+    if entry_kind == "directory":
+        resource.mkdir()
+    else:
+        os.mkfifo(resource)
+    if resource_kind == "artifact":
+        (resource_dir / "manifest.yaml").write_text(
+            yaml.safe_dump({"files": {2024: entry}})
+        )
+
+    def unexpected_read(_artifact_path, _spec):
+        raise AssertionError("non-regular artifact reached artifact I/O")
+
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content", unexpected_read
+    )
+    with pytest.raises(ValueError, match="not a regular file"):
+        if resource_kind == "manifest":
+            # Resolve without opening: a broken guard must fail promptly even
+            # for a FIFO, whose actual open would block the test process.
+            artifact.manifest_resource()
+        else:
+            artifact._artifact_content(2024)
+
+
+def test_source_artifact_spec_reads_regular_importlib_zip_resources(
+    recorded_r2_artifact, monkeypatch
+):
+    artifact, _resource_dir, content, entry = recorded_r2_artifact
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        archive.writestr("data/publisher/package/table.csv", content)
+        archive.writestr(
+            "data/publisher/package/manifest.yaml",
+            yaml.safe_dump({"files": {2024: entry}}),
+        )
+    with ZipFile(buffer) as archive:
+        monkeypatch.setattr(
+            "chronicle.source_package.files", lambda _package: ZipPath(archive)
+        )
+        assert artifact._artifact_content(2024)[0] == content
+
+
+def test_source_artifact_spec_fetches_absent_regular_resource(
+    recorded_r2_artifact, tmp_path, monkeypatch
+):
+    artifact, resource_dir, content, entry = recorded_r2_artifact
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump({"files": {2024: entry}})
+    )
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(tmp_path / "cache"))
+    monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+    monkeypatch.setattr(
+        "chronicle.source_package._fetch_source_artifact_content", lambda _url: content
+    )
+
+    assert artifact._artifact_content(2024)[0] == content
+    assert _source_artifact_cache_path(entry).read_bytes() == content
+
+
+@pytest.mark.parametrize(
+    "path_kind",
+    ["absolute", "parent", "symlink", "normalized-alias", "manifest-name"],
+)
+def test_source_artifact_spec_refuses_unsafe_manifest_filename_before_read(
+    tmp_path, monkeypatch, path_kind
+):
+    resource_root = tmp_path / "resources"
+    resource_dir = resource_root / "data" / "publisher" / "package"
+    resource_dir.mkdir(parents=True)
+    outside = resource_dir.parent / "outside.csv"
+    outside.write_bytes(b"outside publisher bytes")
+    if path_kind == "absolute":
+        filename = str(outside)
+    elif path_kind == "parent":
+        filename = "../outside.csv"
+    else:
+        filename = "table.csv"
+        if path_kind == "symlink":
+            (resource_dir / filename).symlink_to(outside)
+        elif path_kind == "normalized-alias":
+            (resource_dir / "TABLE.csv").write_bytes(outside.read_bytes())
+        else:
+            filename = "manifest_artifact.yaml"
+            (resource_dir / filename).write_bytes(outside.read_bytes())
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "files": {
+                    2024: {
+                        "filename": filename,
+                        "source_url": outside.as_uri(),
+                        "sha256": hashlib.sha256(outside.read_bytes()).hexdigest(),
+                    }
+                }
+            },
+            sort_keys=False,
+        )
+    )
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+
+    def unexpected_artifact_read(_artifact_path, _spec):
+        raise AssertionError("unsafe artifact path reached artifact I/O")
+
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content",
+        unexpected_artifact_read,
+    )
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory="data/publisher/package",
+        manifest="manifest.yaml",
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+
+    if path_kind == "symlink":
+        message = "symbolic link"
+    elif path_kind == "normalized-alias":
+        message = "normalized filename"
+    elif path_kind == "manifest-name":
+        message = "manifest name"
+    else:
+        message = "bare filename"
+    with pytest.raises(ValueError, match=message):
+        artifact._artifact_content(2024)
+
+
+@pytest.mark.parametrize(
+    "path_kind", ["absolute", "parent", "symlink", "normalized-alias", "unsupported"]
+)
+def test_source_artifact_spec_refuses_unsafe_manifest_path_before_artifact_read(
+    tmp_path, monkeypatch, path_kind
+):
+    resource_root = tmp_path / "resources"
+    resource_dir = resource_root / "data" / "publisher" / "package"
+    resource_dir.mkdir(parents=True)
+    payload = {
+        "files": {
+            2024: {
+                "filename": "table.csv",
+                "source_url": "https://example.test/table.csv",
+            }
+        }
+    }
+    outside_manifest = resource_dir.parent / "outside-manifest.yaml"
+    outside_manifest.write_text(yaml.safe_dump(payload, sort_keys=False))
+    if path_kind == "absolute":
+        manifest_name = str(outside_manifest)
+    elif path_kind == "parent":
+        manifest_name = "../outside-manifest.yaml"
+    elif path_kind == "symlink":
+        manifest_name = "manifest.yaml"
+        (resource_dir / manifest_name).symlink_to(outside_manifest)
+    elif path_kind == "normalized-alias":
+        manifest_name = "manifest.yaml"
+        (resource_dir / "Manifest.yaml").write_text(
+            yaml.safe_dump(payload, sort_keys=False)
+        )
+    else:
+        manifest_name = "registry.yaml"
+        (resource_dir / manifest_name).write_text(yaml.safe_dump(payload))
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+
+    def unexpected_artifact_read(_artifact_path, _spec):
+        raise AssertionError("unsafe manifest path reached artifact I/O")
+
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content",
+        unexpected_artifact_read,
+    )
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory="data/publisher/package",
+        manifest=manifest_name,
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+
+    with pytest.raises(ValueError):
+        artifact._artifact_content(2024)
 
 
 def test_source_package_path_builds_valid_soi_table_1_4_facts():
@@ -4340,3 +4671,59 @@ def test_build_facts_with_label_year_does_not_crash():
     # Record-set periods are literal 2024, so a label build still resolves them.
     assert facts
     assert all(fact.period.value == 2024 for fact in facts)
+
+
+@pytest.mark.parametrize(
+    "bad_directory",
+    ["/etc", "../outside", "data/../../outside", "data/./publisher"],
+)
+def test_resource_directory_must_stay_inside_the_resource_package(
+    tmp_path, monkeypatch, bad_directory
+):
+    """`resource_directory` is joined under the resource package root; an
+    absolute or parent-traversing value escapes it and must be refused
+    before any read."""
+    resource_root = tmp_path / "pkg"
+    resource_root.mkdir()
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory=bad_directory,
+        manifest="manifest.yaml",
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+
+    with pytest.raises(ValueError, match="resource_directory"):
+        artifact._artifact_content(2024)
+
+
+def test_resource_directory_refuses_a_symlinked_ancestor(tmp_path, monkeypatch):
+    resource_root = tmp_path / "pkg"
+    real = tmp_path / "elsewhere" / "package"
+    real.mkdir(parents=True)
+    (resource_root / "data").mkdir(parents=True)
+    (resource_root / "data" / "publisher").symlink_to(real.parent)
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory="data/publisher/package",
+        manifest="manifest.yaml",
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+
+    with pytest.raises(ValueError, match="symbolic link|resource_directory"):
+        artifact._artifact_content(2024)

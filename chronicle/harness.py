@@ -5,14 +5,19 @@ from __future__ import annotations
 import argparse
 import json
 import shlex
+import sys
 from pathlib import Path
 
 from chronicle.artifacts import (
+    DEFAULT_MANIFEST_FILENAME,
+    DEFAULT_R2_DERIVED_BUCKET,
+    DEFAULT_R2_RAW_BUCKET,
     ArtifactFetchReport,
     ArtifactInventoryReport,
     DerivedArtifactPublishReport,
     R2BootstrapReport,
     RawArtifactPublishReport,
+    SourceArtifactManifestError,
     bootstrap_r2_buckets,
     fetch_source_artifact,
     inventory_source_artifacts,
@@ -33,6 +38,7 @@ from chronicle.consumer_contract import (
 )
 from chronicle.core import AggregateFact, ValidationReport, validate_facts
 from chronicle.database import ChronicleDbBuildReport, build_chronicle_db
+from chronicle.env import DEFAULT_CHRONICLE_SCHEMA
 from chronicle.mirror import (
     ChronicleMirrorExportReport,
     SupabaseMirrorLoadReport,
@@ -334,12 +340,20 @@ def fetch_artifact_file(
     source_page: str | None = None,
     table: str | None = None,
     filename: str | None = None,
+    manifest_filename: str = DEFAULT_MANIFEST_FILENAME,
     upload_r2: bool = False,
-    r2_bucket: str = "ledger-raw",
+    record_revision: bool = False,
+    r2_bucket: str | None = None,
     r2_prefix: str | None = None,
     wrangler_command: str = "npx wrangler",
 ) -> ArtifactFetchReport:
-    """Fetch/register a raw source artifact and optionally upload it to R2."""
+    """Fetch/register a raw source artifact and optionally upload it to R2.
+
+    ``manifest_filename`` selects which of the package directory's manifests
+    the entry belongs to. Raises :class:`SourceArtifactRevisionError` when the
+    fetched bytes are not the bytes that manifest's entry identifies, unless
+    ``record_revision`` opts into registering the publisher revision.
+    """
     return fetch_source_artifact(
         source_url,
         source_id=source_id,
@@ -350,7 +364,9 @@ def fetch_artifact_file(
         source_page=source_page,
         table=table,
         filename=filename,
+        manifest_filename=manifest_filename,
         upload_r2=upload_r2,
+        record_revision=record_revision,
         r2_bucket=r2_bucket,
         r2_prefix=r2_prefix,
         wrangler_command=wrangler_command,
@@ -372,7 +388,7 @@ def publish_raw_artifact_files(
     manifest_filename: str = "manifest.yaml",
     source_id: str | None = None,
     package_id: str | None = None,
-    r2_bucket: str = "ledger-raw",
+    r2_bucket: str | None = None,
     r2_prefix: str | None = None,
     wrangler_command: str = "npx wrangler",
 ) -> RawArtifactPublishReport:
@@ -390,8 +406,8 @@ def publish_raw_artifact_files(
 
 def bootstrap_r2_storage(
     *,
-    raw_bucket: str = "ledger-raw",
-    derived_bucket: str = "ledger-derived",
+    raw_bucket: str | None = None,
+    derived_bucket: str | None = None,
     wrangler_command: str = "npx wrangler",
 ) -> R2BootstrapReport:
     """Create Chronicle R2 buckets when Wrangler is authenticated."""
@@ -409,7 +425,7 @@ def publish_derived_artifact_files(
     package_id: str,
     year: int,
     build_id: str | None = None,
-    r2_bucket: str = "ledger-derived",
+    r2_bucket: str | None = None,
     r2_prefix: str | None = None,
     wrangler_command: str = "npx wrangler",
     build_artifacts_output: str | Path | None = None,
@@ -441,12 +457,16 @@ def export_chronicle_db_table_files(
 def load_supabase_mirror_files(
     input_dir: str | Path,
     *,
-    schema: str = "ledger",
+    schema: str | None = None,
     batch_size: int = 500,
     dry_run: bool = False,
     build_artifacts_path: str | Path | None = None,
 ) -> SupabaseMirrorLoadReport:
-    """Load exported Chronicle JSONL mirror files into Supabase/Postgres."""
+    """Load exported Chronicle JSONL mirror files into Supabase/Postgres.
+
+    ``schema`` of None resolves to ``$CHRONICLE_SCHEMA``, else the default
+    schema, so the hosted mirror writer answers to the renamed variable.
+    """
     table_paths = (
         {"build_artifacts": Path(build_artifacts_path)}
         if build_artifacts_path is not None
@@ -836,7 +856,7 @@ def main(argv: list[str] | None = None) -> int:
 
     artifact_parser = subparsers.add_parser(
         "fetch-artifact",
-        help="Fetch/register a raw source artifact and update manifest.yaml",
+        help="Fetch/register a raw source artifact and update its manifest",
     )
     artifact_parser.add_argument(
         "--url",
@@ -857,13 +877,23 @@ def main(argv: list[str] | None = None) -> int:
         "--year",
         type=int,
         required=True,
-        help="Artifact vintage year to record in manifest.yaml",
+        help="Artifact vintage year to record in the manifest",
     )
     artifact_parser.add_argument(
         "--out-dir",
         type=Path,
         required=True,
-        help="Directory where the raw artifact and manifest.yaml should live",
+        help="Directory where the raw artifact and its manifest should live",
+    )
+    artifact_parser.add_argument(
+        "--manifest",
+        default=DEFAULT_MANIFEST_FILENAME,
+        help=(
+            "Manifest filename inside --out-dir. A publisher directory that "
+            "feeds several source packages keeps one manifest each, and the "
+            "entry being revised lives in exactly one of them. Defaults to "
+            f"{DEFAULT_MANIFEST_FILENAME}."
+        ),
     )
     artifact_parser.add_argument(
         "--dataset",
@@ -887,9 +917,24 @@ def main(argv: list[str] | None = None) -> int:
         help="Upload the artifact to R2 after local checksum capture.",
     )
     artifact_parser.add_argument(
+        "--record-revision",
+        action="store_true",
+        help=(
+            "Register a publisher revision: the fetched bytes get their own "
+            "content-addressed key under the configured bucket and the "
+            "superseded object moves to storage.previous_r2. Without this "
+            "flag, bytes that disagree with what the entry identifies -- its "
+            "declared sha256, or its recorded content-addressed key once "
+            "published -- are refused."
+        ),
+    )
+    artifact_parser.add_argument(
         "--r2-bucket",
-        default="ledger-raw",
-        help="R2 bucket for raw artifacts when --upload-r2 is set.",
+        default=None,
+        help=(
+            "R2 bucket for raw artifacts when --upload-r2 is set. Defaults to "
+            f"$CHRONICLE_R2_RAW_BUCKET, else {DEFAULT_R2_RAW_BUCKET}."
+        ),
     )
     artifact_parser.add_argument(
         "--r2-prefix",
@@ -923,7 +968,7 @@ def main(argv: list[str] | None = None) -> int:
 
     raw_publish_parser = subparsers.add_parser(
         "publish-raw",
-        help="Upload manifest-declared raw source artifacts to ledger-raw R2",
+        help="Upload manifest-declared raw source artifacts to the raw R2 bucket",
     )
     raw_publish_parser.add_argument(
         "--root",
@@ -946,8 +991,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     raw_publish_parser.add_argument(
         "--r2-bucket",
-        default="ledger-raw",
-        help="R2 bucket for immutable raw artifacts.",
+        default=None,
+        help=(
+            "R2 bucket for immutable raw artifacts. Defaults to "
+            f"$CHRONICLE_R2_RAW_BUCKET, else {DEFAULT_R2_RAW_BUCKET}."
+        ),
     )
     raw_publish_parser.add_argument(
         "--r2-prefix",
@@ -969,13 +1017,19 @@ def main(argv: list[str] | None = None) -> int:
     )
     r2_parser.add_argument(
         "--raw-bucket",
-        default="ledger-raw",
-        help="R2 bucket name for immutable raw source artifacts.",
+        default=None,
+        help=(
+            "R2 bucket name for immutable raw source artifacts. Defaults to "
+            f"$CHRONICLE_R2_RAW_BUCKET, else {DEFAULT_R2_RAW_BUCKET}."
+        ),
     )
     r2_parser.add_argument(
         "--derived-bucket",
-        default="ledger-derived",
-        help="R2 bucket name for derived Chronicle build artifacts.",
+        default=None,
+        help=(
+            "R2 bucket name for derived Chronicle build artifacts. Defaults to "
+            f"$CHRONICLE_R2_DERIVED_BUCKET, else {DEFAULT_R2_DERIVED_BUCKET}."
+        ),
     )
     r2_parser.add_argument(
         "--wrangler-command",
@@ -985,7 +1039,7 @@ def main(argv: list[str] | None = None) -> int:
 
     derived_publish_parser = subparsers.add_parser(
         "publish-derived",
-        help="Upload deterministic Chronicle build outputs to ledger-derived R2",
+        help="Upload deterministic Chronicle build outputs to the derived R2 bucket",
     )
     derived_publish_parser.add_argument(
         "--dir",
@@ -1014,13 +1068,16 @@ def main(argv: list[str] | None = None) -> int:
         help=(
             "Build ID under an accepted epoch prefix, ledger.build.v1:<digest> or "
             "chronicle.build.v2:<digest>; any other form is refused. Defaults to "
-            "the ID inferred from reports or ledger.db."
+            "the ID inferred from reports, chronicle.db, or a legacy ledger.db."
         ),
     )
     derived_publish_parser.add_argument(
         "--r2-bucket",
-        default="ledger-derived",
-        help="R2 bucket for derived build artifacts.",
+        default=None,
+        help=(
+            "R2 bucket for derived build artifacts. Defaults to "
+            f"$CHRONICLE_R2_DERIVED_BUCKET, else {DEFAULT_R2_DERIVED_BUCKET}."
+        ),
     )
     derived_publish_parser.add_argument(
         "--r2-prefix",
@@ -1075,8 +1132,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     mirror_load_parser.add_argument(
         "--schema",
-        default="ledger",
-        help="Supabase/Postgres schema to load into.",
+        default=None,
+        help=(
+            "Supabase/Postgres schema to load into. Defaults to "
+            f"$CHRONICLE_SCHEMA, else {DEFAULT_CHRONICLE_SCHEMA}."
+        ),
     )
     mirror_load_parser.add_argument(
         "--batch-size",
@@ -1305,40 +1365,54 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0
     if args.command == "fetch-artifact":
-        report = fetch_artifact_file(
-            args.url,
-            source_id=args.source_id,
-            package_id=args.package_id,
-            year=args.year,
-            output_dir=args.out_dir,
-            dataset=args.dataset,
-            source_page=args.source_page,
-            table=args.table,
-            filename=args.filename,
-            upload_r2=args.upload_r2,
-            r2_bucket=args.r2_bucket,
-            r2_prefix=args.r2_prefix,
-            wrangler_command=args.wrangler_command,
-        )
+        try:
+            report = fetch_artifact_file(
+                args.url,
+                source_id=args.source_id,
+                package_id=args.package_id,
+                year=args.year,
+                output_dir=args.out_dir,
+                dataset=args.dataset,
+                source_page=args.source_page,
+                table=args.table,
+                filename=args.filename,
+                manifest_filename=args.manifest,
+                upload_r2=args.upload_r2,
+                record_revision=args.record_revision,
+                r2_bucket=args.r2_bucket,
+                r2_prefix=args.r2_prefix,
+                wrangler_command=args.wrangler_command,
+            )
+        except SourceArtifactManifestError as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0 if report.valid else 1
     if args.command == "inventory-artifacts":
-        report = inventory_artifact_files(
-            args.root,
-            manifest_filename=args.manifest,
-        )
+        try:
+            report = inventory_artifact_files(
+                args.root,
+                manifest_filename=args.manifest,
+            )
+        except SourceArtifactManifestError as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0 if report.valid else 1
     if args.command == "publish-raw":
-        report = publish_raw_artifact_files(
-            args.root,
-            manifest_filename=args.manifest,
-            source_id=args.source_id,
-            package_id=args.package_id,
-            r2_bucket=args.r2_bucket,
-            r2_prefix=args.r2_prefix,
-            wrangler_command=args.wrangler_command,
-        )
+        try:
+            report = publish_raw_artifact_files(
+                args.root,
+                manifest_filename=args.manifest,
+                source_id=args.source_id,
+                package_id=args.package_id,
+                r2_bucket=args.r2_bucket,
+                r2_prefix=args.r2_prefix,
+                wrangler_command=args.wrangler_command,
+            )
+        except SourceArtifactManifestError as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0 if report.valid else 1
     if args.command == "bootstrap-r2":

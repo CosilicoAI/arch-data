@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import hashlib
-import os
 from dataclasses import dataclass, replace
 from importlib.resources import files
 from io import BytesIO
@@ -16,6 +15,7 @@ from zipfile import ZipFile
 import httpx
 import yaml
 
+from chronicle.artifacts import SourceArtifactManifestError, _validated_recorded_r2
 from chronicle.core import (
     ALLOWED_AGGREGATIONS,
     ALLOWED_ASSERTIONS,
@@ -32,7 +32,14 @@ from chronicle.core import (
     AggregateFact,
     build_label,
 )
+from chronicle.env import env_flag, env_value
 from chronicle.epoch import SCHEMA_IDS, schema_id
+from chronicle.registration import (
+    is_bare_filename,
+    is_manifest_filename,
+    load_manifest_document,
+    matching_directory_entry,
+)
 from chronicle.sources.cells import (
     SourceArtifactMetadata,
     SourceCell,
@@ -446,8 +453,8 @@ SOURCE_PACKAGE_ALIASES = {
         "usda_snap/fy2025_monthly_state_caseloads"
     ),
 }
-SOURCE_ARTIFACT_CACHE_ENV = "LEDGER_SOURCE_ARTIFACT_CACHE_DIR"
-SOURCE_ARTIFACT_FETCH_ENV = "LEDGER_SOURCE_ARTIFACT_FETCH"
+SOURCE_ARTIFACT_CACHE_ENV = "CHRONICLE_SOURCE_ARTIFACT_CACHE_DIR"
+SOURCE_ARTIFACT_FETCH_ENV = "CHRONICLE_SOURCE_ARTIFACT_FETCH"
 DEFAULT_SOURCE_ARTIFACT_CACHE_DIR = (
     Path.home() / ".cache" / "policyengine-chronicle" / "source-artifacts"
 )
@@ -922,32 +929,177 @@ class SourceArtifactSpec:
             raw_r2_uri=raw_r2.get("uri"),
         )
 
+    def _resource_root(self) -> Any:
+        """Resolve the resource directory, refusing an escape from the package.
+
+        ``resource_directory`` is joined under ``files(resource_package)``; an
+        absolute value would discard that root entirely, a ``..`` or ``.``
+        component would step outside it, and a symlinked ancestor would follow
+        the link out of the package tree. Every byte and manifest read goes
+        through here, so the containment check runs before any I/O.
+        """
+        raw = self.resource_directory
+        parts = str(raw).split("/")
+        if (
+            not isinstance(raw, str)
+            or not raw
+            or raw.startswith("/")
+            or "\\" in raw
+            or any(
+                not part or part in (".", "..") or part != part.strip()
+                for part in parts
+            )
+        ):
+            raise ValueError(
+                f"resource_directory must be a relative path of plain segments "
+                f"inside the resource package, not {raw!r}."
+            )
+        root = files(self.resource_package)
+        directory = root.joinpath(raw)
+        if isinstance(root, Path):
+            current = root
+            for part in parts:
+                current = current / part
+                if current.is_symlink():
+                    raise ValueError(
+                        f"resource_directory component {current} is a symbolic "
+                        "link. Chronicle will not read source-package data "
+                        "through it."
+                    )
+            resolved_root = root.resolve()
+            if not Path(directory).resolve().is_relative_to(resolved_root):
+                raise ValueError(
+                    f"resource_directory {raw!r} escapes the resource package "
+                    f"root {resolved_root}."
+                )
+        return directory
+
+    def _resource_entry(
+        self,
+        value: Any,
+        *,
+        what: str,
+        require_manifest_name: bool = False,
+        forbid_manifest_name: bool = False,
+    ) -> Any:
+        """Resolve one safe file entry under the package resource directory."""
+        if not is_bare_filename(value):
+            raise ValueError(
+                f"{what} must be a bare filename inside "
+                f"{self.resource_directory}, not {value!r}."
+            )
+        name = str(value)
+        if require_manifest_name and not is_manifest_filename(name):
+            raise ValueError(
+                f"{what} must be named manifest.yaml or "
+                f"manifest_<package>.yaml, not {name!r}."
+            )
+        if forbid_manifest_name and is_manifest_filename(name):
+            raise ValueError(
+                f"{what} {name!r} is a manifest name and cannot be read as "
+                "source artifact bytes."
+            )
+
+        directory = self._resource_root()
+        existing = matching_directory_entry(directory, name)
+        if existing is None:
+            return directory.joinpath(name)
+        is_symlink = getattr(existing, "is_symlink", None)
+        if callable(is_symlink) and is_symlink():
+            raise ValueError(
+                f"{what} {existing} is a symbolic link. Chronicle will not "
+                "read source-package data through it."
+            )
+        if existing.name != name:
+            raise ValueError(
+                f"{what} {existing} has the same normalized filename as "
+                f"{name!r}. Keep exactly one spelling in the package."
+            )
+        if not existing.is_file():
+            raise ValueError(
+                f"{what} {existing} is not a regular file. Chronicle will "
+                "not open non-regular source-package resources."
+            )
+        return existing
+
+    def manifest_resource(self) -> Any:
+        """Return the validated manifest file this package spec points at."""
+        return self._resource_entry(
+            self.manifest,
+            what="Source artifact manifest",
+            require_manifest_name=True,
+        )
+
+    def manifest_payload(self) -> dict[str, Any]:
+        """Load the artifact manifest strictly as a YAML mapping."""
+        with self.manifest_resource().open("r", encoding="utf-8") as file:
+            text = file.read()
+        try:
+            payload = load_manifest_document(text)
+        except yaml.YAMLError as exc:
+            raise ValueError(
+                f"{self.resource_directory}/{self.manifest} is not valid YAML: {exc}"
+            ) from exc
+        if payload is None:
+            return {}
+        if not isinstance(payload, dict):
+            raise ValueError(
+                f"{self.resource_directory}/{self.manifest} must be a YAML "
+                f"mapping; it parses as a {type(payload).__name__}."
+            )
+        return payload
+
     def _artifact_content(
         self,
         year: int,
     ) -> tuple[bytes, str, str, dict[str, str]]:
-        manifest_path = files(self.resource_package).joinpath(
-            self.resource_directory,
-            self.manifest,
-        )
-        with manifest_path.open("r", encoding="utf-8") as file:
-            manifest = yaml.safe_load(file)
+        manifest = self.manifest_payload()
         spec = _year_mapping(manifest["files"], self.artifact_year or year)
-        artifact_path = files(self.resource_package).joinpath(
-            self.resource_directory,
-            spec["filename"],
+        filename = spec.get("filename")
+        artifact_path = self._resource_entry(
+            filename,
+            what="Source artifact filename",
+            forbid_manifest_name=True,
         )
-        content = _read_source_artifact_content(artifact_path, spec)
+        try:
+            recorded_r2 = _validated_recorded_r2(
+                spec,
+                manifest_path=Path(self.resource_directory) / self.manifest,
+                year=self.artifact_year or year,
+            )
+        except SourceArtifactManifestError as exc:
+            raise ValueError(str(exc)) from exc
         expected_sha = spec.get("sha256")
+        raw_r2 = {}
+        if recorded_r2 is not None:
+            if recorded_r2.filename != filename or (
+                expected_sha is not None and expected_sha != recorded_r2.sha256
+            ):
+                raise ValueError(
+                    f"Source artifact {filename!r} disagrees with its recorded "
+                    f"R2 identity: storage.r2 names {recorded_r2.filename!r} "
+                    f"with sha256={recorded_r2.sha256}, while the manifest "
+                    f"declares sha256={expected_sha!r}."
+                )
+            expected_sha = recorded_r2.sha256
+            # The immutable object also supplies the checksum for a manifest
+            # without a separate sha256 field. Pass it into the fetch/cache
+            # reader so wrong publisher bytes are refused before cache writes.
+            spec = {**spec, "sha256": expected_sha}
+            raw_r2 = {
+                "provider": recorded_r2.provider,
+                "bucket": recorded_r2.bucket,
+                "key": recorded_r2.key,
+                "uri": recorded_r2.uri,
+            }
+        content = _read_source_artifact_content(artifact_path, spec)
         if expected_sha:
             _validate_source_artifact_sha(
                 content,
                 expected_sha=str(expected_sha),
-                filename=str(spec["filename"]),
+                filename=str(filename),
             )
-        storage = spec.get("storage") if isinstance(spec, dict) else None
-        raw_r2 = storage.get("r2") if isinstance(storage, dict) else {}
-        return content, spec["filename"], spec["source_url"], raw_r2 or {}
+        return content, str(filename), spec["source_url"], raw_r2
 
     def _sheet_name(self, filename: str, *, year: int) -> str:
         if self.sheet_name:
@@ -2315,7 +2467,7 @@ def _read_source_artifact_content(
     if cache_path.exists():
         return cache_path.read_bytes()
 
-    if not _truthy_env(SOURCE_ARTIFACT_FETCH_ENV):
+    if not env_flag(SOURCE_ARTIFACT_FETCH_ENV):
         raise FileNotFoundError(
             f"Source artifact {spec['filename']} is not packaged and was not "
             f"found in {cache_path}. Set {SOURCE_ARTIFACT_FETCH_ENV}=1 to fetch "
@@ -2337,7 +2489,7 @@ def _read_source_artifact_content(
 
 def _source_artifact_cache_path(spec: dict[str, Any]) -> Path:
     cache_root = Path(
-        _env_value(
+        env_value(
             SOURCE_ARTIFACT_CACHE_ENV,
             default=DEFAULT_SOURCE_ARTIFACT_CACHE_DIR,
         )
@@ -2372,21 +2524,6 @@ def _validate_source_artifact_sha(
             f"Source artifact checksum mismatch for {filename}: "
             f"expected {expected_sha}, got {actual_sha}"
         )
-
-
-def _env_value(*names: str, default: str | Path) -> str | Path:
-    for name in names:
-        value = os.environ.get(name)
-        if value:
-            return value
-    return default
-
-
-def _truthy_env(*names: str) -> bool:
-    return any(
-        os.environ.get(name, "").strip().lower() in {"1", "true", "yes", "on"}
-        for name in names
-    )
 
 
 def _single_archive_member(archive: ZipFile, *, suffixes: tuple[str, ...]) -> str:

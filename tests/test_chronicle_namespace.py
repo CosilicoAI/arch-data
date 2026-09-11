@@ -8,11 +8,7 @@ from chronicle.targets import (
     query_targets,
 )
 from db.schema import Target as DbTarget
-from db.supabase_client import (
-    LEDGER_SCHEMA,
-    TARGETS_SCHEMA,
-    query_targets as db_query_targets,
-)
+from db.supabase_client import query_targets as db_query_targets
 
 
 def test_chronicle_targets_reexport_schema_objects():
@@ -29,8 +25,43 @@ def test_chronicle_client_reexports_supabase_client():
 
 
 def test_chronicle_supabase_schema_boundaries_are_defaulted():
-    assert LEDGER_SCHEMA == "ledger"
-    assert TARGETS_SCHEMA == "targets"
+    """The schema names resolve per call, so this reads the cleared window.
+
+    ``db.supabase_client`` is imported at collection, before any fixture runs.
+    Resolving the schema there — as an import-time constant — would bind an
+    operator's ``CHRONICLE_SCHEMA`` (or a ledger-era name, warning as it went)
+    into the module for the whole session, and no fixture could take it back.
+    Reading at call time is what makes this a test of the defaults rather than
+    of the shell.
+    """
+    from db import supabase_client
+
+    assert supabase_client.chronicle_schema() == "ledger"
+    assert supabase_client.targets_schema() == "targets"
+
+
+def test_chronicle_supabase_schema_compatibility_aliases_are_defaulted():
+    """The shipped module keeps its pre-rename import surface."""
+    from chronicle.env import DEFAULT_CHRONICLE_SCHEMA
+    from db.supabase_client import (
+        DEFAULT_TARGETS_SCHEMA,
+        LEDGER_SCHEMA,
+        TARGETS_SCHEMA,
+    )
+
+    assert LEDGER_SCHEMA == DEFAULT_CHRONICLE_SCHEMA == "ledger"
+    assert TARGETS_SCHEMA == DEFAULT_TARGETS_SCHEMA == "targets"
+
+
+def test_chronicle_supabase_schema_follows_the_environment(monkeypatch):
+    """The renamed variable reaches the client after it has been imported."""
+    from db import supabase_client
+
+    monkeypatch.setenv("CHRONICLE_SCHEMA", "chronicle_probe")
+    monkeypatch.setenv("POLICYENGINE_TARGETS_SCHEMA", "targets_probe")
+
+    assert supabase_client.chronicle_schema() == "chronicle_probe"
+    assert supabase_client.targets_schema() == "targets_probe"
 
 
 def test_chronicle_normalization_exports_helpers():

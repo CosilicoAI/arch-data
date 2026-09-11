@@ -65,10 +65,12 @@ contract that aligns it to another period (see
 | Microcosm Target Contracts | Selection, measurement bindings, and active subset | Period alignment, support-aware activation, solver inputs, diagnostics |
 
 The storage split is documented in
-[`docs/storage-architecture.md`](docs/storage-architecture.md): `ledger-raw`
-stores immutable source bytes, `ledger-derived` stores reproducible build
+[`docs/storage-architecture.md`](docs/storage-architecture.md): a raw R2 archive
+stores immutable source bytes, a derived R2 archive stores reproducible build
 artifacts, and Supabase/Postgres hosts the queryable relational Chronicle registry
-mirrored from accepted builds.
+mirrored from accepted builds. The bucket names are configuration
+(`$CHRONICLE_R2_RAW_BUCKET` and `$CHRONICLE_R2_DERIVED_BUCKET`), still defaulting
+to the ledger-era `ledger-raw` and `ledger-derived`.
 
 ## Repository Model
 
@@ -247,7 +249,7 @@ This writes:
   source_regions.jsonl
   facts.jsonl
   consumer_facts.jsonl
-  ledger.db
+  chronicle.db
   reports/
     source_rows.json
     source_cells.json
@@ -349,11 +351,14 @@ needed, even when your Cloudflare user belongs to several accounts:
 # One-time per machine (opens a browser consent page):
 bunx wrangler login
 
-# One-time per account (already done for the PolicyEngine account):
-uv run chronicle bootstrap-r2 --raw-bucket ledger-raw --derived-bucket ledger-derived
+# One-time per account (already done for the PolicyEngine account). The bucket
+# flags default to $CHRONICLE_R2_RAW_BUCKET / $CHRONICLE_R2_DERIVED_BUCKET:
+uv run chronicle bootstrap-r2
 
 # Fetch/register a source artifact, write db/data/.../manifest.yaml, and upload
-# the exact bytes to R2 when Wrangler is authenticated:
+# the exact bytes to R2 when Wrangler is authenticated. Pass --manifest when the
+# package directory keeps more than one manifest (ira_contributions keeps a
+# traditional and a Roth one):
 uv run chronicle fetch-artifact \
   --url https://www.irs.gov/pub/irs-soi/23in12ms.xls \
   --source-id irs_soi \
@@ -364,11 +369,20 @@ uv run chronicle fetch-artifact \
   --table "Publication 1304 Table 1.2" \
   --upload-r2
 
+# Re-fetching is safe: identical bytes keep the recorded storage.r2 block, and
+# bytes that disagree with what the entry identifies -- its declared sha256, or
+# its recorded content-addressed key once published -- are refused. When a
+# publisher has re-published
+# under the same URL and vintage, register the revision explicitly — the new
+# bytes get their own content-addressed key and the superseded object is kept
+# in storage.previous_r2:
+uv run chronicle fetch-artifact ... --record-revision
+
 # Audit local manifests and checksums:
 uv run chronicle inventory-artifacts --root db/data
 
-# Upload all existing manifest-declared local artifacts to ledger-raw and write
-# storage.r2 metadata back into the manifests:
+# Upload all existing manifest-declared local artifacts to the raw archive and
+# write storage.r2 metadata back into the manifests:
 uv run chronicle publish-raw --root db/data
 ```
 
@@ -406,10 +420,10 @@ To prepare the deterministic SQLite artifact for a hosted Supabase/Postgres
 mirror, export each relational table to JSONL plus a manifest:
 
 ```bash
-uv run chronicle export-db-tables --db /tmp/chronicle-suite/ledger.db --out /tmp/chronicle-mirror --replace
+uv run chronicle export-db-tables --db /tmp/chronicle-suite/chronicle.db --out /tmp/chronicle-mirror --replace
 ```
 
-To publish the deterministic build outputs to the `ledger-derived` R2 bucket:
+To publish the deterministic build outputs to the derived R2 archive:
 
 ```bash
 uv run chronicle publish-derived \
@@ -420,13 +434,14 @@ uv run chronicle publish-derived \
   --build-artifacts-out /tmp/chronicle-build-artifacts.jsonl
 ```
 
-The Supabase schema for this mirror lives at
-`supabase/migrations/20260504_chronicle_bronze.sql`. Raw government spreadsheets are
-mirrored as artifact metadata plus one row per parsed cell, not one tidy table
-per sheet. Chronicle does not host raw survey microdata tables.
+Before loading, create and apply a Supabase/Postgres migration that creates the
+mirror tables in the schema selected for the load, then expose that schema
+through the Supabase Data API. Raw government spreadsheets are mirrored as
+artifact metadata plus one row per parsed cell, not one tidy table per sheet.
+Chronicle does not host raw survey microdata tables.
 
-After the migration is applied and the `chronicle` schema is exposed through the
-Supabase Data API, accepted mirror exports can be upserted with:
+After that deployment migration is applied, accepted mirror exports can be
+upserted with:
 
 ```bash
 uv run chronicle load-supabase-mirror \
@@ -434,8 +449,20 @@ uv run chronicle load-supabase-mirror \
   --build-artifacts /tmp/chronicle-build-artifacts.jsonl
 ```
 
+With no schema environment override and no `--schema`, this command
+writes to `ledger`. To load a migrated `chronicle` schema instead, set
+`CHRONICLE_SCHEMA=chronicle` or pass `--schema chronicle`.
+
 Use `--dry-run` first to validate JSONL row counts and file coverage without
 writing to Supabase.
+
+Chronicle settings are read chronicle-first: `CHRONICLE_X` wins, and the
+ledger-era `POLICYENGINE_LEDGER_X` and `LEDGER_X` spellings still work behind a
+one-time deprecation warning naming the variable to move to.
+[`docs/storage-architecture.md`](docs/storage-architecture.md#environment-variable-rename-window)
+lists every variable in that window, and
+[Bucket Cutover](docs/storage-architecture.md#bucket-cutover) covers the R2
+bucket rename.
 
 Chronicle facts keep source concepts and canonical concepts separately. For example,
 the SOI Table 1.1 adjusted gross income column is preserved as
