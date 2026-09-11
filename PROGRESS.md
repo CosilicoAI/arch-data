@@ -2,12 +2,13 @@
 
 ## State
 
-- In progress. Merge commit `97eb36d` ("Merge remote-tracking branch
+- Complete at `3f9d7a1` (plus this journal commit). Merge commit `97eb36d` ("Merge remote-tracking branch
   'origin/main' into HEAD") is on the detached head that extends the pushed
   PR head `7a694be`; nothing is pushed. `git merge origin/main` produced **no
   conflicts**.
-- A full-suite baseline of the merged tree is running to enumerate every
-  failure before any fix lands.
+- The merged tree's full suite reproduced the pull_request-event CI exactly
+  (82 failed / 25 errors); after the fix it is **1,955 passed, 1 skipped**,
+  direct exit 0, with every other CI job step green.
 
 ## Done
 
@@ -71,10 +72,55 @@
   `chronicle init` + `load all` exit 0, `uv build` exit 0, wheel install +
   import/CLI smoke exit 0, `uv run ruff check .` exit 0.
 
+## Done (fixes)
+
+- `fc020c3`: `kind: publisher_table` on the 34 manifests, inserted immediately
+  after `package_id` exactly where `_with_declared_kind` writes it and where
+  `test_a_fetch_into_a_frozen_manifest_declares_its_kind` pins it; five entries
+  dropped from `GRANDFATHERED_KINDLESS_MANIFESTS` (168 -> 163) -- the four whose
+  manifests main deleted plus `uc_households_family_type_april_december_2025`,
+  which main modified and which now declares its kind; the freeze docstring now
+  names deletion as a reason an entry leaves, which
+  `test_the_frozen_list_only_shrinks` already enforced. `git diff --unified=0 --
+  db/data` is exactly `34 +kind: publisher_table` and nothing else.
+- `3f9d7a1`: `FREEZE_SIZE` 168 -> 163. The drop had left five slack slots under a
+  `<=` bound, so five new kindless manifests could have landed with freeze
+  entries of their own and both guards would have stayed green -- what the
+  module docstring's "never added" forbids. The comment records that 168 was the
+  `ba8147a7` snapshot size, which the module docstring still states.
+- No production refusal was weakened, and no `chronicle/` behaviour changed: the
+  only non-data, non-test edit is the freeze list's five removed entries and its
+  docstring.
+
+## Verification
+
+- `inventory_source_artifacts(db/data)`: **valid, 0 errors** (199 manifests, 245
+  artifacts, 0 missing, 0 checksum mismatches, 15 hash-only, 230 R2 links);
+  34 errors before.
+- Merge faithfulness proven mechanically: `git merge-tree --write-tree 7a694be
+  9f8b77a` returns `17b4d386282a29b009e91f71e76d94bb336a21d3`, which is exactly
+  `git rev-parse 97eb36d^{tree}` -- the merge commit is git's unedited 3-way
+  merge, nothing hand-resolved.
+- Every CI job step, direct exit 0: `ruff check chronicle policyengine_chronicle
+  db scripts tests`, `ruff check scripts/ots_anchor.py tests/test_ots_anchor.py`,
+  `pytest tests/test_ots_anchor.py` (30 passed), `chronicle init` / `load all` /
+  `stats` (815 strata, 6,678 targets), `uv build`, wheel install + import/CLI
+  smoke. `ruff format --check` on both changed Python files: already formatted.
+- Full suite on the final committed tree `3f9d7a1`, clean, nothing edited during
+  the run: **1,955 passed, 1 skipped, 42 warnings in 1432.55s (23:52)**, direct
+  exit **0**. Zero `FAILED`/`ERROR` lines. 1,848 + 107 = 1,955: every one of the
+  107 baseline failures now passes and nothing regressed.
+- `uv lock --check` exit 0 (`Resolved 76 packages`), so CI's `uv sync --locked`
+  is satisfied.
+
 ## Next
 
-- Declare `kind: publisher_table` on the 34 manifests, drop the five frozen-list
-  entries, then re-verify.
+- None once the full suite is recorded. Two items for Max are in the report:
+  main's in-place revision of the family-type manifest dropped the superseded R2
+  object (no `previous_r2` recorded anywhere in the tree, and I will not assert
+  an R2 object I cannot verify), and `docs/adr-chronicle-raw-microdata-
+  identity.md` -- which the kind rule cites from ten places -- exists on neither
+  side of the merge.
 
 # PR #227 — round 4 fix lane (publish-raw / inventory microdata-identity residual)
 
