@@ -342,6 +342,80 @@ def _assert_no_microdata_identity(
             )
 
 
+#: Refusal code for local bytes a sibling microdata release already identifies.
+#: Publish and inventory report codes rather than raising, so a package sweep
+#: names every defect before anything is uploaded or rewritten.
+MICRODATA_IDENTITY_CODE = "bytes_identified_by_microdata_release"
+
+
+def _microdata_identity_errors(
+    manifests: Mapping[str, dict[str, Any]] | None,
+    *,
+    package_dir: Any,
+    filename: Any,
+    digests: Iterable[str | None],
+) -> list[str]:
+    """Return the refusal codes for bytes a release sibling identifies.
+
+    The reporting form of :func:`_assert_no_microdata_identity`, for the
+    publish and inventory entry passes that accumulate codes instead of
+    raising. A filename Chronicle cannot address in the package directory is
+    left to the entry-shape codes that already refuse it.
+    """
+    if manifests is None:
+        return []
+    try:
+        _assert_no_microdata_identity(
+            manifests,
+            package_dir=package_dir,
+            filename=filename if is_bare_filename(filename) else "",
+            digests=digests,
+        )
+    except ManifestAccessError as error:
+        return [f"{MICRODATA_IDENTITY_CODE}:{error}"]
+    return []
+
+
+def _assert_no_package_microdata_identities(
+    manifests: Mapping[str, dict[str, Any]],
+) -> None:
+    """Refuse a directory whose public table entry a release sibling identifies.
+
+    Publish and inventory sweep one manifest at a time, but the physical byte
+    belongs to the directory: a table registration carrying a release's
+    filename, checksum, or archived R2 identity is that gated-by-provenance
+    release under another record, whichever manifest declares it. Checked as a
+    package boundary, before any entry's bytes are read, uploaded or rewritten,
+    exactly as the source-package readers check it before returning bytes.
+
+    Only public non-release entries are swept here. A hash-only registration
+    colliding with a public release keeps its existing
+    :func:`validate_package_directory` codes, which this never replaces.
+    """
+    for name, vintage, _index, entry in iter_directory_entries(manifests):
+        if not isinstance(entry, dict):
+            continue
+        manifest_path = Path(name)
+        kind, _kind_error = safe_manifest_kind(
+            manifests[name], manifest_path=manifest_path
+        )
+        if kind == MICRODATA_RELEASE_KIND:
+            continue
+        if is_hash_only(safe_entry_access(entry)):
+            continue
+        errors = _microdata_identity_errors(
+            manifests,
+            package_dir=manifest_path.parent,
+            filename=entry.get("filename"),
+            digests=(
+                entry.get("sha256"),
+                _effective_recorded_digest(name, vintage, entry),
+            ),
+        )
+        if errors:
+            raise SourceArtifactManifestError(errors[0])
+
+
 def _assert_siblings_record_these_bytes(
     manifests: Mapping[str, dict[str, Any]],
     *,
@@ -1793,6 +1867,10 @@ def inventory_source_artifacts(
                 _assert_package_file_owner_identities_agree(package_manifests)
             except SourceArtifactManifestError as exc:
                 package_errors.append(str(exc))
+            try:
+                _assert_no_package_microdata_identities(package_manifests)
+            except SourceArtifactManifestError as exc:
+                package_errors.append(str(exc))
         errors.extend(package_errors)
         for year, spec in files.items():
             for file_spec in iter_file_specs(spec, kind=kind):
@@ -1805,6 +1883,7 @@ def inventory_source_artifacts(
                         kind=kind,
                         staging_dir=staging_dir,
                         inspect_bytes=not package_errors,
+                        package_manifests=package_manifests,
                     )
                 )
 
@@ -3729,6 +3808,21 @@ def _publish_raw_manifest_entry(
         return refuse(f"artifact_path_is_symlink:{filename}")
     if not artifact_path.is_file():
         return refuse("staged_bytes_missing" if release else "missing_file")
+    if not release:
+        # A table whose declared or recorded identity is a release sibling's is
+        # that release under another record. Refuse before its bytes are read,
+        # after every structural code the entry would otherwise report.
+        declared_identity_errors = _microdata_identity_errors(
+            package_manifests,
+            package_dir=manifest_path.parent,
+            filename=filename,
+            digests=(
+                sha256_expected,
+                recorded_object.sha256 if recorded_object is not None else None,
+            ),
+        )
+        if declared_identity_errors:
+            return refuse(declared_identity_errors[0])
     content = artifact_path.read_bytes()
     sha256_actual = hashlib.sha256(content).hexdigest()
     size_bytes = len(content)
@@ -3744,6 +3838,18 @@ def _publish_raw_manifest_entry(
             )
         except ManifestAccessError:
             errors.append(f"sha256_collision_across_manifests:{sha256_actual}")
+    if not release:
+        # An undeclared table digest is only knowable from the bytes. Classify
+        # it in memory, before the preflight return, the recorded-object skip,
+        # the upload, and the manifest rewrite that records it.
+        errors.extend(
+            _microdata_identity_errors(
+                package_manifests,
+                package_dir=manifest_path.parent,
+                filename=filename,
+                digests=(sha256_actual,),
+            )
+        )
     if recorded_object is not None and (
         recorded_object.sha256 != sha256_actual or recorded_object.filename != filename
     ):
@@ -3848,6 +3954,7 @@ def _inventory_entry(
     kind: str | None = None,
     staging_dir: str | Path | None = None,
     inspect_bytes: bool = True,
+    package_manifests: Mapping[str, dict[str, Any]] | None = None,
 ) -> ArtifactInventoryEntry:
     errors: list[str] = []
     original_spec = spec
@@ -3965,6 +4072,22 @@ def _inventory_entry(
         size_bytes = len(content)
         if sha256_expected and sha256_actual != sha256_expected:
             errors.append("checksum_mismatch")
+    if not release and not hash_only:
+        # Report the release sibling's identity beside every other code the
+        # entry earns. A metadata alias is already a package error, which left
+        # these bytes uninspected; only an undeclared digest needs them.
+        errors.extend(
+            _microdata_identity_errors(
+                package_manifests,
+                package_dir=manifest_path.parent,
+                filename=filename,
+                digests=(
+                    sha256_expected,
+                    validated_r2.sha256 if validated_r2 is not None else None,
+                    sha256_actual,
+                ),
+            )
+        )
     r2 = None
     if validated_r2 is not None:
         if sha256_actual is not None and sha256_actual != validated_r2.sha256:
@@ -4522,6 +4645,10 @@ def _publish_source_artifacts_unlocked(
         )
         try:
             _assert_package_file_owner_identities_agree(package_manifests)
+        except SourceArtifactManifestError as exc:
+            structural_errors.append(str(exc))
+        try:
+            _assert_no_package_microdata_identities(package_manifests)
         except SourceArtifactManifestError as exc:
             structural_errors.append(str(exc))
         if structural_errors or entry_errors:

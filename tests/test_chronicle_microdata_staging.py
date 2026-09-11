@@ -596,12 +596,15 @@ def test_publish_raw_refuses_public_microdata_alias_without_upload_or_rewrite(
     assert any("bytes_identified_by_microdata_release" in code for code in codes), codes
     assert uploads == []
     assert writes == []
-    assert {path.name: path.read_bytes() for path in package.iterdir()} == before
-    assert staged.read_bytes() == staged_before
+    # Read the log before the snapshot assertions below read the tree again.
     # Only an undeclared, unrecorded table digest needs the local bytes to be
     # classified; every other alias is known from metadata alone.
     known = identity != "observed" or alias == "archived-filename"
     assert reads == ([] if known else [package / "table.csv"])
+    assert {
+        path.name: original_read_bytes(path) for path in package.iterdir()
+    } == before
+    assert original_read_bytes(staged) == staged_before
 
 
 @pytest.mark.parametrize("alias", ["sha256", "archived-filename", "archived-sha256"])
