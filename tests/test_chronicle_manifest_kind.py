@@ -41,7 +41,10 @@ from chronicle.source_package import SourceArtifactSpec, validate_source_package
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-FREEZE_SIZE = 168
+# The ceiling ratchets down with the list. The freeze held 168 entries at the
+# ``ba8147a7`` snapshot; every removal lowers this bound, so nothing can be
+# added back into a slot a removal vacated.
+FREEZE_SIZE = 163
 
 
 def _tracked_manifests() -> list[Path]:
