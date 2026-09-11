@@ -1,3 +1,28 @@
+# PR #227 — round 4 fix lane (publish-raw / inventory microdata-identity residual)
+
+## State
+
+- Started at `8416660` on branch `microdata-registration` (PR #227, pushed head
+  `8416660`; nothing is pushed from this lane).
+- Scope: the peer finding that `publish-raw` (`_publish_raw_manifest_entry`)
+  and the inventory path still persist/upload/report success over
+  publisher-table bytes that a sibling `microdata_release` manifest identifies
+  by checksum or by an archived filename/sha256 alias.
+- Plan: red regressions first (mocked persistence, network refused, assert no
+  upload and no manifest rewrite), then apply the already-hoisted
+  `_assert_no_microdata_identity` classifier to publish-raw and to the
+  package-directory checks shared by publish and inventory.
+
+## Done
+
+- Read `AGENTS.md`, the prior round-3 journal, and the cited implementation
+  sites in `chronicle/artifacts.py` / `chronicle/registration.py`.
+
+## Next
+
+- Reproduce the publish-raw and inventory residual as failing tests.
+- Apply the shared classifier; run the full suite, Ruff check and format check.
+
 # PR #227 Astra gate bbd833a9 — round 3 fix lane
 
 ## State
