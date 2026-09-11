@@ -142,6 +142,12 @@ SOURCE_PACKAGE_ALIASES = {
     "dft-bus0415-fares-index-2026": Path("dft/bus0415_fares_index_2026"),
     "dft-bus05i-revenue-support-2025": Path("dft/bus05i_revenue_support_2025"),
     "dft-veh1103-cars-fuel-type-2025": Path("dft/veh1103_cars_fuel_type_2025"),
+    "dft-nts0313-mode-use-frequency-2025": Path(
+        "dft/nts0313_mode_use_frequency_2025"
+    ),
+    "dft-nts0621-local-bus-use-frequency-2025": Path(
+        "dft/nts0621_local_bus_use_frequency_2025"
+    ),
     "dft-nts0705-local-bus-trips-2024": Path("dft/nts0705_local_bus_trips_2024"),
     "dft-nts-vehicle-ownership-2024": Path("dft/nts_vehicle_ownership_2024"),
     "dfc-ni-uc-statistics-may-2026": Path("dfc_ni/uc_statistics_may_2026"),
@@ -368,6 +374,9 @@ SOURCE_PACKAGE_ALIASES = {
     "nisra-census2021-household-composition-country": Path(
         "nisra/census2021_household_composition_country"
     ),
+    "nithc-annual-report-accounts-2024-25": Path(
+        "nithc/annual_report_accounts_2024_25"
+    ),
     "ons-uk-population-projections-2024": Path("ons/npp_2024_uk"),
     "scotgov-band-d-council-tax-rates-2026-27": Path(
         "scotgov/band_d_council_tax_rates_2026_27"
@@ -387,7 +396,13 @@ SOURCE_PACKAGE_ALIASES = {
     "scotgov-bus-coach-statistics-2023-24": Path(
         "scotgov/bus_coach_statistics_2023_24"
     ),
+    "scotgov-bus-coach-statistics-2024-25": Path(
+        "scotgov/bus_coach_statistics_2024_25"
+    ),
     "welshgov-council-tax-levels-2026-27": Path("welshgov/council_tax_levels_2026_27"),
+    "welshgov-transport-revenue-outturn-2024-25": Path(
+        "welshgov/transport_revenue_outturn_2024_25"
+    ),
     "welshgov-council-tax-collection-2024-25": Path(
         "welshgov/council_tax_collection_2024_25"
     ),
@@ -407,6 +422,9 @@ SOURCE_PACKAGE_ALIASES = {
         "obr/fuel_duty_receipts_by_vehicle_april_2024"
     ),
     "ofgem-energy-price-cap-q1-2024": Path("ofgem/energy_price_cap_q1_2024"),
+    "ofgem-energy-price-cap-levels-2024-2026": Path(
+        "ofgem/energy_price_cap_levels_2024_2026"
+    ),
     "orr-government-support-7270-2024-25": Path("orr/government_support_7270_2024_25"),
     "orr-government-support-7271-2024-25": Path("orr/government_support_7271_2024_25"),
     "orr-rail-fares-7180-2026": Path("orr/rail_fares_7180_2026"),

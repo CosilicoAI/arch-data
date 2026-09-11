@@ -1,0 +1,18 @@
+source_id: nithc
+package_id: nithc-annual-report-accounts-2024-25
+dataset: nithc_nithc-annual-report-accounts-2024-25
+source_page: https://www.translink.co.uk/corporate/publicationsanddocuments/corporatepublications
+table: Northern Ireland Transport Holding Company Annual Report and Accounts 2024/25
+files:
+  2025:
+    filename: translink-annual-report-2024-25.pdf
+    source_url: https://www.translink.co.uk/getmedia/80ca628c-5412-4a3a-a178-8cdab81c9ca8/Translink-Annual-Report-2025.pdf
+    sha256: 898a0d17963b18da40ebcec64c9b222aec11666712f9a7d65b18f648c92dc26f
+    size_bytes: 15645953
+    fetched_at: '2026-09-10T14:02:58+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/nithc/nithc-annual-report-accounts-2024-25/2025/898a0d17963b18da40ebcec64c9b222aec11666712f9a7d65b18f648c92dc26f/translink-annual-report-2024-25.pdf
+        uri: r2://ledger-raw/raw/nithc/nithc-annual-report-accounts-2024-25/2025/898a0d17963b18da40ebcec64c9b222aec11666712f9a7d65b18f648c92dc26f/translink-annual-report-2024-25.pdf

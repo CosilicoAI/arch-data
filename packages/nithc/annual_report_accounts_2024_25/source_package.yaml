@@ -1,0 +1,261 @@
+# Northern Ireland's bus public support and concessionary fares
+# reimbursement, which the landed dfi-ni-public-transport-statistics-2024-25
+# package could not carry: that release reports Translink journeys and
+# passenger receipts and has no support or reimbursement series, and the DfI
+# annual report and accounts for 2024-25 is not published. The publisher that
+# does state the figures is the Northern Ireland Transport Holding Company,
+# whose annual report and accounts are audited, laid before the Assembly and
+# published under the Transport Act (Northern Ireland) 1967.
+#
+# Chronicle's call on the company-report question the follow-up left open: a
+# statutory, audited public-corporation account is an acceptable publisher
+# artifact. It is recorded as administrative provenance on an accrual basis,
+# and the package takes only note 23, Related Party Transactions, whose lines
+# name the Department for Infrastructure as the counterparty. That is the
+# public support DfI paid, stated by the body that received it.
+#
+# Scope limit the consumer must carry: NITHC is the group holding company for
+# Ulsterbus, Metro, Goldline and NI Railways, and the note does not split
+# these transactions by mode. Public Service Obligation compensation and
+# concessionary fare compensation are therefore all-public-transport figures,
+# not bus-only, and every fact records mode_scope: all public transport so
+# they cannot be read as a bus cell by mistake. The report has no segmental
+# note that would allow a bus split.
+#
+# The report period ends in March, so the note's "2025" column is FY2024-25
+# and its "2024" column is FY2023-24; both are ported.
+schema_version: ledger.source_package.v1
+package_id: nithc-annual-report-accounts-2024-25
+label: Northern Ireland Transport Holding Company transactions with the Department for
+  Infrastructure, 2023-24 and 2024-25
+artifact:
+  source_name: nithc
+  source_table: Northern Ireland Transport Holding Company Annual Report and Accounts 2024/25,
+    note 23 Related Party Transactions
+  resource_package: db
+  resource_directory: data/nithc/annual_report_accounts_2024_25
+  manifest: manifest.yaml
+  vintage: '2024_25'
+  extracted_at: '2026-09-10'
+  extraction_method: PDF text-line number extraction
+  parser: pdf_text_numbers
+  artifact_year: 2025
+record_sets:
+- record_set_id: nithc.dfi_transactions.fy2024
+  provenance_class: administrative
+  assertion: observation
+  accounting_basis: accrual
+  record_set_spec_id: nithc.dfi_transactions.fy2024.v1
+  source_record_id_prefix: nithc.dfi_transactions.fy2024
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2024
+  period_coverage:
+    start_date: '2024-04-01'
+    end_date: '2025-03-31'
+    basis: fiscal
+    source_period_label: '2025'
+    notes: period.value stores the opening year of the publisher fiscal-year label;
+      the accounts label the year by its ending March.
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: government
+  entity_role: public_transport_funding_authority
+  domain: public_transport_finance
+  groupby_dimension: nithc.funding_component
+  shared_filters:
+    mode_scope: all_public_transport
+  shared_constraints:
+  - variable: mode_scope
+    operator: ==
+    value: all_public_transport
+    label: Mode scope
+  rows:
+  - value_id: capital_grants
+    label: Capital grants
+    ordinal: 0
+    row_number: 2497
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: Capital grants 250.3 275.5
+    source_row_dimensions: {funding_component: Capital grants}
+    filters:
+      funding_component: Capital grants
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: Capital grants
+      label: Funding component
+  - value_id: public_service_obligation_compensation
+    label: Public Service Obligation compensation
+    ordinal: 1
+    row_number: 2499
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: Public Service Obligation compensation 61.8 55.5
+    source_row_dimensions: {funding_component: Public Service Obligation compensation}
+    filters:
+      funding_component: Public Service Obligation compensation
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: Public Service Obligation compensation
+      label: Funding component
+  - value_id: concessionary_fare_compensation
+    label: Concessionary fare compensation for a range of groups
+    ordinal: 2
+    row_number: 2501
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: Concessionary fare compensation for a range of groups 49.9 43.7
+    source_row_dimensions: {funding_component: Concessionary fare compensation for a range
+        of groups}
+    filters:
+      funding_component: Concessionary fare compensation for a range of groups
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: Concessionary fare compensation for a range of groups
+      label: Funding component
+  - value_id: other_revenue_funding
+    label: Other revenue funding
+    ordinal: 3
+    row_number: 2503
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: Other revenue funding 53.2 67.8
+    source_row_dimensions: {funding_component: Other revenue funding}
+    filters:
+      funding_component: Other revenue funding
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: Other revenue funding
+      label: Funding component
+  measures:
+  - measure_id: transaction_value
+    label: Transaction with the Department for Infrastructure
+    ordinal: 0
+    column: E
+    source_column_id: transaction_value
+    concept: nithc.dfi_transaction_value
+    source_concept: nithc.dfi_transaction_value
+    concept_relation: source_label
+    concept_authority: nithc
+    concept_evidence_url: https://www.translink.co.uk/corporate/publicationsanddocuments/corporatepublications
+    concept_evidence_notes: Transaction with the Department for Infrastructure
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000
+- record_set_id: nithc.dfi_transactions.fy2023
+  provenance_class: administrative
+  assertion: observation
+  accounting_basis: accrual
+  record_set_spec_id: nithc.dfi_transactions.fy2023.v1
+  source_record_id_prefix: nithc.dfi_transactions.fy2023
+  sheet_name: document_numbers
+  period_type: fiscal_year
+  period: 2023
+  period_coverage:
+    start_date: '2023-04-01'
+    end_date: '2024-03-31'
+    basis: fiscal
+    source_period_label: '2024'
+    notes: period.value stores the opening year of the publisher fiscal-year label;
+      the accounts label the year by its ending March.
+  geography_id: N92000002
+  geography_level: country
+  geography_name: Northern Ireland
+  geography_vintage: current
+  entity: government
+  entity_role: public_transport_funding_authority
+  domain: public_transport_finance
+  groupby_dimension: nithc.funding_component
+  shared_filters:
+    mode_scope: all_public_transport
+  shared_constraints:
+  - variable: mode_scope
+    operator: ==
+    value: all_public_transport
+    label: Mode scope
+  rows:
+  - value_id: capital_grants
+    label: Capital grants
+    ordinal: 0
+    row_number: 2498
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: Capital grants 250.3 275.5
+    source_row_dimensions: {funding_component: Capital grants}
+    filters:
+      funding_component: Capital grants
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: Capital grants
+      label: Funding component
+  - value_id: public_service_obligation_compensation
+    label: Public Service Obligation compensation
+    ordinal: 1
+    row_number: 2500
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: Public Service Obligation compensation 61.8 55.5
+    source_row_dimensions: {funding_component: Public Service Obligation compensation}
+    filters:
+      funding_component: Public Service Obligation compensation
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: Public Service Obligation compensation
+      label: Funding component
+  - value_id: concessionary_fare_compensation
+    label: Concessionary fare compensation for a range of groups
+    ordinal: 2
+    row_number: 2502
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: Concessionary fare compensation for a range of groups 49.9 43.7
+    source_row_dimensions: {funding_component: Concessionary fare compensation for a range
+        of groups}
+    filters:
+      funding_component: Concessionary fare compensation for a range of groups
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: Concessionary fare compensation for a range of groups
+      label: Funding component
+  - value_id: other_revenue_funding
+    label: Other revenue funding
+    ordinal: 3
+    row_number: 2504
+    table_record_kind: detail
+    expected_row_header_column: C
+    expected_row_header: Other revenue funding 53.2 67.8
+    source_row_dimensions: {funding_component: Other revenue funding}
+    filters:
+      funding_component: Other revenue funding
+    constraints:
+    - variable: funding_component
+      operator: ==
+      value: Other revenue funding
+      label: Funding component
+  measures:
+  - measure_id: transaction_value
+    label: Transaction with the Department for Infrastructure
+    ordinal: 0
+    column: E
+    source_column_id: transaction_value
+    concept: nithc.dfi_transaction_value
+    source_concept: nithc.dfi_transaction_value
+    concept_relation: source_label
+    concept_authority: nithc
+    concept_evidence_url: https://www.translink.co.uk/corporate/publicationsanddocuments/corporatepublications
+    concept_evidence_notes: Transaction with the Department for Infrastructure
+    unit: gbp
+    aggregation: sum
+    expected_cell_type: number
+    value_scale: 1000000

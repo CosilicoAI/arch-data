@@ -1,0 +1,18 @@
+source_id: scotgov
+package_id: scotgov-bus-coach-statistics-2024-25
+dataset: scotgov_scotgov-bus-coach-statistics-2024-25
+source_page: https://www.transport.gov.scot/publication/scottish-transport-statistics-2025/chapter-2-bus-and-coach-travel/
+table: Scottish Transport Statistics 2025 bus and coach reference tables
+files:
+  2025:
+    filename: bus-and-coach-reference-tables.xls
+    source_url: https://www.transport.gov.scot/media/vhvnxolo/chapter-2-bus-and-coach-travel-excel.xls
+    sha256: 2a0e4bdd48f65a2a70451a6091e2d035c15f9101d70b64203053be472fd3fc6c
+    size_bytes: 410624
+    fetched_at: '2026-09-10T14:02:38+00:00'
+    storage:
+      r2:
+        provider: r2
+        bucket: ledger-raw
+        key: raw/uk/scotgov/scotgov-bus-coach-statistics-2024-25/2025/2a0e4bdd48f65a2a70451a6091e2d035c15f9101d70b64203053be472fd3fc6c/bus-and-coach-reference-tables.xls
+        uri: r2://ledger-raw/raw/uk/scotgov/scotgov-bus-coach-statistics-2024-25/2025/2a0e4bdd48f65a2a70451a6091e2d035c15f9101d70b64203053be472fd3fc6c/bus-and-coach-reference-tables.xls
