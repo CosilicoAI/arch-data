@@ -403,17 +403,25 @@ def _assert_no_package_microdata_identities(
             continue
         if is_hash_only(safe_entry_access(entry)):
             continue
-        errors = _microdata_identity_errors(
-            manifests,
-            package_dir=manifest_path.parent,
-            filename=entry.get("filename"),
-            digests=(
-                entry.get("sha256"),
-                _effective_recorded_digest(name, vintage, entry),
-            ),
-        )
-        if errors:
-            raise SourceArtifactManifestError(errors[0])
+        filename = entry.get("filename")
+        try:
+            _assert_no_microdata_identity(
+                manifests,
+                package_dir=manifest_path.parent,
+                filename=filename if is_bare_filename(filename) else "",
+                digests=(
+                    entry.get("sha256"),
+                    _effective_recorded_digest(name, vintage, entry),
+                ),
+            )
+        except ManifestAccessError as error:
+            # Name the registration as well as the release: publish and
+            # inventory report a package's codes as vintage/filename, code and
+            # manifest, and an operator reconciling the directory needs both.
+            raise SourceArtifactManifestError(
+                f"{vintage!r}/{filename}: {MICRODATA_IDENTITY_CODE}: "
+                f"{manifest_path}. {error}"
+            ) from error
 
 
 def _assert_siblings_record_these_bytes(

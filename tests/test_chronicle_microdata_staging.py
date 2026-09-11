@@ -621,6 +621,14 @@ def test_inventory_reports_public_microdata_alias_for_table_entry(
     codes = _report_error_codes(report)
     assert not report.valid, codes
     assert any("bytes_identified_by_microdata_release" in code for code in codes), codes
+    assert any("manifest_release.yaml" in code for code in codes), codes
+    # A metadata alias is a package defect, reported with the registration that
+    # carries it as well as the release that already identifies those bytes.
+    if identity != "observed" or alias == "archived-filename":
+        assert any(
+            "manifest_tables.yaml" in code and "manifest_release.yaml" in code
+            for code in codes
+        ), codes
 
 
 @pytest.mark.parametrize("identity", ["declared", "observed"])
