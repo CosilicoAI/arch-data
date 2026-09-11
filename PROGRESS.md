@@ -17,11 +17,23 @@
 
 - Read `AGENTS.md`, the prior round-3 journal, and the cited implementation
   sites in `chronicle/artifacts.py` / `chronicle/registration.py`.
+- Journal opener committed in `97a4f91`.
+- Confirmed the residual by direct execution before writing tests: publish
+  uploads once, rewrites `manifest_tables.yaml` and reports valid, and
+  inventory reports valid, for alias in {sha256, archived-filename,
+  archived-sha256} across declared/observed/r2-only table identities. The
+  current-filename alias is already refused by
+  `bytes_present_for_microdata_release_entry`.
+- Red regressions committed in `de85517`
+  (`tests/test_chronicle_microdata_staging.py`): 18 failing cases across
+  publish-raw and inventory, plus three passing controls (distinct table bytes
+  beside a release; two non-release manifests sharing one public table).
 
 ## Next
 
-- Reproduce the publish-raw and inventory residual as failing tests.
-- Apply the shared classifier; run the full suite, Ruff check and format check.
+- Apply the shared `_assert_no_microdata_identity` classifier to publish-raw,
+  the package-directory checks, and `_inventory_entry`.
+- Run the full suite, Ruff check and format check.
 
 # PR #227 Astra gate bbd833a9 — round 3 fix lane
 
