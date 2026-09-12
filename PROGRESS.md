@@ -1349,6 +1349,42 @@ twelve-module run with fixes 1 and 2: 1109 passed, exit 0 (238s). No tracked
 manifest under `db/`, `data/` or `packages/` carries `previous_r2` at all, and
 `git status --porcelain db data` is empty.
 
-**Next:** adversarial verification (bypass attempts, weakening audit, CLI
-serialization, four-command consistency matrix), then the full suite, Ruff lint
-and format checks, and the external report.
+**Adversarial verification (five attack lanes, all by execution):**
+
+- ~25 metadata-shape attacks on the sweep were all refused: relative and
+  dotted output paths, unclassifiable manifest kinds on either side, list vs
+  mapping entries, hash-only and unreadable access classes, case and Unicode
+  filename aliases, non-bare filenames, YAML anchors, an alias arriving
+  between the two preflight passes (fetch and registration), registration into
+  a not-yet-existing manifest, `--allow-reissue`, and `--record-revision`
+  sibling-owner rewrites.
+- Both CLIs serialize every new refusal: `fetch-artifact` and
+  `register-artifact` print the message and exit 1; `publish-raw` and
+  `inventory-artifacts` emit JSON that parses, carrying
+  `recorded_r2_locator_invalid:… storage.previous_r2[0]: …`. No round-4-style
+  serialization failure, including for YAML date vintages and set identities.
+- Two further defects surfaced and were fixed red-first:
+  `8c99ac8` one locator parser for both readers. `_recorded_object_identities`
+  read a `uri` with `urlsplit`, whose path stops at a `?` or `#`, while
+  `_validated_recorded_r2` splits `provider://bucket/key` by partition and
+  keeps reading. A stray `?` in the authority made a block naming a release's
+  exact object read as naming nothing, so every archived-alias check went
+  blind on it. Both now use the shared `split_r2_uri`.
+- Measured, not assumed: validating archived objects drops an entry's
+  effective recorded digest, but the sweep still sees the identity the current
+  object records, and the refusal still lands before the publisher is read
+  (`test_unreadable_history_does_not_blind_the_package_sweep`).
+
+**Open, needs a decision (reported, not changed):**
+
+- The sweep is a metadata check. `publish-raw` and `inventory-artifacts` also
+  classify each entry's *observed* bytes, so a package-local file that IS a
+  release's bytes under a table record with no (or a wrong) declared digest is
+  still accepted by `fetch-artifact` and `register-artifact`. Closing it for
+  fetch means hashing package-local artifacts in the preflight; closing it for
+  registration would contradict its documented "checks recorded identities
+  without opening artifacts" contract.
+- `docs/adr-chronicle-raw-microdata-identity.md` is cited 11 times across
+  `chronicle/` and `docs/` and does not exist (pre-existing).
+
+**Next:** the final full suite, Ruff lint and format checks, and the report.
