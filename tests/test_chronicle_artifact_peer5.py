@@ -20,6 +20,7 @@ from chronicle.artifacts import (
     SourceArtifactManifestError,
     fetch_source_artifact,
     inventory_source_artifacts,
+    publish_source_artifacts,
 )
 from chronicle.registration import HashOnlyRegistrationError, register_hash_only_artifact
 from tests.test_chronicle_microdata_registration import (
@@ -227,3 +228,240 @@ def test_registration_refuses_a_package_microdata_alias(
 
     assert {path.name: path.read_bytes() for path in package.iterdir()} == before
     assert locks == []
+
+
+# ---------------------------------------------------------------------------
+# Unreadable archived provenance
+# ---------------------------------------------------------------------------
+
+TABLE_BYTES = b"publisher,value\nexample,123\n"
+TABLE_SHA = hashlib.sha256(TABLE_BYTES).hexdigest()
+TABLE_KEY = f"raw/publisher/package/2024/{TABLE_SHA}/table.csv"
+ARCHIVED_KEY = f"raw/publisher/package/2024/{ARCHIVED_SHA}/archived.csv"
+VALID_ARCHIVED = {
+    "provider": "r2",
+    "bucket": "archive",
+    "key": ARCHIVED_KEY,
+    "uri": f"r2://archive/{ARCHIVED_KEY}",
+}
+UNREADABLE_ARCHIVED = {
+    # The peer's case: a bare locator string is not a mapping, so
+    # _recorded_object_identities skips it and every archived-alias check goes
+    # blind on an identity the key plainly carries.
+    "bare-string": f"r2://archive/{ARCHIVED_KEY}",
+    "unparseable-uri": {"provider": "r2", "uri": "not-an-r2-locator"},
+    "contradictory": {
+        "provider": "r2",
+        "bucket": "different",
+        "key": ARCHIVED_KEY,
+        "uri": f"r2://archive/{ARCHIVED_KEY}",
+    },
+    "no-provider": {"uri": f"r2://archive/{ARCHIVED_KEY}"},
+    "not-content-addressed": {
+        "provider": "r2",
+        "uri": "r2://archive/raw/publisher/package/2024/archived.csv",
+    },
+    "empty": {},
+}
+ELEMENTS = sorted(UNREADABLE_ARCHIVED)
+
+
+def _package_with_history(package: Path, *, element: object) -> Path:
+    """A published publisher table whose archived object is the argument."""
+    package.mkdir(parents=True)
+    (package / "table.csv").write_bytes(TABLE_BYTES)
+    manifest_path = package / "manifest.yaml"
+    manifest_path.write_text(
+        yaml.safe_dump(
+            {
+                "kind": "publisher_table",
+                "source_id": "publisher",
+                "package_id": "package",
+                "files": {
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                        "sha256": TABLE_SHA,
+                        "size_bytes": len(TABLE_BYTES),
+                        "storage": {
+                            "r2": {
+                                "provider": "r2",
+                                "bucket": "archive",
+                                "key": TABLE_KEY,
+                                "uri": f"r2://archive/{TABLE_KEY}",
+                            },
+                            "previous_r2": [element],
+                        },
+                    }
+                },
+            },
+            sort_keys=False,
+        )
+    )
+    return manifest_path
+
+
+@pytest.mark.parametrize("element", ELEMENTS)
+def test_inventory_refuses_unreadable_archived_provenance(
+    tmp_path, monkeypatch, element
+):
+    """An archived block Chronicle cannot read is not a valid registration."""
+    package = tmp_path / "package"
+    manifest_path = _package_with_history(package, element=UNREADABLE_ARCHIVED[element])
+    before = manifest_path.read_text()
+
+    def unexpected_read(*args, **kwargs):
+        pytest.fail("inventory read bytes before refusing unreadable history")
+
+    monkeypatch.setattr(Path, "read_bytes", unexpected_read)
+
+    report = inventory_source_artifacts(package)
+
+    assert not report.valid
+    assert any(
+        "previous_r2" in error
+        for error in (*report.errors, *report.entries[0].errors)
+    ), (report.errors, report.entries[0].errors)
+    assert manifest_path.read_text() == before
+
+
+@pytest.mark.parametrize("element", ELEMENTS)
+def test_publish_refuses_unreadable_archived_provenance(tmp_path, monkeypatch, element):
+    package = tmp_path / "package"
+    manifest_path = _package_with_history(package, element=UNREADABLE_ARCHIVED[element])
+    before = manifest_path.read_text()
+    uploads = _record_uploads(monkeypatch)
+
+    report = publish_source_artifacts(package)
+
+    assert not report.valid
+    assert any(
+        "previous_r2" in error
+        for error in (*report.errors, *(e for entry in report.entries for e in entry.errors))
+    ), report
+    assert uploads == []
+    assert manifest_path.read_text() == before
+
+
+@pytest.mark.parametrize("element", ELEMENTS)
+def test_fetch_refuses_unreadable_archived_provenance(tmp_path, monkeypatch, element):
+    package = tmp_path / "package"
+    manifest_path = _package_with_history(package, element=UNREADABLE_ARCHIVED[element])
+    before = manifest_path.read_text()
+    reads = _refuse_read(monkeypatch)
+    uploads = _record_uploads(monkeypatch)
+    locks: list[Path] = []
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock",
+        lambda path: locks.append(path) or nullcontext(),
+    )
+
+    with pytest.raises(SourceArtifactManifestError, match="previous_r2"):
+        fetch_source_artifact(
+            "https://publisher.example/table.csv",
+            source_id="publisher",
+            package_id="package",
+            year=2024,
+            output_dir=package,
+            filename="table.csv",
+        )
+
+    assert manifest_path.read_text() == before
+    assert reads == []
+    assert uploads == []
+    assert locks == []
+
+
+@pytest.mark.parametrize("element", ELEMENTS)
+def test_registration_refuses_unreadable_archived_provenance(
+    tmp_path, monkeypatch, element
+):
+    """The command that already refused it: the other three now agree."""
+    package = tmp_path / "package"
+    manifest_path = _package_with_history(package, element=UNREADABLE_ARCHIVED[element])
+    before = manifest_path.read_text()
+    locks: list[Path] = []
+    monkeypatch.setattr(
+        "chronicle.registration._registration_lock",
+        lambda path: locks.append(path) or nullcontext(),
+    )
+
+    with pytest.raises(HashOnlyRegistrationError, match="previous_r2"):
+        register_hash_only_artifact(
+            source_id="publisher",
+            package_id="package",
+            year=2025,
+            output_dir=package,
+            manifest_filename="manifest_release.yaml",
+            filename="adult.tab",
+            sha256="f" * 64,
+            licence="UK Data Service End User Licence",
+            access="licensed",
+            vintage="2025",
+            size_bytes=1024,
+            doi="10.5255/UKDA-SN-9367-2",
+            **ATTESTED,
+        )
+
+    assert manifest_path.read_text() == before
+    assert locks == []
+
+
+def test_unreadable_archived_provenance_cannot_hide_a_release_identity(
+    tmp_path, monkeypatch
+):
+    """The blinding case: the bare string carries a release's exact identity."""
+    package = tmp_path / "package"
+    package.mkdir()
+    (package / "table.csv").write_bytes(TABLE_BYTES)
+    hidden_key = f"raw/publisher/package/2023/{RELEASE_SHA}/microdata.csv"
+    manifest_path = package / "manifest_tables.yaml"
+    manifest_path.write_text(
+        yaml.safe_dump(
+            {
+                "kind": "publisher_table",
+                "source_id": "publisher",
+                "package_id": "package",
+                "files": {
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                        "sha256": TABLE_SHA,
+                        "size_bytes": len(TABLE_BYTES),
+                        "storage": {"previous_r2": [f"r2://ledger-raw/{hidden_key}"]},
+                    }
+                },
+            },
+            sort_keys=False,
+        )
+    )
+    (package / "manifest_release.yaml").write_text(yaml.safe_dump(_release_manifest()))
+    before = manifest_path.read_text()
+    _record_uploads(monkeypatch)
+
+    report = inventory_source_artifacts(package)
+
+    assert not report.valid
+    assert any(
+        "previous_r2" in error or MICRODATA_CODE in error
+        for error in (*report.errors, *(e for entry in report.entries for e in entry.errors))
+    ), report
+    assert manifest_path.read_text() == before
+
+
+def test_valid_archived_provenance_is_still_read_and_kept(tmp_path, monkeypatch):
+    """The control: a well-formed archived object stays a valid registration."""
+    package = tmp_path / "package"
+    manifest_path = _package_with_history(package, element=VALID_ARCHIVED)
+    before = manifest_path.read_text()
+    _record_uploads(monkeypatch)
+
+    report = inventory_source_artifacts(package)
+
+    assert report.valid, (report.errors, report.entries[0].errors)
+    assert manifest_path.read_text() == before
+    from chronicle.artifacts import _recorded_identity_aliases
+
+    entry = yaml.safe_load(manifest_path.read_text())["files"][2024]
+    names, digests = _recorded_identity_aliases(entry)
+    assert "archived.csv" in names and ARCHIVED_SHA in digests
