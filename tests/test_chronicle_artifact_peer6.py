@@ -562,3 +562,76 @@ def test_fetch_refuses_a_selected_entry_that_contradicts_its_own_locator(
     assert _snapshot(package) == before
     assert reads == []
     assert locks == []
+
+
+def test_provenance_the_sweep_cannot_read_is_still_refused_before_the_read(
+    tmp_path, monkeypatch
+):
+    """Why the hoisted loop follows the package sweep rather than preceding it.
+
+    The sweep resolves locators non-raisingly, so what it finds on unreadable
+    provenance is true and its message is the one the caller needs -- round 5
+    pins that. What it *misses* is this: an archived element that is not a
+    mapping is skipped, so a table entry whose only carrier of the release's
+    identity is that element passes the sweep in silence. The locator loop
+    that runs next refuses it anyway, still before the publisher is read.
+    """
+    package = tmp_path / "package"
+    package.mkdir(parents=True)
+    hidden = f"raw/publisher/package/2023/{RELEASE_SHA}/microdata.csv"
+    aliasing = {
+        "filename": "other-table.csv",
+        "sha256": OTHER_SHA,
+        "source_url": "https://publisher.example/2022.csv",
+        "storage": {
+            "r2": _locator("archive", OTHER_KEY),
+            # Not a mapping: _recorded_object_identities skips it, so the
+            # release identity its key carries is invisible to the sweep.
+            "previous_r2": [f"r2://ledger-raw/{hidden}"],
+        },
+    }
+    (package / "manifest_tables.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest(
+                {
+                    2022: aliasing,
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                    },
+                }
+            ),
+            sort_keys=False,
+        )
+    )
+    (package / "manifest_release.yaml").write_text(
+        yaml.safe_dump(_release_manifest(previous=None), sort_keys=False)
+    )
+    before = _snapshot(package)
+    reads = _refuse_read(monkeypatch)
+    uploads = _record_uploads(monkeypatch)
+    locks: list[Path] = []
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock",
+        lambda path: locks.append(path) or nullcontext(),
+    )
+
+    with pytest.raises(SourceArtifactManifestError) as refusal:
+        fetch_source_artifact(
+            "https://publisher.example/table.csv",
+            source_id="publisher",
+            package_id="package",
+            year=2024,
+            output_dir=package,
+            filename="table.csv",
+            manifest_filename="manifest_tables.yaml",
+        )
+
+    # The sweep stayed silent on it: this is the locator refusal, not the
+    # package identity one.
+    assert "storage.previous_r2[0]" in str(refusal.value)
+    assert "bytes_identified_by_microdata_release" not in str(refusal.value)
+    assert _snapshot(package) == before
+    assert reads == []
+    assert uploads == []
+    assert locks == []

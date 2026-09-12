@@ -1274,24 +1274,26 @@ def fetch_source_artifact(
         kind=manifest_kind_value,
         package_dir=output,
     )
-    manifest_kinds[str(manifest_path)] = manifest_kind_value
-    # Entry validation never opens ``storage``, and the selected entry is the
-    # only one whose locators the identity resolution below reads. Validate
-    # every entry's recorded provenance here, exactly as
-    # ``_prepare_registration_payload`` does before its own lock: an
-    # unreadable locator anywhere in the directory would otherwise be refused
-    # only by _upsert_manifest, after the publisher was read. The sweep below
-    # resolves locators non-raisingly, so readable provenance comes first.
-    for validated_path, validated in manifests.items():
-        _assert_recorded_locators_valid(
-            validated, Path(validated_path), kind=manifest_kinds[validated_path]
-        )
     # Every manifest in the directory is valid on its own terms by now, which
     # is where publish-raw and inventory-artifacts sweep the package as a
     # whole. A fetch rewrites one of these manifests, so it refuses the same
     # directory they refuse -- including a collision in a vintage this fetch
     # never touches -- before the publisher is read and before the lock.
     _assert_no_package_microdata_identities(manifests)
+    manifest_kinds[str(manifest_path)] = manifest_kind_value
+    # Entry validation never opens ``storage``, and the identity resolution
+    # below reads only the selected entry's locators, so this is where an
+    # unreadable one anywhere else in the directory is refused -- exactly as
+    # ``_prepare_registration_payload`` refuses it before its own lock, rather
+    # than leaving it to _upsert_manifest after the publisher is read. It
+    # follows the sweep rather than preceding it because the sweep resolves
+    # locators non-raisingly: what it does find on unreadable provenance is
+    # still true, and the more serious refusal's message is the one the caller
+    # needs. What it may have missed is why this cannot be skipped.
+    for validated_path, validated in manifests.items():
+        _assert_recorded_locators_valid(
+            validated, Path(validated_path), kind=manifest_kinds[validated_path]
+        )
     licence_text = licence.strip() if isinstance(licence, str) else None
     release = manifest_kind_value == MICRODATA_RELEASE_KIND
     evidence: dict[str, str] | None = None
