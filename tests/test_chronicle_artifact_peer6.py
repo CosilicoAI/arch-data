@@ -635,3 +635,112 @@ def test_provenance_the_sweep_cannot_read_is_still_refused_before_the_read(
     assert reads == []
     assert uploads == []
     assert locks == []
+
+
+# ---------------------------------------------------------------------------
+# The same contract, one level up: the package-wide owner sweep
+# ---------------------------------------------------------------------------
+
+COLLISIONS = ["declared-digests-disagree", "recorded-digests-disagree"]
+
+
+def _other_entry(*, sha256: str, recorded: bool) -> dict[str, object]:
+    """A public entry for a file this fetch never touches."""
+    entry: dict[str, object] = {
+        "filename": "other.csv",
+        "source_url": "https://publisher.example/other.csv",
+    }
+    if recorded:
+        # No declared sha256: only the content-addressed key says what these
+        # bytes are, which is the digest `_effective_recorded_digest` resolves.
+        entry["storage"] = {
+            "r2": _locator("archive", f"raw/publisher/package/2022/{sha256}/other.csv")
+        }
+    else:
+        entry["sha256"] = sha256
+        entry["size_bytes"] = 10
+    return entry
+
+
+def _build_collision_package(package: Path, *, collision: str) -> dict[str, object]:
+    """A contradiction between two manifests about a file the fetch never touches."""
+    package.mkdir(parents=True)
+    (package / "table.csv").write_bytes(TABLE_BYTES)
+    recorded = collision == "recorded-digests-disagree"
+    (package / "manifest.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest(
+                {
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                    },
+                    2022: _other_entry(sha256="a" * 64, recorded=recorded),
+                }
+            ),
+            sort_keys=False,
+        )
+    )
+    (package / "manifest_other.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest({2022: _other_entry(sha256="b" * 64, recorded=recorded)}),
+            sort_keys=False,
+        )
+    )
+    return {
+        "source_id": "publisher",
+        "package_id": "package",
+        "year": 2024,
+        "output_dir": package,
+        "filename": "table.csv",
+    }
+
+
+@pytest.mark.parametrize("collision", COLLISIONS)
+def test_inventory_reports_the_collision_on_the_untouched_tree(tmp_path, collision):
+    """The control: no bytes are needed to decide this."""
+    package = tmp_path / "package"
+    _build_collision_package(package, collision=collision)
+
+    report = inventory_source_artifacts(package)
+
+    assert not report.valid
+    assert any(
+        "filename_collision_across_manifests" in error for error in report.errors
+    ), report.errors
+
+
+@pytest.mark.parametrize("collision", COLLISIONS)
+def test_fetch_refuses_a_cross_manifest_collision_before_publisher_io(
+    tmp_path, monkeypatch, collision
+):
+    """The package-wide owner sweep belongs in the preflight, not under the lock.
+
+    ``_assert_shared_owner_identities_agree`` in the preflight is scoped to the
+    filename being fetched, so a contradiction two manifests already record
+    about another package-local file was refused only by
+    ``_assert_package_file_owner_identities_agree`` inside ``_upsert_manifest``
+    -- after the registration lock and after the publisher read, for a fetch
+    that could never have succeeded. ``register-artifact`` runs the same sweep
+    before taking its own lock.
+    """
+    package = tmp_path / "package"
+    kwargs = _build_collision_package(package, collision=collision)
+    before = _snapshot(package)
+    reads = _refuse_read(monkeypatch)
+    uploads = _record_uploads(monkeypatch)
+    locks: list[Path] = []
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock",
+        lambda path: locks.append(path) or nullcontext(),
+    )
+
+    with pytest.raises(
+        SourceArtifactManifestError, match="filename_collision_across_manifests"
+    ):
+        fetch_source_artifact("https://publisher.example/table.csv", **kwargs)
+
+    assert _snapshot(package) == before
+    assert reads == []
+    assert uploads == []
+    assert locks == []
