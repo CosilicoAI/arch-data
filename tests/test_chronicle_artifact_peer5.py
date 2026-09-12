@@ -739,3 +739,59 @@ def test_unreadable_history_does_not_blind_the_package_sweep(
     assert any(
         MICRODATA_CODE in error for error in inventory_source_artifacts(package).errors
     )
+
+
+@pytest.mark.parametrize("alias", ["filename", "sha256"])
+def test_release_fetch_refuses_a_package_microdata_alias(tmp_path, monkeypatch, alias):
+    """The release direction: staging and upload are downstream of the sweep."""
+    package = tmp_path / "package"
+    package.mkdir()
+    aliasing = _aliasing_entry(alias)
+    (package / "manifest_tables.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "source_id": "publisher",
+                "package_id": "package",
+                "kind": "publisher_table",
+                "files": {2022: aliasing},
+            }
+        )
+    )
+    (package / "manifest_release.yaml").write_text(yaml.safe_dump(_release_manifest()))
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    staging = tmp_path / "staging"
+    content = b"person_id,age\n9,64\n"
+    digest = hashlib.sha256(content).hexdigest()
+    reads = _refuse_read(monkeypatch)
+    uploads = _record_uploads(monkeypatch)
+
+    with pytest.raises(SourceArtifactManifestError, match=MICRODATA_CODE):
+        fetch_source_artifact(
+            "https://publisher.example/2024.csv",
+            source_id="publisher",
+            package_id="package",
+            year=2024,
+            output_dir=package,
+            manifest_filename="manifest_release.yaml",
+            filename="microdata-2024.csv",
+            kind="microdata_release",
+            access="public",
+            licence="CC0-1.0",
+            publisher="Fixture publisher",
+            vintage="2024",
+            expected_sha256=digest,
+            licence_evidence={
+                "issuer": "Fixture publisher",
+                "scope": "This fixture public microdata release is dedicated to CC0.",
+                "url": "https://publisher.example/licence",
+                "licence": "CC0-1.0",
+                "sha256": digest,
+            },
+            staging_dir=staging,
+            upload_r2=True,
+        )
+
+    assert {path.name: path.read_bytes() for path in package.iterdir()} == before
+    assert reads == []
+    assert uploads == []
+    assert not staging.exists()
