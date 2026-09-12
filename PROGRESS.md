@@ -1535,3 +1535,65 @@ executed:
 
 `tests/test_chronicle_artifact_peer5.py` + `peer6` at `e51a052`: 167 passed.
 `peer6` against the pre-fix tree `70e128b`: **36 failed, 55 passed**.
+
+### Adversarial verification, and the two further defects it surfaced
+
+Seven independent execution lanes audited the fix (weakening, over-refusal,
+ordering, CLI serialisation, registration parity, real data, design), each
+finding verified by a separate agent whose brief was to refute it. Three
+findings survived reporting; two of the three led to further fixes, and each
+one I re-derived myself before acting on it.
+
+- *Weakening lane*: no refusal disappeared. Its one finding was the ordering
+  regression above, already fixed by `e51a052`.
+- *Registration parity, CLI serialisation, real data*: no findings. The CLI
+  lane drove `fetch-artifact`, `register-artifact`, `publish-raw` and
+  `inventory-artifacts` as subprocesses over the newly refused placements,
+  including YAML-date and non-ASCII payloads inside the message.
+
+**`63cc2c2` — the same contract one level up, found by the ordering lane and
+reproduced by me.** `_assert_package_file_owner_identities_agree(manifests)`
+— the package-wide collision and owner sweep, which runs
+`validate_package_directory` — was reached only from `_upsert_manifest`. The
+preflight's only owner check, `_assert_shared_owner_identities_agree`, is
+scoped to the filename being fetched, so a contradiction two manifests already
+record about *another* package-local file was refused after the lock and after
+the publisher read. Executed: a directory whose `manifest.yaml` and
+`manifest_other.yaml` record `other.csv` under different digests refuses at
+`_assert_package_file_owner_identities_agree` with `publisher reads before the
+refusal: 1, registration locks before the refusal: 1`, on a tree
+`inventory_source_artifacts` already reports
+`filename_collision_across_manifests`. Pre-existing — identical on the pre-fix
+tree — and `register-artifact` runs the same sweep before taking its own lock.
+
+The preflight now runs it with `check_local_files=False`, exactly as
+`_prepare_registration_payload` does: the local bytes are the ones the fetch is
+about to replace, and every owner is compared against the fetched bytes once
+they are known. `_upsert_manifest` keeps the full sweep as the recheck.
+
+Over-refusal measured, not assumed: a 20-tree matrix (declared and
+recorded-only digest disagreements, agreeing owners, an unidentified owner, the
+fetched filename on both sides, gated siblings, clean controls) driven with and
+without `--record-revision`, against the tree carrying the locator hoist but not
+this one. **Exactly 4 cells change, all four the identical refusal moving from
+`LOCKREAD` to before either.** Nothing moved from refused to accepted, and
+nothing moved from accepted to refused. No fetch can repair such a collision:
+the rewrite revises only the owners of its own filename.
+
+**Third measured behaviour change, kept and pinned (`04ad51b`).** The hoisted
+loop reads each manifest's own `source_id`/`package_id`, while
+`_recorded_identity` binds the selected entry with the fetch arguments and
+`_upsert_manifest` validates a proposal `payload.setdefault` has already filled
+in. So a `microdata_release` manifest omitting one of those keys used to be
+repaired by the fetch; it is now refused, before the release licence evidence
+is looked at. Kept because `inventory-artifacts`, `publish-raw` and
+`register-artifact` all refuse the identical tree on both trees, and the repair
+was a silent carry-forward of a locator Chronicle could not bind. Measured on
+tracked data: of 199 manifests under `db/data`, kinds are
+`{None: 163, publisher_table: 34, microdata_release: 2}`; the five that omit
+`package_id` are all kindless Eurostat manifests, which read as
+`publisher_table` and never bind a registration identity, and both
+`microdata_release` manifests declare both keys. Unreachable today.
+
+`inventory_source_artifacts(db/data)` on the fixed tree: **valid, 245 entries,
+0 errors.**
