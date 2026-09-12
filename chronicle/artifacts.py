@@ -4505,11 +4505,16 @@ def _effective_recorded_digest(
     resolves -- so a sibling that only carries the locator does not read as
     an empty digest. A malformed locator is the per-entry preflight's error,
     not a collision: return None and let directory validation use the declared
-    field.
+    field. Only the current object is read here -- unreadable *archived*
+    provenance is its own refusal, and letting it erase the digest this entry
+    plainly records would drop the entry out of the directory comparison and
+    stop naming a contradiction between two manifests.
     """
     try:
         recorded = _validated_recorded_r2(
-            entry, manifest_path=Path(manifest_name), year=vintage
+            {"storage": {"r2": _recorded_r2(entry)}},
+            manifest_path=Path(manifest_name),
+            year=vintage,
         )
     except SourceArtifactManifestError:
         return None
