@@ -1296,5 +1296,59 @@ stash, no `db/data` changes.
    `_prepare_registration_payload` (registration.py:1580-1593) already refuses
    the same element. The four commands disagree.
 
-**Next:** reproduce both by execution (mocked persistence, network refused),
-then failing regressions, then the smallest consistent fixes.
+**Reproduced by execution (both findings, before any fix):**
+
+- Finding 1, own reproduction: a package whose *other* vintage carries the
+  release's filename, checksum or archived R2 identity is refused by
+  `inventory_source_artifacts` (`bytes_identified_by_microdata_release`) and
+  accepted by `fetch_source_artifact`, which rewrites the table manifest and
+  writes the bytes. Three alias variants, all three reproduce.
+- Finding 2, own reproduction: `_recorded_object_identities` yields
+  `[('microdata.csv', <sha>, ...)]` for a mapping element and `[]` for the
+  equivalent bare `r2://` string; `_recorded_identity_aliases` returns
+  `(set(), set())`; `_validated_recorded_storage` returns the storage block
+  unchanged.
+- An independent lane agent pinned the pre-fix tree read-only
+  (`git archive 68bb76f`) and reproduced the fetch gap there for six alias
+  variants in both the table and the release fetch direction (23 passed,
+  exit 0), then saw every one of those gap assertions flip against the fixed
+  tree (16 failed / 7 passed, exit 1).
+
+**Red-first regressions (`tests/test_chronicle_artifact_peer5.py`):**
+
+- `618f287` fetch/registration package sweep: 24 failed, 8 passed, exit 1.
+  Fetch failures were `ORDERING VIOLATION: the publisher was read before the
+  refusal`; registration failures were `DID NOT RAISE`. The 8 passing are the
+  inventory controls that already report the code.
+- `55636de` archived provenance: 19 failed, 7 passed, exit 1. Registration
+  refused all six unreadable element shapes; fetch, publish-raw and inventory
+  accepted every one, and the blinding case reported `valid=True errors=()`.
+- `0169303` identity binding: 2 failed, exit 1,
+  `AttributeError: 'NoneType' object has no attribute 'strip'`.
+
+**Fixes:**
+
+- `4d2d8fe` the package-wide sweep now runs in the fetch preflight (after every
+  manifest is individually valid, before publisher I/O and before the lock, and
+  again under the lock through the existing recursion), over the proposed tree
+  in `_upsert_manifest`, and in `_prepare_registration_payload` inside the
+  package validation that already refuses a directory it will not persist into.
+- `f394205` `_validated_recorded_storage` validates every `previous_r2` element
+  with the locator rules the current object gets, forwarding
+  `source_id`/`package_id`/`bind_registration_identity`, exactly as
+  `_prepare_registration_payload` already did.
+- `f180178` `_clean_key_part` refuses a non-string key part as a `ValueError`,
+  so binding a locator to a manifest that omits `source_id` is the controlled
+  `RecordedR2LocatorError` rather than an `AttributeError` escaping every
+  handler. That crash pre-existed on `storage.r2`; validating archived objects
+  reaches the same binding, so the fix belongs with it.
+
+**Verification so far:** `tests/test_chronicle_artifact_peer5.py` 60 passed.
+Focused ten-module run with fix 1 only: 1038 passed, exit 0 (226s). Focused
+twelve-module run with fixes 1 and 2: 1109 passed, exit 0 (238s). No tracked
+manifest under `db/`, `data/` or `packages/` carries `previous_r2` at all, and
+`git status --porcelain db data` is empty.
+
+**Next:** adversarial verification (bypass attempts, weakening audit, CLI
+serialization, four-command consistency matrix), then the full suite, Ruff lint
+and format checks, and the external report.
