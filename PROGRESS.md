@@ -1597,3 +1597,49 @@ tracked data: of 199 manifests under `db/data`, kinds are
 
 `inventory_source_artifacts(db/data)` on the fixed tree: **valid, 245 entries,
 0 errors.**
+
+**`a673243` — the last half of the check the previous commit added, found by
+the design lane and reproduced by me.** `63cc2c2` passed
+`check_local_files=False`, which left the sweep's unidentified-entry
+comparison — an entry naming a package-local file without recording an
+identity, whose bytes on disk are not what an identified owner records —
+firing only from `_upsert_manifest`, after the lock and the publisher read.
+The preflight now runs it over every package-local file *except* the one being
+fetched, through a new `pending_filename` argument.
+
+The exemption is load-bearing, shown by execution rather than argued: on a
+directory whose shared file is stale and whose sibling records what it must
+hold, `_assert_package_file_owner_identities_agree` without `pending_filename`
+refuses and with it passes — so a plain `check_local_files=True` would have
+refused the very fetch that repairs those bytes.
+`test_the_fetched_file_is_exempt_from_the_preflight_byte_comparison` pins it.
+Measured over a 14-cell matrix against the previous commit: **exactly 2 cells
+change, both the same refusal moving from `LOCKREAD` to before either**, and
+nothing moved between accepted and refused. Every other caller is untouched:
+`_upsert_manifest` still runs the full sweep as the recheck, registration still
+passes `check_local_files=False`, the resource readers still supply observed
+digests.
+
+**What the design lane cleared, each by execution (no action needed):**
+
+- `manifest_kinds` cannot `KeyError`: 10 spelling and lifetime edge cases plus
+  two live races all reached the publisher stub or an `AmbiguousManifestError`.
+  Only a synthetic injection into `manifests` between the two loops produces
+  one, and no code path does that.
+- Non-mapping entries never raise `AttributeError`/`TypeError`: 8 shapes
+  (`str`, `""`, `int`, `float`, `bool`, `None`, `list`, `datetime.date`), bare
+  and inside a list, both kinds, through all three commands — 0 occurrences,
+  every one a proper `MalformedManifestError`.
+- The `storage.previous_r2` second pass deleted from registration is genuinely
+  redundant: 64 shapes driven through `register_hash_only_artifact`, full
+  untruncated messages **identical** pre-fix and fixed.
+- `kind` sourced from `normalize_manifest_kind` (fetch, `_upsert_manifest`)
+  versus `safe_manifest_kind` (registration) does change the helper's
+  `bind_registration_identity` for a kindless manifest, but no command accepts
+  what another refuses: the divergence is always dominated by the earlier kind
+  refusal, which every command makes.
+- No dead code: `ruff check .` passes with F401 on, and every symbol the
+  deleted block used still has callers.
+- On a tree carrying both a malformed locator and a microdata alias, all four
+  commands refuse; they differ only in which true code they name first, and
+  registration's order is byte-identical to the pre-fix tree.
