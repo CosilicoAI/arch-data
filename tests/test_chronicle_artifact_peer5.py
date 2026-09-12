@@ -665,3 +665,77 @@ def test_registration_still_accepts_a_package_that_aliases_nothing(tmp_path):
     assert report.sha256 == "f" * 64
     registered = yaml.safe_load((package / "manifest_release.yaml").read_text())
     assert [entry["filename"] for entry in registered["files"][2025]] == ["adult.tab"]
+
+
+@pytest.mark.parametrize("history", ["none", "valid", "unreadable"])
+def test_unreadable_history_does_not_blind_the_package_sweep(
+    tmp_path, monkeypatch, history
+):
+    """A digest knowable only from the recorded key is still swept.
+
+    Validating archived objects means ``_effective_recorded_digest`` returns
+    None for an entry with malformed history, so the sweep could have lost the
+    digest that entry effectively records. It does not:
+    ``_recorded_identity_aliases`` reads the current object as well, and the
+    refusal still lands before the publisher is read.
+    """
+    package = tmp_path / "package"
+    package.mkdir()
+    key = f"raw/publisher/package/2022/{RELEASE_SHA}/other-table.csv"
+    aliasing = {
+        # No declared sha256: only the recorded key says what these bytes are.
+        "filename": "other-table.csv",
+        "source_url": "https://publisher.example/2022.csv",
+        "storage": {
+            "r2": {
+                "provider": "r2",
+                "bucket": "ledger-raw",
+                "key": key,
+                "uri": f"r2://ledger-raw/{key}",
+            }
+        },
+    }
+    if history == "valid":
+        aliasing["storage"]["previous_r2"] = [
+            _locator("older.csv", "a" * 64, year=2022)
+        ]
+    elif history == "unreadable":
+        aliasing["storage"]["previous_r2"] = [f"r2://ledger-raw/{key}"]
+    (package / "manifest_tables.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "source_id": "publisher",
+                "package_id": "package",
+                "kind": "publisher_table",
+                "files": {
+                    2022: aliasing,
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                    },
+                },
+            }
+        )
+    )
+    (package / "manifest_release.yaml").write_text(yaml.safe_dump(_release_manifest()))
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    reads = _refuse_read(monkeypatch)
+    uploads = _record_uploads(monkeypatch)
+
+    with pytest.raises(SourceArtifactManifestError, match=MICRODATA_CODE):
+        fetch_source_artifact(
+            "https://publisher.example/table.csv",
+            source_id="publisher",
+            package_id="package",
+            year=2024,
+            output_dir=package,
+            filename="table.csv",
+            manifest_filename="manifest_tables.yaml",
+        )
+
+    assert {path.name: path.read_bytes() for path in package.iterdir()} == before
+    assert reads == []
+    assert uploads == []
+    assert any(
+        MICRODATA_CODE in error for error in inventory_source_artifacts(package).errors
+    )
