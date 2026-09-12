@@ -67,6 +67,7 @@ from chronicle.registration import (
     resolve_vintage_key,
     safe_entry_access,
     safe_manifest_kind,
+    split_r2_uri,
     validate_file_entry,
     validate_manifest_files,
     validate_package_directory,
@@ -2707,17 +2708,6 @@ def _recorded_r2(spec: Any) -> dict[str, Any]:
     return recorded if isinstance(recorded, dict) else {}
 
 
-def _split_r2_uri(uri: str) -> tuple[str, str, str] | None:
-    """Split ``provider://bucket/key`` into its three parts, or None."""
-    provider, separator, remainder = uri.partition("://")
-    if not separator or not provider:
-        return None
-    bucket, separator, key = remainder.partition("/")
-    if not separator or not bucket or not key:
-        return None
-    return (provider, bucket, key)
-
-
 def _validated_recorded_storage(
     spec: Any,
     *,
@@ -2834,7 +2824,7 @@ def _validated_recorded_r2(
             f"{provider}://."
         )
     if uri is not None:
-        parts = _split_r2_uri(uri)
+        parts = split_r2_uri(uri)
         if parts is None:
             raise RecordedR2LocatorError(
                 f"{where}: uri {uri!r} is not provider://bucket/key."

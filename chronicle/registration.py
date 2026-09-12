@@ -54,7 +54,6 @@ import stat
 import tempfile
 from typing import Any
 import unicodedata
-from urllib.parse import urlsplit
 
 import yaml
 
@@ -1135,6 +1134,24 @@ def recorded_previous_r2(spec: Any) -> tuple[Any, ...]:
     return (previous,) if previous else ()
 
 
+def split_r2_uri(uri: str) -> tuple[str, str, str] | None:
+    """Split ``provider://bucket/key`` into its three parts, or None.
+
+    One parser for both readers of a recorded locator. A raw key is a path
+    with no query or fragment, so everything after the authority's first
+    ``/`` is the key: reading the same URI with a URL parser would stop the
+    key at a ``?`` or ``#`` and lose the identity the rest of it carries,
+    while the validator kept reading.
+    """
+    provider, separator, remainder = uri.partition("://")
+    if not separator or not provider:
+        return None
+    bucket, separator, key = remainder.partition("/")
+    if not separator or not bucket or not key:
+        return None
+    return (provider, bucket, key)
+
+
 def _recorded_object_identities(
     spec: Any,
 ) -> Iterator[tuple[str | None, str | None, str]]:
@@ -1152,10 +1169,10 @@ def _recorded_object_identities(
             if not isinstance(locator, str) or not locator:
                 continue
             if field == "uri":
-                try:
-                    key = urlsplit(locator).path
-                except ValueError:
+                parts = split_r2_uri(locator)
+                if parts is None:
                     continue
+                key = parts[2]
             else:
                 key = locator
             segments = key.rsplit("/", 2)
