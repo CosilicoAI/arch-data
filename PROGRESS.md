@@ -1271,3 +1271,30 @@ full run included the subsequent journal commit `9fa6a1d`.
   interrupted first full run without counting either as passing verification.
 
 **Next:** none in this fix lane. No push or branch operation is authorized.
+
+## Peer round 5 fix lane: the two low residuals on head 83de2e8
+
+**State:** opening. Worktree `_worktrees/chronicle-227-fix`, detached HEAD at
+`83de2e8` (PR #227, branch `microdata-registration`). No push, no branch, no
+stash, no `db/data` changes.
+
+**The two findings (peer, verbatim summaries):**
+
+1. [low] `fetch-artifact` and `register-artifact` never run the package-wide
+   sweep `_assert_no_package_microdata_identities` that `publish-raw`
+   (artifacts.py:1973) and `inventory-artifacts` (artifacts.py:4753) run. The
+   fetch preflight validates siblings entry-by-entry
+   (`_assert_manifest_valid_for_fetch`, 1242-1273); `_upsert_manifest`
+   (3317-3339) repeats that plus `_assert_package_file_owner_identities_agree`;
+   registration stops at owner agreement (registration.py:1600). A fetch or
+   registration therefore carries forward a package that inventory reports as
+   `bytes_identified_by_microdata_release`.
+2. [low] `_validated_recorded_storage` (artifacts.py:2715-2736) refuses a
+   non-list `storage.previous_r2` but not its elements.
+   `_recorded_object_identities` (registration.py:1138-1171) silently skips a
+   non-mapping element, blinding the round-4 archived-alias checks, while
+   `_prepare_registration_payload` (registration.py:1580-1593) already refuses
+   the same element. The four commands disagree.
+
+**Next:** reproduce both by execution (mocked persistence, network refused),
+then failing regressions, then the smallest consistent fixes.
