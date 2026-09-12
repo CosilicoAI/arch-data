@@ -1552,6 +1552,7 @@ def _prepare_registration_payload(
     from chronicle.artifacts import (
         RecordedR2LocatorError,
         SourceArtifactManifestError,
+        _assert_no_package_microdata_identities,
         _assert_package_file_owner_identities_agree,
         _validated_recorded_r2,
     )
@@ -1600,6 +1601,11 @@ def _prepare_registration_payload(
         _assert_package_file_owner_identities_agree(
             proposed_manifests, check_local_files=False
         )
+        # The same package-wide sweep publish-raw, inventory-artifacts and
+        # fetch-artifact run: a public table entry carrying a release's
+        # filename, checksum or archived R2 identity is that release under a
+        # second record, whichever manifest this registration writes.
+        _assert_no_package_microdata_identities(proposed_manifests)
     except SourceArtifactManifestError as exc:
         raise HashOnlyRegistrationError(
             f"{output} is not a valid package directory; refusing to persist "

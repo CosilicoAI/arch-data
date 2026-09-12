@@ -1271,6 +1271,12 @@ def fetch_source_artifact(
         kind=manifest_kind_value,
         package_dir=output,
     )
+    # Every manifest in the directory is valid on its own terms by now, which
+    # is where publish-raw and inventory-artifacts sweep the package as a
+    # whole. A fetch rewrites one of these manifests, so it refuses the same
+    # directory they refuse -- including a collision in a vintage this fetch
+    # never touches -- before the publisher is read and before the lock.
+    _assert_no_package_microdata_identities(manifests)
     licence_text = licence.strip() if isinstance(licence, str) else None
     release = manifest_kind_value == MICRODATA_RELEASE_KIND
     evidence: dict[str, str] | None = None
@@ -3337,6 +3343,9 @@ def _upsert_manifest(
                     f"{path} entry {proposed_year!r}: recorded_r2_identity_mismatch"
                 )
     _assert_package_file_owner_identities_agree(manifests)
+    # The rewrite revises owner entries in sibling manifests too, so the
+    # proposed directory gets the same package-wide sweep as the one read.
+    _assert_no_package_microdata_identities(manifests)
 
     for owner in owners:
         if owner.manifest_path == manifest_path and str(owner.vintage) == str(key):
