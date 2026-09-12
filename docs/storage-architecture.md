@@ -241,6 +241,21 @@ address would hide the identity they exist to find. `fetch-artifact`,
 `inventory-artifacts` and `publish-raw` report it as
 `recorded_r2_locator_invalid` naming `storage.previous_r2[<index>]`.
 
+Like the directory identity sweep, this is checked across the whole package
+directory and not only for the entry a command is about to touch. A command
+that rewrites one manifest still has to be able to read the provenance the
+others record: `fetch-artifact` validates every entry of every manifest in the
+directory in its preflight -- before the publisher is read, before the package
+lock, and again over the proposed tree under that lock -- and
+`register-artifact` does the same before it takes its own lock. So a locator
+Chronicle cannot read in a vintage no fetch selects, or in a sibling manifest,
+is refused without touching the publisher, in the vocabulary
+`inventory-artifacts` reports for the same tree. The entry the fetch rewrites
+is checked on the recorded tree too: a block whose key contradicts the entry's
+own `sha256` or `filename` is `recorded_r2_identity_mismatch` there as much as
+anywhere else, and reconciling it is an operator's decision, not something a
+rewrite settles.
+
 ## Relational Registry Contract
 
 The hosted `chronicle` schema should be the lookup surface for Chronicle, not the place
