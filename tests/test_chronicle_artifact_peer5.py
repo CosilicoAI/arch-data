@@ -622,3 +622,46 @@ def test_registration_rechecks_the_package_sweep_under_the_lock(tmp_path, monkey
 
     assert locks == [package]
     assert release_manifest.read_bytes() == before
+
+
+def test_registration_still_accepts_a_package_that_aliases_nothing(tmp_path):
+    """The control for the sweep: a release sibling alone refuses nothing."""
+    package = tmp_path / "package"
+    package.mkdir()
+    (package / "manifest_tables.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "source_id": "publisher",
+                "package_id": "package",
+                "kind": "publisher_table",
+                "files": {
+                    2022: {
+                        "filename": "other-table.csv",
+                        "source_url": "https://publisher.example/2022.csv",
+                        "sha256": OTHER_SHA,
+                    }
+                },
+            }
+        )
+    )
+    (package / "manifest_release.yaml").write_text(yaml.safe_dump(_release_manifest()))
+
+    report = register_hash_only_artifact(
+        source_id="publisher",
+        package_id="package",
+        year=2025,
+        output_dir=package,
+        manifest_filename="manifest_release.yaml",
+        filename="adult.tab",
+        sha256="f" * 64,
+        licence="UK Data Service End User Licence",
+        access="licensed",
+        vintage="2025",
+        size_bytes=1024,
+        doi="10.5255/UKDA-SN-9367-2",
+        **ATTESTED,
+    )
+
+    assert report.sha256 == "f" * 64
+    registered = yaml.safe_load((package / "manifest_release.yaml").read_text())
+    assert [entry["filename"] for entry in registered["files"][2025]] == ["adult.tab"]
