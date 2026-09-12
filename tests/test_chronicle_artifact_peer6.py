@@ -818,3 +818,172 @@ def test_release_fetch_refuses_a_manifest_that_cannot_bind_its_own_locator(
     assert reads == []
     assert uploads == []
     assert locks == []
+
+
+# ---------------------------------------------------------------------------
+# The owner sweep's local-bytes half
+# ---------------------------------------------------------------------------
+
+OTHER_BYTES = b"other,bytes\n7,8\n"
+OTHER_LOCAL_SHA = hashlib.sha256(OTHER_BYTES).hexdigest()
+
+
+def _build_unidentified_owner_package(
+    package: Path, *, local_bytes: bytes
+) -> dict[str, object]:
+    """One package-local file an identified owner and an unidentified entry share."""
+    package.mkdir(parents=True)
+    (package / "table.csv").write_bytes(TABLE_BYTES)
+    (package / "other-table.csv").write_bytes(local_bytes)
+    (package / "manifest.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest(
+                {
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                    }
+                }
+            ),
+            sort_keys=False,
+        )
+    )
+    (package / "manifest_a.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest(
+                {
+                    2022: {
+                        "filename": "other-table.csv",
+                        "source_url": "https://publisher.example/other-table.csv",
+                        "sha256": OTHER_LOCAL_SHA,
+                        "size_bytes": len(OTHER_BYTES),
+                    }
+                }
+            ),
+            sort_keys=False,
+        )
+    )
+    (package / "manifest_b.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest(
+                {
+                    2021: {
+                        "filename": "other-table.csv",
+                        "source_url": "https://publisher.example/other-table.csv",
+                    }
+                }
+            ),
+            sort_keys=False,
+        )
+    )
+    return {
+        "source_id": "publisher",
+        "package_id": "package",
+        "year": 2024,
+        "output_dir": package,
+        "filename": "table.csv",
+    }
+
+
+def test_fetch_refuses_unidentified_shared_bytes_before_publisher_io(
+    tmp_path, monkeypatch
+):
+    """The sweep's local-bytes half belongs in the preflight too.
+
+    An entry that names a package-local file without recording an identity is
+    not a collision, but identifying it would split one file into two
+    identities, so the owner sweep compares the bytes on disk. Those bytes are
+    not the ones this fetch replaces -- it is fetching a different filename --
+    so nothing about the refusal needs the publisher.
+    """
+    package = tmp_path / "package"
+    kwargs = _build_unidentified_owner_package(package, local_bytes=b"stale,bytes\n")
+    before = _snapshot(package)
+    reads = _refuse_read(monkeypatch)
+    uploads = _record_uploads(monkeypatch)
+    locks: list[Path] = []
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock",
+        lambda path: locks.append(path) or nullcontext(),
+    )
+
+    with pytest.raises(
+        SourceArtifactManifestError, match="without a recorded identity"
+    ):
+        fetch_source_artifact("https://publisher.example/table.csv", **kwargs)
+
+    assert _snapshot(package) == before
+    assert reads == []
+    assert uploads == []
+    assert locks == []
+
+
+def test_agreeing_unidentified_shared_bytes_still_fetch(tmp_path, monkeypatch):
+    """The control: bytes that are what the owner records are not a refusal."""
+    package = tmp_path / "package"
+    kwargs = _build_unidentified_owner_package(package, local_bytes=OTHER_BYTES)
+    reads = _serve(monkeypatch, TABLE_BYTES)
+    _record_uploads(monkeypatch)
+
+    report = fetch_source_artifact("https://publisher.example/table.csv", **kwargs)
+
+    assert reads == ["https://publisher.example/table.csv"]
+    assert report.sha256 == TABLE_SHA
+
+
+def test_the_fetched_file_is_exempt_from_the_preflight_byte_comparison(
+    tmp_path, monkeypatch
+):
+    """The bytes this fetch replaces are compared to every owner after the read.
+
+    The selected entry is predeclared, so it is the unidentified one; a
+    sibling already records what the file must hold, and the copy on disk is
+    stale. Refusing on those bytes in the preflight would refuse the very
+    fetch that repairs them.
+    """
+    package = tmp_path / "package"
+    package.mkdir(parents=True)
+    (package / "table.csv").write_bytes(b"stale,bytes\n")
+    (package / "manifest.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest(
+                {
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                    }
+                }
+            ),
+            sort_keys=False,
+        )
+    )
+    (package / "manifest_a.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest(
+                {
+                    2021: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                        "sha256": TABLE_SHA,
+                        "size_bytes": len(TABLE_BYTES),
+                    }
+                }
+            ),
+            sort_keys=False,
+        )
+    )
+    reads = _serve(monkeypatch, TABLE_BYTES)
+    _record_uploads(monkeypatch)
+
+    report = fetch_source_artifact(
+        "https://publisher.example/table.csv",
+        source_id="publisher",
+        package_id="package",
+        year=2024,
+        output_dir=package,
+        filename="table.csv",
+    )
+
+    assert reads == ["https://publisher.example/table.csv"]
+    assert report.sha256 == TABLE_SHA
+    assert (package / "table.csv").read_bytes() == TABLE_BYTES
