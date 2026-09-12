@@ -4290,6 +4290,11 @@ def _run_command(command: list[str]) -> ArtifactCommandResult:
 
 
 def _clean_key_part(value: str) -> str:
+    if not isinstance(value, str):
+        # Callers bind keys to manifest-supplied identities, which a manifest
+        # may simply omit. Every one of them turns a ValueError into its own
+        # refusal; an AttributeError on None would escape all of them.
+        raise ValueError(f"R2 key parts must be strings, not {type(value).__name__}.")
     cleaned = value.strip().strip("/")
     if not cleaned:
         raise ValueError("R2 key parts cannot be empty.")
