@@ -9,7 +9,7 @@ and silently ignored by the artifact commands.
 
 from __future__ import annotations
 
-from contextlib import nullcontext
+from contextlib import contextmanager, nullcontext
 import hashlib
 from pathlib import Path
 
@@ -30,6 +30,7 @@ from tests.test_chronicle_microdata_registration import (
     ATTESTED,
     _record_uploads,
     _refuse_read,
+    _serve,
 )
 
 RELEASE_BYTES = b"person_id,age\n1,45\n2,31\n"
@@ -516,3 +517,108 @@ def test_an_identityless_release_manifest_refuses_rather_than_crashes(
     assert any("recorded_r2" in error for error in report.entries[0].errors), (
         report.entries[0].errors
     )
+
+
+def test_fetch_rechecks_the_package_sweep_under_the_lock(tmp_path, monkeypatch):
+    """The second preflight pass sees an alias created after the first one."""
+    package = tmp_path / "package"
+    kwargs = _package_with_aliasing_table(
+        package, alias="filename", where="sibling-manifest"
+    )
+    clean = package / "manifest_other.yaml"
+    aliasing = clean.read_bytes()
+    clean.write_text(
+        yaml.safe_dump(
+            {
+                "source_id": "publisher",
+                "package_id": "package",
+                "kind": "publisher_table",
+                "files": {
+                    2022: {
+                        "filename": "other-table.csv",
+                        "source_url": "https://publisher.example/2022.csv",
+                    }
+                },
+            }
+        )
+    )
+    content = b"year,total_people\n2024,1234\n"
+    reads = _serve(monkeypatch, content)
+    uploads = _record_uploads(monkeypatch)
+    locks: list[Path] = []
+
+    @contextmanager
+    def alias_while_acquiring_lock(output):
+        locks.append(output)
+        clean.write_bytes(aliasing)
+        yield
+
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock", alias_while_acquiring_lock
+    )
+
+    with pytest.raises(SourceArtifactManifestError, match=MICRODATA_CODE):
+        fetch_source_artifact(
+            "https://publisher.example/table.csv", upload_r2=True, **kwargs
+        )
+
+    assert locks == [package]
+    assert reads == []
+    assert uploads == []
+    assert not (package / "table.csv").exists()
+
+
+def test_registration_rechecks_the_package_sweep_under_the_lock(tmp_path, monkeypatch):
+    """The same for the registration pass that runs under the package lock."""
+    package = tmp_path / "package"
+    _package_with_aliasing_table(package, alias="sha256", where="sibling-manifest")
+    clean = package / "manifest_other.yaml"
+    aliasing = clean.read_bytes()
+    clean.write_text(
+        yaml.safe_dump(
+            {
+                "source_id": "publisher",
+                "package_id": "package",
+                "kind": "publisher_table",
+                "files": {
+                    2022: {
+                        "filename": "other-table.csv",
+                        "source_url": "https://publisher.example/2022.csv",
+                    }
+                },
+            }
+        )
+    )
+    release_manifest = package / "manifest_release.yaml"
+    before = release_manifest.read_bytes()
+    locks: list[Path] = []
+
+    @contextmanager
+    def alias_while_acquiring_lock(output):
+        locks.append(Path(output))
+        clean.write_bytes(aliasing)
+        yield
+
+    monkeypatch.setattr(
+        "chronicle.registration._registration_lock", alias_while_acquiring_lock
+    )
+
+    with pytest.raises(HashOnlyRegistrationError, match=MICRODATA_CODE):
+        register_hash_only_artifact(
+            source_id="publisher",
+            package_id="package",
+            year=2025,
+            output_dir=package,
+            manifest_filename="manifest_release.yaml",
+            filename="adult.tab",
+            sha256="f" * 64,
+            licence="UK Data Service End User Licence",
+            access="licensed",
+            vintage="2025",
+            size_bytes=1024,
+            doi="10.5255/UKDA-SN-9367-2",
+            **ATTESTED,
+        )
+
+    assert locks == [package]
+    assert release_manifest.read_bytes() == before
