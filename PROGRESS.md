@@ -1407,4 +1407,20 @@ manifest under `db/`, `data/` or `packages/` carries `previous_r2` at all, and
   regression from this lane; `faa1a87` reads the bytes after that refetch,
   which is what the assertion means.
 
-**Next:** the final full suite, Ruff lint and format checks, and the report.
+**Final state:** complete.
+
+- Full suite at `faa1a87`: `2032 passed, 1 skipped, 42 warnings in 1367.55s
+  (22m 47s)`, direct exit 0. `HEAD` adds only this journal entry, which no test
+  reads.
+- `uv run ruff check .` exits 0; `ruff format --check` on all four changed
+  Python files exits 0; `git diff --check 83de2e8..HEAD` exits 0; no tracked
+  `db/data` change; worktree clean.
+- `tests/test_chronicle_artifact_peer5.py`: 77 passed at HEAD, `58 failed, 19
+  passed` against `83de2e8` (the 19 are the declared controls).
+- The external report is at
+  `_recovered/scratch-backup/893/lanes/out-227-residuals-r1.md`.
+
+**Next:** none in this lane. No push or branch operation is authorized. Two
+items are left for a maintainer decision, both recorded above: the byte-level
+half of the package identity rule, and the missing
+`docs/adr-chronicle-raw-microdata-identity.md`.
