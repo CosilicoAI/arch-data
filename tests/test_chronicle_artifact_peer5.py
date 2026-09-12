@@ -465,3 +465,48 @@ def test_valid_archived_provenance_is_still_read_and_kept(tmp_path, monkeypatch)
     entry = yaml.safe_load(manifest_path.read_text())["files"][2024]
     names, digests = _recorded_identity_aliases(entry)
     assert "archived.csv" in names and ARCHIVED_SHA in digests
+
+
+@pytest.mark.parametrize("recorded", ["current", "archived"])
+def test_an_identityless_release_manifest_refuses_rather_than_crashes(
+    tmp_path, recorded
+):
+    """Binding a locator to a missing identity is a refusal, not a crash.
+
+    ``_clean_key_part`` was reached with the manifest's absent ``source_id``
+    and raised ``AttributeError``, which no ``SourceArtifactManifestError``
+    handler catches. Validating archived objects reaches the same binding, so
+    the failure has to be the controlled one.
+    """
+    package = tmp_path / "package"
+    package.mkdir()
+    key = f"raw/pub/pack/2024/{TABLE_SHA}/table.csv"
+    block = {
+        "provider": "r2",
+        "bucket": "ledger-raw",
+        "key": key,
+        "uri": f"r2://ledger-raw/{key}",
+    }
+    entry = {
+        "filename": "table.csv",
+        "sha256": TABLE_SHA,
+        "size_bytes": len(TABLE_BYTES),
+        "source_url": "https://publisher.example/table.csv",
+        "access": "public",
+        "licence": "CC0-1.0",
+        "vintage": "2024",
+        "hash_source": "chronicle_fetch",
+        "attested_by": "chronicle",
+        "verified_at": "2026-09-05",
+        "storage": {"r2": block} if recorded == "current" else {"previous_r2": [block]},
+    }
+    (package / "manifest.yaml").write_text(
+        yaml.safe_dump({"kind": "microdata_release", "files": {2024: [entry]}})
+    )
+
+    report = inventory_source_artifacts(package)
+
+    assert not report.valid
+    assert any(
+        "recorded_r2" in error for error in report.entries[0].errors
+    ), report.entries[0].errors
