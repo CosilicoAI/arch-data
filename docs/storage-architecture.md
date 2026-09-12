@@ -216,6 +216,17 @@ owner to the new checksum and preserves each owner's own R2 block in
 `storage.previous_r2`. The manifest selector must be a filename inside
 `--out-dir`, not a path.
 
+That comparison covers the whole directory, not only the file being fetched:
+two manifests that already disagree about any package-local file, or an entry
+that names one without recording an identity while the bytes on disk are not
+what an identified owner records, are refused in the fetch preflight, before
+the publisher is read and before the package lock. The one exception is the
+file the fetch is replacing, whose bytes on disk are the ones being superseded
+— those are compared against every owner as soon as the publisher has served
+them, which is also where a revision is decided. `register-artifact` runs the
+same directory comparison before taking its lock, without reading local bytes:
+it registers an identity and opens no artifact.
+
 ### What a recorded block has to say
 
 A `storage.r2` block must explicitly say `provider: r2` and carry an `r2://`
