@@ -1294,6 +1294,16 @@ def fetch_source_artifact(
         _assert_recorded_locators_valid(
             validated, Path(validated_path), kind=manifest_kinds[validated_path]
         )
+    # The owner check below is scoped to the filename being fetched, so a
+    # contradiction two manifests already record about another package-local
+    # file reached _upsert_manifest -- after the lock and the publisher read,
+    # for a fetch that could never have succeeded. No fetch repairs one: the
+    # rewrite revises only the owners of its own filename. Run the sweep
+    # register-artifact already runs before its own lock, and for the same
+    # reason skip its local-bytes half: those bytes are what this fetch is
+    # about to replace, and every owner is compared against the fetched bytes
+    # once they are known.
+    _assert_package_file_owner_identities_agree(manifests, check_local_files=False)
     licence_text = licence.strip() if isinstance(licence, str) else None
     release = manifest_kind_value == MICRODATA_RELEASE_KIND
     evidence: dict[str, str] | None = None
