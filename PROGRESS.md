@@ -1387,4 +1387,16 @@ manifest under `db/`, `data/` or `packages/` carries `previous_r2` at all, and
 - `docs/adr-chronicle-raw-microdata-identity.md` is cited 11 times across
   `chronicle/` and `docs/` and does not exist (pre-existing).
 
+- The weakening audit found one real regression from fix 2 and it is fixed:
+  `59869e9`. Validating archived objects made `_effective_recorded_digest`
+  return `None` for an entry whose own locator is valid, which dropped the
+  entry out of `validate_package_directory` and stopped inventory and
+  publish-raw naming `filename_collision_across_manifests` /
+  `sha256_collision_across_manifests` between two manifests (the tree stayed
+  invalid through the new locator code, so nothing became acceptable). The
+  digest now comes from the current object alone; unreadable history keeps its
+  own refusal.
+- Measured on real data: the sweep fires on 0 of the 195 tracked package
+  directories under `db/`, on both the pre-fix and the fixed tree.
+
 **Next:** the final full suite, Ruff lint and format checks, and the report.
