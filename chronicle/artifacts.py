@@ -2764,8 +2764,7 @@ def _validated_recorded_storage(
             )
         except SourceArtifactManifestError as error:
             raise RecordedR2LocatorError(
-                f"{manifest_path} entry {year!r} storage.previous_r2[{index}]: "
-                f"{error}"
+                f"{manifest_path} entry {year!r} storage.previous_r2[{index}]: {error}"
             ) from error
     return storage
 

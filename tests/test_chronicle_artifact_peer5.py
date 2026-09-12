@@ -22,7 +22,10 @@ from chronicle.artifacts import (
     inventory_source_artifacts,
     publish_source_artifacts,
 )
-from chronicle.registration import HashOnlyRegistrationError, register_hash_only_artifact
+from chronicle.registration import (
+    HashOnlyRegistrationError,
+    register_hash_only_artifact,
+)
 from tests.test_chronicle_microdata_registration import (
     ATTESTED,
     _record_uploads,
@@ -182,9 +185,7 @@ def test_fetch_refuses_a_package_microdata_alias_before_publisher_io(
 
 @pytest.mark.parametrize("alias", ALIASES)
 @pytest.mark.parametrize("where", ["same-manifest", "sibling-manifest"])
-def test_inventory_reports_the_same_package_alias_fetch_refuses(
-    tmp_path, alias, where
-):
+def test_inventory_reports_the_same_package_alias_fetch_refuses(tmp_path, alias, where):
     """The fetch refusal uses inventory-artifacts' vocabulary, on one tree."""
     package = tmp_path / "package"
     _package_with_aliasing_table(package, alias=alias, where=where)
@@ -319,8 +320,7 @@ def test_inventory_refuses_unreadable_archived_provenance(
 
     assert not report.valid
     assert any(
-        "previous_r2" in error
-        for error in (*report.errors, *report.entries[0].errors)
+        "previous_r2" in error for error in (*report.errors, *report.entries[0].errors)
     ), (report.errors, report.entries[0].errors)
     assert manifest_path.read_text() == before
 
@@ -337,7 +337,10 @@ def test_publish_refuses_unreadable_archived_provenance(tmp_path, monkeypatch, e
     assert not report.valid
     assert any(
         "previous_r2" in error
-        for error in (*report.errors, *(e for entry in report.entries for e in entry.errors))
+        for error in (
+            *report.errors,
+            *(e for entry in report.entries for e in entry.errors),
+        )
     ), report
     assert uploads == []
     assert manifest_path.read_text() == before
@@ -444,7 +447,10 @@ def test_unreadable_archived_provenance_cannot_hide_a_release_identity(
     assert not report.valid
     assert any(
         "previous_r2" in error or MICRODATA_CODE in error
-        for error in (*report.errors, *(e for entry in report.entries for e in entry.errors))
+        for error in (
+            *report.errors,
+            *(e for entry in report.entries for e in entry.errors),
+        )
     ), report
     assert manifest_path.read_text() == before
 
@@ -507,6 +513,6 @@ def test_an_identityless_release_manifest_refuses_rather_than_crashes(
     report = inventory_source_artifacts(package)
 
     assert not report.valid
-    assert any(
-        "recorded_r2" in error for error in report.entries[0].errors
-    ), report.entries[0].errors
+    assert any("recorded_r2" in error for error in report.entries[0].errors), (
+        report.entries[0].errors
+    )
