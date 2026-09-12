@@ -462,3 +462,103 @@ def test_the_under_lock_loop_still_rechecks_a_locator_written_during_the_read(
     # this fetch would have recorded never gained its fetch metadata.
     selected = yaml.safe_load((package / "manifest.yaml").read_text())["files"][2024]
     assert "fetched_at" not in selected, selected
+
+
+# ---------------------------------------------------------------------------
+# The selected entry: the one place the existing tree differs from the proposed
+# ---------------------------------------------------------------------------
+
+MISMATCHED = {
+    # The recorded object's key says one thing and the entry says another.
+    "checksum": {"sha256": OTHER_SHA, "key_sha256": TABLE_SHA, "key_name": "table.csv"},
+    "filename": {
+        "sha256": TABLE_SHA,
+        "key_sha256": TABLE_SHA,
+        "key_name": "renamed.csv",
+    },
+}
+
+
+def _package_with_a_mismatched_selected_entry(package: Path, *, defect: str) -> None:
+    package.mkdir(parents=True)
+    (package / "table.csv").write_bytes(TABLE_BYTES)
+    spec = MISMATCHED[defect]
+    key = f"raw/publisher/package/2024/{spec['key_sha256']}/{spec['key_name']}"
+    (package / "manifest.yaml").write_text(
+        yaml.safe_dump(
+            _table_manifest(
+                {
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                        "sha256": spec["sha256"],
+                        "size_bytes": len(TABLE_BYTES),
+                        "storage": {"r2": _locator("archive", key)},
+                    }
+                }
+            ),
+            sort_keys=False,
+        )
+    )
+
+
+@pytest.mark.parametrize("defect", sorted(MISMATCHED))
+def test_inventory_calls_a_mismatched_selected_entry_invalid(tmp_path, defect):
+    """The control that makes the refusal below the documented contract.
+
+    ``fetch-artifact`` will not carry an invalid registration forward, and
+    ``inventory-artifacts`` reports the same codes.
+    """
+    package = tmp_path / "package"
+    _package_with_a_mismatched_selected_entry(package, defect=defect)
+
+    report = inventory_source_artifacts(package)
+
+    assert not report.valid
+    assert any(
+        "recorded_r2_identity_mismatch" in error
+        for entry in report.entries
+        for error in entry.errors
+    ), [entry.errors for entry in report.entries]
+
+
+@pytest.mark.parametrize("record_revision", [False, True])
+@pytest.mark.parametrize("defect", sorted(MISMATCHED))
+def test_fetch_refuses_a_selected_entry_that_contradicts_its_own_locator(
+    tmp_path, monkeypatch, defect, record_revision
+):
+    """The preflight reads the recorded tree, so the entry it rewrites is checked too.
+
+    The fetch used to accept this directory and repair the contradiction in
+    the rewrite, including under ``--record-revision``, which archived a
+    superseded object the entry never agreed with. Validating every entry
+    before the publisher is read refuses it instead, in the vocabulary
+    ``inventory-artifacts`` already reports for the same tree.
+    """
+    package = tmp_path / "package"
+    _package_with_a_mismatched_selected_entry(package, defect=defect)
+    before = _snapshot(package)
+    reads = _refuse_read(monkeypatch)
+    locks: list[Path] = []
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock",
+        lambda path: locks.append(path) or nullcontext(),
+    )
+
+    with pytest.raises(
+        SourceArtifactManifestError, match="recorded_r2_identity_mismatch"
+    ):
+        fetch_source_artifact(
+            "https://publisher.example/table.csv",
+            source_id="publisher",
+            package_id="package",
+            year=2024,
+            output_dir=package,
+            filename="table.csv",
+            record_revision=record_revision,
+            expected_sha256=TABLE_SHA if record_revision else None,
+        )
+
+    assert _snapshot(package) == before
+    assert reads == []
+    assert locks == []
