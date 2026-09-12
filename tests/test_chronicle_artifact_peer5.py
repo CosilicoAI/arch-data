@@ -18,6 +18,8 @@ import yaml
 
 from chronicle.artifacts import (
     SourceArtifactManifestError,
+    _expected_identity,
+    _upsert_manifest,
     fetch_source_artifact,
     inventory_source_artifacts,
     publish_source_artifacts,
@@ -795,3 +797,46 @@ def test_release_fetch_refuses_a_package_microdata_alias(tmp_path, monkeypatch, 
     assert reads == []
     assert uploads == []
     assert not staging.exists()
+
+
+@pytest.mark.parametrize("alias", ["filename", "sha256"])
+def test_the_manifest_rewrite_sweeps_the_proposed_package(tmp_path, alias):
+    """The second site: the tree as it would be written gets the same sweep.
+
+    The preflight sweeps the tree it read; ``_upsert_manifest`` proposes the
+    tree it is about to write, revising owner entries in sibling manifests as
+    it goes, and refuses the same directory before rendering any YAML.
+    """
+    package = tmp_path / "package"
+    kwargs = _package_with_aliasing_table(package, alias=alias, where="same-manifest")
+    manifest_path = package / str(kwargs["manifest_filename"])
+    before = manifest_path.read_bytes()
+    content = b"year,total_people\n2024,1234\n"
+
+    with pytest.raises(SourceArtifactManifestError, match=MICRODATA_CODE):
+        _upsert_manifest(
+            manifest_path,
+            source_id="publisher",
+            package_id="package",
+            dataset="publisher_package",
+            source_page=None,
+            table=None,
+            publisher=None,
+            year=2024,
+            filename="table.csv",
+            source_url="https://publisher.example/table.csv",
+            sha256=hashlib.sha256(content).hexdigest(),
+            size_bytes=len(content),
+            fetched_at="2026-09-11T00:00:00+00:00",
+            access="public",
+            licence=None,
+            kind="publisher_table",
+            vintage=None,
+            licence_evidence=None,
+            expected=_expected_identity(None, None),
+            r2_location=None,
+            record_revision=False,
+            _preflight_only=True,
+        )
+
+    assert manifest_path.read_bytes() == before
