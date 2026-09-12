@@ -198,9 +198,7 @@ def test_inventory_reports_the_locator_fetch_refuses(
 ):
     """The control: one tree, and inventory-artifacts already names it."""
     package = tmp_path / "package"
-    _build_package(
-        package, where=where, position=position, element=UNREADABLE[element]
-    )
+    _build_package(package, where=where, position=position, element=UNREADABLE[element])
 
     report = inventory_source_artifacts(package)
 
@@ -224,9 +222,7 @@ def test_registration_already_refuses_the_same_locator(
 ):
     """The parity control: registration validated every entry all along."""
     package = tmp_path / "package"
-    _build_package(
-        package, where=where, position=position, element=UNREADABLE[element]
-    )
+    _build_package(package, where=where, position=position, element=UNREADABLE[element])
     before = _snapshot(package)
     locks: list[Path] = []
     monkeypatch.setattr(

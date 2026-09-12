@@ -1567,53 +1567,25 @@ def _prepare_registration_payload(
     # Import lazily: artifact commands also depend on this module. Their owner
     # validator compares effective identities both within and across manifests.
     from chronicle.artifacts import (
-        RecordedR2LocatorError,
         SourceArtifactManifestError,
         _assert_no_package_microdata_identities,
         _assert_package_file_owner_identities_agree,
-        _validated_recorded_r2,
+        _assert_recorded_locators_valid,
     )
 
     proposed_manifests = {str(path): sibling for path, sibling in siblings.items()}
     proposed_manifests[str(manifest_path)] = payload
     try:
         # Effective-digest resolution deliberately leaves malformed locators
-        # to per-entry validation. Validate each one explicitly so its fallback
-        # cannot conceal contradictory or incomplete recorded provenance.
+        # to per-entry validation. Validate each one explicitly -- the current
+        # object and every archived one -- so its fallback cannot conceal
+        # contradictory or incomplete recorded provenance. The artifact
+        # commands run the same loop: fetch-artifact in its preflight, before
+        # the publisher is read, and again over the proposed tree.
         for name, proposed in proposed_manifests.items():
             path = Path(name)
             kind, _error = safe_manifest_kind(proposed, manifest_path=path)
-            for vintage, _index, spec in iter_manifest_entries(proposed):
-                locator_arguments = {
-                    "manifest_path": path,
-                    "year": vintage,
-                    "source_id": proposed.get("source_id"),
-                    "package_id": proposed.get("package_id"),
-                    "bind_registration_identity": kind == MICRODATA_RELEASE_KIND,
-                }
-                locator = _validated_recorded_r2(spec, **locator_arguments)
-                if locator is not None and (
-                    locator.filename != spec.get("filename")
-                    or (
-                        spec.get("sha256") is not None
-                        and locator.sha256 != spec["sha256"]
-                    )
-                ):
-                    raise RecordedR2LocatorError(
-                        f"{path} entry {vintage!r}: recorded_r2_identity_mismatch"
-                    )
-                # Historical objects may have different filenames and digests,
-                # but each archived block must still locate one valid object.
-                for index, previous in enumerate(recorded_previous_r2(spec)):
-                    try:
-                        _validated_recorded_r2(
-                            {"storage": {"r2": previous}}, **locator_arguments
-                        )
-                    except SourceArtifactManifestError as exc:
-                        raise RecordedR2LocatorError(
-                            f"{path} entry {vintage!r} "
-                            f"storage.previous_r2[{index}]: {exc}"
-                        ) from exc
+            _assert_recorded_locators_valid(proposed, path, kind=kind)
         # Registration checks recorded identities without opening artifacts.
         _assert_package_file_owner_identities_agree(
             proposed_manifests, check_local_files=False

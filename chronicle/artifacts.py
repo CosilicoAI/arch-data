@@ -1229,6 +1229,7 @@ def fetch_source_artifact(
     # serious refusal, and its message is the one the caller needs, not a
     # prompt about the manifest's kind or licence.
     manifests = _package_manifests(output, manifest_path, existing_manifest)
+    manifest_kinds: dict[str, str] = {}
     for sibling_path, sibling in manifests.items():
         if sibling_path == str(manifest_path):
             continue
@@ -1240,6 +1241,7 @@ def fetch_source_artifact(
             raise ManifestAccessError(
                 f"{sibling_path} cannot be classified safely: {exc}"
             ) from exc
+        manifest_kinds[sibling_path] = sibling_kind
         _assert_manifest_valid_for_fetch(
             sibling,
             Path(sibling_path),
@@ -1272,6 +1274,18 @@ def fetch_source_artifact(
         kind=manifest_kind_value,
         package_dir=output,
     )
+    manifest_kinds[str(manifest_path)] = manifest_kind_value
+    # Entry validation never opens ``storage``, and the selected entry is the
+    # only one whose locators the identity resolution below reads. Validate
+    # every entry's recorded provenance here, exactly as
+    # ``_prepare_registration_payload`` does before its own lock: an
+    # unreadable locator anywhere in the directory would otherwise be refused
+    # only by _upsert_manifest, after the publisher was read. The sweep below
+    # resolves locators non-raisingly, so readable provenance comes first.
+    for validated_path, validated in manifests.items():
+        _assert_recorded_locators_valid(
+            validated, Path(validated_path), kind=manifest_kinds[validated_path]
+        )
     # Every manifest in the directory is valid on its own terms by now, which
     # is where publish-raw and inventory-artifacts sweep the package as a
     # whole. A fetch rewrites one of these manifests, so it refuses the same
@@ -2516,6 +2530,42 @@ def _assert_manifest_valid_for_fetch(
         )
 
 
+def _assert_recorded_locators_valid(
+    manifest: Mapping[str, Any],
+    manifest_path: Path,
+    *,
+    kind: str,
+) -> None:
+    """Refuse a manifest whose recorded R2 provenance Chronicle cannot read.
+
+    Entry validation reports the vocabulary
+    :func:`_assert_manifest_valid_for_fetch` carries, and that vocabulary
+    never opens ``storage``; the package-wide readers resolve locators
+    non-raisingly, so an unreadable one reads as absent provenance to every
+    check but this. Run over every entry of every manifest in the directory by
+    each command that writes into one -- the fetch preflight before the
+    publisher is read, :func:`_upsert_manifest` over the proposed tree under
+    the lock, and ``_prepare_registration_payload`` before it persists -- so
+    one validator, :func:`_validated_recorded_r2`, decides in all three.
+    """
+    for vintage, _index, entry in iter_manifest_entries(manifest):
+        locator = _validated_recorded_r2(
+            entry,
+            manifest_path=manifest_path,
+            year=vintage,
+            source_id=manifest.get("source_id"),
+            package_id=manifest.get("package_id"),
+            bind_registration_identity=kind == MICRODATA_RELEASE_KIND,
+        )
+        if locator is not None and (
+            locator.filename != entry.get("filename")
+            or (entry.get("sha256") is not None and locator.sha256 != entry["sha256"])
+        ):
+            raise RecordedR2LocatorError(
+                f"{manifest_path} entry {vintage!r}: recorded_r2_identity_mismatch"
+            )
+
+
 def _release_fetch_evidence(
     manifest_path: Path,
     existing_manifest: dict[str, Any],
@@ -3346,25 +3396,7 @@ def _upsert_manifest(
         _assert_manifest_valid_for_fetch(
             proposed, path, kind=proposed_kind, package_dir=path.parent
         )
-        for proposed_year, _index, entry in iter_manifest_entries(proposed):
-            locator = _validated_recorded_r2(
-                entry,
-                manifest_path=path,
-                year=proposed_year,
-                source_id=proposed.get("source_id"),
-                package_id=proposed.get("package_id"),
-                bind_registration_identity=proposed_kind == MICRODATA_RELEASE_KIND,
-            )
-            if locator is not None and (
-                locator.filename != entry.get("filename")
-                or (
-                    entry.get("sha256") is not None
-                    and locator.sha256 != entry["sha256"]
-                )
-            ):
-                raise RecordedR2LocatorError(
-                    f"{path} entry {proposed_year!r}: recorded_r2_identity_mismatch"
-                )
+        _assert_recorded_locators_valid(proposed, path, kind=proposed_kind)
     _assert_package_file_owner_identities_agree(manifests)
     # The rewrite revises owner entries in sibling manifests too, so the
     # proposed directory gets the same package-wide sweep as the one read.
