@@ -186,9 +186,13 @@ files:
 and `previous_r2` lists superseded objects oldest first, so the bytes an
 archived witness record pinned stay addressable at the URI it pinned. Every
 reader — `inventory-artifacts`, `publish-raw`, source-package artifact loading,
-and the suite's raw-R2-link acceptance check — reads `storage.r2` alone, so a
-revised entry reads exactly like an unrevised one; `publish-raw` preserves the
-rest of the `storage` block when it writes back.
+and the suite's raw-R2-link acceptance check — resolves the entry's current
+bytes from `storage.r2` alone, so a revised entry reads exactly like an
+unrevised one; `publish-raw` preserves the rest of the `storage` block when it
+writes back. The identity checks are the exception, and deliberately so: they
+compare every archived object as well, because an immutable object keeps
+identifying the bytes it holds after the entry that recorded it is renamed or
+revised.
 
 `publish-raw` applies the same identity check before treating a recorded block
 as history. A local file the recorded object does not hold is reported as
@@ -225,6 +229,17 @@ something to preserve or publish under. Likewise a manifest that parses as
 anything other than a mapping is refused rather than treated as absent —
 reading it as absent would let the next fetch replace the file with a single
 entry.
+
+Every element of `storage.previous_r2` answers the same question about the
+bytes its object holds, so it is held to the same rules: a mapping that locates
+one object, with `provider: r2`, an `r2://` URI its other fields agree with,
+and a content-addressed key. An element Chronicle cannot read is unreadable
+provenance, not absent provenance — the identity checks read archived objects
+precisely to catch a registration that has been renamed, so a block they cannot
+address would hide the identity they exist to find. `fetch-artifact`,
+`publish-raw`, `inventory-artifacts` and `register-artifact` all refuse it;
+`inventory-artifacts` and `publish-raw` report it as
+`recorded_r2_locator_invalid` naming `storage.previous_r2[<index>]`.
 
 ## Relational Registry Contract
 

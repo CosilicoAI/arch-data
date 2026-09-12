@@ -195,7 +195,12 @@ that release under a second record: `fetch-artifact` refuses it before reading
 the publisher, the source-package reader refuses it before any byte I/O, and
 `publish-raw` and `inventory-artifacts` report
 `bytes_identified_by_microdata_release` for the package and for the entry,
-before any upload or manifest rewrite. `fetch-artifact`, `publish-raw` and
+before any upload or manifest rewrite. The directory sweep is not limited to
+the entry a command is about to touch: `fetch-artifact` and `register-artifact`
+run it over every manifest in the directory -- before the publisher is read and
+again under the package lock -- and refuse to rewrite a directory whose other
+vintage carries a release's identity, rather than carry that registration
+forward. `fetch-artifact`, `publish-raw` and
 `inventory-artifacts` read the table's archived objects the same way, so an
 alias survives a rename on either side; the source-package reader compares the
 table's current identity and separately refuses a public entry that declares no
