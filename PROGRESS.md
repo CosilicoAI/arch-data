@@ -1424,3 +1424,42 @@ manifest under `db/`, `data/` or `packages/` carries `previous_r2` at all, and
 items are left for a maintainer decision, both recorded above: the byte-level
 half of the package identity rule, and the missing
 `docs/adr-chronicle-raw-microdata-identity.md`.
+
+## Peer round 6 fix lane: the recorded-locator hole in the fetch preflight
+
+**State:** opening. Worktree `_worktrees/chronicle-227-fix`, branch
+`microdata-registration` at the pushed head `247a617` (PR #227). No push, no
+branch, no stash, no `db/data` changes.
+
+**The finding (peer, verbatim summary):** the fetch preflight validates
+recorded locators only for the selected entry (`_recorded_identity`,
+artifacts.py:1315) and for entries naming the same filename
+(`_manifest_file_owners`, 1382). `_assert_manifest_valid_for_fetch` delegates
+to `validate_file_entry`, which never inspects `storage.r2` /
+`storage.previous_r2`; `_assert_no_package_microdata_identities` and
+`_effective_recorded_digest` read locators non-raisingly. So a malformed
+locator in another vintage of the selected manifest, or in a sibling manifest,
+is caught only by `_upsert_manifest`'s proposed-tree loop (3349-3367) — after
+the registration lock and after `_read_artifact` (1438). The documented
+contract "Every refusal happens before the publisher is read" (1172-1174) and
+the round-5 regression's `reads == []` guarantee therefore hold only when the
+malformed element sits in the vintage being fetched. Registration has no such
+gap: `_prepare_registration_payload` validates every entry's locator before
+mkdir/lock.
+
+**Reproduced by execution, before any fix** (mocked publisher and lock, no
+network; scripts in the session scratchpad):
+
+- Both placements, the peer's bare-string `previous_r2` element: the refusal is
+  `RecordedR2LocatorError` raised in
+  `_upsert_manifest -> _validated_recorded_r2 -> _validated_recorded_storage`,
+  and the ordering log recorded before it is `['LOCK <package>', 'READ
+  https://publisher.example/table.csv']`. Nothing on disk changed.
+- Swept 24 cases (2 placements x 2 locator positions `storage.r2` /
+  `previous_r2` x 6 malformed shapes): **every one** refuses only inside
+  `_upsert_manifest`, with `LOCK` and `READ` both already recorded, and
+  `inventory_source_artifacts` reports the same tree invalid and names the
+  locator in all 24.
+
+**Next:** red-first regression, then hoist the per-entry loop into the fetch
+preflight.
