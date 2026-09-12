@@ -5,14 +5,19 @@ from __future__ import annotations
 import argparse
 import json
 import shlex
+import sys
 from pathlib import Path
 
 from chronicle.artifacts import (
+    DEFAULT_MANIFEST_FILENAME,
+    DEFAULT_R2_DERIVED_BUCKET,
+    DEFAULT_R2_RAW_BUCKET,
     ArtifactFetchReport,
     ArtifactInventoryReport,
     DerivedArtifactPublishReport,
     R2BootstrapReport,
     RawArtifactPublishReport,
+    SourceArtifactManifestError,
     bootstrap_r2_buckets,
     fetch_source_artifact,
     inventory_source_artifacts,
@@ -33,6 +38,7 @@ from chronicle.consumer_contract import (
 )
 from chronicle.core import AggregateFact, ValidationReport, validate_facts
 from chronicle.database import ChronicleDbBuildReport, build_chronicle_db
+from chronicle.env import DEFAULT_CHRONICLE_SCHEMA
 from chronicle.mirror import (
     ChronicleMirrorExportReport,
     SupabaseMirrorLoadReport,
@@ -44,6 +50,16 @@ from chronicle.pe_source_plan import (
     build_pe_source_plan,
     write_pe_source_plan_json,
     write_pe_source_plan_markdown,
+)
+from chronicle.registration import (
+    ACCESS_CLASSES,
+    HASH_ONLY_HASH_SOURCES,
+    MANIFEST_KINDS,
+    ArtifactRegistrationReport,
+    HashOnlyRegistrationError,
+    ManifestAccessError,
+    MicrodataReleaseNotParseableError,
+    register_hash_only_artifact,
 )
 from chronicle.sources.cells import (
     SourceCell,
@@ -334,12 +350,29 @@ def fetch_artifact_file(
     source_page: str | None = None,
     table: str | None = None,
     filename: str | None = None,
+    manifest_filename: str = DEFAULT_MANIFEST_FILENAME,
+    access: str = "public",
+    licence: str | None = None,
+    kind: str | None = None,
+    publisher: str | None = None,
+    vintage: str | None = None,
+    expected_sha256: str | None = None,
+    expected_size_bytes: int | None = None,
+    licence_evidence: dict[str, str] | None = None,
+    staging_dir: str | Path | None = None,
     upload_r2: bool = False,
-    r2_bucket: str = "ledger-raw",
+    record_revision: bool = False,
+    r2_bucket: str | None = None,
     r2_prefix: str | None = None,
     wrangler_command: str = "npx wrangler",
 ) -> ArtifactFetchReport:
-    """Fetch/register a raw source artifact and optionally upload it to R2."""
+    """Fetch/register a raw source artifact and optionally upload it to R2.
+
+    ``manifest_filename`` selects which of the package directory's manifests
+    the entry belongs to. Raises :class:`SourceArtifactRevisionError` when the
+    fetched bytes are not the bytes that manifest's entry identifies, unless
+    ``record_revision`` opts into registering the publisher revision.
+    """
     return fetch_source_artifact(
         source_url,
         source_id=source_id,
@@ -350,10 +383,83 @@ def fetch_artifact_file(
         source_page=source_page,
         table=table,
         filename=filename,
+        manifest_filename=manifest_filename,
+        access=access,
+        licence=licence,
+        kind=kind,
+        publisher=publisher,
+        vintage=vintage,
+        expected_sha256=expected_sha256,
+        expected_size_bytes=expected_size_bytes,
+        licence_evidence=licence_evidence,
+        staging_dir=staging_dir,
         upload_r2=upload_r2,
+        record_revision=record_revision,
         r2_bucket=r2_bucket,
         r2_prefix=r2_prefix,
         wrangler_command=wrangler_command,
+    )
+
+
+def register_artifact_file(
+    *,
+    source_id: str,
+    package_id: str,
+    year: int,
+    output_dir: str | Path,
+    filename: str,
+    sha256: str,
+    licence: str,
+    access: str,
+    vintage: str,
+    hash_source: str,
+    attested_by: str,
+    attestation_evidence: str | None = None,
+    pinned_from: dict[str, str] | None = None,
+    verified_at: str | None = None,
+    size_bytes: int | None = None,
+    source_page: str | None = None,
+    source_url: str | None = None,
+    access_route: str | None = None,
+    doi: str | None = None,
+    study: str | None = None,
+    dataset: str | None = None,
+    table: str | None = None,
+    publisher: str | None = None,
+    fetched_at: str | None = None,
+    notes: str | None = None,
+    allow_reissue: bool = False,
+    manifest_filename: str = DEFAULT_MANIFEST_FILENAME,
+) -> ArtifactRegistrationReport:
+    """Register a licensed or restricted artifact by identity, without bytes."""
+    return register_hash_only_artifact(
+        source_id=source_id,
+        package_id=package_id,
+        year=year,
+        output_dir=output_dir,
+        filename=filename,
+        sha256=sha256,
+        licence=licence,
+        access=access,
+        vintage=vintage,
+        hash_source=hash_source,
+        attested_by=attested_by,
+        attestation_evidence=attestation_evidence,
+        pinned_from=pinned_from,
+        verified_at=verified_at,
+        size_bytes=size_bytes,
+        source_page=source_page,
+        source_url=source_url,
+        access_route=access_route,
+        doi=doi,
+        study=study,
+        dataset=dataset,
+        table=table,
+        publisher=publisher,
+        fetched_at=fetched_at,
+        notes=notes,
+        allow_reissue=allow_reissue,
+        manifest_filename=manifest_filename,
     )
 
 
@@ -361,9 +467,14 @@ def inventory_artifact_files(
     root: str | Path,
     *,
     manifest_filename: str = "manifest.yaml",
+    staging_dir: str | Path | None = None,
 ) -> ArtifactInventoryReport:
     """Inventory local manifest-declared source artifacts."""
-    return inventory_source_artifacts(root, manifest_filename=manifest_filename)
+    return inventory_source_artifacts(
+        root,
+        manifest_filename=manifest_filename,
+        staging_dir=staging_dir,
+    )
 
 
 def publish_raw_artifact_files(
@@ -372,9 +483,11 @@ def publish_raw_artifact_files(
     manifest_filename: str = "manifest.yaml",
     source_id: str | None = None,
     package_id: str | None = None,
-    r2_bucket: str = "ledger-raw",
+    r2_bucket: str | None = None,
     r2_prefix: str | None = None,
     wrangler_command: str = "npx wrangler",
+    skip_hash_only: bool = False,
+    staging_dir: str | Path | None = None,
 ) -> RawArtifactPublishReport:
     """Publish manifest-declared raw source artifacts to R2."""
     return publish_source_artifacts(
@@ -385,13 +498,15 @@ def publish_raw_artifact_files(
         r2_bucket=r2_bucket,
         r2_prefix=r2_prefix,
         wrangler_command=wrangler_command,
+        skip_hash_only=skip_hash_only,
+        staging_dir=staging_dir,
     )
 
 
 def bootstrap_r2_storage(
     *,
-    raw_bucket: str = "ledger-raw",
-    derived_bucket: str = "ledger-derived",
+    raw_bucket: str | None = None,
+    derived_bucket: str | None = None,
     wrangler_command: str = "npx wrangler",
 ) -> R2BootstrapReport:
     """Create Chronicle R2 buckets when Wrangler is authenticated."""
@@ -409,7 +524,7 @@ def publish_derived_artifact_files(
     package_id: str,
     year: int,
     build_id: str | None = None,
-    r2_bucket: str = "ledger-derived",
+    r2_bucket: str | None = None,
     r2_prefix: str | None = None,
     wrangler_command: str = "npx wrangler",
     build_artifacts_output: str | Path | None = None,
@@ -441,12 +556,16 @@ def export_chronicle_db_table_files(
 def load_supabase_mirror_files(
     input_dir: str | Path,
     *,
-    schema: str = "ledger",
+    schema: str | None = None,
     batch_size: int = 500,
     dry_run: bool = False,
     build_artifacts_path: str | Path | None = None,
 ) -> SupabaseMirrorLoadReport:
-    """Load exported Chronicle JSONL mirror files into Supabase/Postgres."""
+    """Load exported Chronicle JSONL mirror files into Supabase/Postgres.
+
+    ``schema`` of None resolves to ``$CHRONICLE_SCHEMA``, else the default
+    schema, so the hosted mirror writer answers to the renamed variable.
+    """
     table_paths = (
         {"build_artifacts": Path(build_artifacts_path)}
         if build_artifacts_path is not None
@@ -482,6 +601,30 @@ def plan_pe_source_files(
     if markdown_path is not None:
         write_pe_source_plan_markdown(report, markdown_path)
     return report
+
+
+def _licence_evidence_arguments(args: argparse.Namespace) -> dict[str, str] | None:
+    """Collect the licence-evidence flags, or None when none was passed."""
+    evidence = {
+        "issuer": args.licence_evidence_issuer,
+        "scope": args.licence_evidence_scope,
+        "url": args.licence_evidence_url,
+    }
+    if all(value is None for value in evidence.values()):
+        return None
+    return {key: value for key, value in evidence.items() if value is not None}
+
+
+def _pinned_from_arguments(args: argparse.Namespace) -> dict[str, str] | None:
+    """Collect the pinned-from flags, or None when none was passed."""
+    pinned = {
+        "repository": args.pinned_from_repository,
+        "path": args.pinned_from_path,
+        "commit": args.pinned_from_commit,
+    }
+    if all(value is None for value in pinned.values()):
+        return None
+    return {key: value for key, value in pinned.items() if value is not None}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -836,7 +979,7 @@ def main(argv: list[str] | None = None) -> int:
 
     artifact_parser = subparsers.add_parser(
         "fetch-artifact",
-        help="Fetch/register a raw source artifact and update manifest.yaml",
+        help="Fetch/register a raw source artifact and update its manifest",
     )
     artifact_parser.add_argument(
         "--url",
@@ -857,13 +1000,23 @@ def main(argv: list[str] | None = None) -> int:
         "--year",
         type=int,
         required=True,
-        help="Artifact vintage year to record in manifest.yaml",
+        help="Artifact vintage year to record in the manifest",
     )
     artifact_parser.add_argument(
         "--out-dir",
         type=Path,
         required=True,
-        help="Directory where the raw artifact and manifest.yaml should live",
+        help="Directory where the raw artifact and its manifest should live",
+    )
+    artifact_parser.add_argument(
+        "--manifest",
+        default=DEFAULT_MANIFEST_FILENAME,
+        help=(
+            "Manifest filename inside --out-dir. A publisher directory that "
+            "feeds several source packages keeps one manifest each, and the "
+            "entry being revised lives in exactly one of them. Defaults to "
+            f"{DEFAULT_MANIFEST_FILENAME}."
+        ),
     )
     artifact_parser.add_argument(
         "--dataset",
@@ -879,7 +1032,93 @@ def main(argv: list[str] | None = None) -> int:
     )
     artifact_parser.add_argument(
         "--filename",
-        help="Override artifact filename inferred from URL/path.",
+        help=(
+            "Override the artifact filename inferred from the URL. Must be a "
+            "bare filename; the artifact always lands under that name."
+        ),
+    )
+    artifact_parser.add_argument(
+        "--access",
+        default="public",
+        choices=list(ACCESS_CLASSES),
+        help=(
+            "Publisher access class. Only public artifacts may be fetched; "
+            "licensed and restricted artifacts are registered hash-only with "
+            "`chronicle register-artifact`."
+        ),
+    )
+    artifact_parser.add_argument(
+        "--licence",
+        help=(
+            "Publisher terms identifier or URL. Required for entries in a "
+            "microdata-release manifest."
+        ),
+    )
+    artifact_parser.add_argument(
+        "--kind",
+        choices=list(MANIFEST_KINDS),
+        help=(
+            "Manifest kind to declare. Pass microdata_release to archive a "
+            "public-use microdata release, which may hold several files under "
+            "one vintage and is never parsed by a source package. Must match "
+            "the existing manifest's kind; a conflicting kind is refused. "
+            "Omit to inherit it (publisher_table for a new manifest)."
+        ),
+    )
+    artifact_parser.add_argument(
+        "--publisher",
+        help="Publishing body. Required for a microdata release.",
+    )
+    artifact_parser.add_argument(
+        "--vintage",
+        help="Publisher vintage label. Required for a microdata release.",
+    )
+    artifact_parser.add_argument(
+        "--expected-sha256",
+        help=(
+            "Lowercase 64-character SHA-256 the fetched bytes must have, from "
+            "a reviewed pin. The fetch refuses, before writing or uploading, "
+            "bytes that hash differently; --record-revision does not override "
+            "it. Required for a microdata release: the licence evidence covers "
+            "this checksum. Never invent one."
+        ),
+    )
+    artifact_parser.add_argument(
+        "--expected-size-bytes",
+        type=int,
+        help="Size the fetched bytes must have, from the same reviewed pin.",
+    )
+    artifact_parser.add_argument(
+        "--licence-evidence-issuer",
+        help=(
+            "Who issued the file under the allowlisted --licence. Required "
+            "for a microdata release."
+        ),
+    )
+    artifact_parser.add_argument(
+        "--licence-evidence-scope",
+        help=(
+            "Statement of what the evidence covers, such as 'public-use file "
+            "of a federal agency'. Required for a microdata release."
+        ),
+    )
+    artifact_parser.add_argument(
+        "--licence-evidence-url",
+        help=(
+            "Durable http(s) URL of the publisher's evidence that this file is "
+            "issued under --licence. Required for a microdata release."
+        ),
+    )
+    artifact_parser.add_argument(
+        "--staging-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Transient directory where a microdata release's bytes are staged "
+            "before upload, outside the repository. Defaults to "
+            "$CHRONICLE_MICRODATA_STAGING_DIR, else "
+            "~/.cache/policyengine-chronicle/microdata-staging."
+        ),
     )
     artifact_parser.add_argument(
         "--upload-r2",
@@ -887,9 +1126,24 @@ def main(argv: list[str] | None = None) -> int:
         help="Upload the artifact to R2 after local checksum capture.",
     )
     artifact_parser.add_argument(
+        "--record-revision",
+        action="store_true",
+        help=(
+            "Register a publisher revision: the fetched bytes get their own "
+            "content-addressed key under the configured bucket and the "
+            "superseded object moves to storage.previous_r2. Without this "
+            "flag, bytes that disagree with what the entry identifies -- its "
+            "declared sha256, or its recorded content-addressed key once "
+            "published -- are refused."
+        ),
+    )
+    artifact_parser.add_argument(
         "--r2-bucket",
-        default="ledger-raw",
-        help="R2 bucket for raw artifacts when --upload-r2 is set.",
+        default=None,
+        help=(
+            "R2 bucket for raw artifacts when --upload-r2 is set. Defaults to "
+            f"$CHRONICLE_R2_RAW_BUCKET, else {DEFAULT_R2_RAW_BUCKET}."
+        ),
     )
     artifact_parser.add_argument(
         "--r2-prefix",
@@ -903,6 +1157,169 @@ def main(argv: list[str] | None = None) -> int:
         "--wrangler-command",
         default="npx wrangler",
         help="Wrangler command prefix to use for R2 uploads.",
+    )
+
+    registration_parser = subparsers.add_parser(
+        "register-artifact",
+        help="Register a licensed or restricted artifact by identity, no bytes",
+        description=(
+            "Register a raw artifact Chronicle may not redistribute. The "
+            "manifest records the checksum, size, vintage, licence, and access "
+            "route; no bytes are fetched, stored, or uploaded, and no R2 key "
+            "is recorded."
+        ),
+    )
+    registration_parser.add_argument(
+        "--source-id",
+        required=True,
+        help="Stable source ID, such as dwp.",
+    )
+    registration_parser.add_argument(
+        "--package-id",
+        required=True,
+        help="Stable package ID, such as dwp-frs-2023-24.",
+    )
+    registration_parser.add_argument(
+        "--year",
+        type=int,
+        required=True,
+        help="Artifact vintage year to record in manifest.yaml",
+    )
+    registration_parser.add_argument(
+        "--out-dir",
+        type=Path,
+        required=True,
+        help="Directory where manifest.yaml should live. No bytes are written.",
+    )
+    registration_parser.add_argument(
+        "--manifest",
+        default=DEFAULT_MANIFEST_FILENAME,
+        help=(
+            "Manifest filename inside --out-dir to record into, for a "
+            "directory that keeps one manifest_<package>.yaml per package. "
+            "Must be manifest.yaml or manifest_<package>.yaml; the default "
+            "name is refused beside named manifests."
+        ),
+    )
+    registration_parser.add_argument(
+        "--filename",
+        required=True,
+        help="Publisher filename this registration identifies.",
+    )
+    registration_parser.add_argument(
+        "--sha256",
+        required=True,
+        help="Lowercase 64-character SHA-256 of the publisher bytes.",
+    )
+    registration_parser.add_argument(
+        "--size-bytes",
+        type=int,
+        help="Size of the publisher bytes, when known.",
+    )
+    registration_parser.add_argument(
+        "--vintage",
+        required=True,
+        help="Publisher vintage label, such as 2023_24.",
+    )
+    registration_parser.add_argument(
+        "--licence",
+        required=True,
+        help="Publisher terms identifier or URL, such as a UKDS licence.",
+    )
+    registration_parser.add_argument(
+        "--access",
+        required=True,
+        choices=["licensed", "restricted"],
+        help="Access class. Public artifacts are registered with fetch-artifact.",
+    )
+    registration_parser.add_argument(
+        "--source-page",
+        help="Publisher or archive landing page for the release.",
+    )
+    registration_parser.add_argument(
+        "--source-url",
+        help="Direct publisher URL, when the release has one behind its licence.",
+    )
+    registration_parser.add_argument(
+        "--access-route",
+        help="How an authorized consumer obtains the bytes.",
+    )
+    registration_parser.add_argument(
+        "--doi",
+        help="Persistent identifier for the study, such as a UKDS DOI.",
+    )
+    registration_parser.add_argument(
+        "--study",
+        help="Archive study reference, such as a UK Data Service study number.",
+    )
+    registration_parser.add_argument(
+        "--dataset",
+        help="Manifest dataset ID. Defaults to <source-id>_<package-id>.",
+    )
+    registration_parser.add_argument(
+        "--table",
+        help="Human-readable release title.",
+    )
+    registration_parser.add_argument(
+        "--publisher",
+        help="Publishing body, when it differs from the source ID.",
+    )
+    registration_parser.add_argument(
+        "--fetched-at",
+        help="When the authorized environment fetched the bytes, if known.",
+    )
+    registration_parser.add_argument(
+        "--hash-source",
+        required=True,
+        choices=list(HASH_ONLY_HASH_SOURCES),
+        help=(
+            "How the checksum is known: consumer_attested (the consumer "
+            "verified it against bytes it holds; pass --attested-by, "
+            "--attestation-evidence and --verified-at) or consumer_pin (it is "
+            "transcribed from a reviewed pin in the consumer's repository; pass "
+            "--attested-by and the three --pinned-from-* fields, and no "
+            "--verified-at)."
+        ),
+    )
+    registration_parser.add_argument(
+        "--attested-by",
+        required=True,
+        help="The consumer that attests the checksum, such as PolicyEngine/microcosm.",
+    )
+    registration_parser.add_argument(
+        "--attestation-evidence",
+        help="The consumer's evidence for a consumer_attested checksum.",
+    )
+    registration_parser.add_argument(
+        "--verified-at",
+        help=(
+            "When the consumer verified the checksum against the bytes "
+            "(consumer_attested only)."
+        ),
+    )
+    registration_parser.add_argument(
+        "--pinned-from-repository",
+        help="Repository holding the consumer's pin, such as PolicyEngine/microcosm.",
+    )
+    registration_parser.add_argument(
+        "--pinned-from-path",
+        help="Path of the pin inside that repository.",
+    )
+    registration_parser.add_argument(
+        "--pinned-from-commit",
+        help="40-hex commit the pin was read from.",
+    )
+    registration_parser.add_argument(
+        "--notes",
+        help="Free-text provenance notes for the registration.",
+    )
+    registration_parser.add_argument(
+        "--allow-reissue",
+        action="store_true",
+        help=(
+            "Register different bytes for a filename already registered in "
+            "this year, keeping both registrations."
+        ),
     )
 
     artifact_inventory_parser = subparsers.add_parser(
@@ -920,10 +1337,20 @@ def main(argv: list[str] | None = None) -> int:
         default="manifest.yaml",
         help="Manifest filename to scan for.",
     )
+    artifact_inventory_parser.add_argument(
+        "--staging-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Where public microdata releases are staged. Defaults to "
+            "$CHRONICLE_MICRODATA_STAGING_DIR, else "
+            "~/.cache/policyengine-chronicle/microdata-staging."
+        ),
+    )
 
     raw_publish_parser = subparsers.add_parser(
         "publish-raw",
-        help="Upload manifest-declared raw source artifacts to ledger-raw R2",
+        help="Upload manifest-declared raw source artifacts to the raw R2 bucket",
     )
     raw_publish_parser.add_argument(
         "--root",
@@ -937,6 +1364,25 @@ def main(argv: list[str] | None = None) -> int:
         help="Manifest filename to scan for.",
     )
     raw_publish_parser.add_argument(
+        "--skip-hash-only",
+        action="store_true",
+        help=(
+            "Treat licensed and restricted registrations as deliberately "
+            "skipped rather than refused, so a mixed tree can be published."
+        ),
+    )
+    raw_publish_parser.add_argument(
+        "--staging-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Where public microdata releases are staged; their bytes are read "
+            "from there, never from beside the manifest. Defaults to "
+            "$CHRONICLE_MICRODATA_STAGING_DIR, else "
+            "~/.cache/policyengine-chronicle/microdata-staging."
+        ),
+    )
+    raw_publish_parser.add_argument(
         "--source-id",
         help="Override manifest source_id for scanned artifacts.",
     )
@@ -946,8 +1392,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     raw_publish_parser.add_argument(
         "--r2-bucket",
-        default="ledger-raw",
-        help="R2 bucket for immutable raw artifacts.",
+        default=None,
+        help=(
+            "R2 bucket for immutable raw artifacts. Defaults to "
+            f"$CHRONICLE_R2_RAW_BUCKET, else {DEFAULT_R2_RAW_BUCKET}."
+        ),
     )
     raw_publish_parser.add_argument(
         "--r2-prefix",
@@ -969,13 +1418,19 @@ def main(argv: list[str] | None = None) -> int:
     )
     r2_parser.add_argument(
         "--raw-bucket",
-        default="ledger-raw",
-        help="R2 bucket name for immutable raw source artifacts.",
+        default=None,
+        help=(
+            "R2 bucket name for immutable raw source artifacts. Defaults to "
+            f"$CHRONICLE_R2_RAW_BUCKET, else {DEFAULT_R2_RAW_BUCKET}."
+        ),
     )
     r2_parser.add_argument(
         "--derived-bucket",
-        default="ledger-derived",
-        help="R2 bucket name for derived Chronicle build artifacts.",
+        default=None,
+        help=(
+            "R2 bucket name for derived Chronicle build artifacts. Defaults to "
+            f"$CHRONICLE_R2_DERIVED_BUCKET, else {DEFAULT_R2_DERIVED_BUCKET}."
+        ),
     )
     r2_parser.add_argument(
         "--wrangler-command",
@@ -985,7 +1440,7 @@ def main(argv: list[str] | None = None) -> int:
 
     derived_publish_parser = subparsers.add_parser(
         "publish-derived",
-        help="Upload deterministic Chronicle build outputs to ledger-derived R2",
+        help="Upload deterministic Chronicle build outputs to the derived R2 bucket",
     )
     derived_publish_parser.add_argument(
         "--dir",
@@ -1014,13 +1469,16 @@ def main(argv: list[str] | None = None) -> int:
         help=(
             "Build ID under an accepted epoch prefix, ledger.build.v1:<digest> or "
             "chronicle.build.v2:<digest>; any other form is refused. Defaults to "
-            "the ID inferred from reports or ledger.db."
+            "the ID inferred from reports, chronicle.db, or a legacy ledger.db."
         ),
     )
     derived_publish_parser.add_argument(
         "--r2-bucket",
-        default="ledger-derived",
-        help="R2 bucket for derived build artifacts.",
+        default=None,
+        help=(
+            "R2 bucket for derived build artifacts. Defaults to "
+            f"$CHRONICLE_R2_DERIVED_BUCKET, else {DEFAULT_R2_DERIVED_BUCKET}."
+        ),
     )
     derived_publish_parser.add_argument(
         "--r2-prefix",
@@ -1075,8 +1533,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     mirror_load_parser.add_argument(
         "--schema",
-        default="ledger",
-        help="Supabase/Postgres schema to load into.",
+        default=None,
+        help=(
+            "Supabase/Postgres schema to load into. Defaults to "
+            f"$CHRONICLE_SCHEMA, else {DEFAULT_CHRONICLE_SCHEMA}."
+        ),
     )
     mirror_load_parser.add_argument(
         "--batch-size",
@@ -1252,15 +1713,21 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "build-suite":
         axiom_command = shlex.split(args.axiom_cli) if args.axiom_cli else None
-        report = build_source_suite_dir(
-            args.source,
-            args.out,
-            year=args.year,
-            axiom_command=axiom_command,
-            axiom_roots=args.axiom_root,
-            require_axiom_validation=args.require_axiom_validation,
-            replace=args.replace,
-        )
+        try:
+            report = build_source_suite_dir(
+                args.source,
+                args.out,
+                year=args.year,
+                axiom_command=axiom_command,
+                axiom_roots=args.axiom_root,
+                require_axiom_validation=args.require_axiom_validation,
+                replace=args.replace,
+            )
+        except (ManifestAccessError, MicrodataReleaseNotParseableError) as error:
+            # Refused before the output directory was touched: no source
+            # package parses a microdata release or a hash-only entry.
+            print(f"error: {error}", file=sys.stderr)
+            return 1
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0 if report.valid else 1
     if args.command == "build-bundle":
@@ -1305,40 +1772,102 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0
     if args.command == "fetch-artifact":
-        report = fetch_artifact_file(
-            args.url,
-            source_id=args.source_id,
-            package_id=args.package_id,
-            year=args.year,
-            output_dir=args.out_dir,
-            dataset=args.dataset,
-            source_page=args.source_page,
-            table=args.table,
-            filename=args.filename,
-            upload_r2=args.upload_r2,
-            r2_bucket=args.r2_bucket,
-            r2_prefix=args.r2_prefix,
-            wrangler_command=args.wrangler_command,
-        )
+        try:
+            report = fetch_artifact_file(
+                args.url,
+                source_id=args.source_id,
+                package_id=args.package_id,
+                year=args.year,
+                output_dir=args.out_dir,
+                dataset=args.dataset,
+                source_page=args.source_page,
+                table=args.table,
+                filename=args.filename,
+                manifest_filename=args.manifest,
+                access=args.access,
+                licence=args.licence,
+                kind=args.kind,
+                publisher=args.publisher,
+                vintage=args.vintage,
+                expected_sha256=args.expected_sha256,
+                expected_size_bytes=args.expected_size_bytes,
+                licence_evidence=_licence_evidence_arguments(args),
+                staging_dir=args.staging_dir,
+                upload_r2=args.upload_r2,
+                record_revision=args.record_revision,
+                r2_bucket=args.r2_bucket,
+                r2_prefix=args.r2_prefix,
+                wrangler_command=args.wrangler_command,
+            )
+        except (SourceArtifactManifestError, ManifestAccessError, ValueError) as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0 if report.valid else 1
+    if args.command == "register-artifact":
+        try:
+            registration = register_artifact_file(
+                source_id=args.source_id,
+                package_id=args.package_id,
+                year=args.year,
+                output_dir=args.out_dir,
+                filename=args.filename,
+                sha256=args.sha256,
+                licence=args.licence,
+                access=args.access,
+                vintage=args.vintage,
+                hash_source=args.hash_source,
+                attested_by=args.attested_by,
+                attestation_evidence=args.attestation_evidence,
+                pinned_from=_pinned_from_arguments(args),
+                verified_at=args.verified_at,
+                size_bytes=args.size_bytes,
+                source_page=args.source_page,
+                source_url=args.source_url,
+                access_route=args.access_route,
+                doi=args.doi,
+                study=args.study,
+                dataset=args.dataset,
+                table=args.table,
+                publisher=args.publisher,
+                fetched_at=args.fetched_at,
+                notes=args.notes,
+                allow_reissue=args.allow_reissue,
+                manifest_filename=args.manifest,
+            )
+        except (HashOnlyRegistrationError, ManifestAccessError) as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
+        print(json.dumps(registration.to_dict(), indent=2, sort_keys=True))
+        return 0 if registration.valid else 1
     if args.command == "inventory-artifacts":
-        report = inventory_artifact_files(
-            args.root,
-            manifest_filename=args.manifest,
-        )
+        try:
+            report = inventory_artifact_files(
+                args.root,
+                manifest_filename=args.manifest,
+                staging_dir=args.staging_dir,
+            )
+        except SourceArtifactManifestError as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0 if report.valid else 1
     if args.command == "publish-raw":
-        report = publish_raw_artifact_files(
-            args.root,
-            manifest_filename=args.manifest,
-            source_id=args.source_id,
-            package_id=args.package_id,
-            r2_bucket=args.r2_bucket,
-            r2_prefix=args.r2_prefix,
-            wrangler_command=args.wrangler_command,
-        )
+        try:
+            report = publish_raw_artifact_files(
+                args.root,
+                manifest_filename=args.manifest,
+                staging_dir=args.staging_dir,
+                source_id=args.source_id,
+                package_id=args.package_id,
+                r2_bucket=args.r2_bucket,
+                r2_prefix=args.r2_prefix,
+                wrangler_command=args.wrangler_command,
+                skip_hash_only=args.skip_hash_only,
+            )
+        except SourceArtifactManifestError as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
         print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
         return 0 if report.valid else 1
     if args.command == "bootstrap-r2":

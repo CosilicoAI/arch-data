@@ -1,0 +1,45 @@
+{
+  "snapshot_of": {
+    "repository": "PolicyEngine/microcosm",
+    "commit": "fe2f92f8c79d36b897e6ae4d7e4b3c33fc7ebd28",
+    "note": "Synthetic consumer manifests in Microcosm's shapes, carrying the reviewed pins verbatim; decoy artifacts exercise selection."
+  },
+  "version": "fixture",
+  "country": "uk",
+  "policy": "synthetic Microcosm HMRC income source-stages manifest",
+  "stages": [
+    {
+      "stage": "hmrc_spi_income",
+      "survey": "Survey of Personal Incomes Public Use Tape 2022-23",
+      "source": "https://example.invalid/collated_tables.ods",
+      "grain": "person",
+      "artifacts": [
+        {
+          "role": "qrf_donor",
+          "kind": "private_microdata",
+          "format": "tab_delimited",
+          "survey": "Survey of Personal Incomes Public Use Tape 2022-23",
+          "vintage": "2022-23",
+          "tax_year_start": 2022,
+          "ukds_study_number": "SN 9422",
+          "doi": "10.5255/UKDA-SN-9422-1",
+          "filename": "put2223uk.tab",
+          "sha256": "5ef829461060c91a2a47be59ad541d9b519fc3976d66ca80d4920f711bb96f66",
+          "size_bytes": 141323762,
+          "access": "private_local_input",
+          "locator": "caller-supplied local input",
+          "runtime_sha256_required": true
+        },
+        {
+          "role": "published_fact_surface",
+          "kind": "administrative_table",
+          "format": "ods",
+          "vintage": "2023-24",
+          "locator": "https://example.invalid/collated_tables.ods",
+          "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "size_bytes": 2
+        }
+      ]
+    }
+  ]
+}

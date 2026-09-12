@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from dataclasses import replace
 import hashlib
 from io import BytesIO
+import os
 from pathlib import Path
-from zipfile import ZipFile
+from zipfile import Path as ZipPath, ZipFile
 
 import openpyxl
 import pytest
@@ -18,6 +20,7 @@ from chronicle.consumer_contract import (
 )
 from chronicle.core import validate_facts
 from chronicle.epoch import SCHEMA_IDS
+from chronicle.registration import ManifestAccessError, validate_file_entry
 from chronicle.source_package import (
     SOURCE_ARTIFACT_CACHE_ENV,
     SOURCE_ARTIFACT_FETCH_ENV,
@@ -244,9 +247,7 @@ def test_hmrc_cgt_reuses_one_publisher_series_across_definition_years():
     package = load_source_package("hmrc-cgt-statistics-2026")
     package_facts = package.build_facts(2026)
     facts = [
-        fact
-        for fact in package_facts
-        if fact.measure.concept == "hmrc.cgt_tax_total"
+        fact for fact in package_facts if fact.measure.concept == "hmrc.cgt_tax_total"
     ]
 
     assert {fact.entity.name for fact in package_facts} == {"tax_unit"}
@@ -1088,6 +1089,688 @@ def test_source_artifact_loader_fetches_missing_artifact_when_enabled(
 
     assert _read_source_artifact_content(_MissingArtifactPath(), spec) == content
     assert _source_artifact_cache_path(spec).read_bytes() == content
+
+
+@pytest.fixture
+def recorded_r2_artifact(tmp_path, monkeypatch):
+    resource_root = tmp_path / "resources"
+    resource_dir = resource_root / "data" / "publisher" / "package"
+    resource_dir.mkdir(parents=True)
+    content = b"publisher source artifact"
+    digest = hashlib.sha256(content).hexdigest()
+    key = f"raw/publisher/package/2024/{digest}/table.csv"
+    entry = {
+        "filename": "table.csv",
+        "source_url": "https://example.test/table.csv",
+        "sha256": digest,
+        "storage": {
+            "r2": {
+                "provider": "r2",
+                "bucket": "ledger-raw",
+                "key": key,
+                "uri": f"r2://ledger-raw/{key}",
+            }
+        },
+    }
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory="data/publisher/package",
+        manifest="manifest.yaml",
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+    return artifact, resource_dir, content, entry
+
+
+@pytest.mark.parametrize("entry", [None, "not a file entry", 42])
+@pytest.mark.parametrize("method", ["assert_parseable", "_artifact_content"])
+def test_source_artifact_spec_refuses_scalar_entry_before_artifact_io(
+    recorded_r2_artifact, monkeypatch, entry, method
+):
+    artifact, resource_dir, _content, _valid_entry = recorded_r2_artifact
+    manifest_path = resource_dir / "manifest.yaml"
+    manifest_path.write_text(
+        yaml.safe_dump({"kind": "publisher_table", "files": {2024: entry}})
+    )
+    original_manifest = manifest_path.read_bytes()
+    reads = []
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content",
+        lambda *args: reads.append(args) or b"unexpected source bytes",
+    )
+
+    with pytest.raises(ManifestAccessError, match="malformed_file_spec"):
+        getattr(artifact, method)(2024)
+
+    assert reads == []
+    assert manifest_path.read_bytes() == original_manifest
+    assert list(resource_dir.iterdir()) == [manifest_path]
+
+
+@pytest.mark.parametrize(
+    "invalid_locator",
+    [
+        "contradictory-key",
+        "contradictory-bucket",
+        "missing-provider",
+        "missing-uri",
+        "non-r2",
+        "null-block",
+        "checksum-identity",
+        "filename-identity",
+    ],
+)
+def test_source_artifact_spec_refuses_invalid_recorded_r2_before_read(
+    recorded_r2_artifact, monkeypatch, invalid_locator
+):
+    artifact, resource_dir, content, entry = recorded_r2_artifact
+    recorded = entry["storage"]["r2"]
+    if invalid_locator == "contradictory-key":
+        recorded["key"] = recorded["key"].replace("table.csv", "other.csv")
+    elif invalid_locator == "contradictory-bucket":
+        recorded["bucket"] = "other-raw"
+    elif invalid_locator == "missing-provider":
+        del recorded["provider"]
+    elif invalid_locator == "missing-uri":
+        del recorded["uri"]
+    elif invalid_locator == "non-r2":
+        recorded["provider"] = "s3"
+        recorded["uri"] = recorded["uri"].replace("r2://", "s3://")
+    elif invalid_locator == "null-block":
+        entry["storage"]["r2"] = None
+    elif invalid_locator == "checksum-identity":
+        entry["sha256"] = "0" * 64
+    else:
+        recorded["key"] = recorded["key"].replace("table.csv", "other.csv")
+        recorded["uri"] = recorded["uri"].replace("table.csv", "other.csv")
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump({"kind": "publisher_table", "files": {2024: entry}})
+    )
+    (resource_dir / "table.csv").write_bytes(content)
+
+    def unexpected_read(_artifact_path, _spec):
+        raise AssertionError("invalid R2 provenance reached artifact I/O")
+
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content", unexpected_read
+    )
+    with pytest.raises(ValueError, match="storage.r2|recorded R2"):
+        artifact._artifact_content(2024)
+
+
+@pytest.mark.parametrize("location", ["local", "fetch"])
+def test_source_artifact_spec_checks_recorded_r2_digest_without_declared_checksum(
+    recorded_r2_artifact, tmp_path, monkeypatch, location
+):
+    artifact, resource_dir, _content, entry = recorded_r2_artifact
+    del entry["sha256"]
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump({"kind": "publisher_table", "files": {2024: entry}})
+    )
+    changed_content = b"different publisher bytes"
+    cache = tmp_path / "cache"
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(cache))
+    if location == "local":
+        (resource_dir / "table.csv").write_bytes(changed_content)
+    else:
+        monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+        monkeypatch.setattr(
+            "chronicle.source_package._fetch_source_artifact_content",
+            lambda _url: changed_content,
+        )
+
+    with pytest.raises(ValueError, match="checksum mismatch"):
+        artifact._artifact_content(2024)
+    assert not cache.exists()
+
+
+def test_source_artifact_spec_accepts_consistent_recorded_r2(recorded_r2_artifact):
+    artifact, resource_dir, content, entry = recorded_r2_artifact
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump({"kind": "publisher_table", "files": {2024: entry}})
+    )
+    (resource_dir / "table.csv").write_bytes(content)
+
+    assert artifact._artifact_content(2024) == (
+        content,
+        "table.csv",
+        entry["source_url"],
+        entry["storage"]["r2"],
+    )
+
+
+@pytest.mark.parametrize("location", ["local", "fetch"])
+def test_source_reader_refuses_conflicting_r2_only_shared_owners_before_read(
+    recorded_r2_artifact, tmp_path, monkeypatch, location
+):
+    artifact, resource_dir, content, entry = recorded_r2_artifact
+    digest = entry.pop("sha256")
+    sibling = deepcopy(entry)
+    other_digest = hashlib.sha256(b"different sibling bytes").hexdigest()
+    for field in ("key", "uri"):
+        sibling["storage"]["r2"][field] = sibling["storage"]["r2"][field].replace(
+            digest, other_digest
+        )
+    for name, owner in (("manifest.yaml", entry), ("manifest_sibling.yaml", sibling)):
+        (resource_dir / name).write_text(
+            yaml.safe_dump({"kind": "publisher_table", "files": {2024: owner}})
+        )
+    before = {path.name: path.read_bytes() for path in resource_dir.iterdir()}
+    cache = tmp_path / "cache"
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(cache))
+    monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+    fetches = []
+    monkeypatch.setattr(
+        "chronicle.source_package._fetch_source_artifact_content",
+        lambda url: fetches.append(url) or content,
+    )
+    reads = []
+    original_read = Path.read_bytes
+
+    def read_bytes(path):
+        if path == resource_dir / "table.csv":
+            reads.append(path)
+        return original_read(path)
+
+    monkeypatch.setattr(Path, "read_bytes", read_bytes)
+    if location == "local":
+        (resource_dir / "table.csv").write_bytes(content)
+
+    with pytest.raises(ManifestAccessError, match="filename_collision|different bytes"):
+        artifact._artifact_content(2024)
+
+    assert reads == []
+    assert fetches == []
+    assert not cache.exists()
+    assert all(
+        (resource_dir / name).read_bytes() == data for name, data in before.items()
+    )
+
+
+@pytest.mark.parametrize("location", ["local", "cache", "fetch", "zip"])
+def test_source_reader_refuses_unpinned_bytes_that_contradict_shared_owner(
+    recorded_r2_artifact, tmp_path, monkeypatch, location
+):
+    artifact, resource_dir, _content, sibling = recorded_r2_artifact
+    entry = {
+        "filename": "table.csv",
+        "source_url": sibling["source_url"],
+    }
+    sibling.pop("storage")
+    for name, owner in (("manifest.yaml", entry), ("manifest_sibling.yaml", sibling)):
+        (resource_dir / name).write_text(
+            yaml.safe_dump({"kind": "publisher_table", "files": {2024: owner}})
+        )
+    before = {path.name: path.read_bytes() for path in resource_dir.iterdir()}
+    changed_content = b"unpinned bytes contradict the identified sibling"
+    cache = tmp_path / "cache"
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(cache))
+    monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+    fetches = []
+    monkeypatch.setattr(
+        "chronicle.source_package._fetch_source_artifact_content",
+        lambda url: fetches.append(url) or changed_content,
+    )
+    if location == "local":
+        (resource_dir / "table.csv").write_bytes(changed_content)
+    elif location == "cache":
+        cache_path = _source_artifact_cache_path(entry)
+        cache_path.parent.mkdir(parents=True)
+        cache_path.write_bytes(changed_content)
+    if location == "zip":
+        buffer = BytesIO()
+        with ZipFile(buffer, "w") as archive:
+            for name, data in before.items():
+                archive.writestr(f"data/publisher/package/{name}", data)
+            archive.writestr("data/publisher/package/table.csv", changed_content)
+        with ZipFile(buffer) as archive:
+            monkeypatch.setattr(
+                "chronicle.source_package.files", lambda _package: ZipPath(archive)
+            )
+            with pytest.raises(
+                ManifestAccessError, match="filename_collision|two identities"
+            ):
+                artifact._artifact_content(2024)
+    else:
+        with pytest.raises(
+            ManifestAccessError, match="filename_collision|two identities"
+        ):
+            artifact._artifact_content(2024)
+
+    assert fetches == ([entry["source_url"]] if location == "fetch" else [])
+    if location == "cache":
+        assert cache_path.read_bytes() == changed_content
+    else:
+        assert not cache.exists()
+    assert all(
+        (resource_dir / name).read_bytes() == data for name, data in before.items()
+    )
+
+
+def _public_microdata_sibling(entry):
+    return {
+        **deepcopy(entry),
+        "access": "public",
+        "licence": "CC0-1.0",
+        "licence_evidence": {
+            "issuer": "Fixture publisher",
+            "scope": "This fixture public microdata release is dedicated to CC0.",
+            "url": "https://example.test/licence",
+        },
+        "vintage": "2024",
+        "hash_source": "chronicle_fetch",
+        "attested_by": "chronicle",
+        "verified_at": "2026-09-05",
+    }
+
+
+@pytest.mark.parametrize(
+    "alias", ["filename", "sha256", "archived-filename", "archived-sha256"]
+)
+@pytest.mark.parametrize(
+    "declared_checksum", [True, False], ids=["declared", "r2-only"]
+)
+@pytest.mark.parametrize("location", ["cache", "fetch"])
+@pytest.mark.parametrize("method", ["_artifact_content", "build_source_rows"])
+def test_source_reader_refuses_public_microdata_sibling_alias_before_io(
+    recorded_r2_artifact,
+    tmp_path,
+    monkeypatch,
+    alias,
+    declared_checksum,
+    location,
+    method,
+):
+    artifact, resource_dir, _content, entry = recorded_r2_artifact
+    artifact = replace(artifact, parser="delimited_text_full_rows")
+    content = b"person_id,age\n1,45\n2,31\n"
+    digest = hashlib.sha256(content).hexdigest()
+
+    def locator(filename, checksum):
+        key = f"raw/publisher/package/2024/{checksum}/{filename}"
+        return {
+            "provider": "r2",
+            "bucket": "ledger-raw",
+            "key": key,
+            "uri": f"r2://ledger-raw/{key}",
+        }
+
+    entry["sha256"] = digest
+    entry["storage"]["r2"] = locator("table.csv", digest)
+    sibling = _public_microdata_sibling(entry)
+    if alias == "sha256":
+        sibling["filename"] = "microdata.csv"
+    elif alias.startswith("archived-"):
+        sibling["filename"] = "new-microdata.csv"
+        sibling["sha256"] = "a" * 64
+        sibling["storage"]["previous_r2"] = [
+            locator("table.csv", "b" * 64)
+            if alias == "archived-filename"
+            else locator("old-microdata.csv", digest)
+        ]
+    sibling["storage"]["r2"] = locator(sibling["filename"], sibling["sha256"])
+    sibling["licence_evidence"].update(
+        licence=sibling["licence"], sha256=sibling["sha256"]
+    )
+    assert (
+        validate_file_entry(
+            sibling, kind="microdata_release", manifest={}, local_file_exists=False
+        )
+        == ()
+    )
+    if not declared_checksum:
+        entry.pop("sha256")
+    for name, kind, owner in (
+        ("manifest.yaml", "publisher_table", entry),
+        ("manifest_release.yaml", "microdata_release", sibling),
+    ):
+        (resource_dir / name).write_text(
+            yaml.safe_dump({"kind": kind, "files": {2024: owner}})
+        )
+    before = {path.name: path.read_bytes() for path in resource_dir.iterdir()}
+    cache = tmp_path / "cache"
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(cache))
+    monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+    cache_path = _source_artifact_cache_path({**entry, "sha256": digest})
+    if location == "cache":
+        cache_path.parent.mkdir(parents=True)
+        cache_path.write_bytes(content)
+    fetches = []
+    monkeypatch.setattr(
+        "chronicle.source_package._fetch_source_artifact_content",
+        lambda url: fetches.append(url) or content,
+    )
+    reads = []
+    original_read = Path.read_bytes
+
+    def read_bytes(path):
+        if path.name == "table.csv":
+            reads.append(path)
+        return original_read(path)
+
+    monkeypatch.setattr(Path, "read_bytes", read_bytes)
+    emitted = []
+    with pytest.raises(ManifestAccessError, match="microdata"):
+        emitted.extend(getattr(artifact, method)(2024))
+
+    assert emitted == []
+    assert reads == []
+    assert fetches == []
+    if location == "cache":
+        assert original_read(cache_path) == content
+        assert [path for path in cache.rglob("*") if path.is_file()] == [cache_path]
+    else:
+        assert not cache.exists()
+    assert {path.name: path.read_bytes() for path in resource_dir.iterdir()} == before
+
+
+@pytest.mark.parametrize(
+    "identified", [True, False], ids=["known-distinct", "unpinned"]
+)
+def test_source_reader_requires_identity_beside_unrelated_public_microdata(
+    recorded_r2_artifact, tmp_path, monkeypatch, identified
+):
+    artifact, resource_dir, content, entry = recorded_r2_artifact
+    sibling = _public_microdata_sibling(entry)
+    sibling["filename"] = "microdata.csv"
+    sibling["sha256"] = "a" * 64
+    sibling["storage"]["r2"] = {
+        field: value.replace("table.csv", "microdata.csv").replace(
+            entry["sha256"], "a" * 64
+        )
+        for field, value in sibling["storage"]["r2"].items()
+    }
+    sibling["licence_evidence"].update(
+        licence=sibling["licence"], sha256=sibling["sha256"]
+    )
+    if not identified:
+        entry.pop("sha256")
+        entry.pop("storage")
+    for name, kind, owner in (
+        ("manifest.yaml", "publisher_table", entry),
+        ("manifest_release.yaml", "microdata_release", sibling),
+    ):
+        (resource_dir / name).write_text(
+            yaml.safe_dump({"kind": kind, "files": {2024: owner}})
+        )
+    before = {path.name: path.read_bytes() for path in resource_dir.iterdir()}
+    cache = tmp_path / "cache"
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(cache))
+    monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+    fetches = []
+    monkeypatch.setattr(
+        "chronicle.source_package._fetch_source_artifact_content",
+        lambda url: fetches.append(url) or content,
+    )
+    if identified:
+        assert artifact._artifact_content(2024)[0] == content
+        assert fetches == [entry["source_url"]]
+        assert _source_artifact_cache_path(entry).read_bytes() == content
+    else:
+        with pytest.raises(ManifestAccessError, match="microdata"):
+            artifact._artifact_content(2024)
+        assert fetches == []
+        assert not cache.exists()
+    assert {path.name: path.read_bytes() for path in resource_dir.iterdir()} == before
+
+
+@pytest.mark.parametrize("identity", ["r2-only", "unpinned"])
+@pytest.mark.parametrize("location", ["fetch", "zip"])
+def test_source_reader_accepts_shared_owner_bytes_from_nonfilesystem_resources(
+    recorded_r2_artifact, tmp_path, monkeypatch, identity, location
+):
+    artifact, resource_dir, content, sibling = recorded_r2_artifact
+    entry = deepcopy(sibling)
+    entry.pop("sha256")
+    if identity == "r2-only":
+        sibling.pop("sha256")
+    else:
+        entry.pop("storage")
+        sibling.pop("storage")
+    for name, owner in (("manifest.yaml", entry), ("manifest_sibling.yaml", sibling)):
+        (resource_dir / name).write_text(
+            yaml.safe_dump({"kind": "publisher_table", "files": {2024: owner}})
+        )
+    before = {path.name: path.read_bytes() for path in resource_dir.iterdir()}
+    monkeypatch.chdir(tmp_path)
+    # Manifest labels passed to the shared validator are resource names;
+    # interpreting them as filesystem paths would read these unrelated bytes.
+    (tmp_path / "table.csv").write_bytes(b"unrelated working-directory bytes")
+    cache = tmp_path / "cache"
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(cache))
+    monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+    monkeypatch.setattr(
+        "chronicle.source_package._fetch_source_artifact_content", lambda url: content
+    )
+    if location == "zip":
+        buffer = BytesIO()
+        with ZipFile(buffer, "w") as archive:
+            for name, data in before.items():
+                archive.writestr(f"data/publisher/package/{name}", data)
+            archive.writestr("data/publisher/package/table.csv", content)
+        with ZipFile(buffer) as archive:
+            monkeypatch.setattr(
+                "chronicle.source_package.files", lambda _package: ZipPath(archive)
+            )
+            assert artifact._artifact_content(2024)[0] == content
+        assert not cache.exists()
+    else:
+        assert artifact._artifact_content(2024)[0] == content
+        assert [path.read_bytes() for path in cache.rglob("table.csv")] == [content]
+    assert all(
+        (resource_dir / name).read_bytes() == data for name, data in before.items()
+    )
+
+
+@pytest.mark.parametrize("entry_kind", ["directory", "fifo"])
+@pytest.mark.parametrize("resource_kind", ["manifest", "artifact"])
+def test_source_artifact_spec_refuses_non_regular_resource_before_open(
+    recorded_r2_artifact, monkeypatch, entry_kind, resource_kind
+):
+    artifact, resource_dir, _content, entry = recorded_r2_artifact
+    name = "manifest.yaml" if resource_kind == "manifest" else "table.csv"
+    resource = resource_dir / name
+    if entry_kind == "directory":
+        resource.mkdir()
+    else:
+        os.mkfifo(resource)
+    if resource_kind == "artifact":
+        (resource_dir / "manifest.yaml").write_text(
+            yaml.safe_dump({"kind": "publisher_table", "files": {2024: entry}})
+        )
+
+    def unexpected_read(_artifact_path, _spec):
+        raise AssertionError("non-regular artifact reached artifact I/O")
+
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content", unexpected_read
+    )
+    with pytest.raises(ValueError, match="not a regular file"):
+        if resource_kind == "manifest":
+            # Resolve without opening: a broken guard must fail promptly even
+            # for a FIFO, whose actual open would block the test process.
+            artifact.manifest_resource()
+        else:
+            artifact._artifact_content(2024)
+
+
+def test_source_artifact_spec_reads_regular_importlib_zip_resources(
+    recorded_r2_artifact, monkeypatch
+):
+    artifact, _resource_dir, content, entry = recorded_r2_artifact
+    buffer = BytesIO()
+    with ZipFile(buffer, "w") as archive:
+        archive.writestr("data/publisher/package/table.csv", content)
+        archive.writestr(
+            "data/publisher/package/manifest.yaml",
+            yaml.safe_dump({"kind": "publisher_table", "files": {2024: entry}}),
+        )
+    with ZipFile(buffer) as archive:
+        monkeypatch.setattr(
+            "chronicle.source_package.files", lambda _package: ZipPath(archive)
+        )
+        assert artifact._artifact_content(2024)[0] == content
+
+
+def test_source_artifact_spec_fetches_absent_regular_resource(
+    recorded_r2_artifact, tmp_path, monkeypatch
+):
+    artifact, resource_dir, content, entry = recorded_r2_artifact
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump({"kind": "publisher_table", "files": {2024: entry}})
+    )
+    monkeypatch.setenv(SOURCE_ARTIFACT_CACHE_ENV, str(tmp_path / "cache"))
+    monkeypatch.setenv(SOURCE_ARTIFACT_FETCH_ENV, "1")
+    monkeypatch.setattr(
+        "chronicle.source_package._fetch_source_artifact_content", lambda _url: content
+    )
+
+    assert artifact._artifact_content(2024)[0] == content
+    assert _source_artifact_cache_path(entry).read_bytes() == content
+
+
+@pytest.mark.parametrize(
+    "path_kind",
+    ["absolute", "parent", "symlink", "normalized-alias", "manifest-name"],
+)
+def test_source_artifact_spec_refuses_unsafe_manifest_filename_before_read(
+    tmp_path, monkeypatch, path_kind
+):
+    resource_root = tmp_path / "resources"
+    resource_dir = resource_root / "data" / "publisher" / "package"
+    resource_dir.mkdir(parents=True)
+    outside = resource_dir.parent / "outside.csv"
+    outside.write_bytes(b"outside publisher bytes")
+    if path_kind == "absolute":
+        filename = str(outside)
+    elif path_kind == "parent":
+        filename = "../outside.csv"
+    else:
+        filename = "table.csv"
+        if path_kind == "symlink":
+            (resource_dir / filename).symlink_to(outside)
+        elif path_kind == "normalized-alias":
+            (resource_dir / "TABLE.csv").write_bytes(outside.read_bytes())
+        else:
+            filename = "manifest_artifact.yaml"
+            (resource_dir / filename).write_bytes(outside.read_bytes())
+    (resource_dir / "manifest.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "kind": "publisher_table",
+                "files": {
+                    2024: {
+                        "filename": filename,
+                        "source_url": outside.as_uri(),
+                        "sha256": hashlib.sha256(outside.read_bytes()).hexdigest(),
+                    }
+                },
+            },
+            sort_keys=False,
+        )
+    )
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+
+    def unexpected_artifact_read(_artifact_path, _spec):
+        raise AssertionError("unsafe artifact path reached artifact I/O")
+
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content",
+        unexpected_artifact_read,
+    )
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory="data/publisher/package",
+        manifest="manifest.yaml",
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+
+    if path_kind == "symlink":
+        message = "symbolic link"
+    elif path_kind == "normalized-alias":
+        message = "normalized filename"
+    elif path_kind == "manifest-name":
+        message = "manifest name"
+    else:
+        message = "bare filename"
+    with pytest.raises(ValueError, match=message):
+        artifact._artifact_content(2024)
+
+
+@pytest.mark.parametrize(
+    "path_kind", ["absolute", "parent", "symlink", "normalized-alias", "unsupported"]
+)
+def test_source_artifact_spec_refuses_unsafe_manifest_path_before_artifact_read(
+    tmp_path, monkeypatch, path_kind
+):
+    resource_root = tmp_path / "resources"
+    resource_dir = resource_root / "data" / "publisher" / "package"
+    resource_dir.mkdir(parents=True)
+    payload = {
+        "kind": "publisher_table",
+        "files": {
+            2024: {
+                "filename": "table.csv",
+                "source_url": "https://example.test/table.csv",
+            }
+        },
+    }
+    outside_manifest = resource_dir.parent / "outside-manifest.yaml"
+    outside_manifest.write_text(yaml.safe_dump(payload, sort_keys=False))
+    if path_kind == "absolute":
+        manifest_name = str(outside_manifest)
+    elif path_kind == "parent":
+        manifest_name = "../outside-manifest.yaml"
+    elif path_kind == "symlink":
+        manifest_name = "manifest.yaml"
+        (resource_dir / manifest_name).symlink_to(outside_manifest)
+    elif path_kind == "normalized-alias":
+        manifest_name = "manifest.yaml"
+        (resource_dir / "Manifest.yaml").write_text(
+            yaml.safe_dump(payload, sort_keys=False)
+        )
+    else:
+        manifest_name = "registry.yaml"
+        (resource_dir / manifest_name).write_text(yaml.safe_dump(payload))
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+
+    def unexpected_artifact_read(_artifact_path, _spec):
+        raise AssertionError("unsafe manifest path reached artifact I/O")
+
+    monkeypatch.setattr(
+        "chronicle.source_package._read_source_artifact_content",
+        unexpected_artifact_read,
+    )
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory="data/publisher/package",
+        manifest=manifest_name,
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+
+    with pytest.raises(ValueError):
+        artifact._artifact_content(2024)
 
 
 def test_source_package_path_builds_valid_soi_table_1_4_facts():
@@ -4291,3 +4974,59 @@ def test_build_facts_with_label_year_does_not_crash():
     # Record-set periods are literal 2024, so a label build still resolves them.
     assert facts
     assert all(fact.period.value == 2024 for fact in facts)
+
+
+@pytest.mark.parametrize(
+    "bad_directory",
+    ["/etc", "../outside", "data/../../outside", "data/./publisher"],
+)
+def test_resource_directory_must_stay_inside_the_resource_package(
+    tmp_path, monkeypatch, bad_directory
+):
+    """`resource_directory` is joined under the resource package root; an
+    absolute or parent-traversing value escapes it and must be refused
+    before any read."""
+    resource_root = tmp_path / "pkg"
+    resource_root.mkdir()
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory=bad_directory,
+        manifest="manifest.yaml",
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+
+    with pytest.raises(ValueError, match="resource_directory"):
+        artifact._artifact_content(2024)
+
+
+def test_resource_directory_refuses_a_symlinked_ancestor(tmp_path, monkeypatch):
+    resource_root = tmp_path / "pkg"
+    real = tmp_path / "elsewhere" / "package"
+    real.mkdir(parents=True)
+    (resource_root / "data").mkdir(parents=True)
+    (resource_root / "data" / "publisher").symlink_to(real.parent)
+    monkeypatch.setattr(
+        "chronicle.source_package.files", lambda _package: resource_root
+    )
+    artifact = SourceArtifactSpec(
+        source_name="publisher",
+        source_table="Table",
+        resource_package="test_resources",
+        resource_directory="data/publisher/package",
+        manifest="manifest.yaml",
+        vintage="2024",
+        extracted_at="2026-09-04",
+        extraction_method="test",
+        artifact_year=2024,
+    )
+
+    with pytest.raises(ValueError, match="symbolic link|resource_directory"):
+        artifact._artifact_content(2024)

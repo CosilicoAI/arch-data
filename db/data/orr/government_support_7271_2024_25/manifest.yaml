@@ -1,5 +1,6 @@
 source_id: orr
 package_id: orr-government-support-7271-2024-25
+kind: publisher_table
 dataset: orr_orr-government-support-7271-2024-25
 source_page: https://dataportal.orr.gov.uk/statistics/finance/rail-industry-finance-uk/
 table: Table 7271 government support to the rail industry by source and recipient

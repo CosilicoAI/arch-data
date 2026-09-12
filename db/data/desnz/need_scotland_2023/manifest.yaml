@@ -1,5 +1,6 @@
 source_id: desnz
 package_id: desnz-need-scotland-2023
+kind: publisher_table
 dataset: desnz_desnz-need-scotland-2023
 source_page: https://www.gov.uk/government/statistics/national-energy-efficiency-data-framework-need-report-summary-of-analysis-2025
 table: NEED consumption headline tables, Scotland, 2023

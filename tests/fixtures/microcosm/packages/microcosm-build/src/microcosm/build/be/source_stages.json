@@ -1,0 +1,27 @@
+{
+  "snapshot_of": {
+    "repository": "PolicyEngine/microcosm",
+    "commit": "fe2f92f8c79d36b897e6ae4d7e4b3c33fc7ebd28",
+    "note": "Synthetic consumer manifests in Microcosm's shapes, carrying the reviewed pins verbatim; decoy artifacts exercise selection."
+  },
+  "version": "fixture",
+  "country": "be",
+  "policy": "synthetic Microcosm BE source-stages manifest",
+  "stages": [
+    {
+      "stage": "silc_load",
+      "survey": "BE-SILC (Statbel national SILC)",
+      "source": "https://statbel.fgov.be/en/themes/households/poverty-and-living-conditions",
+      "grain": "person",
+      "artifacts": [
+        {
+          "kind": "restricted_microdata",
+          "format": "csv_or_spss",
+          "vintage": "2023",
+          "locator": "Statbel BE-SILC scientific-use files: D (household register), R (personal register), H (household data), P (personal data)",
+          "licence": "Statbel/Eurostat scientific-use; restricted"
+        }
+      ]
+    }
+  ]
+}

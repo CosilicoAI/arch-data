@@ -1,5 +1,6 @@
 source_id: dft
 package_id: dft-nts0621-local-bus-use-frequency-2025
+kind: publisher_table
 dataset: dft_dft-nts0621-local-bus-use-frequency-2025
 source_page: https://www.gov.uk/government/statistical-data-sets/nts06-age-gender-and-modal-breakdown
 table: 'NTS0621: Frequency of local bus use for those aged 60 years and over: England,

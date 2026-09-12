@@ -1,5 +1,6 @@
 source_id: desnz
 package_id: desnz-weekly-road-fuel-prices-september-2026
+kind: publisher_table
 dataset: desnz_desnz-weekly-road-fuel-prices-september-2026
 source_page: https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-weekly-statistics
 table: Weekly road fuel prices

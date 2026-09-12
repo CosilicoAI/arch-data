@@ -1,5 +1,6 @@
 source_id: ons
 package_id: ons-consumer-trends-current-price-2026
+kind: publisher_table
 dataset: ons_ons-consumer-trends-current-price-2026
 source_page: https://www.ons.gov.uk/economy/nationalaccounts/satelliteaccounts/datasets/consumertrendscurrentpricenotseasonallyadjusted
 table: Consumer Trends current price, not seasonally adjusted, sheets 04CN and 07CN

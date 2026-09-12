@@ -15,6 +15,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from chronicle import artifacts
 from chronicle.core import (
     ALLOWED_PROVENANCE_CLASSES,
     DEFAULT_ASSERTION,
@@ -468,6 +469,33 @@ def validate_consumer_fact_contract(
     )
 
 
+def _r2_uri_parts(uri: str) -> tuple[str, str]:
+    """Split an ``r2://bucket/key`` URI into its bucket and key."""
+    if uri[: len("r2://")].lower() != "r2://":
+        return "", ""
+    bucket, _, key = uri[len("r2://") :].partition("/")
+    return bucket, key
+
+
+# The marker a downstream target row carries in its source_record_id. It moves
+# with the rename window: producers write `ledger_derived` today and
+# `chronicle_derived` once they migrate (PolicyEngine/chronicle#143, mechanism
+# 3), so the boundary has to reject both spellings identically or the guard
+# stops firing the moment a producer renames.
+DERIVED_SOURCE_RECORD_SUFFIXES = frozenset({"ledger_derived", "chronicle_derived"})
+
+
+def _is_derived_source_record_id(source_record_id: str) -> bool:
+    """Whether a source_record_id marks a downstream derived target row."""
+    _, separator, suffix = source_record_id.rpartition(".")
+    return bool(separator) and suffix in DERIVED_SOURCE_RECORD_SUFFIXES
+
+
+def _points_at_derived(bucket: str, key: str) -> bool:
+    """Use the same derived routes publication is permitted to address."""
+    return artifacts.is_derived_r2_route(bucket, key)
+
+
 def _derived_source_provenance_issue(fact: AggregateFact) -> str | None:
     """Return a boundary error if a fact is a downstream target derivation."""
     source = fact.source
@@ -489,26 +517,29 @@ def _derived_source_provenance_issue(fact: AggregateFact) -> str | None:
             "itself. Target construction, aging, and reconciliation belong in "
             "Microcosm."
         )
-    if source_file.startswith("ledger-derived:"):
+    if source_file[: len("r2://")].lower() == "r2://":
+        source_file_bucket, source_file_key = _r2_uri_parts(source_file)
+    else:
+        source_file_bucket, bucket_separator, source_file_key = source_file.partition(
+            ":"
+        )
+        if not bucket_separator:
+            source_file_bucket = source_file_key = ""
+    if _points_at_derived(source_file_bucket, source_file_key):
         return (
             "Chronicle consumer facts must cite raw publisher artifacts. Derived "
             "target-construction artifacts belong in Microcosm."
         )
     if (
-        raw_r2_bucket.endswith("-derived")
-        or raw_r2_key.startswith("derived/")
-        or raw_r2_uri.startswith(
-            (
-                "r2://ledger-derived/",
-                "r2://ledger-raw/derived/",
-            )
-        )
+        _points_at_derived(raw_r2_bucket, raw_r2_key)
+        or _points_at_derived(*_r2_uri_parts(raw_r2_uri))
+        or _points_at_derived(*_r2_uri_parts(source.url or ""))
     ):
         return (
             "Chronicle consumer facts must point at raw source artifacts, not "
             "derived build artifacts."
         )
-    if source_record_id.endswith(".ledger_derived"):
+    if _is_derived_source_record_id(source_record_id):
         return (
             "Chronicle source_record_id must identify a publisher-backed row, not "
             "a downstream derived target row."

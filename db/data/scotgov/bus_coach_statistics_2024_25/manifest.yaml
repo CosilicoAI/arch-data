@@ -1,5 +1,6 @@
 source_id: scotgov
 package_id: scotgov-bus-coach-statistics-2024-25
+kind: publisher_table
 dataset: scotgov_scotgov-bus-coach-statistics-2024-25
 source_page: https://www.transport.gov.scot/publication/scottish-transport-statistics-2025/chapter-2-bus-and-coach-travel/
 table: Scottish Transport Statistics 2025 bus and coach reference tables

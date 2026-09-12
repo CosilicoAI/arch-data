@@ -14,21 +14,218 @@ lineage, provenance, constraints, and a passing `build-suite` report.
 The first gate for a new package is source-artifact acquisition. Agents should
 register raw source files with `uv run chronicle fetch-artifact` before authoring
 selectors. This writes the local artifact, captures checksum and retrieval
-metadata in `manifest.yaml`, and can upload the exact bytes to the private
-`ledger-raw` R2 bucket when Wrangler is authenticated. Agents can audit the local
+metadata in `manifest.yaml`, and can upload the exact bytes to the private raw
+R2 bucket (`ledger-raw` today; overridable with `CHRONICLE_R2_RAW_BUCKET`) when
+Wrangler is authenticated. A publisher directory that feeds several source
+packages keeps one manifest each, so pass `--manifest <filename>` to address
+the right one. Agents can audit the local
 artifact registry with `uv run chronicle inventory-artifacts --root db/data`.
 For already-downloaded manifest artifacts, agents should run
 `uv run chronicle publish-raw --root db/data` to upload checksum-verified bytes to
 R2 and write `storage.r2` metadata back into each manifest entry.
 
+Both commands treat a manifest entry as a claim about specific bytes: by its
+declared `sha256` from the moment it is registered, and by the content-addressed
+key of its recorded `storage.r2` block once it is published. Re-fetching or
+publishing bytes the entry does not identify is refused; when a publisher has re-published
+under the same URL and vintage, register the revision with
+`uv run chronicle fetch-artifact ... --record-revision`, which stores the new
+bytes under their own key and keeps the superseded object in
+`storage.previous_r2`. See
+[Publisher Revisions](storage-architecture.md#publisher-revisions).
+
 Builds do not require production raw bytes to be committed to Git. Source
 packages first read packaged fixture bytes, then
-`LEDGER_SOURCE_ARTIFACT_CACHE_DIR` (defaulting to
+`CHRONICLE_SOURCE_ARTIFACT_CACHE_DIR` (defaulting to
 `~/.cache/policyengine-chronicle/source-artifacts`). If a manifest artifact is
-missing locally, set `LEDGER_SOURCE_ARTIFACT_FETCH=1` to fetch it from the
+missing locally, set `CHRONICLE_SOURCE_ARTIFACT_FETCH=1` to fetch it from the
 manifest `source_url`, verify the declared SHA-256, and write it to that cache.
-The old `CHRONICLE_`-prefixed environment variables remain accepted only as
-migration fallbacks.
+The ledger-era spellings `LEDGER_SOURCE_ARTIFACT_CACHE_DIR` and
+`LEDGER_SOURCE_ARTIFACT_FETCH` are still honored during the rename window and
+emit a one-time deprecation warning naming the `CHRONICLE_` variable to set
+instead; see "Environment Variable Rename Window" in
+[`docs/storage-architecture.md`](storage-architecture.md#environment-variable-rename-window).
+
+## Manifest Kinds
+
+Every manifest declares `kind`: `publisher_table` (one file per vintage,
+parsed by a source package) or `microdata_release` (a registered release,
+never parsed). The manifests that predate this rule are frozen, byte for
+byte, in `chronicle/grandfathered_manifests.py` and read as publisher tables
+only while they still match the freeze; `fetch-artifact` writes `kind` onto
+any manifest it touches, so a frozen manifest leaves the freeze the first time
+it is modified. A kindless manifest outside that list is an error at every
+entry point — `fetch-artifact`, `publish-raw`, `inventory-artifacts`,
+`validate-package` and the source-package byte reader — and never a publisher
+table by default. A manifest that declares no file entry yet (a bare
+`files:` line or an empty mapping) has nothing to classify, and the command
+writing its first entry declares the kind. A manifest's kind is fixed once
+declared: `fetch-artifact --kind` must match it, and a conflicting kind is
+refused before anything is read.
+
+## Hash-Only Registrations
+
+Not every raw artifact a build starts from may be redistributed. Every
+manifest file entry carries an `access` class from a closed set — `public`,
+`licensed`, or `restricted` — and a `licence` naming the publisher's terms.
+`public` is inferred when a publisher-table entry omits `access`, and
+`fetch-artifact` writes the class explicitly onto every entry it touches.
+Both fields are required on a `kind: microdata_release` manifest, as is the
+attestation of who asserts the checksum: `hash_source` is one of
+`chronicle_fetch` (`attested_by: chronicle`, `verified_at` = fetch date),
+`consumer_attested` (`attested_by` = the consumer, `attestation_evidence`,
+`verified_at`) or `consumer_pin` (`attested_by` = the consumer, `pinned_from`
+= repository, path and commit, and no `verified_at`).
+
+Only `public` bytes enter a Chronicle store. A `licensed` or `restricted`
+artifact is registered *hash-only*: the manifest records the checksum, size,
+vintage, licence, access route, and attestation, and no bytes are fetched,
+written, or uploaded. Chronicle never fetched the bytes, so a hash-only
+checksum is always the consumer's. Agents should register one with:
+
+```bash
+uv run chronicle register-artifact \
+  --source-id dwp \
+  --package-id dwp-frs-2023-24 \
+  --year 2023 \
+  --out-dir db/data/dwp/frs_2023_24 \
+  --filename adult.tab \
+  --sha256 e09f9647d03585c81a528636028b2ed495f8f1fbcf64c5e7b4fe521b67367e06 \
+  --size-bytes 35323384 \
+  --vintage 2023_24 \
+  --licence "UK Data Service End User Licence" \
+  --access licensed \
+  --doi 10.5255/UKDA-SN-9367-2 \
+  --hash-source consumer_pin \
+  --attested-by PolicyEngine/microcosm \
+  --pinned-from-repository PolicyEngine/microcosm \
+  --pinned-from-path packages/microcosm-build/src/microcosm/build/uk/source_stages.json \
+  --pinned-from-commit 2fb2e2f8a99c37725bd6e7a15ff4c2595c912b77
+```
+
+Agents should never invent a checksum to satisfy the command: `--sha256` must
+be a lowercase 64-character digest taken from a reviewed pin, and a release
+whose checksum nobody has published is a blocker to record, not a value to
+guess. The command refuses `--access public`, refuses bytes sitting beside the
+manifest, refuses to write into a `publisher_table` manifest, and refuses to
+reclassify a filename the manifest already holds as `public` — an archived
+release's object must be removed, with its `storage` record, before the entry
+can become hash-only. It also refuses to write into a package directory whose
+public table entries carry a release sibling's identity
+(`bytes_identified_by_microdata_release`), whichever manifest holds the
+collision and whichever vintage, because the registration would join a
+directory `publish-raw` and `inventory-artifacts` already refuse.
+
+Filenames are bare names compared case-insensitively: `./adult.tab`,
+`ADULT.TAB` and `sub/../adult.tab` are the file `adult.tab`, and a manifest
+never holds one path under two access classes. `2023` and `'2023'` are one
+vintage key; a manifest that records both is refused rather than read through
+one of them. Every command validates the whole package directory with the codes
+`inventory-artifacts` reports before reading, writing, or uploading anything.
+
+The other commands enforce the same boundary from their side. `fetch-artifact`
+refuses a `licensed` or `restricted` access class before reading anything, and
+refuses to pull bytes over an entry already registered hash-only — including
+when the filename is inferred from the URL, which happens before the read.
+`publish-raw` refuses such an entry without reading or uploading its bytes;
+pass `--skip-hash-only` to publish a tree that deliberately mixes both kinds.
+`inventory-artifacts` treats a hash-only entry with no local file as valid —
+the absent bytes are the correct state — and reports an error if the bytes
+appear. The source-package byte reader refuses a hash-only entry before
+consulting the package tree, the content-addressed cache, or the publisher,
+whatever manifest kind it sits under; `validate-package` reports it as
+`hash_only_artifact_not_parseable`, and `build-suite` refuses before creating
+its output directory.
+
+A `public` microdata release is different: its bytes are redistributable, so
+they are archived — but only with artifact-bound evidence. Being downloadable
+is not a licence. The `licence` must be one of the allowlisted terms in
+`chronicle/licences.py` (`US-Government-Work`, `OGL-UK-3.0`, `CC0-1.0`,
+`CC-BY-4.0`), and the entry carries `licence_evidence` binding this file to
+that term: the issuer, the licence identifier, a scope statement, a durable
+evidence URL, and the reviewed SHA-256. The fetch therefore takes
+`--expected-sha256` and refuses, before writing or uploading, bytes that hash
+differently; `--record-revision` does not override that. Release bytes are
+staged in a transient directory outside the repository
+(`$CHRONICLE_MICRODATA_STAGING_DIR`, default
+`~/.cache/policyengine-chronicle/microdata-staging`) and uploaded from there;
+a file of that name beside the manifest is refused as tracked microdata bytes,
+and the test suite guards that no release package tracks anything but its
+manifest. Pass `--kind microdata_release` so the manifest declares what it is:
+
+```bash
+uv run chronicle fetch-artifact \
+  --url https://www2.census.gov/programs-surveys/acs/data/pums/2022/1-Year/csv_hus.zip \
+  --source-id census_acs \
+  --package-id census-acs-pums-2022-1yr \
+  --year 2022 \
+  --out-dir db/data/census/acs_pums_2022_1yr \
+  --publisher "U.S. Census Bureau" \
+  --vintage 2022 \
+  --access public \
+  --licence US-Government-Work \
+  --kind microdata_release \
+  --expected-sha256 <reviewed sha256 of csv_hus.zip> \
+  --licence-evidence-issuer "U.S. Census Bureau" \
+  --licence-evidence-scope "Public-use file of a federal agency; 17 U.S.C. §105" \
+  --licence-evidence-url <durable URL of the publisher's statement> \
+  --upload-r2
+```
+
+The entry records `hash_source: chronicle_fetch`, `attested_by: chronicle`
+and the fetch date. A public release without licence evidence is classed
+`licensed` and registered hash-only instead.
+
+Because several files can share one vintage, a `kind: microdata_release`
+manifest gives `files[year]` as a list of entries rather than a single
+mapping — the ACS household and person files above land side by side. A list
+under any other manifest kind is an error. A fetch replaces only the entry for
+its own filename, in place, so acquiring a second file never drops the first,
+and re-fetching different bytes for one of them is a publisher revision under
+the same guard as any other entry.
+
+No source package parses a microdata release. `validate-package` fails with
+`microdata_release_not_parseable` if a package spec points at one, and no
+microdata row, cell, or fact ever enters Chronicle. Registration is
+manifest-level identity; see `docs/adr-chronicle-raw-microdata-identity.md`.
+
+That identity is a property of the package directory, not of one manifest, so
+every command checks it across the directory's manifests. A `microdata_release`
+entry identifies its bytes by filename, by checksum, and by every R2 object it
+has recorded -- the current one and each archived under `storage.previous_r2`,
+because an immutable object keeps identifying the bytes it holds after the
+entry is renamed or revised. A publisher-table entry matching any of them is
+that release under a second record: `fetch-artifact` refuses it before reading
+the publisher, the source-package reader refuses it before any byte I/O, and
+`publish-raw` and `inventory-artifacts` report
+`bytes_identified_by_microdata_release` for the package and for the entry,
+before any upload or manifest rewrite. The directory sweep is not limited to
+the entry a command is about to touch: `fetch-artifact` and `register-artifact`
+run it over every manifest in the directory -- before the publisher is read and
+again under the package lock -- and refuse to rewrite a directory whose other
+vintage carries a release's identity, rather than carry that registration
+forward. `fetch-artifact`, `publish-raw` and
+`inventory-artifacts` read the table's archived objects the same way, so an
+alias survives a rename on either side; the source-package reader compares the
+table's current identity and separately refuses a public entry that declares no
+checksum at all beside a release. The reverse direction is refused too:
+registering a release for bytes a public table sibling already declares would
+create exactly that package. A hash-only registration colliding with a public
+release keeps its own `sha256_collision_across_manifests` and
+`archived_sha256_collision` codes instead.
+
+`scripts/register_microdata_releases.py` drives both halves from a read-only
+PolicyEngine/microcosm checkout: `emit` writes the hash-only manifests from
+Microcosm's reviewed pins as `consumer_pin` registrations (recording the
+consumer manifest's path and the last commit that changed it, or the commit
+given with `--microcosm-commit [PATH=]COMMIT`), and `plan` prints the
+`fetch-artifact` commands to run for public releases from a networked machine
+with every reviewed identity as an argument. Anything Microcosm does not pin
+prints as a `TODO` the command refuses to run with. The suite exercises the
+script against `tests/fixtures/microcosm`, a synthetic snapshot of the
+consumer manifests; re-deriving the catalogue means re-snapshotting that
+fixture and regenerating `tests/fixtures/microcosm/golden_plan.json` in the
+same change.
 
 For broad PE source migration, generate the agent queue from the manifest before
 assigning work:
@@ -687,16 +884,19 @@ uv run chronicle build-suite packages/irs_soi/table_1_1 \
   --require-axiom-validation
 ```
 
-The SQLite `ledger.db` is the source of hosted mirrors. To prepare tables for
+The SQLite `chronicle.db` is the source of hosted mirrors. To prepare tables for
 Supabase/Postgres bulk loading, export the DB artifact rather than inserting
 cells through the Supabase client:
 
 ```bash
-uv run chronicle export-db-tables --db /tmp/chronicle-suite/ledger.db --out /tmp/chronicle-mirror --replace
+uv run chronicle export-db-tables --db /tmp/chronicle-suite/chronicle.db --out /tmp/chronicle-mirror --replace
 ```
 
-Accepted build-suite outputs can be published to the private `ledger-derived` R2
-bucket after validation:
+Builds produced before the rename wrote `ledger.db`. That name is still read and
+published unchanged, so point `--db` at whichever file the build emitted.
+
+Accepted build-suite outputs can be published to the private derived R2 bucket
+after validation:
 
 ```bash
 uv run chronicle publish-derived \
@@ -707,11 +907,11 @@ uv run chronicle publish-derived \
   --build-artifacts-out /tmp/chronicle-build-artifacts.jsonl
 ```
 
-The SQL schema is checked in at
-`supabase/migrations/20260504_chronicle_bronze.sql`. Spreadsheet publications are
-stored as immutable artifact metadata and one parsed-cell row per workbook cell.
-Agents should not try to normalize irregular government worksheets into tidy
-sheet tables before selector specs interpret them.
+Before loading, create and apply a Supabase/Postgres migration that creates the
+mirror tables in the selected schema. Spreadsheet publications are stored as
+immutable artifact metadata and one parsed-cell row per workbook cell. Agents
+should not try to normalize irregular government worksheets into tidy sheet
+tables before selector specs interpret them.
 
 After the DB export and derived publish, agents can validate and load the
 hosted mirror:
@@ -727,8 +927,11 @@ uv run chronicle load-supabase-mirror \
 ```
 
 The live load requires `POLICYENGINE_SUPABASE_URL` and
-`POLICYENGINE_SUPABASE_SERVICE_KEY`, the Chronicle mirror migration applied, and the
-`chronicle` schema exposed by the Supabase Data API.
+`POLICYENGINE_SUPABASE_SERVICE_KEY`, the deployment migration applied, and the
+selected schema exposed by the Supabase Data API. With no schema environment
+override and no `--schema`, the selected schema is `ledger`; set
+`CHRONICLE_SCHEMA=chronicle` or pass `--schema chronicle` to load a migrated
+`chronicle` schema.
 
 ## Declarative Authoring Contract
 

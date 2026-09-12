@@ -1,5 +1,6 @@
 source_id: obr
 package_id: obr-fuel-duty-receipts-by-vehicle-april-2024
+kind: publisher_table
 dataset: obr_obr-fuel-duty-receipts-by-vehicle-april-2024
 source_page: https://obr.uk/efo/economic-and-fiscal-outlook-march-2024/
 table: 'Fuel duty supplementary release: receipts by vehicle type'

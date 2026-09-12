@@ -11,6 +11,7 @@ from typing import Any
 
 import pytest
 
+import chronicle.artifacts as artifacts
 import chronicle.consumer_contract as consumer_contract
 from chronicle.consumer_contract import (
     CONSUMER_FACT_SCHEMA_VERSION,
@@ -886,6 +887,41 @@ def test_export_consumer_facts_cli_rejects_contract_invalid_facts(tmp_path, caps
             },
             "irs_soi.ty2024.table.us.taxable_interest_amount.ledger_derived",
         ),
+        # The guard used to match two hardcoded URI prefixes, so a URI naming
+        # any derived bucket other than `ledger-derived` did not match. Once the
+        # buckets are renamed (PolicyEngine/chronicle#143, mechanism 3) that is
+        # every derived URI, so the guard has to match on shape.
+        (
+            {
+                "source_name": "irs_soi",
+                "source_file": "publisher.xlsx",
+                "raw_r2_bucket": None,
+                "raw_r2_key": None,
+                "raw_r2_uri": "r2://chronicle-derived/derived/source/fact.json",
+            },
+            "publisher.raw.fact",
+        ),
+        (
+            {
+                "source_name": "irs_soi",
+                "source_file": "chronicle-derived:taxable_interest.json",
+                "raw_r2_bucket": "ledger-raw",
+                "raw_r2_uri": "r2://ledger-raw/raw/source/publisher.xlsx",
+            },
+            "publisher.raw.fact",
+        ),
+        # The derived-row marker renames with everything else, so the guard has
+        # to reject the chronicle spelling the same way it rejects the ledger
+        # one (PolicyEngine/chronicle#143, mechanism 3).
+        (
+            {
+                "source_name": "irs_soi",
+                "source_file": "publisher.xlsx",
+                "raw_r2_bucket": "ledger-raw",
+                "raw_r2_uri": "r2://ledger-raw/raw/source/publisher.xlsx",
+            },
+            "irs_soi.ty2024.table.us.taxable_interest_amount.chronicle_derived",
+        ),
     ],
 )
 def test_consumer_contract_rejects_downstream_derived_target_facts(
@@ -903,6 +939,157 @@ def test_consumer_contract_rejects_downstream_derived_target_facts(
 
     assert not report.valid
     assert "derived_fact_provenance" in {error.code for error in report.errors}
+
+
+@pytest.mark.parametrize(
+    "bucket_env",
+    [
+        "CHRONICLE_R2_DERIVED_BUCKET",
+        "POLICYENGINE_LEDGER_R2_DERIVED_BUCKET",
+        "LEDGER_R2_DERIVED_BUCKET",
+    ],
+)
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("raw_r2_bucket", "chronicle-builds"),
+        ("raw_r2_uri", "r2://chronicle-builds/builds/source/fact.json"),
+        ("source_file", "chronicle-builds:builds/source/fact.json"),
+        ("source_file", "r2://chronicle-builds/builds/source/fact.json"),
+        ("url", "r2://chronicle-builds/builds/source/fact.json"),
+    ],
+)
+def test_consumer_contract_rejects_configured_derived_bucket(
+    monkeypatch, tmp_path, bucket_env, field, value
+):
+    monkeypatch.setenv(bucket_env, "chronicle-builds")
+    fact = _soi_agi_fact()
+    derived = replace(fact, source=replace(fact.source, **{field: value}))
+
+    report = validate_consumer_fact_contract([derived])
+
+    assert "derived_fact_provenance" in {error.code for error in report.errors}
+    output = tmp_path / "new-directory" / "consumer_facts.jsonl"
+    with pytest.raises(ValueError, match="consumer-contract"):
+        write_consumer_facts_jsonl([derived], output)
+    assert not output.parent.exists()
+
+
+@pytest.mark.parametrize(
+    "prefix_env",
+    [
+        None,
+        "CHRONICLE_R2_DERIVED_PREFIX",
+        "POLICYENGINE_LEDGER_R2_DERIVED_PREFIX",
+        "LEDGER_R2_DERIVED_PREFIX",
+    ],
+)
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("raw_r2_key", "builds/source/fact.json"),
+        ("raw_r2_uri", "r2://publisher-archive/builds/source/fact.json"),
+        ("source_file", "publisher-archive:builds/source/fact.json"),
+        ("source_file", "r2://publisher-archive/builds/source/fact.json"),
+        ("url", "r2://publisher-archive/builds/source/fact.json"),
+    ],
+)
+def test_consumer_contract_rejects_configured_derived_prefix(
+    monkeypatch, prefix_env, field, value
+):
+    if prefix_env is None:
+        monkeypatch.setattr(artifacts, "DEFAULT_R2_DERIVED_PREFIX", "builds")
+    else:
+        monkeypatch.setenv(prefix_env, "builds")
+    fact = _soi_agi_fact()
+    derived = replace(fact, source=replace(fact.source, **{field: value}))
+
+    report = validate_consumer_fact_contract([derived])
+
+    assert "derived_fact_provenance" in {error.code for error in report.errors}
+
+
+def test_consumer_contract_derived_routes_match_complete_names(monkeypatch):
+    monkeypatch.setenv("CHRONICLE_R2_DERIVED_BUCKET", "chronicle-builds")
+    monkeypatch.setattr(artifacts, "DEFAULT_R2_DERIVED_PREFIX", "builds")
+    fact = _soi_agi_fact()
+    publisher = replace(
+        fact,
+        source=replace(
+            fact.source,
+            source_file="chronicle-builds-raw:buildstats/source/publisher.csv",
+            raw_r2_bucket="chronicle-builds-raw",
+            raw_r2_key="buildstats/source/publisher.csv",
+            raw_r2_uri="r2://chronicle-builds-raw/buildstats/source/publisher.csv",
+        ),
+    )
+
+    assert validate_consumer_fact_contract([publisher]).valid
+
+
+@pytest.mark.parametrize("field", ["raw_r2_uri", "source_file", "url"])
+@pytest.mark.parametrize("scheme", ["R2", "r2"])
+def test_consumer_contract_rejects_derived_uri_scheme_case(
+    monkeypatch, tmp_path, field, scheme
+):
+    monkeypatch.setenv("CHRONICLE_R2_DERIVED_BUCKET", "chronicle-builds")
+    monkeypatch.setenv("CHRONICLE_R2_DERIVED_PREFIX", "builds")
+    fact = _soi_agi_fact()
+    derived = replace(
+        fact,
+        source=replace(
+            fact.source,
+            **{field: f"{scheme}://chronicle-builds/builds/source/fact.json"},
+        ),
+    )
+
+    report = validate_consumer_fact_contract([derived])
+
+    assert "derived_fact_provenance" in {error.code for error in report.errors}
+    output = tmp_path / "new-directory" / "consumer_facts.jsonl"
+    with pytest.raises(ValueError, match="consumer-contract"):
+        write_consumer_facts_jsonl([derived], output)
+    assert not output.parent.exists()
+
+
+def test_derived_record_marker_is_rejected_in_either_spelling():
+    """Both rename-window spellings produce the identical boundary error."""
+    fact = _soi_agi_fact()
+    base = "irs_soi.ty2024.table.us.taxable_interest_amount"
+
+    reports = {
+        suffix: validate_consumer_fact_contract(
+            [replace(fact, source_record_id=f"{base}.{suffix}")]
+        )
+        for suffix in ("ledger_derived", "chronicle_derived")
+    }
+
+    ledger_errors = [
+        (error.code, error.message) for error in reports["ledger_derived"].errors
+    ]
+    chronicle_errors = [
+        (error.code, error.message) for error in reports["chronicle_derived"].errors
+    ]
+    assert ledger_errors == chronicle_errors
+    assert "derived_fact_provenance" in {code for code, _ in ledger_errors}
+
+
+@pytest.mark.parametrize(
+    "source_record_id",
+    [
+        # A publisher-backed row that merely contains the marker as a word, or
+        # carries it without the separating dot, is not a derived target row.
+        "irs_soi.ty2024.table.us.chronicle_derived_totals",
+        "irs_soi.ty2024.table.us.ledger_derived_totals",
+        "chronicle_derived",
+    ],
+)
+def test_derived_record_marker_matches_the_whole_final_segment(source_record_id):
+    fact = replace(_soi_agi_fact(), source_record_id=source_record_id)
+
+    report = validate_consumer_fact_contract([fact])
+
+    assert report.valid
 
 
 def test_export_consumer_facts_cli_preserves_decimal_values(tmp_path, capsys):
@@ -940,3 +1127,32 @@ def test_contract_reports_malformed_lineage_keys_instead_of_raising(tmp_path):
         ValueError, match="Cannot export invalid Chronicle consumer-contract facts"
     ):
         write_consumer_facts_jsonl([fact], tmp_path / "facts.jsonl")
+
+
+@pytest.mark.parametrize(
+    ("bucket", "key"),
+    [
+        ("publisher-derived", "exports/facts.jsonl"),
+        ("PUBLISHER-Derived", "exports/facts.jsonl"),
+        ("some-archive", "derived/exports/facts.jsonl"),
+    ],
+)
+def test_consumer_contract_keeps_rejecting_legacy_derived_routes(bucket, key):
+    """Configured routes extend the derived boundary; they never narrow it.
+    A bucket ending in ``-derived`` or a ``derived/`` key was rejected before
+    routes became configurable and must still be, under default config."""
+    fact = _soi_agi_fact()
+    derived = replace(
+        fact,
+        source=replace(
+            fact.source,
+            source_file=f"{bucket}:{key}",
+            raw_r2_bucket=bucket,
+            raw_r2_key=key,
+            raw_r2_uri=f"r2://{bucket}/{key}",
+        ),
+    )
+
+    report = validate_consumer_fact_contract([derived])
+
+    assert "derived_fact_provenance" in {error.code for error in report.errors}

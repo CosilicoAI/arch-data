@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 import hashlib
-import os
 from dataclasses import dataclass, replace
 from importlib.resources import files
 from io import BytesIO
@@ -16,6 +16,13 @@ from zipfile import ZipFile
 import httpx
 import yaml
 
+from chronicle.artifacts import (
+    SourceArtifactManifestError,
+    _assert_no_microdata_identity,
+    _assert_package_file_owner_identities_agree,
+    _effective_recorded_digest,
+    _validated_recorded_r2,
+)
 from chronicle.core import (
     ALLOWED_AGGREGATIONS,
     ALLOWED_ASSERTIONS,
@@ -32,7 +39,29 @@ from chronicle.core import (
     AggregateFact,
     build_label,
 )
+from chronicle.env import env_flag, env_value
 from chronicle.epoch import SCHEMA_IDS, schema_id
+from chronicle.registration import (
+    AmbiguousVintageKeyError,
+    ManifestAccessError,
+    ManifestKindError,
+    MicrodataReleaseNotParseableError,
+    entry_access,
+    hash_only_registrations,
+    is_bare_filename,
+    is_hash_only,
+    is_manifest_filename,
+    is_microdata_release,
+    iter_file_specs,
+    iter_manifest_entries,
+    load_manifest_document,
+    manifest_kind,
+    matching_directory_entry,
+    resolve_vintage_key,
+    validate_file_entry,
+    validate_manifest_files,
+    validate_package_directory,
+)
 from chronicle.sources.cells import (
     SourceArtifactMetadata,
     SourceCell,
@@ -461,8 +490,8 @@ SOURCE_PACKAGE_ALIASES = {
         "usda_snap/fy2025_monthly_state_caseloads"
     ),
 }
-SOURCE_ARTIFACT_CACHE_ENV = "LEDGER_SOURCE_ARTIFACT_CACHE_DIR"
-SOURCE_ARTIFACT_FETCH_ENV = "LEDGER_SOURCE_ARTIFACT_FETCH"
+SOURCE_ARTIFACT_CACHE_ENV = "CHRONICLE_SOURCE_ARTIFACT_CACHE_DIR"
+SOURCE_ARTIFACT_FETCH_ENV = "CHRONICLE_SOURCE_ARTIFACT_FETCH"
 DEFAULT_SOURCE_ARTIFACT_CACHE_DIR = (
     Path.home() / ".cache" / "policyengine-chronicle" / "source-artifacts"
 )
@@ -937,31 +966,398 @@ class SourceArtifactSpec:
             raw_r2_uri=raw_r2.get("uri"),
         )
 
+    def _resource_root(self) -> Any:
+        """Resolve the resource directory, refusing an escape from the package.
+
+        ``resource_directory`` is joined under ``files(resource_package)``; an
+        absolute value would discard that root entirely, a ``..`` or ``.``
+        component would step outside it, and a symlinked ancestor would follow
+        the link out of the package tree. Every byte and manifest read goes
+        through here, so the containment check runs before any I/O.
+        """
+        raw = self.resource_directory
+        parts = str(raw).split("/")
+        if (
+            not isinstance(raw, str)
+            or not raw
+            or raw.startswith("/")
+            or "\\" in raw
+            or any(
+                not part or part in (".", "..") or part != part.strip()
+                for part in parts
+            )
+        ):
+            raise ValueError(
+                f"resource_directory must be a relative path of plain segments "
+                f"inside the resource package, not {raw!r}."
+            )
+        root = files(self.resource_package)
+        directory = root.joinpath(raw)
+        if isinstance(root, Path):
+            current = root
+            for part in parts:
+                current = current / part
+                if current.is_symlink():
+                    raise ValueError(
+                        f"resource_directory component {current} is a symbolic "
+                        "link. Chronicle will not read source-package data "
+                        "through it."
+                    )
+            resolved_root = root.resolve()
+            if not Path(directory).resolve().is_relative_to(resolved_root):
+                raise ValueError(
+                    f"resource_directory {raw!r} escapes the resource package "
+                    f"root {resolved_root}."
+                )
+        return directory
+
+    def _resource_entry(
+        self,
+        value: Any,
+        *,
+        what: str,
+        require_manifest_name: bool = False,
+        forbid_manifest_name: bool = False,
+    ) -> Any:
+        """Resolve one safe file entry under the package resource directory."""
+        if not is_bare_filename(value):
+            raise ValueError(
+                f"{what} must be a bare filename inside "
+                f"{self.resource_directory}, not {value!r}."
+            )
+        name = str(value)
+        if require_manifest_name and not is_manifest_filename(name):
+            raise ValueError(
+                f"{what} must be named manifest.yaml or "
+                f"manifest_<package>.yaml, not {name!r}."
+            )
+        if forbid_manifest_name and is_manifest_filename(name):
+            raise ValueError(
+                f"{what} {name!r} is a manifest name and cannot be read as "
+                "source artifact bytes."
+            )
+
+        directory = self._resource_root()
+        existing = matching_directory_entry(directory, name)
+        if existing is None:
+            return directory.joinpath(name)
+        is_symlink = getattr(existing, "is_symlink", None)
+        if callable(is_symlink) and is_symlink():
+            raise ValueError(
+                f"{what} {existing} is a symbolic link. Chronicle will not "
+                "read source-package data through it."
+            )
+        if existing.name != name:
+            raise ValueError(
+                f"{what} {existing} has the same normalized filename as "
+                f"{name!r}. Keep exactly one spelling in the package."
+            )
+        if not existing.is_file():
+            raise ValueError(
+                f"{what} {existing} is not a regular file. Chronicle will "
+                "not open non-regular source-package resources."
+            )
+        return existing
+
+    def manifest_resource(self) -> Any:
+        """Return the validated manifest file this package spec points at."""
+        return self._resource_entry(
+            self.manifest,
+            what="Source artifact manifest",
+            require_manifest_name=True,
+        )
+
+    def manifest_payload(self) -> dict[str, Any]:
+        """Load the artifact manifest strictly as a YAML mapping."""
+        with self.manifest_resource().open("r", encoding="utf-8") as file:
+            text = file.read()
+        try:
+            payload = load_manifest_document(text)
+        except yaml.YAMLError as exc:
+            raise ValueError(
+                f"{self.resource_directory}/{self.manifest} is not valid YAML: {exc}"
+            ) from exc
+        if payload is None:
+            return {}
+        if not isinstance(payload, dict):
+            raise ValueError(
+                f"{self.resource_directory}/{self.manifest} must be a YAML "
+                f"mapping; it parses as a {type(payload).__name__}."
+            )
+        return payload
+
+    def _assert_manifest_kind_is_parseable(self, manifest: dict[str, Any]) -> None:
+        """Refuse a release manifest using an already-loaded payload."""
+        if is_microdata_release(manifest, manifest_path=self.manifest_resource()):
+            raise MicrodataReleaseNotParseableError(
+                f"{self.resource_directory}/{self.manifest} registers a "
+                "microdata release. Registration is identity only: no source "
+                "package parses a microdata release and no microdata rows, "
+                "cells, or facts enter Chronicle."
+            )
+
+    def assert_parseable_manifest(self) -> None:
+        """Refuse to parse a manifest that registers a microdata release.
+
+        Microdata registration is manifest-level identity: no source package
+        parses a release, and no microdata row, cell, or fact enters Chronicle
+        (``docs/adr-chronicle-raw-microdata-identity.md``). A manifest that
+        declares no kind and is not frozen kindless is refused too: the reader
+        never assumes a publisher table.
+        """
+        self._assert_manifest_kind_is_parseable(self.manifest_payload())
+
+    def _assert_complete_manifest_valid(
+        self, manifest: dict[str, Any], *, manifest_name: str | None = None
+    ) -> None:
+        """Validate every current-manifest entry before selecting one to read."""
+        manifest_label = manifest_name or self.manifest
+        directory = self._resource_root()
+        manifest_path = directory.joinpath(manifest_label)
+        kind = manifest_kind(manifest, manifest_path=manifest_path)
+        codes: list[str] = list(validate_manifest_files(manifest))
+        files_by_year = manifest.get("files")
+        if isinstance(files_by_year, dict):
+            for key, value in files_by_year.items():
+                for entry in iter_file_specs(value, kind=kind):
+                    entry_name = (
+                        entry.get("filename") if isinstance(entry, dict) else None
+                    )
+                    exists = matching_directory_entry(directory, entry_name) is not None
+                    codes.extend(
+                        f"{key!r}/{entry_name}: {code}"
+                        for code in validate_file_entry(
+                            entry,
+                            kind=kind,
+                            manifest=manifest,
+                            local_file_exists=exists,
+                        )
+                    )
+        if codes:
+            raise ManifestAccessError(
+                f"{self.resource_directory}/{manifest_label} is not a valid "
+                f"{kind} manifest: {'; '.join(codes)}. No source artifact "
+                "bytes will be read until the complete manifest is valid."
+            )
+
+    def assert_parseable(self, year: int) -> dict[str, Any]:
+        """Return the entry a parse would read, refusing any it must not.
+
+        Two carve-outs, decided from the manifest alone before any byte is
+        read: the manifest-level microdata-release kind, and the selected
+        entry's own access class -- a licensed or restricted entry is identity
+        only whatever manifest it sits in.
+        """
+        _manifest, spec = self._parseable_entry(year)
+        return spec
+
+    def _parseable_entry(self, year: int) -> tuple[dict[str, Any], dict[str, Any]]:
+        """Return one validated manifest snapshot and its selected entry."""
+        manifest = self.manifest_payload()
+        self._assert_manifest_kind_is_parseable(manifest)
+        spec = _year_mapping(manifest["files"], self.artifact_year or year)
+        _assert_entry_bytes_readable(spec)
+        if isinstance(spec, dict):
+            self._resource_entry(
+                spec.get("filename"),
+                what="Source artifact filename",
+                forbid_manifest_name=True,
+            )
+        self._assert_complete_manifest_valid(manifest)
+        self._assert_package_identities_parseable(spec, manifest)
+        return manifest, spec
+
+    def _assert_package_identities_parseable(
+        self,
+        spec: Any,
+        manifest: dict[str, Any],
+        *,
+        sha256: str | None = None,
+    ) -> None:
+        """Refuse contradictory owners and identities that cannot be parsed.
+
+        The boundary is the file in the package directory, not the manifest
+        that names it: a name or a digest registered ``licensed`` or
+        ``restricted`` in a sibling manifest is identity only, whichever
+        manifest this package reads through. Public microdata is also identity
+        only for parsers, including its current and archived object aliases.
+        An unreadable sibling is a refusal because its kind cannot be decided.
+        """
+        if not isinstance(spec, dict):
+            return
+        directory = self._resource_root()
+        manifests: dict[str, dict[str, Any]] = {self.manifest: manifest}
+        for item in directory.iterdir():
+            if item.name == self.manifest or not is_manifest_filename(item.name):
+                continue
+            item = self._resource_entry(
+                item.name,
+                what="Sibling source artifact manifest",
+                require_manifest_name=True,
+            )
+            try:
+                with item.open("r", encoding="utf-8") as file:
+                    payload = load_manifest_document(file.read())
+            except (OSError, yaml.YAMLError) as exc:
+                raise ManifestAccessError(
+                    f"{self.resource_directory}/{item.name} cannot be read "
+                    f"({exc}), so whether it registers "
+                    f"{spec.get('filename')!r} hash-only cannot be decided; "
+                    "fix the manifest before parsing beside it."
+                ) from exc
+            if payload is None:
+                payload = {}
+            if not isinstance(payload, dict):
+                raise ManifestAccessError(
+                    f"{self.resource_directory}/{item.name} is not a YAML "
+                    "mapping, so whether it registers "
+                    f"{spec.get('filename')!r} hash-only cannot be decided."
+                )
+            self._assert_complete_manifest_valid(payload, manifest_name=item.name)
+            manifests[item.name] = payload
+        for name, key, entry in hash_only_registrations(
+            manifests,
+            filename=spec.get("filename"),
+            sha256=sha256 or spec.get("sha256"),
+        ):
+            raise ManifestAccessError(
+                f"{self.resource_directory}/{name} registers "
+                f"{entry.get('filename')!r} for {key!r} as "
+                f"access={entry.get('access')!r}: the same file, or the same "
+                f"bytes (sha256={sha256 or spec.get('sha256')!s}), as "
+                f"{spec.get('filename')!r}. A licensed or restricted "
+                "artifact is identity only, so no source package reads, caches, "
+                "fetches, or parses it through another manifest "
+                "(docs/adr-chronicle-raw-microdata-identity.md)."
+            )
+        declared_sha256 = spec.get("sha256")
+        if sha256 is None and not (
+            isinstance(declared_sha256, str) and declared_sha256.strip()
+        ):
+            for name, payload in manifests.items():
+                for key, _index, entry in iter_manifest_entries(payload):
+                    if not isinstance(entry, dict) or not is_hash_only(
+                        entry_access(entry)
+                    ):
+                        continue
+                    raise ManifestAccessError(
+                        f"{self.resource_directory}/{self.manifest} public entry "
+                        f"{spec.get('filename')!r} omits sha256 while "
+                        f"{self.resource_directory}/{name} registers "
+                        f"{entry.get('filename')!r} for {key!r} hash-only with "
+                        f"sha256={entry.get('sha256')!s}. The public entry must "
+                        "declare its digest before any source bytes may be read, "
+                        "fetched, or cached beside a gated registration."
+                    )
+        _assert_no_microdata_identity(
+            manifests,
+            package_dir=directory,
+            filename=spec.get("filename"),
+            digests=(
+                sha256,
+                spec.get("sha256"),
+                _effective_recorded_digest(self.manifest, self.artifact_year, spec),
+            ),
+            require_digest=True,
+        )
+        collision_errors = validate_package_directory(
+            manifests, entry_digest=_effective_recorded_digest
+        )
+        if collision_errors:
+            raise ManifestAccessError(
+                f"{self.resource_directory} is not a valid package directory: "
+                f"{'; '.join(collision_errors)}. No source artifact bytes will "
+                "be read until every manifest agrees on shared filenames and "
+                "digests."
+            )
+        try:
+            _assert_package_file_owner_identities_agree(
+                manifests,
+                observed_sha256=(
+                    {str(spec["filename"]): sha256} if sha256 is not None else None
+                ),
+                check_local_files=False,
+            )
+        except SourceArtifactManifestError as exc:
+            raise ManifestAccessError(str(exc)) from exc
+
     def _artifact_content(
         self,
         year: int,
     ) -> tuple[bytes, str, str, dict[str, str]]:
-        manifest_path = files(self.resource_package).joinpath(
-            self.resource_directory,
-            self.manifest,
+        manifest, spec = self._parseable_entry(year)
+        filename = spec.get("filename")
+        artifact_path = self._resource_entry(
+            filename,
+            what="Source artifact filename",
+            forbid_manifest_name=True,
         )
-        with manifest_path.open("r", encoding="utf-8") as file:
-            manifest = yaml.safe_load(file)
-        spec = _year_mapping(manifest["files"], self.artifact_year or year)
-        artifact_path = files(self.resource_package).joinpath(
-            self.resource_directory,
-            spec["filename"],
-        )
-        content = _read_source_artifact_content(artifact_path, spec)
+        manifest_path = Path(self.resource_directory) / self.manifest
+        try:
+            recorded_r2 = _validated_recorded_r2(
+                spec,
+                manifest_path=manifest_path,
+                year=self.artifact_year or year,
+                source_id=str(manifest.get("source_id") or ""),
+                package_id=str(manifest.get("package_id") or ""),
+            )
+        except SourceArtifactManifestError as exc:
+            raise ManifestAccessError(str(exc)) from exc
         expected_sha = spec.get("sha256")
+        if recorded_r2 is not None and (
+            recorded_r2.filename != filename
+            or (expected_sha is not None and recorded_r2.sha256 != expected_sha)
+        ):
+            raise ManifestAccessError(
+                f"{manifest_path} entry {self.artifact_year or year!r} "
+                "storage.r2 identifies "
+                f"sha256={recorded_r2.sha256}, filename={recorded_r2.filename!r}; "
+                f"the entry identifies sha256={expected_sha!r}, "
+                f"filename={spec['filename']!r}. No source bytes will be read "
+                "through a locator for another artifact."
+            )
+        if recorded_r2 is not None:
+            expected_sha = recorded_r2.sha256
+            # The immutable object supplies the checksum when the manifest
+            # omits it, so a publisher mismatch is refused before cache writes.
+            spec = {**spec, "sha256": expected_sha}
+
+        def validate_content_owner_identities(content: bytes) -> None:
+            self._assert_package_identities_parseable(
+                spec,
+                manifest,
+                sha256=hashlib.sha256(content).hexdigest(),
+            )
+
+        content = _read_source_artifact_content(
+            artifact_path,
+            spec,
+            validate_content=validate_content_owner_identities,
+        )
+        actual_sha = hashlib.sha256(content).hexdigest()
         if expected_sha:
             _validate_source_artifact_sha(
                 content,
                 expected_sha=str(expected_sha),
-                filename=str(spec["filename"]),
+                filename=str(filename),
             )
-        storage = spec.get("storage") if isinstance(spec, dict) else None
-        raw_r2 = storage.get("r2") if isinstance(storage, dict) else {}
+        if recorded_r2 is not None and recorded_r2.sha256 != actual_sha:
+            raise ManifestAccessError(
+                f"{manifest_path} entry {self.artifact_year or year!r} "
+                f"storage.r2 identifies sha256={recorded_r2.sha256}, but "
+                f"{spec['filename']!r} contains sha256={actual_sha}. Refusing "
+                "to emit immutable source provenance for different bytes."
+            )
+        raw_r2 = (
+            {
+                "provider": recorded_r2.provider,
+                "bucket": recorded_r2.bucket,
+                "key": recorded_r2.key,
+                "uri": recorded_r2.uri,
+            }
+            if recorded_r2 is not None
+            else {}
+        )
         return content, spec["filename"], spec["source_url"], raw_r2 or {}
 
     def _sheet_name(self, filename: str, *, year: int) -> str:
@@ -1298,6 +1694,58 @@ def validate_source_package(
             counts=counts,
             errors=tuple(errors),
         )
+
+    try:
+        package.artifact.assert_parseable_manifest()
+    except (MicrodataReleaseNotParseableError, ManifestKindError) as exc:
+        errors.append(
+            SourcePackageIssue(
+                code=(
+                    "microdata_release_not_parseable"
+                    if isinstance(exc, MicrodataReleaseNotParseableError)
+                    else "manifest_kind_missing"
+                ),
+                message=str(exc),
+            )
+        )
+        return SourcePackageValidationReport(
+            package_id=package.package_id,
+            package_path=str(package.package_path),
+            year=year,
+            counts=counts,
+            errors=tuple(errors),
+            warnings=tuple(warnings),
+        )
+    except (FileNotFoundError, OSError, ValueError) as exc:
+        errors.append(
+            SourcePackageIssue(
+                code="source_artifact_manifest_unreadable",
+                message=str(exc),
+            )
+        )
+    else:
+        try:
+            package.artifact.assert_parseable(year)
+        except ManifestAccessError as exc:
+            # Decided from the manifest alone: no package tree, cache, or
+            # publisher is consulted for an entry a parser must never read.
+            errors.append(
+                SourcePackageIssue(
+                    code="hash_only_artifact_not_parseable",
+                    message=str(exc),
+                )
+            )
+            return SourcePackageValidationReport(
+                package_id=package.package_id,
+                package_path=str(package.package_path),
+                year=year,
+                counts=counts,
+                errors=tuple(errors),
+                warnings=tuple(warnings),
+            )
+        except (FileNotFoundError, KeyError, OSError, ValueError):
+            # Reported below by the artifact read itself.
+            pass
 
     try:
         package.artifact._artifact_content(year)
@@ -2309,28 +2757,91 @@ def _required(payload: dict[str, Any], key: str, context: str) -> Any:
 
 
 def _year_mapping(files_by_year: dict[Any, Any], year: int) -> dict[str, str]:
-    if year in files_by_year:
-        return files_by_year[year]
-    if str(year) in files_by_year:
-        return files_by_year[str(year)]
-    raise ValueError(f"No source artifact for year {year}")
+    """Return the file spec for ``year``, whichever key spelling records it.
+
+    ``2023`` and ``'2023'`` are one vintage; a manifest that records both is
+    refused rather than silently read through the integer key, which would
+    hide whichever entry -- often the one carrying the R2 history -- a writer
+    left under the other spelling.
+    """
+    try:
+        key = resolve_vintage_key(files_by_year, year)
+    except AmbiguousVintageKeyError as exc:
+        raise ValueError(f"Source artifact for year {year}: {exc}") from exc
+    if key is None:
+        raise ValueError(f"No source artifact for year {year}")
+    return _single_year_spec(files_by_year[key], year)
+
+
+def _assert_entry_bytes_readable(spec: Any) -> None:
+    """Refuse to read a hash-only entry's bytes from any store.
+
+    This is the lowest byte-reader boundary: it runs before the package tree,
+    the content-addressed cache, or the publisher is consulted, so a licensed
+    or restricted entry is never read, cached, fetched, or parsed -- whatever
+    manifest kind it sits under. An access class Chronicle cannot parse is
+    refused too, never read as public.
+    """
+    if not isinstance(spec, dict):
+        return
+    access = entry_access(spec)
+    if is_hash_only(access):
+        raise ManifestAccessError(
+            f"Source artifact {spec.get('filename')!r} is registered as "
+            f"access={access!r}. Its bytes must not enter a Chronicle store or "
+            "a parser: a licensed or restricted artifact is identity only, so "
+            "no source package reads, caches, fetches, or parses it "
+            "(docs/adr-chronicle-raw-microdata-identity.md)."
+        )
+
+
+def _single_year_spec(spec: Any, year: int) -> dict[str, str]:
+    """Return one file spec, refusing the multi-file microdata-release shape.
+
+    Only a ``kind: microdata_release`` manifest may list several files under one
+    vintage, and no source package parses one of those, so a list here is a
+    malformed publisher-table manifest rather than something to index into.
+    """
+    if isinstance(spec, list):
+        raise ValueError(
+            f"Source artifact for year {year} is a list of {len(spec)} entries. "
+            "Only a kind: microdata_release manifest may list several files "
+            "under one vintage, and no source package parses one."
+        )
+    return spec
 
 
 def _read_source_artifact_content(
     artifact_path: Any,
     spec: dict[str, Any],
+    *,
+    validate_content: Callable[[bytes], None] | None = None,
 ) -> bytes:
-    """Read a source artifact from package data, cache, or explicit fetch."""
+    """Read a source artifact from package data, cache, or explicit fetch.
+
+    Refuses a hash-only entry before touching any of the three: none of them
+    may hold its bytes, and the fetch branch would write them into the cache.
+    The optional package-owner check runs on every content path before a
+    return or cache write.
+    """
+    _assert_entry_bytes_readable(spec)
     try:
-        return artifact_path.read_bytes()
+        content = artifact_path.read_bytes()
     except FileNotFoundError:
         pass
+    else:
+        if validate_content is not None:
+            validate_content(content)
+        return content
 
     cache_path = _source_artifact_cache_path(spec)
     if cache_path.exists():
-        return cache_path.read_bytes()
+        content = cache_path.read_bytes()
+        if validate_content is not None:
+            validate_content(content)
+        return content
 
-    if not _truthy_env(SOURCE_ARTIFACT_FETCH_ENV):
+    if not env_flag(SOURCE_ARTIFACT_FETCH_ENV):
         raise FileNotFoundError(
             f"Source artifact {spec['filename']} is not packaged and was not "
             f"found in {cache_path}. Set {SOURCE_ARTIFACT_FETCH_ENV}=1 to fetch "
@@ -2345,6 +2856,8 @@ def _read_source_artifact_content(
             expected_sha=str(expected_sha),
             filename=str(spec["filename"]),
         )
+    if validate_content is not None:
+        validate_content(content)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     cache_path.write_bytes(content)
     return content
@@ -2352,7 +2865,7 @@ def _read_source_artifact_content(
 
 def _source_artifact_cache_path(spec: dict[str, Any]) -> Path:
     cache_root = Path(
-        _env_value(
+        env_value(
             SOURCE_ARTIFACT_CACHE_ENV,
             default=DEFAULT_SOURCE_ARTIFACT_CACHE_DIR,
         )
@@ -2387,21 +2900,6 @@ def _validate_source_artifact_sha(
             f"Source artifact checksum mismatch for {filename}: "
             f"expected {expected_sha}, got {actual_sha}"
         )
-
-
-def _env_value(*names: str, default: str | Path) -> str | Path:
-    for name in names:
-        value = os.environ.get(name)
-        if value:
-            return value
-    return default
-
-
-def _truthy_env(*names: str) -> bool:
-    return any(
-        os.environ.get(name, "").strip().lower() in {"1", "true", "yes", "on"}
-        for name in names
-    )
 
 
 def _single_archive_member(archive: ZipFile, *, suffixes: tuple[str, ...]) -> str:

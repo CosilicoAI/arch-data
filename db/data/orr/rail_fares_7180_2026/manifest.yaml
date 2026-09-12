@@ -1,5 +1,6 @@
 source_id: orr
 package_id: orr-rail-fares-7180-2026
+kind: publisher_table
 dataset: orr_orr-rail-fares-7180-2026
 source_page: https://dataportal.orr.gov.uk/statistics/finance/rail-fares/
 table: Table 7180 average change in fares by regulated and unregulated tickets

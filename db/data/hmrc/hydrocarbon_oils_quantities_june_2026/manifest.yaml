@@ -1,5 +1,6 @@
 source_id: hmrc
 package_id: hmrc-hydrocarbon-oils-quantities-june-2026
+kind: publisher_table
 dataset: hmrc_hmrc-hydrocarbon-oils-quantities-june-2026
 source_page: https://www.gov.uk/government/statistics/hydrocarbon-oils-bulletin
 table: Hydrocarbon Oils Bulletin tables 2a and 2c

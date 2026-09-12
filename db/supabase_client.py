@@ -4,11 +4,15 @@ Supabase client for Chronicle.
 Provides connection to PolicyEngine Supabase database for:
 - Source metadata and dataset registries
 - Target inputs
+
+``LEDGER_SCHEMA`` and ``TARGETS_SCHEMA`` remain as deprecated compatibility
+snapshots of the environment at import time. Runtime code should call
+``chronicle_schema()`` and ``targets_schema()`` so environment overrides are
+resolved at the time of use.
 """
 
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
@@ -16,18 +20,40 @@ from unittest.mock import Mock
 
 from supabase import create_client, Client
 
+from chronicle.env import default_chronicle_schema, env_value
 
-def _env(*names: str) -> str | None:
-    """Read PolicyEngine-owned storage config."""
-    for name in names:
-        value = os.environ.get(name)
-        if value:
-            return value
-    return None
+TARGETS_SCHEMA_ENV = "POLICYENGINE_TARGETS_SCHEMA"
+DEFAULT_TARGETS_SCHEMA = "targets"
 
 
-LEDGER_SCHEMA = _env("POLICYENGINE_LEDGER_SCHEMA") or "ledger"
-TARGETS_SCHEMA = _env("POLICYENGINE_TARGETS_SCHEMA") or "targets"
+def chronicle_schema() -> str:
+    """Resolve the hosted Chronicle schema for a query.
+
+    Read at call time, not bound at import: an import-time constant fixes the
+    schema at whatever the environment held when this module was first
+    imported, which the caller does not control (in the test suite that moment
+    is collection, before any fixture has isolated the environment). The
+    hosted schema is still named "ledger" -- only the variable that overrides
+    it has moved to the chronicle prefix, and renaming the schema value is a
+    later slice of PolicyEngine/chronicle#143.
+    """
+    return default_chronicle_schema()
+
+
+def targets_schema() -> str:
+    """Resolve the hosted targets schema. Read at call time, as above.
+
+    ``POLICYENGINE_TARGETS_SCHEMA`` names a surface outside the ledger rename
+    window, so it is read literally.
+    """
+    return env_value(TARGETS_SCHEMA_ENV, default=DEFAULT_TARGETS_SCHEMA)
+
+
+# Deprecated import compatibility. Preserve the historical import-time
+# environment snapshot for downstream code that still imports these names;
+# Chronicle's own query paths use the lazy resolvers above.
+LEDGER_SCHEMA = chronicle_schema()
+TARGETS_SCHEMA = targets_schema()
 
 
 @dataclass
@@ -49,14 +75,14 @@ class SupabaseConfig:
         Raises:
             ValueError: If required environment variables are missing
         """
-        url = _env("POLICYENGINE_SUPABASE_URL")
+        url = env_value("POLICYENGINE_SUPABASE_URL")
         if not url:
             raise ValueError(
                 "POLICYENGINE_SUPABASE_URL not set. "
                 "Set this to your Supabase project URL."
             )
 
-        secret_key = _env(
+        secret_key = env_value(
             "POLICYENGINE_SUPABASE_SERVICE_KEY",
             "POLICYENGINE_SUPABASE_SECRET_KEY",
         )
@@ -114,7 +140,7 @@ def query_sources(
         List of source records
     """
     client = get_supabase_client()
-    query = _table(client, LEDGER_SCHEMA, "sources").select("*")
+    query = _table(client, chronicle_schema(), "sources").select("*")
 
     if jurisdiction:
         query = query.eq("jurisdiction", jurisdiction)
@@ -143,7 +169,9 @@ def query_strata(
         List of strata records with nested constraints
     """
     client = get_supabase_client()
-    query = _table(client, TARGETS_SCHEMA, "strata").select("*, stratum_constraints(*)")
+    query = _table(client, targets_schema(), "strata").select(
+        "*, stratum_constraints(*)"
+    )
 
     if jurisdiction:
         query = query.eq("jurisdiction", jurisdiction)
@@ -172,7 +200,7 @@ def query_targets(
     """
     client = get_supabase_client()
     # Nested join: strata with their stratum_constraints
-    query = _table(client, TARGETS_SCHEMA, "targets").select(
+    query = _table(client, targets_schema(), "targets").select(
         "*, strata(*, stratum_constraints(*)), sources(*)"
     )
 
@@ -219,7 +247,7 @@ def insert_targets_batch(
 
     for i in range(0, len(targets), chunk_size):
         chunk = targets[i : i + chunk_size]
-        _table(client, TARGETS_SCHEMA, "targets").insert(chunk).execute()
+        _table(client, targets_schema(), "targets").insert(chunk).execute()
         total += len(chunk)
 
     return total

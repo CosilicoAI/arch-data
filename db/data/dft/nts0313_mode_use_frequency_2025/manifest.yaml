@@ -1,5 +1,6 @@
 source_id: dft
 package_id: dft-nts0313-mode-use-frequency-2025
+kind: publisher_table
 dataset: dft_dft-nts0313-mode-use-frequency-2025
 source_page: https://www.gov.uk/government/statistical-data-sets/nts03-modal-comparisons
 table: 'NTS0313: Frequency of use of different transport modes: England, 2003 onwards'

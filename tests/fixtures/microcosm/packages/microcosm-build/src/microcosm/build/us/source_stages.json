@@ -1,0 +1,112 @@
+{
+  "snapshot_of": {
+    "repository": "PolicyEngine/microcosm",
+    "commit": "fe2f92f8c79d36b897e6ae4d7e4b3c33fc7ebd28",
+    "note": "Synthetic consumer manifests in Microcosm's shapes, carrying the reviewed pins verbatim; decoy artifacts exercise selection."
+  },
+  "version": "fixture",
+  "country": "us",
+  "policy": "synthetic Microcosm US source-stages manifest",
+  "stages": [
+    {
+      "stage": "weeks_unemployed_input",
+      "survey": "Census CPS ASEC",
+      "source": "https://www.census.gov/programs-surveys/cps.html",
+      "grain": "person",
+      "artifacts": [
+        {
+          "kind": "public_microdata",
+          "format": "zip_csv",
+          "vintage": "2023 ASEC / 2022 income reference year",
+          "locator": "https://www2.census.gov/programs-surveys/cps/datasets/2023/march/asecpub23csv.zip",
+          "sha256": "d2e000250782adfbdd7f29c82b66d866591a30f0d330496698ec19f9c784ce11",
+          "size_bytes": 150165063,
+          "member": "pppub23.csv"
+        },
+        {
+          "kind": "official_data_dictionary",
+          "format": "pdf",
+          "vintage": "2023",
+          "locator": "https://example.invalid/asec2023_ddl_pub_full.pdf"
+        }
+      ]
+    },
+    {
+      "stage": "org_wages",
+      "survey": "CPS ORG",
+      "source": "https://www2.census.gov/programs-surveys/cps/datasets/2024/basic/",
+      "grain": "person",
+      "artifacts": [
+        {
+          "kind": "public_microdata",
+          "format": "cps_basic_monthly_csv_or_zip",
+          "vintage": "2024",
+          "locator": "jan24pub through dec24pub; HRMIS 4 and 8"
+        },
+        {
+          "kind": "administrative_table",
+          "format": "published_table",
+          "vintage": "2024",
+          "locator": "https://example.invalid/union2.t01.1"
+        }
+      ]
+    },
+    {
+      "stage": "acs_rent",
+      "survey": "Census ACS 2022",
+      "source": "https://www.census.gov/programs-surveys/acs",
+      "grain": "household",
+      "artifacts": [
+        {
+          "kind": "public_microdata",
+          "format": "census_asec_hdf5",
+          "vintage": "2022-2024 pooled",
+          "locator": "SHA-locked Census CPS ASEC person and household tables"
+        },
+        {
+          "kind": "versioned_derived_microdata",
+          "format": "hdf5_arrays",
+          "vintage": "2022",
+          "locator": "Census ACS 2022 PUMS processed person/household arrays (acs_2022.h5)",
+          "sha256": "0b319b496f19a6913066f9c5ea572edfda3d78a187be6f375846617d0b441bd4",
+          "official_person_source": "https://www2.census.gov/programs-surveys/acs/data/pums/2022/1-Year/csv_pus.zip",
+          "official_household_source": "https://www2.census.gov/programs-surveys/acs/data/pums/2022/1-Year/csv_hus.zip"
+        }
+      ]
+    },
+    {
+      "stage": "scf_wealth",
+      "survey": "Fed SCF 2022 + Census SIPP 2023",
+      "source": "https://www.federalreserve.gov/econres/scfindex.htm",
+      "grain": "household",
+      "artifacts": [
+        {
+          "kind": "public_microdata",
+          "format": "stata_in_zip",
+          "vintage": "2022",
+          "locator": "https://www.federalreserve.gov/econres/files/scfp2022s.zip",
+          "member": "rscfp2022.dta",
+          "sha256": "3bb4d890ae2463ff6039ec7692e375f544dd98a55a37ca2cb2340354b9cc9d80"
+        },
+        {
+          "kind": "public_microdata",
+          "format": "stata_in_zip",
+          "vintage": "2022",
+          "locator": "https://www.federalreserve.gov/econres/files/scf2022s.zip",
+          "member": "p22i6.dta",
+          "expected_rows": 22975
+        },
+        {
+          "kind": "public_microdata",
+          "format": "pipe_delimited_csv",
+          "vintage": "2023",
+          "locator": "Census SIPP 2023 public-use file; immutable Hugging Face mirror revision 21280dca5995e978d706740a8a4b9b7860cfd7b6",
+          "member": "pu2023.csv",
+          "revision": "21280dca5995e978d706740a8a4b9b7860cfd7b6",
+          "sha256": "5c30439e365fc26483318ef61d1d8f4bb2f0e9d6bb47c22c06756a7698733ee2",
+          "size_bytes": 3726010471
+        }
+      ]
+    }
+  ]
+}
