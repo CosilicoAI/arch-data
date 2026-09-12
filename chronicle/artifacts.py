@@ -2723,8 +2723,20 @@ def _validated_recorded_storage(
     *,
     manifest_path: Path,
     year: Any,
+    source_id: str = "",
+    package_id: str = "",
+    bind_registration_identity: bool = False,
 ) -> dict[str, Any]:
-    """Return the entry's ``storage`` mapping, refusing a malformed one."""
+    """Return the entry's ``storage`` mapping, refusing a malformed one.
+
+    Every archived object is a locator like the current one, and is held to the
+    same rules: an element Chronicle cannot read is unreadable provenance, not
+    absent provenance. :func:`_recorded_object_identities` skips a block it
+    cannot address, so a malformed element would otherwise hide the identity
+    its key carries from every archived-alias check while the entry still read
+    as valid. ``_prepare_registration_payload`` already refuses these elements;
+    validating them here is what makes the artifact commands agree.
+    """
     if not isinstance(spec, dict) or "storage" not in spec:
         return {}
     storage = spec["storage"]
@@ -2740,6 +2752,21 @@ def _validated_recorded_storage(
             f"list; it is a {type(previous).__name__}. Chronicle will not "
             "discard malformed archived provenance."
         )
+    for index, archived in enumerate(storage.get("previous_r2") or ()):
+        try:
+            _validated_recorded_r2(
+                {"storage": {"r2": archived}},
+                manifest_path=manifest_path,
+                year=year,
+                source_id=source_id,
+                package_id=package_id,
+                bind_registration_identity=bind_registration_identity,
+            )
+        except SourceArtifactManifestError as error:
+            raise RecordedR2LocatorError(
+                f"{manifest_path} entry {year!r} storage.previous_r2[{index}]: "
+                f"{error}"
+            ) from error
     return storage
 
 
@@ -2761,7 +2788,14 @@ def _validated_recorded_r2(
     field and trusting the rest is what lets a block that says two different
     things survive a preserve or a publish.
     """
-    storage = _validated_recorded_storage(spec, manifest_path=manifest_path, year=year)
+    storage = _validated_recorded_storage(
+        spec,
+        manifest_path=manifest_path,
+        year=year,
+        source_id=source_id,
+        package_id=package_id,
+        bind_registration_identity=bind_registration_identity,
+    )
     if "r2" not in storage:
         return None
     block = storage["r2"]
