@@ -1399,4 +1399,12 @@ manifest under `db/`, `data/` or `packages/` carries `previous_r2` at all, and
 - Measured on real data: the sweep fires on 0 of the 195 tracked package
   directories under `db/`, on both the pre-fix and the fixed tree.
 
+- A focused run under heavy load surfaced a pre-existing flake:
+  `test_a_registered_entry_is_protected_before_it_is_ever_published` captured
+  the manifest *before* a same-bytes refetch, which rewrites `fetched_at`, so
+  its final assertion only held when both fetches landed in the same second.
+  The same body fails on `83de2e8` with a 1.2s delay inserted, so it is not a
+  regression from this lane; `faa1a87` reads the bytes after that refetch,
+  which is what the assertion means.
+
 **Next:** the final full suite, Ruff lint and format checks, and the report.
