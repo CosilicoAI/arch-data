@@ -67,7 +67,7 @@ from chronicle.registration import (
     resolve_vintage_key,
     safe_entry_access,
     safe_manifest_kind,
-    split_r2_uri,
+    _split_r2_uri,
     validate_file_entry,
     validate_manifest_files,
     validate_package_directory,
@@ -2824,7 +2824,7 @@ def _validated_recorded_r2(
             f"{provider}://."
         )
     if uri is not None:
-        parts = split_r2_uri(uri)
+        parts = _split_r2_uri(uri)
         if parts is None:
             raise RecordedR2LocatorError(
                 f"{where}: uri {uri!r} is not provider://bucket/key."

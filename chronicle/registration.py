@@ -1134,7 +1134,7 @@ def recorded_previous_r2(spec: Any) -> tuple[Any, ...]:
     return (previous,) if previous else ()
 
 
-def split_r2_uri(uri: str) -> tuple[str, str, str] | None:
+def _split_r2_uri(uri: str) -> tuple[str, str, str] | None:
     """Split ``provider://bucket/key`` into its three parts, or None.
 
     One parser for both readers of a recorded locator. A raw key is a path
@@ -1169,7 +1169,7 @@ def _recorded_object_identities(
             if not isinstance(locator, str) or not locator:
                 continue
             if field == "uri":
-                parts = split_r2_uri(locator)
+                parts = _split_r2_uri(locator)
                 if parts is None:
                     continue
                 key = parts[2]
