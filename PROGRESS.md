@@ -1510,3 +1510,28 @@ consistent control still fetches. Both halves are pinned, with the inventory
 verdict as the paired control.
 
 Whole module against the pre-fix tree `70e128b`: **35 failed, 55 passed**.
+
+**Regression found by the focused run and fixed (`e51a052`):** placing the
+hoisted loop *before* `_assert_no_package_microdata_identities` changed which
+refusal a tree carrying both problems reports, and round 5 had pinned the
+sweep's. Focused 15-module run at `7c84f3e`: **3 failed, 1,237 passed** —
+`test_unreadable_history_does_not_blind_the_package_sweep[unreadable]` and
+`test_one_locator_is_read_the_same_way_by_both_readers[current-?]` /
+`[current-#]`, each a tree whose aliasing entry *also* has an unreadable or
+contradictory locator. The loop now runs immediately after the sweep, still
+before the release evidence, the lock and publisher I/O. Reasons, both
+executed:
+
+- the sweep resolves locators non-raisingly, so what it *finds* on unreadable
+  provenance is true whichever order they run in, and the preflight already
+  prefers the more serious refusal's message at the hash-only byte boundary
+  (artifacts.py:1228);
+- what the sweep *misses* is why the loop cannot be skipped: a `previous_r2`
+  element that is not a mapping is invisible to `_recorded_object_identities`,
+  so a table entry carrying a release's identity only there passes the sweep in
+  silence. `test_provenance_the_sweep_cannot_read_is_still_refused_before_the_read`
+  pins that case through the fetch path, where round 5 had only pinned it
+  through `inventory-artifacts`.
+
+`tests/test_chronicle_artifact_peer5.py` + `peer6` at `e51a052`: 167 passed.
+`peer6` against the pre-fix tree `70e128b`: **36 failed, 55 passed**.
