@@ -2264,12 +2264,15 @@ def test_a_registered_entry_is_protected_before_it_is_ever_published(tmp_path):
     package = tmp_path / "db" / "data" / "irs_soi" / "soi-table-5"
     source = _publish(tmp_path, "22in05ira.xlsx", b"IRA table 5, first publication")
     first = _fetch_local(package, source, upload_r2=False)
-    recorded = (package / "manifest.yaml").read_bytes()
 
     assert "storage" not in _entry(package / "manifest.yaml")
 
-    # Same bytes: an ordinary repeated fetch, not a revision.
+    # Same bytes: an ordinary repeated fetch, not a revision. It rewrites
+    # fetched_at, so the bytes the refused fetch must leave alone are the ones
+    # this fetch left behind -- reading them before it made the assertion below
+    # depend on both fetches landing in the same second.
     assert _fetch_local(package, source, upload_r2=False).sha256 == first.sha256
+    recorded = (package / "manifest.yaml").read_bytes()
 
     source.write_bytes(b"IRA table 5, silently re-published")
     with pytest.raises(SourceArtifactRevisionError) as raised:
