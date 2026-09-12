@@ -910,3 +910,66 @@ def test_one_locator_is_read_the_same_way_by_both_readers(
     assert any(
         MICRODATA_CODE in error for error in inventory_source_artifacts(package).errors
     )
+
+
+@pytest.mark.parametrize("history", ["none", "valid", "unreadable"])
+def test_unreadable_history_still_names_the_cross_manifest_collision(tmp_path, history):
+    """Validating archived objects must not erase the current object's digest.
+
+    ``_effective_recorded_digest`` swallows a locator error and returns None,
+    which is right for an entry whose own locator is malformed. Once archived
+    objects are validated too, a malformed element would otherwise take the
+    entry out of ``validate_package_directory``'s comparison, and inventory
+    would stop naming the contradiction between the two manifests.
+    """
+    package = tmp_path / "package"
+    package.mkdir()
+    (package / "table.csv").write_bytes(TABLE_BYTES)
+    key = f"raw/publisher/package/2025/{OTHER_SHA}/table.csv"
+    storage: dict[str, object] = {
+        "r2": {
+            "provider": "r2",
+            "bucket": "archive",
+            "key": key,
+            "uri": f"r2://archive/{key}",
+        }
+    }
+    if history == "valid":
+        storage["previous_r2"] = [VALID_ARCHIVED]
+    elif history == "unreadable":
+        storage["previous_r2"] = [UNREADABLE_ARCHIVED["bare-string"]]
+    for name, entry in (
+        (
+            "manifest_a.yaml",
+            {
+                "filename": "table.csv",
+                "sha256": ARCHIVED_SHA,
+                "source_url": "https://publisher.example/a.csv",
+            },
+        ),
+        (
+            "manifest_b.yaml",
+            {
+                "filename": "table.csv",
+                "source_url": "https://publisher.example/b.csv",
+                "storage": storage,
+            },
+        ),
+    ):
+        (package / name).write_text(
+            yaml.safe_dump(
+                {
+                    "source_id": "publisher",
+                    "package_id": "package",
+                    "kind": "publisher_table",
+                    "files": {2025: entry},
+                }
+            )
+        )
+
+    report = inventory_source_artifacts(package)
+
+    assert not report.valid
+    assert any(
+        "filename_collision_across_manifests" in error for error in report.errors
+    ), report.errors
