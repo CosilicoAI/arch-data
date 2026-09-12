@@ -840,3 +840,73 @@ def test_the_manifest_rewrite_sweeps_the_proposed_package(tmp_path, alias):
         )
 
     assert manifest_path.read_bytes() == before
+
+
+@pytest.mark.parametrize("quirk", ["?", "#"])
+@pytest.mark.parametrize("where", ["current", "archived"])
+def test_one_locator_is_read_the_same_way_by_both_readers(
+    tmp_path, monkeypatch, quirk, where
+):
+    """A URI the validator accepts must not be invisible to the alias reader.
+
+    ``_validated_recorded_r2`` splits ``provider://bucket/key`` by partition,
+    so everything after the first ``/`` of the authority is the key;
+    ``_recorded_object_identities`` read the same field with ``urlsplit``,
+    whose path stops at a ``?`` or ``#``. A stray one in the authority made a
+    block that names a release's exact object read as naming nothing.
+    """
+    package = tmp_path / "package"
+    package.mkdir()
+    key = f"raw/publisher/package/2023/{RELEASE_SHA}/microdata.csv"
+    block = {"provider": "r2", "uri": f"r2://ledger-raw{quirk}/{key}"}
+    aliasing = {
+        "filename": "other-table.csv",
+        "sha256": OTHER_SHA,
+        "source_url": "https://publisher.example/2022.csv",
+        "storage": (
+            {"r2": block}
+            if where == "current"
+            else {
+                "r2": _locator("other-table.csv", OTHER_SHA, year=2022),
+                "previous_r2": [block],
+            }
+        ),
+    }
+    (package / "manifest_tables.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "source_id": "publisher",
+                "package_id": "package",
+                "kind": "publisher_table",
+                "files": {
+                    2022: aliasing,
+                    2024: {
+                        "filename": "table.csv",
+                        "source_url": "https://publisher.example/table.csv",
+                    },
+                },
+            }
+        )
+    )
+    (package / "manifest_release.yaml").write_text(yaml.safe_dump(_release_manifest()))
+    before = {path.name: path.read_bytes() for path in package.iterdir()}
+    reads = _refuse_read(monkeypatch)
+    uploads = _record_uploads(monkeypatch)
+
+    with pytest.raises(SourceArtifactManifestError, match=MICRODATA_CODE):
+        fetch_source_artifact(
+            "https://publisher.example/table.csv",
+            source_id="publisher",
+            package_id="package",
+            year=2024,
+            output_dir=package,
+            filename="table.csv",
+            manifest_filename="manifest_tables.yaml",
+        )
+
+    assert {path.name: path.read_bytes() for path in package.iterdir()} == before
+    assert reads == []
+    assert uploads == []
+    assert any(
+        MICRODATA_CODE in error for error in inventory_source_artifacts(package).errors
+    )
