@@ -744,3 +744,77 @@ def test_fetch_refuses_a_cross_manifest_collision_before_publisher_io(
     assert reads == []
     assert uploads == []
     assert locks == []
+
+
+# ---------------------------------------------------------------------------
+# A release manifest that does not identify its own recorded object
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("missing", ["source_id", "package_id"])
+def test_release_fetch_refuses_a_manifest_that_cannot_bind_its_own_locator(
+    tmp_path, monkeypatch, missing
+):
+    """The preflight reads the manifest's identifiers, not the fetch arguments.
+
+    ``_recorded_identity`` binds the selected entry's locator with the values
+    the caller passed, and ``_upsert_manifest`` validates a proposal into
+    which ``payload.setdefault`` has already written them, so a release
+    manifest that declares neither used to be repaired by the fetch that
+    filled the key in. Every other command reads the manifest's own keys and
+    refuses: ``inventory-artifacts`` reports ``recorded_r2_locator_invalid``
+    on the untouched tree and ``register-artifact`` refuses the same
+    directory. The preflight now agrees, before the release licence evidence
+    is even looked at.
+    """
+    package = tmp_path / "package"
+    package.mkdir(parents=True)
+    manifest = _release_manifest(previous=None)
+    del manifest[missing]
+    manifest_path = package / "manifest.yaml"
+    manifest_path.write_text(yaml.safe_dump(manifest, sort_keys=False))
+    before = _snapshot(package)
+    reads = _refuse_read(monkeypatch)
+    uploads = _record_uploads(monkeypatch)
+    locks: list[Path] = []
+    monkeypatch.setattr(
+        "chronicle.artifacts._registration_lock",
+        lambda path: locks.append(path) or nullcontext(),
+    )
+
+    inventory = inventory_source_artifacts(package)
+    assert not inventory.valid
+    assert any(
+        "recorded_r2_locator_invalid" in error
+        for entry in inventory.entries
+        for error in entry.errors
+    ), [entry.errors for entry in inventory.entries]
+
+    with pytest.raises(SourceArtifactManifestError, match="cannot bind the locator"):
+        fetch_source_artifact(
+            "https://publisher.example/microdata.csv",
+            source_id="publisher",
+            package_id="package",
+            year=2023,
+            output_dir=package,
+            filename="microdata.csv",
+            kind="microdata_release",
+            access="public",
+            licence="CC0-1.0",
+            publisher="Fixture publisher",
+            vintage="2023",
+            expected_sha256=RELEASE_SHA,
+            licence_evidence={
+                "issuer": "Fixture publisher",
+                "scope": "This fixture public microdata release is dedicated to CC0.",
+                "url": "https://publisher.example/licence",
+                "licence": "CC0-1.0",
+                "sha256": RELEASE_SHA,
+            },
+            staging_dir=tmp_path / "staging",
+        )
+
+    assert _snapshot(package) == before
+    assert reads == []
+    assert uploads == []
+    assert locks == []
