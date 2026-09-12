@@ -1463,3 +1463,50 @@ network; scripts in the session scratchpad):
 
 **Next:** red-first regression, then hoist the per-entry loop into the fetch
 preflight.
+
+**Red-first regression (`tests/test_chronicle_artifact_peer6.py`, `70e128b`):**
+31 failed, 53 passed, direct exit 1. Every one of the 31 failures is
+`ORDERING VIOLATION: the publisher was read before the refusal`. The 53
+passing are the declared controls: `inventory-artifacts` already names the
+same locator on the same tree, and `register-artifact` already refuses it
+before its own lock.
+
+**Fix (`7c84f3e`):** `_upsert_manifest`'s per-entry loop becomes
+`_assert_recorded_locators_valid(manifest, path, kind=)` and is called from
+three places rather than copied into a third:
+
+- the fetch preflight, after every manifest is valid on its own terms and
+  before `_assert_no_package_microdata_identities`, the release licence
+  evidence, the lock and publisher I/O (the sweep resolves locators
+  non-raisingly, so readable provenance has to come first);
+- `_upsert_manifest` over the proposed tree, unchanged in position — still the
+  under-lock recheck;
+- `_prepare_registration_payload`, whose own copy of the loop is replaced by
+  the same call. Its explicit second pass over `storage.previous_r2` went with
+  it: `_validated_recorded_storage` has validated those elements since
+  `f394205`, with the identical message. One validator,
+  `_validated_recorded_r2`, decides in all three.
+
+`tests/test_chronicle_artifact_peer6.py` at `7c84f3e`: 84 passed, exit 0.
+
+**Measured behaviour change beyond the finding, kept deliberately (`a146627`):**
+the preflight validates the *recorded* tree while `_upsert_manifest` validates
+the *proposed* one, so the entry the fetch rewrites is the single place they
+can disagree. Executed on both trees, a selected entry whose recorded locator
+contradicts its declared identity:
+
+| tree | same bytes | `--record-revision` | new bytes, no revision |
+| --- | --- | --- | --- |
+| pre-fix, checksum mismatch | ACCEPTED | ACCEPTED | refused after READ |
+| pre-fix, filename mismatch | refused after READ | ACCEPTED | refused after READ |
+| fixed, both | refused in preflight | refused in preflight | refused in preflight |
+
+`inventory_source_artifacts` reports both trees invalid with
+`recorded_r2_identity_mismatch` on the pre-fix tree as well, so the new
+refusal is `_assert_manifest_valid_for_fetch`'s documented contract — "will
+not carry an invalid registration forward ... inventory-artifacts reports the
+same codes" — reaching a check that lived only on the proposed tree. The
+consistent control still fetches. Both halves are pinned, with the inventory
+verdict as the paired control.
+
+Whole module against the pre-fix tree `70e128b`: **35 failed, 55 passed**.
