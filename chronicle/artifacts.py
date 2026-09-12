@@ -1299,11 +1299,13 @@ def fetch_source_artifact(
     # file reached _upsert_manifest -- after the lock and the publisher read,
     # for a fetch that could never have succeeded. No fetch repairs one: the
     # rewrite revises only the owners of its own filename. Run the sweep
-    # register-artifact already runs before its own lock, and for the same
-    # reason skip its local-bytes half: those bytes are what this fetch is
-    # about to replace, and every owner is compared against the fetched bytes
-    # once they are known.
-    _assert_package_file_owner_identities_agree(manifests, check_local_files=False)
+    # register-artifact already runs before its own lock, over every
+    # package-local file except the one being fetched: that file's bytes are
+    # the ones this fetch replaces, and they are compared against every owner
+    # as soon as the publisher has served them.
+    _assert_package_file_owner_identities_agree(
+        manifests, pending_filename=artifact_filename
+    )
     licence_text = licence.strip() if isinstance(licence, str) else None
     release = manifest_kind_value == MICRODATA_RELEASE_KIND
     evidence: dict[str, str] | None = None
@@ -4570,6 +4572,7 @@ def _assert_package_file_owner_identities_agree(
     *,
     observed_sha256: Mapping[str, str] | None = None,
     check_local_files: bool = True,
+    pending_filename: str | None = None,
 ) -> None:
     """Refuse contradictory identities for any package-local filename.
 
@@ -4581,6 +4584,13 @@ def _assert_package_file_owner_identities_agree(
     Resource readers supply observed digests by filename and disable local
     filesystem reads: their bytes may come from ZIP resources, cache, or a
     publisher response, and must agree before they are returned or cached.
+
+    ``pending_filename`` names the one package-local file the caller is about
+    to replace. Its bytes on disk are the ones being superseded, so comparing
+    them would refuse the fetch that repairs them; the fetched bytes are
+    compared against every owner as soon as the publisher has served them.
+    Every other file in the directory is untouched by that fetch, so it is
+    compared before the publisher is read.
     """
     collision_codes = validate_package_directory(
         manifests, entry_digest=_effective_recorded_digest
@@ -4648,6 +4658,7 @@ def _assert_package_file_owner_identities_agree(
     observed_by_filename = {
         filename_key(name): digest for name, digest in (observed_sha256 or {}).items()
     }
+    pending_key = filename_key(pending_filename) if pending_filename else None
     for key, pending in unidentified.items():
         owners = owners_by_filename.get(key)
         if not owners:
@@ -4657,7 +4668,7 @@ def _assert_package_file_owner_identities_agree(
         for manifest_path, vintage, recorded_name in pending:
             actual = observed_by_filename.get(key)
             if actual is None:
-                if not check_local_files:
+                if not check_local_files or key == pending_key:
                     continue
                 try:
                     local = matching_directory_entry(
