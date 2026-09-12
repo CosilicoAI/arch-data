@@ -1643,3 +1643,36 @@ digests.
 - On a tree carrying both a malformed locator and a microdata alias, all four
   commands refuse; they differ only in which true code they name first, and
   registration's order is byte-identical to the pre-fix tree.
+
+### Final state (peer round 6)
+
+**State: complete.** Final code commit `a673243`; `HEAD` is `e81d125`, which
+adds only docs and this journal, neither of which any test reads.
+
+- Full suite at `e81d125`, clean tree, nothing edited during the run:
+  **2,132 passed, 1 skipped, 42 warnings in 1290.81s (21m 30s)**, direct exit
+  **0**, zero `FAILED`/`ERROR` lines. Round 5 closed at 2,032 passed / 1
+  skipped, and `tests/test_chronicle_artifact_peer6.py` collects 100 tests:
+  2,032 + 100 = 2,132, so the whole delta is this lane's new module and nothing
+  regressed.
+- `uv run ruff check .` exits 0 (`All checks passed!`). `ruff format --check` on
+  the three changed Python files exits 0 (`3 files already formatted`).
+  `git diff --check 247a617..HEAD` exits 0. `uv lock --check` exits 0
+  (`Resolved 76 packages`).
+- `git diff --name-only 247a617..HEAD` is exactly `PROGRESS.md`,
+  `chronicle/artifacts.py`, `chronicle/registration.py`,
+  `docs/storage-architecture.md`, `tests/test_chronicle_artifact_peer6.py`.
+  `git status --porcelain db data packages` is empty. No GitHub access, no
+  push, no branch, no stash.
+- `tests/test_chronicle_artifact_peer6.py`: 100 passed at `HEAD`; **40 failed,
+  57 passed** against the pre-fix tree `70e128b`.
+- The external report is at
+  `_recovered/scratch-backup/893/lanes/out-227-preflight-r2.md`.
+
+**Next:** none in this lane. No push or branch operation is authorized. Four
+items are left for a maintainer, all in the report: whether the two
+out-of-scope fixes (`63cc2c2`, `a673243`) and the three pinned behaviour
+changes should stay, `register-artifact`'s `check_local_files=False` contract,
+the round-5 byte-level half of the package identity rule together with the
+missing `docs/adr-chronicle-raw-microdata-identity.md`, and the two residual
+copies of the locator predicate in `source_package.py` and `_inventory_entry`.
