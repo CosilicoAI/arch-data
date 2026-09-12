@@ -110,13 +110,17 @@ guess. The command refuses `--access public`, refuses bytes sitting beside the
 manifest, refuses to write into a `publisher_table` manifest, and refuses to
 reclassify a filename the manifest already holds as `public` — an archived
 release's object must be removed, with its `storage` record, before the entry
-can become hash-only.
+can become hash-only. It also refuses to write into a package directory whose
+public table entries carry a release sibling's identity
+(`bytes_identified_by_microdata_release`), whichever manifest holds the
+collision and whichever vintage, because the registration would join a
+directory `publish-raw` and `inventory-artifacts` already refuse.
 
 Filenames are bare names compared case-insensitively: `./adult.tab`,
 `ADULT.TAB` and `sub/../adult.tab` are the file `adult.tab`, and a manifest
 never holds one path under two access classes. `2023` and `'2023'` are one
 vintage key; a manifest that records both is refused rather than read through
-one of them. Every command validates the whole manifest with the codes
+one of them. Every command validates the whole package directory with the codes
 `inventory-artifacts` reports before reading, writing, or uploading anything.
 
 The other commands enforce the same boundary from their side. `fetch-artifact`
